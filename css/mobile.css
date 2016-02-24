@@ -1,0 +1,153 @@
+/* Style sheet */
+body {
+	background-color: cornsilk;
+	background-image: url(../images/bg.jpg);
+	font-family: Arial;
+	color: black;
+	font-size: 8pt;
+}
+
+table {
+	background-color: burlywood;
+	border: 1px solid #A52A2A;
+	padding: 4px;
+}
+
+a {
+	color: blue;
+}
+
+a:hover {
+	color: red;
+	background-color: yellow;
+}
+
+h2 {
+	color: maroon;
+	text-align: center;
+	font-weight: bold;
+	border-bottom: 2px solid maroon;
+}
+
+.td_title {
+	padding: 3px;
+	background-color: #FFDAB9;
+	border: 1px solid maroon;
+	/*
+	border-radius-topright: .8em;
+   -moz-border-radius-topright: .8em;	
+	border-radius-topleft: .8em;
+   -moz-border-radius-topleft: .8em;
+   */	
+}
+
+.td_menu {
+	background-color: #D2B48C;
+	/*
+	border-radius-bottomright: .8em;
+   -moz-border-radius-bottomright: .8em;	
+	border-radius-bottomleft: .8em;
+   -moz-border-radius-bottomleft: .8em;
+   */	
+   text-align: center;
+	padding: 5px;
+	border: 1px solid #BC8F8F;
+	font-size: 8pt;
+}
+
+.td_menu_info {
+	background-color: #D2B48C;
+   text-align: center;
+	padding: 0px;
+	border: 1px solid #BC8F8F;
+	font-size: 8pt;
+}
+
+.td_menu_title {
+	background-color: #D2B48C;
+	/* 
+	border-radius-topright: .8em;
+   -moz-border-radius-topright: .8em;	
+	border-radius-topleft: .8em;
+   -moz-border-radius-topleft: .8em;
+   */	
+   text-align: center;
+	padding: 5px;
+	border: 1px solid #BC8F8F;
+	font-size: 8pt;
+}
+
+.td_empty {
+	border: none;
+	padding: 0px;
+}
+
+.trsheet_opnotes{
+	background-color: #eeeeee; 
+	font-size: 8pt;
+}
+
+.td1 {
+	background-color: #eeeeee; 
+	font-size: 8pt;
+}
+
+.td2 {
+	background-color: #bbbbbb;
+	font-size: 8pt;
+}
+
+.td3 {
+	background-color: #FFFACD;
+	font-size: 8pt;
+	padding: 2px;
+}
+
+.tbl1 {
+	border: none;
+}
+
+.small_txt {
+	font-size: 7pt;
+}
+
+.med_txt {
+	font-size: 8pt;
+	font-weight: bold;
+	color: maroon;
+}
+
+.popuptxt {
+	border: 1px solid black;
+	background-color:#FFFF99;
+	color: maroon;
+	padding: 4px; 
+}
+
+textarea, select, input {
+	border: 1px inset black;
+	/* 
+	border-radius: .4em;
+   -moz-border-radius: .4em; 
+   */	
+   padding: 3px;
+}
+
+input.submit, #submit {
+	border: 2px outset black;
+	background-color: lightgrey;
+}
+
+.sugdata {
+background-color: wheat;
+border: 1px solid black;
+padding: 5px;
+text-align: left;
+min-width: 75px;
+min-height: 0px;
+}
+
+.sugdata a:hover {
+border: none;
+background-color: yellow;
+}

@@ -1,0 +1,195 @@
+/* Style sheet */
+@page {
+   size: portrait;
+}
+
+body {
+	background-color: white;
+	font-family: Arial;
+	color: black;
+	font-size: 11pt;
+}
+
+table {
+	background-color: white;
+	border: none;
+	padding: 10px;
+}
+td {
+	border: 1px solid gray;
+}
+
+h2 {
+	color: black;
+	text-align: center;
+	font-weight: bold;
+	border-bottom: 2px solid black;
+	font-size:10pt;
+}
+
+.td_title {
+	padding: 3px;
+	background-color: #999;
+	border: 1px solid black;
+	font-size: 8pt;
+}
+
+div.td_menu {
+	display: none;
+}
+
+div.td_menu_info {
+	display: none;	
+}
+
+div.td_menu_title {
+	display: none;
+}
+
+div.td_empty {
+	display: none;
+}
+
+.td1 {
+	background-color: #ffffff; 
+	padding: 2px;
+	font-size: 8pt;
+	width: auto;
+	border-bottom: 1px solid black;
+}
+
+.td2 {
+	background-color: #dddddd;
+	padding: 2px;
+	font-size: 8pt;
+	width: auto;
+	border-bottom: 1px solid black;
+}
+
+.td3 {
+	background-color: #FFFACD;
+	padding: 2px;
+	font-size: 8pt;
+	width: auto;
+}
+
+.tbl1 {
+	display: none;
+}
+
+.small_txt {
+	font-size: 8pt;
+}
+
+#small_menu {
+	display: none;
+}
+
+
+.med_txt {
+	font-size: 9pt;
+	font-weight: bold;
+	color: maroon;
+}
+
+.info_container {
+	padding: 2px; 
+	padding-top: 0px; 
+	margin; 0px; 
+	border: 1px solid #ccc;
+}
+
+.info_div {
+	font-size: 8pt;
+	font-weight: normal;
+	display: block; padding: 1px; border: none; border-bottom: 1px solid #ccc;
+ }
+ 
+.popuptxt {
+	border: 1px solid black;
+	background-color:#FFFF99;
+	color: maroon;
+	padding: 10px; 
+}
+
+textarea, select, input {
+	display: none;
+	width: 2px;
+}
+
+#submit {
+	display: none;
+}
+
+.sugdata {
+background-color: wheat;
+border: 1px solid black;
+padding: 5px;
+text-align: left;
+min-width: 75px;
+min-height: 0px;
+}
+
+.sugdata a:hover {
+border: none;
+background-color: yellow;
+}
+
+#po_waiting {
+	display:none;
+}
+
+#other_wb {
+	display: none;
+}
+
+#rrds, #rr_disp {
+	display: none;
+}
+
+#recact {
+	display: none;
+}
+
+#stuff1 {
+	display: none;
+}
+
+#future_events {
+	display: none;
+}
+
+.trsheet_opnotes{
+	font-size: 9pt;
+}
+
+.topcell {border-top: 3px solid black;}
+
+.footer {display: none;}
+
+#afil_wb_home {font-size: 11pt; font-weight: bold; border: 2px solid black;}
+
+div.box1 {display: none;}
+
+div.wb_lnk_mess {display: none;}
+
+/* home page classes */
+.notes {
+	color: black; font-weight: bold; padding: 6px;
+}
+
+.routing {
+	font-size: 10pt; font-weight: bolder; color: black;
+}
+
+.lading {
+	float: right;padding: 3px; color: black; border: 1px solid #ccc; max-width: 200px; text-align: right; font-size: 9pt; font-weight: normal;
+}
+
+.rr_tr {
+	font-weight: bolder; color: black;
+}
+
+.progress {
+	font-size: 10pt;
+}
