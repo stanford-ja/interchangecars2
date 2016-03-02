@@ -45,8 +45,10 @@ class Rr extends CI_Controller {
 			$this->dat['data'][0]['rr_name'] 			= $rrdat[$i]->rr_name;
 			$this->dat['data'][0]['rr_desc'] 			= $rrdat[$i]->rr_desc;
 			$this->dat['data'][0]['owner_name'] 		= $rrdat[$i]->owner_name;
-			$this->dat['data'][0]['interchanges']		= $rrdat[$i]->interchanges;
+			$this->dat['data'][0]['interchanges']		= str_replace(";","<br />",$rrdat[$i]->interchanges);
 			$this->dat['data'][0]['affiliates'] 		= $rrdat[$i]->affiliates;
+			$rrdat[$i]->website = str_replace("&#47;","/",$rrdat[$i]->website);
+			$rrdat[$i]->social = str_replace("&#47;","/",$rrdat[$i]->social);
 			$this->dat['data'][0]['website'] 			= auto_link($rrdat[$i]->website, 'url', TRUE);
 			$this->dat['data'][0]['social'] 			= auto_link(str_replace(";","<br />",$rrdat[$i]->social), 'url', TRUE);
 			$this->dat['data'][0]['tzone'] 			= $rrdat[$i]->tzone;
@@ -146,7 +148,7 @@ class Rr extends CI_Controller {
 			'type' => "input", 'label' => 'Report Mark', 'def' => array(
               'name'        => 'report_mark',
               'id'          => 'report_mark',
-              'value'       => @$this->dat['data'][0]->report_mark,
+              'value'       => @str_replace("&#47;","/",$this->dat['data'][0]->report_mark),
               'maxlength'   => '8',
               'size'        => '8',
               'onchange'	=> 'this.value = this.value.toUpperCase();'
@@ -157,7 +159,7 @@ class Rr extends CI_Controller {
 			'type' => "input", 'label' => 'RR Name', 'def' => array(
               'name'        => 'rr_name',
               'id'          => 'rr_name',
-              'value'       => @$this->dat['data'][0]->rr_name,
+              'value'       => @str_replace("&#47;","/",$this->dat['data'][0]->rr_name),
               'maxlength'   => '60',
               'size'        => '60',
               'onchange'	=> 'this.value = this.value.toUpperCase();'
@@ -186,7 +188,7 @@ class Rr extends CI_Controller {
 			'type' => "textarea", 'label' => 'Description', 'def' => array(
              'name'        => 'rr_desc',
              'id'          => 'rr_desc',
-             'value'       => @$this->dat['data'][0]->rr_desc,
+             'value'       => @str_replace("&#47;","/",$this->dat['data'][0]->rr_desc),
              'rows'			 => '5',
              'cols'        => '50'
 			)
@@ -196,7 +198,7 @@ class Rr extends CI_Controller {
 			'type' => "textarea", 'label' => 'Interchanges', 'def' => array(
              'name'        => 'interchanges',
              'id'          => 'interchanges',
-             'value'       => @$this->dat['data'][0]->interchanges,
+             'value'       => @str_replace("&#47;","/",$this->dat['data'][0]->interchanges),
              'rows'			 => '3',
              'cols'        => '50'
 			)
@@ -206,7 +208,7 @@ class Rr extends CI_Controller {
 			'type' => "input", 'label' => 'Affiliates', 'def' => array(
               'name'        => 'affiliates',
               'id'          => 'affiliates',
-              'value'       => @$this->dat['data'][0]->affiliates,
+              'value'       => @str_replace("&#47;","/",$this->dat['data'][0]->affiliates),
               'maxlength'   => '30',
               'size'        => '30'
 			)
@@ -216,7 +218,7 @@ class Rr extends CI_Controller {
 			'type' => "input", 'label' => 'Website', 'def' => array(
               'name'        => 'website',
               'id'          => 'website',
-              'value'       => @$this->dat['data'][0]->website,
+              'value'       => @str_replace("&#47;","/",$this->dat['data'][0]->website),
               'maxlength'   => '60',
               'size'        => '60'
 			)
@@ -226,7 +228,7 @@ class Rr extends CI_Controller {
 			'type' => "textarea", 'label' => 'Social Website Links', 'def' => array(
              'name'        => 'social',
              'id'          => 'social',
-             'value'       => @$this->dat['data'][0]->social,
+             'value'       => @str_replace("&#47;","/",$this->dat['data'][0]->social),
              'rows'			 => '3',
              'cols'        => '50'
 			)
@@ -278,7 +280,7 @@ class Rr extends CI_Controller {
 		);
 
 		$this->field_defs[] =  array(
-			'type' => "select", 'label' => 'Timezone', 'name' => 'tzone', 'value' => @$this->dat['data'][0]->tzone, 
+			'type' => "select", 'label' => 'Timezone', 'name' => 'tzone', 'value' => @str_replace("&#47;","/",$this->dat['data'][0]->tzone), 
 			'other' => 'id="tzone"', 'options' => $tz_opts
 		);
 
