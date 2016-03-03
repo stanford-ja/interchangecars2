@@ -12,6 +12,7 @@ class Switchlist extends CI_Controller {
 		$this->load->library('mricf');
 		$this->load->library('email');
 		
+		$this->load->model('Generic_model','',TRUE); // Database connection! TRUE means connect to db.
 		$this->load->model('Railroad_model','',TRUE); // Database connection! TRUE means connect to db.
 		$this->load->model('Locomotives_model','',TRUE); // Database connection! TRUE means connect to db.
 		$this->load->model('Waybill_model','',TRUE); // Database connection! TRUE means connect to db.
@@ -144,7 +145,10 @@ class Switchlist extends CI_Controller {
 				}						
 				
 				// Progress entries array
-				$prog = @json_decode($arrdat[$i]->progress,TRUE);
+				//$prog = @json_decode($arrdat[$i]->progress,TRUE);
+				$last_prog_sql = "SELECT * FROM `ichange_progress` WHERE `waybill_num` = '".$arrdat[$i]->waybill_num."' ORDER BY date DESC, time DESC LIMIT 1";
+				$prog_res = (array)$this->Generic_model->qry($last_prog_sql);
+				$prog[0] = (array)$prog_res[0]; //json_decode($this->waybills[$tmp]->progress, true);
 				$map_loc = "";
 				if(isset($prog[count($prog)-1]['map_location'])){
 					if(strlen($prog[count($prog)-1]['map_location']) > 0 && strpos("Z".$arrdat[$i]->status,"AT") < 1){$map_loc = "<br />At: ".$prog[count($prog)-1]['map_location'];}
@@ -274,7 +278,7 @@ class Switchlist extends CI_Controller {
 		if(strlen($this->arr['move_to']) > 0){
 		for($w=0;$w<count($wb_aff_id);$w++){
 			// Progress report manipulation
-			$prog = $this->mricf->progWB($wb_aff_id[$w]);
+			$prog = array(); //$this->mricf->progWB($wb_aff_id[$w]); - COMMENTED OUT 2016-03-02 JS
 			$prog[] = array(
 				'date' => $this->arr['move_to_dt'], 
 				'time' => $this->arr['move_to_hr'].":".$this->arr['move_to_mi'], 
@@ -287,6 +291,19 @@ class Switchlist extends CI_Controller {
 			$jprog = json_encode($prog);
 			$s = "UPDATE `ichange_waybill` SET `status` = '".$this->arr['move_to']."', `progress` = '".$jprog."' WHERE `id` = '".$wb_aff_id[$w]."'";
 			$this->Generic_model->change($s);
+
+			// Added 2016-03-02 - The $prog[] creation above can be changed to single (ie, taken out of this FOR loop) after 2016-06-02				
+			$prog_sql = "INSERT INTO `ichange_progress` SET 
+				`date` = '".$this->arr['move_to_dt']."', 
+				`time` = '".$this->arr['move_to_hr'].":".$this->arr['move_to_mi']."', 
+				`text` = 'CAR/S ON WAYBILL HAVE BEEN MOVED BY TRAIN <strong>".$this->arr['train_id']."</strong> AND ARE NOW LOCATED <strong>".$this->arr['move_to']."</strong> (v2.0)', 
+				`waybill_num` = '".$this->mricf->qry("ichange_waybill", $wb_aff_id[$w], "id", "waybill_num")."', 
+				`map_location` = '".str_replace("AT ","",$this->arr['move_to'])."', 
+				`status` = '".$this->arr['move_to']."', 
+				`train` = '".$this->arr['train_id']."', 
+				`tzone` = 'America/Chicago', 
+				`added` = '".date('U')."'";
+			$this->Generic_model->change($prog_sql);
 
 			// Cars retreive and list			
 			$cars_arr = $this->mricf->carsWB($wb_aff_id[$w]);
@@ -345,7 +362,7 @@ class Switchlist extends CI_Controller {
 					$loc = $this->loc_qry($ind,$rr);
 					$txt = "LOADING AT ".$ind;
 				}
-				$prog = $this->mricf->progWB($this->arr['wb_id'][$w]);
+				$prog = array(); //$this->mricf->progWB($this->arr['wb_id'][$w]); - COMMENTED OUT 2016-03-02 JS
 				$prog[] = array(
 					'date' => $this->arr['move_to_dt'][$w], 
 					'time' => $this->arr['move_to_hr'][$w].":".$this->arr['move_to_mi'][$w], 
@@ -356,6 +373,19 @@ class Switchlist extends CI_Controller {
 					'status' => $this->arr['move_to_ind'][$w]
 				);
 				$jprog = json_encode($prog);
+
+				// Added 2016-03-02 - The $prog[] creation above can be changed to single (ie, taken out of this FOR loop) after 2016-06-02				
+				$prog_sql = "INSERT INTO `ichange_progress` SET 
+					`date` = '".$this->arr['move_to_dt'][$w]."', 
+					`time` = '".$this->arr['move_to_hr'][$w].":".$this->arr['move_to_mi'][$w]."', 
+					`text` = '".$txt."', 
+					`waybill_num` = '".$this->mricf->qry("ichange_waybill", $this->arr['wb_id'][$w], "id", "waybill_num")."', 
+					`map_location` = '".$loc."', 
+					`status` = '".$this->arr['move_to_ind'][$w]."', 
+					`train` = '".$this->arr['train_id']."', 
+					`tzone` = 'America/Chicago', 
+					`added` = '".date('U')."'";
+				$this->Generic_model->change($prog_sql);
 
 				// Cars retreive and list			
 				$cars_arr = $this->mricf->carsWB($this->arr['wb_id'][$w]);

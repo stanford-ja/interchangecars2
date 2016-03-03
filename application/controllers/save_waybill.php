@@ -58,7 +58,7 @@ class Save_waybill extends CI_Controller {
 		
 		// Start From interchangecars/inc/waybill_save.php
 		$flds_arr = array("","date","rr_id_from","rr_id_to","indust_origin_name","indust_dest_name","routing","status","waybill_num","car_num","car_aar","lading","alias_num","alias_aar","train_id","po","waybill_type","notes","rr_id_handling","return_to");
-		$prog = $this->mricf->progWB($this->arr['id']);
+		$prog = array(); //$this->mricf->progWB($this->arr['id']); - COMMENTED OUT 2016-03-02 JS
 		$last_prog = count($prog)-1;
 		$returnToTmp = $this->arr['fld19'];
 		//if($action == "NEW"){
@@ -117,18 +117,35 @@ class Save_waybill extends CI_Controller {
 			for($pz=0;$pz<count($this->arr['pfld4']);$pz++){
 				$pfld7_tmp = $this->arr['pfld7'][$pz].":".$this->arr['pfld8'][$pz];
 				//if($this->arr['pfld2'][$pz] == date('Y-m-d')){$pfld7_tmp = date('H:i');} // Dont know why I put this line in, so un-remark if it become apparent why!
-				$prog[] = array(
-				'date' => $this->arr['pfld2'][$pz], 
-				'time' => $pfld7_tmp, 
-				'text' => strtoupper($this->arr['pfld3'][$pz]),
-				'waybill_num' => $this->arr['pfld4'][$pz], 
-				'map_location' => strtoupper($this->arr['pfld6'][$pz]), 
-				'status' => strtoupper($this->arr['fld7'][$pz]), 
-				'train' => str_replace("NOT ALLOCATED","",$this->arr['fld14'][$pz]), 
-				'rr' => $this->arr['fld18'], 
-				'exit_location' => strtoupper($autoSav['entry_waypoint']), 
-				'tzone' => @$_COOKIE['_tz']
-				);
+				if($pz >= count($this->arr['pfld4'])){ /* NOW ONLY HAS *ONE* PROGRESS REPORT - THE LATEST ONE */
+					$prog[] = array(
+					'date' => $this->arr['pfld2'][$pz], 
+					'time' => $pfld7_tmp, 
+					'text' => strtoupper($this->arr['pfld3'][$pz]),
+					'waybill_num' => $this->arr['pfld4'][$pz], 
+					'map_location' => strtoupper($this->arr['pfld6'][$pz]), 
+					'status' => strtoupper($this->arr['fld7'][$pz]), 
+					'train' => str_replace("NOT ALLOCATED","",$this->arr['fld14'][$pz]), 
+					'rr' => $this->arr['fld18'], 
+					'exit_location' => strtoupper($autoSav['entry_waypoint']), 
+					'tzone' => @$_COOKIE['_tz']
+					);
+				}
+
+				// Added 2016-03-02 - The $prog[] creation above can be changed to single (ie, taken out of this FOR loop) after 2016-06-02				
+				$prog_sql = "INSERT INTO `ichange_progress` SET 
+					`date` = '".$this->arr['pfld2'][$pz]."', 
+					`time` = '".$pfld7_tmp."', 
+					`text` = '".strtoupper($this->arr['pfld3'][$pz])."', 
+					`waybill_num` = '".$this->arr['pfld4'][$pz]."', 
+					`map_location` = '".strtoupper($this->arr['pfld6'][$pz])."', 
+					`status` = '".strtoupper($this->arr['fld7'][$pz])."', 
+					`train` = '".str_replace("NOT ALLOCATED","",$this->arr['fld14'][$pz])."', 
+					`rr` = '".$this->arr['fld18']."', 
+					`exit_location` = '".strtoupper($autoSav['entry_waypoint'])."', 
+					`tzone` = '".@$_COOKIE['_tz']."', 
+					`added` = '".date('U')."'";
+				$this->Generic_model->change($prog_sql);
 			}
 		}
 		$jprog = json_encode($prog);

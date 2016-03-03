@@ -91,7 +91,8 @@ class Waybill extends CI_Controller {
 				if(strlen(@$cars[$c]['NUM']) > 0){$cars_dat .= @$cars[$c]['NUM']." (".@$cars[$c]['AAR'].") (".@$this->arr['allRR'][$cars[$c]['RR']]->report_mark.")<br />";}
 			}
 
-			$prog_dat = $this->prog_lst($wbdat[0]->progress);
+			//$prog_dat = $this->prog_lst($wbdat[0]->progress);
+			$prog_dat = (array)$this->Generic_model->qry("SELECT * FROM `ichange_progress` WHERE `waybill_num` = '".$wbdat[$i]->waybill_num."'");
 
 			$this->dat['data'][0]['id'] 					= $wbdat[$i]->id;
 			$this->dat['data'][0]['date']			 	= $wbdat[$i]->date;
@@ -165,6 +166,10 @@ class Waybill extends CI_Controller {
 		// Progress Array
 		$prog_dat = @$this->dat['data'][0]->progress;
 		$prog_dat_json = @json_decode($prog_dat,TRUE);
+		$prog_data = (array)$this->Generic_model->qry("SELECT * FROM `ichange_progress` WHERE `waybill_num` = '".$wb_num."'");
+		//print_r($prog_dat_json);
+
+		
 				
 		// Create data variables for waybill form fields
 		$this->dat['id'] = $id;
@@ -190,7 +195,7 @@ class Waybill extends CI_Controller {
   	   $this->dat['fld19'] = @$this->dat['data'][0]->return_to;
    	$this->dat['fld21'] = @json_decode($this->dat['data'][0]->cars, true);
   	   $this->arr['fld21'] = @$this->dat['data'][0]->cars;
-  	   $this->dat['prog_lst'] = $this->prog_lst($prog_dat);//(@$this->dat['data'][0]->progress);
+  	   $this->dat['prog_lst'] = $this->prog_lst($prog_data); //$prog_dat);//(@$this->dat['data'][0]->progress);
   	   $this->dat['oth_dat_json'] = @$this->dat['data'][0]->other_data;
   	   $this->dat['sugg_car_types'] = ""; 
   	   if(strlen(@$this->dat['data'][0]->lading)){
@@ -332,7 +337,8 @@ class Waybill extends CI_Controller {
 	
 	function prog_lst($wbdat){
 			// Progress listing JSON to string.
-			$prog = @json_decode($wbdat, TRUE);
+			//$prog = @json_decode($wbdat, TRUE);
+			$prog = $wbdat;
 			$prog_d = "<div style=\"display: table; width: 100%;\">";
 			$prog_d .= "<div style=\"display: table-row;\">";
 			$prog_d .= "<div style=\"display: table-cell;\" class=\"td_title\">Date / Time</div>";
@@ -342,6 +348,7 @@ class Waybill extends CI_Controller {
 			$prog_d .= "<div style=\"display: table-cell;\" class=\"td_title\">Status</div>";
 			$prog_d .= "</div>";
 			for($p=count($prog)-1;$p>=0;$p=$p-1){
+				$prog[$p] = (array)$prog[$p];
 				$tc="td1"; if(floatval($p/2) == intval($p/2)){$tc="td2";}
 				$prog_d .= "<div style=\"display: table-row;\">";
 				$prog_d .= "<div style=\"display: table-cell;\" class=\"".$tc."\">".@$prog[$p]['date']."&nbsp;".@$prog[$p]['time']."<br />".@$prog[$p]['tzone']."</div>";
@@ -426,6 +433,21 @@ class Waybill extends CI_Controller {
 		$r1_last = $r1_prog[$r1_max];
 		$r1_progress = array();
 		$r1_progress[] = $r1_last;
+		// Added 2016-03-02			
+		$prog_sql = "INSERT INTO `ichange_progress` SET 
+			`date` = '".$r1_last['date']."', 
+			`time` = '".$r1_last['time']."', 
+			`text` = '".$r1_last['text']."', 
+			`waybill_num` = '".$t_wb."', 
+			`map_location` = '".$r1_last['map_location']."', 
+			`status` = '".$r1_last['status']."', 
+			`train` = '".$r1_last['train']."', 
+			`rr` = '".$r1_last['rr']."', 
+			`exit_location` = '".$r1_last['exit_location']."', 
+			`tzone` = '".$r1_last['tzone']."', 
+			`added` = '".date('U')."'";
+		$this->Generic_model->change($prog_sql);
+
 		$r1_progress[] = array(
 			'date' => date('Y-m-d'),
 			'time' => date('H:i'), 
@@ -435,6 +457,19 @@ class Waybill extends CI_Controller {
 			'map_location' => "", 
 			'tzone' => @$_SESSION['_tz']
 		);
+		// Added 2016-03-02 			
+		$prog_sql = "INSERT INTO `ichange_progress` SET 
+			`date` = '".date('Y-m-d')."', 
+			`time` = '".date('H:i')."', 
+			`text` = 'TRANSHIPPED FROM WB ".$wb[0]->waybill_num."', 
+			`waybill_num` = '".$t_wb."', 
+			`map_location` = '', 
+			`status` = 'TRANSHIPPED', 
+			`tzone` = '".@$_SESSION['_tz']."', 
+			`added` = '".date('U')."'";
+		$this->Generic_model->change($prog_sql);
+		
+		$prog_sql = "";
 		$r1['progress'] = json_encode($r1_progress);
 		// End get orig waybill data and manipulate
 		

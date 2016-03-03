@@ -667,8 +667,11 @@ class Home extends CI_Controller {
 	}
 
 	function latest_prog($tmp){
-		$prog_all = json_decode($this->waybills[$tmp]->progress, true);
-		$last_prog = count($prog_all) - 1; 
+		// Get latest Progress Report
+		$sql = "SELECT * FROM `ichange_progress` WHERE `waybill_num` = '".$this->waybills[$tmp]->waybill_num."' ORDER BY date DESC, time DESC LIMIT 1";
+		$prog_res = (array)$this->Generic_model->qry($sql);
+		$prog_all[0] = (array)$prog_res[0]; //json_decode($this->waybills[$tmp]->progress, true);
+		$last_prog = 0; //count($prog_all) - 1; 
 		$this->fld1_1 = $prog_all[$last_prog]['date']; //"Server Date/Time: ".$prog_all[$last_prog]['date'];
 		$this->fld1_2 = $prog_all[$last_prog]['text'];
 		$this->fld1_3 = $prog_all[$last_prog]['map_location'];

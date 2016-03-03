@@ -64,7 +64,7 @@
 		$desc = $res['description'];
 		$ret_to = $res['w_return_to'];
 		$oth_data_j = $res['w_other_data'];
-		$prog = json_decode($res['w_progress'], true);
+		$prog = array(); //json_decode($res['w_progress'], true); - COMMENTED OUT 2016-03-02 JS
 		if(strlen($ret_to) < 1){$ret_to = $res['w_indust_origin_name'];}
 		
 		// Set progress and waybill data.
@@ -107,6 +107,19 @@
 			'status' => $wb_stat, 
 			'tzone' => "America/Chicago"
 		);
+
+		// Added 2016-03-02 - The $prog[] creation above can be changed to single (ie, taken out of this FOR loop) after 2016-06-02				
+		$prog_sql = "INSERT INTO `ichange_progress` SET 
+			`date` = '".$dt."', 
+			`time` = '".date('H:i')."', 
+			`text` = '".$t."', 
+			`waybill_num` = '".$wb."', 
+			`map_location` = '".$wp."', 
+			`status` = '".$wb_stat."', 
+			`train` = '".str_replace("NOT ALLOCATED","",$ti)."', 
+			`tzone` = 'America/Chicago', 
+			`added` = '".date('U')."'";
+		mysql_query($prog_sql);
 		
 		$jprog = json_encode($prog);
 		//echo $jprog."<br />";
