@@ -165,11 +165,8 @@ class Waybill extends CI_Controller {
 		
 		// Progress Array
 		$prog_dat = @$this->dat['data'][0]->progress;
-		$prog_dat_json = @json_decode($prog_dat,TRUE);
+		//$prog_dat_json = @json_decode($prog_dat,TRUE);
 		$prog_data = (array)$this->Generic_model->qry("SELECT * FROM `ichange_progress` WHERE `waybill_num` = '".$wb_num."'");
-		//print_r($prog_dat_json);
-
-		
 				
 		// Create data variables for waybill form fields
 		$this->dat['id'] = $id;
@@ -221,11 +218,20 @@ class Waybill extends CI_Controller {
   	   $this->dat['fld11_prev'] = @$oth_dat['commodity'];
   	   
   	   $this->dat['tz_opts'] = $this->dates_times->getTZOptions();
+  	   $prog_data[count($prog_data)-1] = (array)$prog_data[count($prog_data)-1];
+  	   /*
   	   $this->dat['last_prog_date_arr'] = explode("-",$prog_dat_json[count($prog_dat_json)-1]['date']);
   	   $this->dat['last_prog_time_arr'] = explode(":",$prog_dat_json[count($prog_dat_json)-1]['time']);
   	   $this->dat['last_prog_date'] = str_replace("-","",$prog_dat_json[count($prog_dat_json)-1]['date']);
   	   $this->dat['last_prog_date_ux'] = mktime(12,0,0,$this->dat['last_prog_date_arr'][1],$this->dat['last_prog_date_arr'][2],$this->dat['last_prog_date_arr'][0]);
   	   $this->dat['last_prog_time'] = str_replace(":","",$prog_dat_json[count($prog_dat_json)-1]['time']);
+  	   */
+  	   $this->dat['last_prog_date_arr'] = explode("-",$prog_data[count($prog_data)-1]['date']);
+  	   $this->dat['last_prog_time_arr'] = explode(":",$prog_data[count($prog_data)-1]['time']);
+  	   $this->dat['last_prog_date'] = str_replace("-","",$prog_data[count($prog_data)-1]['date']);
+  	   $this->dat['last_prog_date_ux'] = mktime(12,0,0,$this->dat['last_prog_date_arr'][1],$this->dat['last_prog_date_arr'][2],$this->dat['last_prog_date_arr'][0]);
+  	   $this->dat['last_prog_time'] = str_replace(":","",$prog_data[count($prog_data)-1]['time']);
+
   	   $fld6_tmp = explode("-",str_replace(" ","",str_replace("/","-",$this->dat['fld6'])));
   	   $this->dat['route_rr_arr'] = array(); // Array of Report Marks
   	   $this->dat['rr_ics'] = array(); // Array of Interchanges

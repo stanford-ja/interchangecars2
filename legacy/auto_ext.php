@@ -124,7 +124,7 @@
 		$jprog = json_encode($prog);
 		//echo $jprog."<br />";
 		//if(strlen($ti.$wp) > 1){$oth_flds .= ", `progress` = '".$jprog."'";}
-		$oth_flds .= ", `progress` = '".$jprog."'";
+		$oth_flds .= ", `progress` = '[]'"; //.$jprog."'";
 		
 		// Update waybill table
 		$wb_upd = "UPDATE `ichange_waybill` SET `status` = '".$wb_stat."'".$oth_flds." WHERE `waybill_num` = '".$wb."'";

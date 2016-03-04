@@ -12,7 +12,7 @@ if(strpos($LocTst,"www/Applications/") > 0){
 	$dbusername="admin";
 	$dbpassword="admin";
 }
-$dbname="jstan_general";
+$dbname="jstan2_general";
 
 $dbcnx = mysql_connect($dbhost, $dbusername, $dbpassword) or die(mysql_error());
 $seldb = mysql_select_db($dbname);

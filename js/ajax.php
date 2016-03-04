@@ -221,12 +221,15 @@ function trainAutoComp($str,$fld,$sct = NULL){
 	// $tbl = table to search in
 	// $str = string to search for in field $fld - can be train_id, train_desc, origin, destination, or auto waypoint
 	// $sct = span to display results in
-	db_conn();
+	db_conn(); //$sqli = db_conn();
+	//echo "<pre>"; print_r($sqli); echo "</pre>";
 	$str = charConv($str,"[AMP]","&"); // Require to convert [AMP] back to '&'
 	$tbl = "ichange_trains";
 	$str = strtoupper($str);
-	$sql = "SELECT * FROM `".$tbl."` WHERE `train_id` LIKE '%".$str."%' OR `train_desc` LIKE '%".$str."%' OR `origin` LIKE '%".$str."%' OR `destination` LIKE '%".$str."%' OR `auto` LIKE '%".$str."%' OR `op_notes` LIKE '%".$str."%'ORDER BY `train_id`";
+	$sql = "SELECT * FROM `".$tbl."` WHERE `train_id` LIKE '%".$str."%' OR `train_desc` LIKE '%".$str."%' OR `origin` LIKE '%".$str."%' OR `destination` LIKE '%".$str."%' OR `auto` LIKE '%".$str."%' OR `op_notes` LIKE '%".$str."%' ORDER BY `train_id`";
+	//echo $sql;
 	$qry = mysql_query($sql);
+	//echo "<pre>"; print_r($qry); echo "</pre>";
 	$lst = "<a href=\"javascript:{}\" class=\"autocompletetxt\" onClick=\"document.getElementById('".$sct."_span').style.display = 'none';\">[ Close this box ]</a><br />";
 	while($res = mysql_fetch_array($qry)){
 		$fnd = 0;
@@ -248,6 +251,7 @@ function trainAutoComp($str,$fld,$sct = NULL){
 		$lst .= "<a href=\"javascript:{}\" class=\"autocompletetxt\" onClick=\"document.getElementById('".$sct."_span').style.display = 'none';\">[ Close this box ]</a>";
 	}
 	mysql_close();
+	//$sqli->close();
 	echo $lst;
 }
 
@@ -408,11 +412,15 @@ function db_conn(){
 		$dbhost="localhost";
 		$dbusername="admin";
 		$dbpassword="admin";
-		$dbname="jstan_general";
+		//$dbname="jstan_general";
 	}
 
 	$dbcnx = mysql_connect($dbhost, $dbusername, $dbpassword);
 	$seldb = mysql_select_db($dbname);
+	
+	//$sqli = new mysqli($dbhost, $dbusername, $dbpassword,$dbname);
+	//return $sqli;
+	
 }
 
 function charConv($str,$from,$to){
