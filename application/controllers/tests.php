@@ -54,7 +54,8 @@ class Tests extends CI_Controller {
 					echo "<pre>".$prog_sql."</pre>";
 					$this->Generic_model->change($prog_sql);
 				}
-				$new_prog_sql = "UPDATE `ichange_waybill` SET `progress` = '".json_encode($new_prog_arr)."' WHERE `id` = '".$wbs[$i]->id."'";
+				//$new_prog_sql = "UPDATE `ichange_waybill` SET `progress` = '".json_encode($new_prog_arr)."' WHERE `id` = '".$wbs[$i]->id."'";
+				$new_prog_sql = "UPDATE `ichange_waybill` SET `progress` = '[]' WHERE `id` = '".$wbs[$i]->id."'";
 				echo $new_prog_sql."<hr />";
 				$this->Generic_model->change($new_prog_sql);
 			}

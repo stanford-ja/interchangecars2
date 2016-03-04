@@ -279,6 +279,7 @@ class Switchlist extends CI_Controller {
 		for($w=0;$w<count($wb_aff_id);$w++){
 			// Progress report manipulation
 			$prog = array(); //$this->mricf->progWB($wb_aff_id[$w]); - COMMENTED OUT 2016-03-02 JS
+			/* DISABLED 2016-03-04 AS NOW IN ichange_progress TABLE!
 			$prog[] = array(
 				'date' => $this->arr['move_to_dt'], 
 				'time' => $this->arr['move_to_hr'].":".$this->arr['move_to_mi'], 
@@ -288,6 +289,7 @@ class Switchlist extends CI_Controller {
 				'train' => $this->arr['train_id'],
 				'status' => $this->arr['move_to']
 			);
+			*/
 			$jprog = json_encode($prog);
 			$s = "UPDATE `ichange_waybill` SET `status` = '".$this->arr['move_to']."', `progress` = '".$jprog."' WHERE `id` = '".$wb_aff_id[$w]."'";
 			$this->Generic_model->change($s);
@@ -363,6 +365,7 @@ class Switchlist extends CI_Controller {
 					$txt = "LOADING AT ".$ind;
 				}
 				$prog = array(); //$this->mricf->progWB($this->arr['wb_id'][$w]); - COMMENTED OUT 2016-03-02 JS
+				/* DISABLED 2016-03-04 AS NOW IN ichange_progress TABLE!
 				$prog[] = array(
 					'date' => $this->arr['move_to_dt'][$w], 
 					'time' => $this->arr['move_to_hr'][$w].":".$this->arr['move_to_mi'][$w], 
@@ -372,6 +375,7 @@ class Switchlist extends CI_Controller {
 					'train' => $this->arr['train_id'],
 					'status' => $this->arr['move_to_ind'][$w]
 				);
+				*/
 				$jprog = json_encode($prog);
 
 				// Added 2016-03-02 - The $prog[] creation above can be changed to single (ie, taken out of this FOR loop) after 2016-06-02				

@@ -96,6 +96,7 @@
 		$oth_flds .= ", `train_id` = '".$train."'";
 		$t .= " (added by cron)";
 
+		/* DISABLED 2016-03-04 AS NOW IN ichange_progress TABLE!
 		// Addint progress to the JSON array for updating in ichange_waybill.progress
 		$prog[] = array(
 			'date' => $dt,	
@@ -107,6 +108,7 @@
 			'status' => $wb_stat, 
 			'tzone' => "America/Chicago"
 		);
+		*/
 
 		// Added 2016-03-02 - The $prog[] creation above can be changed to single (ie, taken out of this FOR loop) after 2016-06-02				
 		$prog_sql = "INSERT INTO `ichange_progress` SET 

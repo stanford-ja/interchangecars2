@@ -117,7 +117,8 @@ class Save_waybill extends CI_Controller {
 			for($pz=0;$pz<count($this->arr['pfld4']);$pz++){
 				$pfld7_tmp = $this->arr['pfld7'][$pz].":".$this->arr['pfld8'][$pz];
 				//if($this->arr['pfld2'][$pz] == date('Y-m-d')){$pfld7_tmp = date('H:i');} // Dont know why I put this line in, so un-remark if it become apparent why!
-				if($pz >= count($this->arr['pfld4'])){ /* NOW ONLY HAS *ONE* PROGRESS REPORT - THE LATEST ONE */
+				/* DISABLED 2016-03-04 AS NOW IN ichange_progress TABLE!
+				if($pz >= count($this->arr['pfld4'])){ // NOW ONLY HAS *ONE* PROGRESS REPORT - THE LATEST ONE 
 					$prog[] = array(
 					'date' => $this->arr['pfld2'][$pz], 
 					'time' => $pfld7_tmp, 
@@ -131,6 +132,7 @@ class Save_waybill extends CI_Controller {
 					'tzone' => @$_COOKIE['_tz']
 					);
 				}
+				*/
 
 				// Added 2016-03-02 - The $prog[] creation above can be changed to single (ie, taken out of this FOR loop) after 2016-06-02				
 				$prog_sql = "INSERT INTO `ichange_progress` SET 
