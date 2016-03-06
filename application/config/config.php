@@ -20,7 +20,7 @@ if(strpos($LocTst,"www/Applications/") > 0){
 	$config['base_url']	= 'http://'.$_SERVER['SERVER_NAME'].'/Applications/interchangecars2/';
 }else{
 	//$config['base_url']	= 'http://www.stanfordhosting.net/interchangecars2/';
-	$config['base_url']	= 'http://125.7.10.69/apps/interchangecars2/';
+	$config['base_url']	= 'http://jstan2.pairserver.com/apps/interchangecars2/';
 }
 
 /*
