@@ -267,11 +267,11 @@ class Home extends CI_Controller {
 		for($w=0;$w<count($tmp);$w++){
 			$prog_all = json_decode($tmp[$w]->progress, true);
 			$last_prog = count($prog_all) - 1; 
-			$fld1_1 = $prog_all[$last_prog]['date']; //"Server Date/Time: ".$prog_all[$last_prog]['date'];
-			$fld1_2 = $prog_all[$last_prog]['text'];
-			$fld1_3 = $prog_all[$last_prog]['map_location'];
+			$fld1_1 = @$prog_all[$last_prog]['date']; //"Server Date/Time: ".$prog_all[$last_prog]['date'];
+			$fld1_2 = @$prog_all[$last_prog]['text'];
+			$fld1_3 = @$prog_all[$last_prog]['map_location'];
 			$fld1_4 = ""; //if(isset($prog_all[$last_prog]['tzone']) && isset($_COOKIE['_tz'])){$this->fld1_4 = " (TZ Time: ".$prog_all[$last_prog]['tzone']." ".date('Y-m-d H:i',date('U')+$this->dates_times->get_timezone_offset($prog_all[$last_prog]['tzone'],$_COOKIE['_tz'])).")";}
-			$fld1_5 = $prog_all[$last_prog]['time'];
+			$fld1_5 = @$prog_all[$last_prog]['time'];
 
 			$this->content['html'] .= "<div class=\"item2\">";
 			$this->content['html'] .= "<a href=\"waybill/edit/".$tmp[$w]->id."\">".$tmp[$w]->waybill_num."</a> <span style=\"background-color: yellow; font-weight: bold;\">".$tmp[$w]->waybill_type."</span>&nbsp;".$tmp[$w]->date."&nbsp;<br />\n";
@@ -608,7 +608,7 @@ class Home extends CI_Controller {
 				$fil_html .= "</a>";
 			}
 		}
-		if(strlen($fil_html) > 0){
+		if(isset($fil_html) && strlen($fil_html) > 0){
 			$fil_html = "<div style=\"width: auto; float: right; max-height: 120px; border: 1px solid brown; width: 130px; overflow: auto;\">
 				".$fil_html."
 				</div>";
