@@ -31,14 +31,17 @@ class Tests extends CI_Controller {
 		if($t == "james"){
 			// If James then ok to perform, otherwise npthing!
 			$sql = "SELECT `id`,`waybill_num`,`progress` FROM `ichange_waybill` WHERE status != 'CLOSED'";
+			echo "Start.<br />";
 			$wbs = (array)$this->Generic_model->qry($sql);
 			for($i=0;$i<count($wbs);$i++){
 				$prog_arr = @json_decode($wbs[$i]->progress,true);
 				echo "<pre>"; print_r($prog_arr); echo "</pre>Count prog_arr = ".count($prog_arr)."<br />";
-				$new_prog_arr[0] = $prog_arr[(count($prog_arr)-1)];
-				$new_prog_arr[0]['text'] = str_replace("/","&#47;",$prog_arr[(count($prog_arr)-1)]['text']);
+				//$new_prog_arr[0] = $prog_arr[(count($prog_arr)-1)];
+				//$new_prog_arr[0]['text'] = strip_tags($new_prog_arr[0]['text']); 
+				//$new_prog_arr[0]['text'] = str_replace("'","",$prog_arr[(count($prog_arr)-1)]['text']); //str_replace("/","&#47;",$prog_arr[(count($prog_arr)-1)]['text']);
 				for($p=0;$p<count($prog_arr);$p++){
-					$text = str_replace("/","&#47;",$prog_arr[$p]['text']);
+					$text = strip_tags($prog_arr[$p]['text']);
+					$text = str_replace(array("<strong>","'","&lt;/strong&gt;"),"",$text);
 					$prog_sql = "INSERT INTO `ichange_progress` SET 
 						`date` = '".$prog_arr[$p]['date']."', 
 						`time` = '".$prog_arr[$p]['time']."', 
@@ -59,6 +62,7 @@ class Tests extends CI_Controller {
 				echo $new_prog_sql."<hr />";
 				$this->Generic_model->change($new_prog_sql);
 			}
+			echo "End.<br />";
 		}
 	}
 	
