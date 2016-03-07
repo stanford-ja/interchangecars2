@@ -529,6 +529,7 @@ function st_cv($st, $app){
 
 function get_car_image($car_num,$aar_type=""){
 	$g = "&nbsp;";
+	$car_num = str_replace(array("&","_","-"," "),"",$car_num);
 	if(strlen($aar_type) > 0 && file_exists(DOC_ROOT."/images/".substr($aar_type, 0, 1).".gif")){
 		$g = "&nbsp;&nbsp;<img src=\"".IMAGE_ROOT."/".substr($aar_type, 0, 1).".gif\" border=\"0\" title=\"".$aar_type."\" />";
 	}

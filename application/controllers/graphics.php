@@ -198,10 +198,11 @@ class Graphics extends CI_Controller {
 	function carUpload(){
 		// Car upload save method
 		$p = $_POST;
+		$car_num = str_replace(array("&","_","-"," "),"",$p['car_num']);
 		$this->filePath = DOC_ROOT.'/car_images/';
 		$this->webPath = str_replace(DOC_ROOT,WEB_ROOT,$this->filePath);
 		$this->uconfig['upload_path'] = $this->filePath;
-		$this->uconfig['file_name'] = $p['car_num'].".jpg";
+		$this->uconfig['file_name'] = $car_num.".jpg";
 		$this->uconfig['max_size']	= '30';
 		$this->uconfig['max_width'] = '150';
 		$this->uconfig['max_height'] = '100';

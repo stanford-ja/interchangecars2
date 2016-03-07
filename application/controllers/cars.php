@@ -54,8 +54,8 @@ class Cars extends CI_Controller {
 			$emph = "<span style=\"".$used_style.";\">"; 
 			
 			$emph_end = "</span>";
-			$car_img = ""; if(file_exists(DOC_ROOT."/car_images/".str_replace("&","",$carsdat[$i]->car_num).".jpg")){
-				$car_img = "<br /><img src=\"".WEB_ROOT."/car_images/".str_replace("&","",$carsdat[$i]->car_num).".jpg\" style=\"width: 120px;\" />";
+			$car_img = ""; if(file_exists(DOC_ROOT."/car_images/".str_replace(array("&","_","-"," "),"",$carsdat[$i]->car_num).".jpg")){
+				$car_img = "<br /><img src=\"".WEB_ROOT."/car_images/".str_replace(array("&","_","-"," "),"",$carsdat[$i]->car_num).".jpg\" style=\"width: 120px;\" />";
 			}
 			$this->dat['data'][$i]['id'] 						= $carsdat[$i]->id;
 			$this->dat['data'][$i]['car_num']				 	= $emph.$carsdat[$i]->car_num.$emph_end;
