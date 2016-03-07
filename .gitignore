@@ -1,5 +1,5 @@
 *~
 *.jpg
-car_images/*.*
+car_images_NOT/*.*
 uploaded_files/*.*
 *.sql
