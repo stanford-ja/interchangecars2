@@ -1,9 +1,9 @@
 <?php
 // LIVE SERVER
-$dbhost="localhost"; //"db72d.pair.com";
-$dbusername="apps"; //"jstan_6_w";
-$dbpassword="1C4nDo3s5tuff"; //"Js120767";
-$dbname="interchangecars"; //"jstan_general";
+$dbhost="db150c.pair.com"; // localhost"; //"db72d.pair.com";
+$dbusername="jstan2_2_w"; //"apps"; //"jstan_6_w";
+$dbpassword="Js120767"; //"1C4nDo3s5tuff"; //"Js120767";
+//$dbname="interchangecars"; //"jstan_general";
 
 // TESTING
 $LocTst = $_SERVER['DOCUMENT_ROOT'].$_SERVER['SCRIPT_NAME'];
