@@ -9,7 +9,7 @@ class Mricf {
 function sqli_instance(){
 	$d = "jstan2_general"; //"interchangecars";
 	$LocTst = $_SERVER['DOCUMENT_ROOT'].$_SERVER['SCRIPT_NAME'];
-	if(strpos($LocTst,"www/Applications/") > 0){$d = "jstan_general";}
+	//if(strpos($LocTst,"www/Applications/") > 0){$d = "jstan_general";}
 
 	$sqli = new sqli;
 	$sqli->select_db($d); //("jstan_general");

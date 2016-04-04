@@ -18,7 +18,7 @@
 		// -->
 		<link rel="stylesheet" href="<?=CSS_ROOT?>/skeleton/skeleton.css" type="text/css" media="screen">
 		<link rel="stylesheet" href="<?=CSS_ROOT?>/style.css" type="text/css" media="screen">
-		<link rel="stylesheet" href="<?=CSS_ROOT?>/tipsy.css" type="text/css" media="screen">
+		<link rel="stylesheet" href="<?=CSS_ROOT?>/balloon.css" type="text/css" media="screen">
 		<link rel="stylesheet" href="<?=CSS_ROOT?>/print.css" type="text/css" media="print">
 		<!-- <link rel="stylesheet" href="<?=CSS_ROOT?>/mobile.css" type="text/css" media="handheld"> // -->
 		<meta name="generator" content="Bluefish 2.2.2" >
@@ -29,9 +29,8 @@
 		<!-- 
 		<script type="text/javascript" src="<?php echo JS_ROOT; ?>/jquery-1.9.1.min.js"></script>
 		<script type="text/javascript" src="<?php echo JS_ROOT; ?>/jquery.autocomplete.min.js"></script>
-		<script type="text/javascript" src="<?php echo JS_ROOT; ?>/jquery.tipsy.min.js"></script>
 		// -->
-	<!-- 
+		<!-- 
 	<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=true&amp;key=ABQIAAAAm_VCXnhfjstxzItlLyN4mBTquJ3XAnB-O2ZhZYp82wRvGEX5YxQbuUOxizYh2Df1SzfR-wjHVa5-HQ" type="text/javascript"></script>
 	// -->
 	<?php 

@@ -46,7 +46,7 @@
 						<?php echo @$_COOKIE['_tz']; ?>
 					<?php } ?>
 					</span>
-					<?php echo $phtml.$rhtml.$thtml.$shtml.@$mhtml; /* - TEST OF DROPDOWN FOR RAILROADS AS MOBILE-FRIENDLY RE-DESIGN */ ?>
+					<?php echo @$phtml.@$rhtml.@$thtml.@$shtml.@$mhtml; /* - TEST OF DROPDOWN FOR RAILROADS AS MOBILE-FRIENDLY RE-DESIGN */ ?>
 				</div>
 				<div style="display: table-cell; padding: 10px; font-size: 13pt;" class="td_menu_title">
 					<div style="display: block; max-height: 120px; overflow: auto;">

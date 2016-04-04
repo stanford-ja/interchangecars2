@@ -91,7 +91,7 @@ if(@$myRR[0]->use_tz_time == 1 && strlen(@$myRR[0]->tzone) > 0){	date_default_ti
 					<td>
 						<!-- <input name="fld21_car" id="fld21_car" value="" style="width: 150px;" onchange="this.value=this.value.toUpperCase(); carUsed(this.value);" /> // -->
 						<div id="autocomp"><div id="field">
-						<input name="fld21_car" id="fld21_car" value="" style="width: 200px;" onchange="this.value=this.value.toUpperCase(); carUsed(this.value);" />
+						<input name="fld21_car" id="fld21_car" value="" style="width: 200px;" onchange="this.value=this.value.toUpperCase(); carUsed(this.value);" title="Enter the full Car Number including reporting mark." />
 						</div></div>
 					</td>
 					</tr>
@@ -107,7 +107,9 @@ if(@$myRR[0]->use_tz_time == 1 && strlen(@$myRR[0]->tzone) > 0){	date_default_ti
 							</td></tr>
 							<tr><td colspan="3"><span id="fld9drop">
 							<?php echo "<pre>"; /* print_r($cars_options);*/ echo "</pre>"; ?>
-							Car Select <select id="fld9sel" name="fld9sel" style="width: 320px;" onChange="var expSt = explodeStr('\,',document.getElementById('fld9sel').value); option0 = new Option(expSt[1],expSt[1]); document.form1.fld21_car.value = expSt[0]; document.form1.fld21_aar.options[0] = option0; document.form1.fld21_aar.options[0].selected = true;">
+							Car Select
+							<span data-balloon="Select a car from the list, then click the Add Car button to add it to the car list for this waybill." data-balloon-pos="right" data-balloon-length="large"> 
+							<select id="fld9sel" name="fld9sel" style="width: 320px;" onChange="var expSt = explodeStr('\,',document.getElementById('fld9sel').value); option0 = new Option(expSt[1],expSt[1]); document.form1.fld21_car.value = expSt[0]; document.form1.fld21_aar.options[0] = option0; document.form1.fld21_aar.options[0].selected = true;">
 							<option value="">--Select Car Number or enter in Field above--</option>
 							<?php $last_aar = ""; for($c=0;$c<count($cars_options);$c++){
 								$this_aar = substr($cars_options[$c]['aar_type'],0,1);
@@ -140,7 +142,7 @@ if(@$myRR[0]->use_tz_time == 1 && strlen(@$myRR[0]->tzone) > 0){	date_default_ti
 				<!-- <input type="text" id="fld11" name="fld11" value="<?php echo $fld11; ?>" onKeyUp="autoComp(this.value,'ichange_commod','commod_name,generates','fld11');" /> // -->
 				<div id="autocomp">
 				<div id="field">
-				<input type="text" id="fld11" name="fld11" value="<?php echo $fld11; ?>" onKeyUp="autoComp(this.value,'ichange_commod','commod_name','fld11');" />
+				<input type="text" id="fld11" name="fld11" value="<?php echo $fld11; ?>" title="The cargo being transported on this waybill." onKeyUp="autoComp(this.value,'ichange_commod','commod_name','fld11');" />
 				</div>
 				</div>
 				<?php if($fld11 == "MT" || $fld11 == "MTY"){ ?>
@@ -182,7 +184,7 @@ if(@$myRR[0]->use_tz_time == 1 && strlen(@$myRR[0]->tzone) > 0){	date_default_ti
 				<td>Origin</td>
 				<td><a name="ind1"></a>
 					<!-- <input type"text" name="fld4" id="fld4" value="<?php echo $fld4; ?>" size="50" onKeyUp="industAutoComp(this.value,'ichange_indust','fld4','fld4',1, {'target':'fld4_span'}); document.getElementById('fld4_span').style.display = 'block';" onfocus="showEle('orig_ind_info');" onblur="hideEle('orig_ind_info');" /> // -->
-					<input type"text" name="fld4" id="fld4" value="<?php echo $fld4; ?>" size="50" onKeyUp="industAutoComp(this.value,'ichange_indust','fld4','fld4',1)" onfocus="showEle('orig_ind_info');" onblur="hideEle('orig_ind_info');" />
+					<input type"text" name="fld4" id="fld4" value="<?php echo $fld4; ?>" title="The originating industry." size="50" onKeyUp="industAutoComp(this.value,'ichange_indust','fld4','fld4',1)" onfocus="showEle('orig_ind_info');" onblur="hideEle('orig_ind_info');" />
 			<div id="fld4_span"  style="display: none; border: 1px solid black; background-color: yellow; font-size: 9pt; padding: 5px; max-height: 100px; overflow: auto;"></div>
 			<div id="fld4_indDescDiv" style="display: none;">
 					<textarea cols="50" name="fld4_indDesc" id="fld4_indDesc" onchange="this.parent.style.display = 'block'"><?php echo $fld4_indDesc; ?></textarea>
@@ -194,7 +196,7 @@ if(@$myRR[0]->use_tz_time == 1 && strlen(@$myRR[0]->tzone) > 0){	date_default_ti
 				<td>Destination</td>
 				<td><a name="ind2"></a>
 					<!-- <input type"text" name="fld5" id="fld5" value="<?php echo $fld5; ?>" size="50" onKeyUp="industAutoComp(this.value,'ichange_indust','fld5','fld5',2, {'target':'fld5_span'}); document.getElementById('fld5_span').style.display = 'block';" onfocus="showEle('dest_ind_info');" onblur="hideEle('dest_ind_info');" /> // -->
-					<input type"text" name="fld5" id="fld5" value="<?php echo $fld5; ?>" size="50" onKeyUp="industAutoComp(this.value,'ichange_indust','fld5','fld5',2);" onfocus="showEle('dest_ind_info');" onblur="hideEle('dest_ind_info');" />
+					<input type"text" name="fld5" id="fld5" value="<?php echo $fld5; ?>" size="50" title="The destination industry." onKeyUp="industAutoComp(this.value,'ichange_indust','fld5','fld5',2);" onfocus="showEle('dest_ind_info');" onblur="hideEle('dest_ind_info');" />
 			<div id="fld5_span"  style="display: none; border: 1px solid black; background-color: yellow; font-size: 9pt; padding: 5px; max-height: 100px; overflow: auto;"></div>
 			<div id="fld5_indDescDiv" style="display: none;">
 					<textarea cols="50" name="fld5_indDesc" id="fld5_indDesc" onchange="this.parent.style.display = 'block'"><?php echo $fld5_indDesc; ?></textarea>
@@ -205,7 +207,7 @@ if(@$myRR[0]->use_tz_time == 1 && strlen(@$myRR[0]->tzone) > 0){	date_default_ti
 			<tr>
 				<td>Return to</td>
 				<td>
-					<input type="text" id="fld19" name="fld19" size="40" maxsize="40" value="<?php echo $fld19; ?>" />
+					<input type="text" id="fld19" name="fld19" size="40" maxsize="40" value="<?php echo $fld19; ?>" title="Where to return the car/s on the waybill to when empty." />
 				</td>
 				<td>
 				</td>
@@ -215,7 +217,7 @@ if(@$myRR[0]->use_tz_time == 1 && strlen(@$myRR[0]->tzone) > 0){	date_default_ti
 			</tr>
 			<tr>
 				<td>From</td>
-				<td><select id="fld2" name="fld2" />
+				<td><select id="fld2" name="fld2" title="The railroad that servers the originating industry" />
 					<?php for($r=0;$r<count($rr_kys);$r++){
 						$sel = ""; if($rr_options[$rr_kys[$r]]->id == $fld2){$sel = "selected=\"selected\" ";}
 						if($rr_options[$rr_kys[$r]]->common_flag != @$rr_options[$rr_kys[$r-1]]->common_flag && $r > 0){
@@ -234,7 +236,7 @@ if(@$myRR[0]->use_tz_time == 1 && strlen(@$myRR[0]->tzone) > 0){	date_default_ti
 			</tr>
 			<tr>
 				<td>To</td>
-				<td><select id="fld3" name="fld3" />
+				<td><select id="fld3" name="fld3" title="The railroad that serves the destination industry." />
 					<?php for($r=0;$r<count($rr_kys);$r++){
 						$sel = ""; if($rr_options[$rr_kys[$r]]->id == $fld3){$sel = "selected=\"selected\" ";}
 						if($rr_options[$rr_kys[$r]]->common_flag != @$rr_options[$rr_kys[$r-1]]->common_flag && $r > 0){
@@ -249,7 +251,7 @@ if(@$myRR[0]->use_tz_time == 1 && strlen(@$myRR[0]->tzone) > 0){	date_default_ti
 			</tr>
 			<tr>
 				<td>Assigned to</td>
-				<td><select id="fld18" name="fld18" />
+				<td><select id="fld18" name="fld18"title="The railroad the waybill is currently assigned to. Normally this would be either the From or To railroad, or an intermediate railroad that connects either of them."  />
 					<?php for($r=0;$r<count($rr_kys);$r++){
 						$sel = ""; if($rr_options[$rr_kys[$r]]->id == $fld18){$sel = "selected=\"selected\" ";}
 						if($rr_options[$rr_kys[$r]]->common_flag != @$rr_options[$rr_kys[$r-1]]->common_flag && $r > 0){
@@ -279,7 +281,7 @@ if(@$myRR[0]->use_tz_time == 1 && strlen(@$myRR[0]->tzone) > 0){	date_default_ti
 					// -->
 					<div id="autocomp">
 					<div id="field">
-					<input type="text" id="fld6" size="25" name="fld6" value="<?php echo $fld6; ?>" />
+					<input type="text" id="fld6" size="25" name="fld6" value="<?php echo $fld6; ?>" title="The route the car/s on the waybill take to get to the destination industry. This should include the reporting marks of ALL railroads that will be actioning the waybill, NOT just the origin and destination railroad." />
 					</div>
 					</div>
 				</td>
@@ -340,7 +342,7 @@ if(@$myRR[0]->use_tz_time == 1 && strlen(@$myRR[0]->tzone) > 0){	date_default_ti
 			<tr>
 				<td valign="top"><span style="white-space: nowrap;">In / Allocated To</span></td>
 				<td>
-                <input type="text" size="35" name="fld14[]" id="fld14" value="<?php echo $fld14; ?>" onchange="this.value = this.value.toUpperCase();selTrain(this.value);" />&nbsp;<input type="button" name="fndTrn" value="Find" onclick="trainAutoComp(document.getElementById('fld14').value,'fld14','train_autocomp');" />
+                <input type="text" size="35" name="fld14[]" id="fld14" value="<?php echo $fld14; ?>" title="The symbol of train the waybill is currently in or allocated to. To search for a train, enter either the location to be served, part or all of the train symbol, origin, or destination, or an auto train waypoint, then click the Find button." onchange="this.value = this.value.toUpperCase();selTrain(this.value);" />&nbsp;<input type="button" name="fndTrn" value="Find" onclick="trainAutoComp(document.getElementById('fld14').value,'fld14','train_autocomp');" />
                 <div id="train_autocomp_span" style="display: none; border: 1px solid #777; background-color: yellow; font-size: 9pt; padding: 5px; margin: 1px; max-height: 150px; overflow: auto;">
                 </div>
             	 <div id="train_disp_span" style="display: none; border: 1px solid #777; background-color: yellow; font-size: 9pt; padding: 5px; margin: 1px;">
