@@ -68,6 +68,7 @@
 						<div class="td_menu" style="display: inline-block;"><!-- <a href="javascript:{}" onclick="window.open = ('<?php echo WEB_ROOT."/legacy/charts.php"; ?>', 'Charts', 'width=600px, height=600px, resizable');">Charts</a> // --><a href="<?php echo WEB_ROOT."/legacy/charts.php"; ?>" target="Charts">Charts</a></div> 
 						<div class="td_menu" style="display: inline-block;"><?php echo anchor(WEB_ROOT."/dat/csv_file", "Upload"); ?></div>
 						<div class="td_menu" style="display: inline-block;"><?php echo anchor(WEB_ROOT."/graphics/viewall", "WB Images"); ?></div>
+						<div class="td_menu" style="display: inline-block;"><?php echo anchor(WEB_ROOT."/rr", "Railroads"); ?></div>
 		
 						<?php if($rr_sess > 0){ ?>			
 						<div class="td_menu" style="display: inline-block;"><?php echo anchor(WEB_ROOT."/rr/edit/0", "Create RR"); ?></div>

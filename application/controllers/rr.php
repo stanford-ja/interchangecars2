@@ -23,7 +23,47 @@ class Rr extends CI_Controller {
 	}
 
 	public function index(){
-		$this->view($this->arr['rr_sess']);
+		//$this->view($this->arr['rr_sess']);
+		$this->lst();
+	}
+
+	public function lst(){
+		$this->arr['pgTitle'] .= " - Railroad List";
+		$randpos = array();
+		if(isset($_POST['search_for'])){
+			$rrdat = (array)$this->Generic_model->qry($_POST['search_for'],$_POST['search_in'],"ichange_rr");
+		}else{
+			$rrdat = (array)$this->Railroad_model->get_allActive('report_mark',1);
+		}
+		//echo "<pre>"; print_r($rrdat); echo "</pre>"; exit();
+		//$this->dat = array();
+		$this->dat['fields'] 			= array('id', 'rr_name', 'report_mark','owner_name', 'interchanges', 'modified');
+		$this->dat['field_names'] 		= array("ID", "Name", "Report Mark", "Owner Name", "Interchanges", "Added/Modified");
+		$this->dat['widths'] = array("5%","10%","20%","10%","35%","10%");
+		$this->dat['options']			= array(
+				'View' => "rr/view/"
+			); // Paths to options method, with trailling slash!
+		$this->dat['links']				= array(); // Paths for other links!
+		
+		for($i=0;$i<count($rrdat);$i++){
+			$this->dat['data'][$i]['id'] 						= $rrdat[$i]->id;
+			$this->dat['data'][$i]['rr_name']			 	= $rrdat[$i]->rr_name;
+			$this->dat['data'][$i]['report_mark']			 	= $rrdat[$i]->report_mark;
+			$this->dat['data'][$i]['owner_name']			 	= $rrdat[$i]->owner_name;
+			$this->dat['data'][$i]['interchanges']			 	= $rrdat[$i]->interchanges;
+			$this->dat['data'][$i]['modified'] = "";
+			if($rrdat[$i]->added > 0){$this->dat['data'][$i]['modified'] = date('Y-m-d H:i',$rrdat[$i]->added);}
+			if($rrdat[$i]->modified > 0){$this->dat['data'][$i]['modified'] = date('Y-m-d H:i',$rrdat[$i]->modified);}
+		}
+
+		//$this->rr_opts_build(10); // $this->mricf->rrOpts()
+		//$this->search_build();
+		
+		// Load views
+		$this->load->view('header', $this->arr);
+		$this->load->view('menu', $this->arr);
+		$this->load->view('list', $this->dat);
+		$this->load->view('footer');
 	}
 	
 	public function view($id=0){
