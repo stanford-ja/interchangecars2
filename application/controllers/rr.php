@@ -44,13 +44,14 @@ class Rr extends CI_Controller {
 				'View' => "rr/view/"
 			); // Paths to options method, with trailling slash!
 		$this->dat['links']				= array(); // Paths for other links!
+		$ic_div = "<div style=\"margin: 2px; padding: 4px; display: inline-block; background-color: antiquewhite;\">";
 		
 		for($i=0;$i<count($rrdat);$i++){
 			$this->dat['data'][$i]['id'] 						= $rrdat[$i]->id;
 			$this->dat['data'][$i]['rr_name']			 	= $rrdat[$i]->rr_name;
 			$this->dat['data'][$i]['report_mark']			 	= $rrdat[$i]->report_mark;
 			$this->dat['data'][$i]['owner_name']			 	= $rrdat[$i]->owner_name;
-			$this->dat['data'][$i]['interchanges']			 	= $rrdat[$i]->interchanges;
+			$this->dat['data'][$i]['interchanges']			 	= $ic_div.str_replace(";","</div>".$ic_div,$rrdat[$i]->interchanges)."</div>";
 			$this->dat['data'][$i]['modified'] = "";
 			if($rrdat[$i]->added > 0){$this->dat['data'][$i]['modified'] = date('Y-m-d H:i',$rrdat[$i]->added);}
 			if($rrdat[$i]->modified > 0){$this->dat['data'][$i]['modified'] = date('Y-m-d H:i',$rrdat[$i]->modified);}
