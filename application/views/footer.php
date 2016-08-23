@@ -2,8 +2,10 @@
 // Footer view
 ?>
 <hr style="color: #777;" />
+<?php if(isset($_COOKIE['rr_sess']) && $_COOKIE['rr_sess'] > 0 && file_exists(".git/config")){
+	echo "<span style=\"font-size: 10pt; color: red; float: right;\">GIT REPO available! To clone: <strong>git clone https://github.com/stanford-ja/interchangecars2.git</strong></span>";
+} ?>
 <span style="color: #777">&copy; <?php echo date('Y'); ?> J. Stanford.</span>
-<?php if(file_exists(".git/config")){echo "<br /><span style=\"font-size: 14pt; color: red; font-weight: bold;\">GIT REPO in use! Make sure to commit changes to repo after changes made.</span>";} ?>
 </body>
 	<?php if(strpos($_SERVER['REQUEST_URI'],"waybill/edit") < 1){ ?>
 	<script type="text/javascript">
