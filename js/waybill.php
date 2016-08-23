@@ -425,19 +425,3 @@ $f21 = str_replace("{\"AAR_REQD\":\"UNDEFINED\",\"NUM\":\"UNDEFINED\",\"AAR\":\"
 			}
 			<?php } ?>		
 	}, 90000); // divide value by 1000 to work out seconds 
-	
-	$(document).ready(function(){
-		// TIPSY definitions...
-		// $('#example6').tipsy({gravity: 'w',fade: true, html: true}); // nw | n | ne | w | e | sw | s | se
-		$('#fld21_car').tipsy({gravity: 'w', html: true}); // nw | n | ne | w | e | sw | s | se
-		$('#fld9sel').tipsy({gravity: 'w', html: true});
-		$('#fld11').tipsy({gravity: 'w', html: true});
-		$('#fld4').tipsy({gravity: 'w', html: true});
-		$('#fld5').tipsy({gravity: 'w', html: true});
-		$('#fld19').tipsy({gravity: 'w', html: true});
-		$('#fld2').tipsy({gravity: 'w', html: true});
-		$('#fld3').tipsy({gravity: 'w', html: true});
-		$('#fld18').tipsy({gravity: 'w', html: true});
-		$('#fld6').tipsy({gravity: 'w', html: true});
-		$('#fld14').tipsy({gravity: 'w', html: true});
-	});
