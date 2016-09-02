@@ -278,7 +278,9 @@ class Map extends CI_Controller {
 		$poi_file_content = array();
 		
 		for($i=0;$i<count($wb);$i++){
-			$prog = json_decode($wb[$i]->progress, TRUE);
+			$sql = "SELECT * FROM ichange_progress WHERE `waybill_num` = '".$wb[$i]->waybill_num."' ORDER BY `date` DESC, `time` DESC LIMIT 1";
+			$wb_prog = (array)$this->Generic_model->qry($sql);
+			$prog = (array)$wb_prog[0]; //json_decode($wb[$i]->progress, TRUE);
 			$progCntr = count($prog)-1;
 			$map_location = str_replace(", ",",",$prog[$progCntr]['map_location']);
 			$map_location = $this->mricf->strip_spec($map_location);
