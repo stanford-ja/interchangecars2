@@ -383,7 +383,7 @@ if ( ! function_exists('auto_link'))
 		{
 			if (preg_match_all("#(^|\s|\()((http(s?)://)|(www\.))(\w+[^\s\)\<]+)#i", $str, $matches))
 			{
-				$pop = ($popup == TRUE) ? " target=\"_blank\" " : "";
+				$pop = ($popup == TRUE) ? " target=\"_blank\" rel=\"noopener noreferrer\" " : "";
 
 				for ($i = 0; $i < count($matches['0']); $i++)
 				{
