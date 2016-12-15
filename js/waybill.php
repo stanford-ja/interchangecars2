@@ -425,5 +425,3 @@ $f21 = str_replace("{\"AAR_REQD\":\"UNDEFINED\",\"NUM\":\"UNDEFINED\",\"AAR\":\"
 			}
 			<?php } ?>		
 	}, 90000); // divide value by 1000 to work out seconds 
-	
-	

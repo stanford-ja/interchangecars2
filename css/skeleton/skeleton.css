@@ -69,6 +69,9 @@
     .container .offset-by-fourteen              { padding-left: 840px; }
     .container .offset-by-fifteen               { padding-left: 900px; }
 
+    #mainMenu { display: block; }
+    #mobMenu { display: none; float: right;}
+    #mobMenu2 { display: none;}
 
 /* #Tablet (Portrait)
 ================================================== */
@@ -120,7 +123,11 @@
         .container .offset-by-thirteen              { padding-left: 624px; }
         .container .offset-by-fourteen              { padding-left: 672px; }
         .container .offset-by-fifteen               { padding-left: 720px; }
-    }
+        
+        #mainMenu { display: none; }
+        #mobMenu { display: inline; float: right;}
+	     #mobMenu2 { display: inline-block;}
+   }
 
 
 /*  #Mobile (Portrait)
@@ -171,6 +178,10 @@
         .container .offset-by-fifteen { padding-left: 0; }
 
 			.item, .item2 { width: 300px; }
+
+        #mainMenu { display: none; }
+        #mobMenu { display: inline; float: right;}
+	     #mobMenu2 { display: inline-block;}
     }
 
 
@@ -203,6 +214,10 @@
         .container .sixteen.columns,
         .container .one-third.column,
         .container .two-thirds.column { width: 420px; }
+
+        #mainMenu { display: none; }
+        #mobMenu { display: inline; float: right;}
+	     #mobMenu2 { display: inline-block;}
     }
 
 

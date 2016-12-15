@@ -91,23 +91,35 @@ if(@$myRR[0]->use_tz_time == 1 && strlen(@$myRR[0]->tzone) > 0){	date_default_ti
 					<td>
 						<!-- <input name="fld21_car" id="fld21_car" value="" style="width: 150px;" onchange="this.value=this.value.toUpperCase(); carUsed(this.value);" /> // -->
 						<div id="autocomp"><div id="field">
+						<span data-balloon="Enter the full Car Number including reporting mark." data-balloon-pos="right" data-balloon-length="xlarge">
 						<input name="fld21_car" id="fld21_car" value="" style="width: 200px;" onchange="this.value=this.value.toUpperCase(); carUsed(this.value);" />
+						</span>
 						</div></div>
 					</td>
 					</tr>
 					<tr><td>AAR </td>
-					<td><select name="fld21_aar" id="fld21_aar" style="width: 150px; font-size: 9pt;">
+					<td>
+						<span data-balloon="Select an AAR Code for the car you wish to add." data-balloon-pos="right" data-balloon-length="large">
+						<select name="fld21_aar" id="fld21_aar" style="width: 150px; font-size: 9pt;">
 							<option value=""></option>
 							<?php echo $aar_options; ?>
-							</select></td></tr><tr><td>Attach to RR</td>
-							<td>
+						</select>
+						</span>
+					</td></tr>
+					<tr><td>Attach to RR</td>
+						<td>
+							<span data-balloon="Select the railroad the entred car will be added for." data-balloon-pos="right" data-balloon-length="large">
 							<select name="fld21_rr" id="fld21_rr">
 							<?php for($i=0;$i<count($affil);$i++){echo "<option value=\"".$affil[$i]."\">".$allRR[$affil[$i]]->report_mark."</option>";} ?>
-							</select>&nbsp;<input type="button" value="Add" onclick="addCar();" />
+							</select>
+							</span>
+							&nbsp;<input type="button" value="Add" onclick="addCar();" />
 							</td></tr>
 							<tr><td colspan="3"><span id="fld9drop">
 							<?php echo "<pre>"; /* print_r($cars_options);*/ echo "</pre>"; ?>
-							Car Select <select id="fld9sel" name="fld9sel" style="width: 320px;" onChange="var expSt = explodeStr('\,',document.getElementById('fld9sel').value); option0 = new Option(expSt[1],expSt[1]); document.form1.fld21_car.value = expSt[0]; document.form1.fld21_aar.options[0] = option0; document.form1.fld21_aar.options[0].selected = true;">
+							Car Select
+							<span data-balloon="Select a car from the list, then click the Add Car button to add it to the car list for this waybill." data-balloon-pos="right" data-balloon-length="large"> 
+							<select id="fld9sel" name="fld9sel" style="width: 320px;" onChange="var expSt = explodeStr('\,',document.getElementById('fld9sel').value); option0 = new Option(expSt[1],expSt[1]); document.form1.fld21_car.value = expSt[0]; document.form1.fld21_aar.options[0] = option0; document.form1.fld21_aar.options[0].selected = true;">
 							<option value="">--Select Car Number or enter in Field above--</option>
 							<?php $last_aar = ""; for($c=0;$c<count($cars_options);$c++){
 								$this_aar = substr($cars_options[$c]['aar_type'],0,1);
@@ -123,7 +135,10 @@ if(@$myRR[0]->use_tz_time == 1 && strlen(@$myRR[0]->tzone) > 0){	date_default_ti
 				<td rowspan="1" style="vertical-align: top; background-color: yellow; padding: 3px;">
 					<strong><u>Car Search</u></strong><br />&nbsp;
 					<!-- Find cars at: <input type="text" size="20" name="mtcars" id="mtcars" onkeyup="carsAutoFind(this.value,'location','mtcars', '', {'preloader':'mtcars_load', 'target':'mtcars_span'});" /> // -->
-					Find cars at: <input type="text" size="20" name="mtcars" id="mtcars" onkeyup="carsAutoFind(this.value,'location');" />
+					<span data-balloon="Start to enter a car location or number and the results will appear as you type." data-balloon-pos="left" data-balloon-length="large">
+					Find cars at: 
+					<input type="text" size="20" name="mtcars" id="mtcars" onkeyup="carsAutoFind(this.value,'location');" />
+					</span>
 					<span id="mtcars_load" style="visibility: hidden;">Loading...</span>
 					<br />
 					<div id="mtcars_span" style="font-size: 9pt; max-height: 125px; overflow: auto;">&nbsp;</span>
@@ -140,7 +155,9 @@ if(@$myRR[0]->use_tz_time == 1 && strlen(@$myRR[0]->tzone) > 0){	date_default_ti
 				<!-- <input type="text" id="fld11" name="fld11" value="<?php echo $fld11; ?>" onKeyUp="autoComp(this.value,'ichange_commod','commod_name,generates','fld11');" /> // -->
 				<div id="autocomp">
 				<div id="field">
+				<span data-balloon="The cargo being transported on this waybill. Start typing and commodity matches will appear." data-balloon-pos="right" data-balloon-length="large">
 				<input type="text" id="fld11" name="fld11" value="<?php echo $fld11; ?>" onKeyUp="autoComp(this.value,'ichange_commod','commod_name','fld11');" />
+				</span>
 				</div>
 				</div>
 				<?php if($fld11 == "MT" || $fld11 == "MTY"){ ?>
@@ -182,7 +199,9 @@ if(@$myRR[0]->use_tz_time == 1 && strlen(@$myRR[0]->tzone) > 0){	date_default_ti
 				<td>Origin</td>
 				<td><a name="ind1"></a>
 					<!-- <input type"text" name="fld4" id="fld4" value="<?php echo $fld4; ?>" size="50" onKeyUp="industAutoComp(this.value,'ichange_indust','fld4','fld4',1, {'target':'fld4_span'}); document.getElementById('fld4_span').style.display = 'block';" onfocus="showEle('orig_ind_info');" onblur="hideEle('orig_ind_info');" /> // -->
+					<span data-balloon="The originating industry for this waybill." data-balloon-pos="right" data-balloon-length="large">
 					<input type"text" name="fld4" id="fld4" value="<?php echo $fld4; ?>" size="50" onKeyUp="industAutoComp(this.value,'ichange_indust','fld4','fld4',1)" onfocus="showEle('orig_ind_info');" onblur="hideEle('orig_ind_info');" />
+					</span>
 			<div id="fld4_span"  style="display: none; border: 1px solid black; background-color: yellow; font-size: 9pt; padding: 5px; max-height: 100px; overflow: auto;"></div>
 			<div id="fld4_indDescDiv" style="display: none;">
 					<textarea cols="50" name="fld4_indDesc" id="fld4_indDesc" onchange="this.parent.style.display = 'block'"><?php echo $fld4_indDesc; ?></textarea>
@@ -194,7 +213,9 @@ if(@$myRR[0]->use_tz_time == 1 && strlen(@$myRR[0]->tzone) > 0){	date_default_ti
 				<td>Destination</td>
 				<td><a name="ind2"></a>
 					<!-- <input type"text" name="fld5" id="fld5" value="<?php echo $fld5; ?>" size="50" onKeyUp="industAutoComp(this.value,'ichange_indust','fld5','fld5',2, {'target':'fld5_span'}); document.getElementById('fld5_span').style.display = 'block';" onfocus="showEle('dest_ind_info');" onblur="hideEle('dest_ind_info');" /> // -->
+					<span data-balloon="The destination industry for this waybill." data-balloon-pos="right" data-balloon-length="large">
 					<input type"text" name="fld5" id="fld5" value="<?php echo $fld5; ?>" size="50" onKeyUp="industAutoComp(this.value,'ichange_indust','fld5','fld5',2);" onfocus="showEle('dest_ind_info');" onblur="hideEle('dest_ind_info');" />
+					</span>
 			<div id="fld5_span"  style="display: none; border: 1px solid black; background-color: yellow; font-size: 9pt; padding: 5px; max-height: 100px; overflow: auto;"></div>
 			<div id="fld5_indDescDiv" style="display: none;">
 					<textarea cols="50" name="fld5_indDesc" id="fld5_indDesc" onchange="this.parent.style.display = 'block'"><?php echo $fld5_indDesc; ?></textarea>
@@ -205,7 +226,9 @@ if(@$myRR[0]->use_tz_time == 1 && strlen(@$myRR[0]->tzone) > 0){	date_default_ti
 			<tr>
 				<td>Return to</td>
 				<td>
+					<span data-balloon="Where to return the car/s on this waybill to when they have been unloaded." data-balloon-pos="right" data-balloon-length="large">
 					<input type="text" id="fld19" name="fld19" size="40" maxsize="40" value="<?php echo $fld19; ?>" />
+					</span>
 				</td>
 				<td>
 				</td>
@@ -215,7 +238,9 @@ if(@$myRR[0]->use_tz_time == 1 && strlen(@$myRR[0]->tzone) > 0){	date_default_ti
 			</tr>
 			<tr>
 				<td>From</td>
-				<td><select id="fld2" name="fld2" />
+				<td>
+					<span data-balloon="The railroad that serves the Originating Industry" data-balloon-pos="right" data-balloon-length="large">
+					<select id="fld2" name="fld2">
 					<?php for($r=0;$r<count($rr_kys);$r++){
 						$sel = ""; if($rr_options[$rr_kys[$r]]->id == $fld2){$sel = "selected=\"selected\" ";}
 						if($rr_options[$rr_kys[$r]]->common_flag != @$rr_options[$rr_kys[$r-1]]->common_flag && $r > 0){
@@ -226,15 +251,21 @@ if(@$myRR[0]->use_tz_time == 1 && strlen(@$myRR[0]->tzone) > 0){	date_default_ti
 						echo "<option ".$sel."value=\"".$rr_options[$rr_kys[$r]]->id."\">".$rr_options[$rr_kys[$r]]->rr_name." (".$rr_options[$rr_kys[$r]]->report_mark.")</option>\n";
 					} 
 					?>
+					</select>
+					</span>
 				</td>
 				<td rowspan="5" style="vertical-align: top;">Notes<br />
-				<textarea name="fld17" id="fld17" cols="50" rows="4"><?php echo $fld17; ?></textarea><br />
+				<span data-balloon="Any notes pertinent to the movement of cars on this waybill. Can include information that does not appear anywhere else on the waybill, but will help handling railroads expedite this waybill." data-balloon-pos="left" data-balloon-length="large">
+				<textarea name="fld17" id="fld17" cols="50" rows="4"><?php echo $fld17; ?></textarea>
+				</span><br />
 				</td>
 
 			</tr>
 			<tr>
 				<td>To</td>
-				<td><select id="fld3" name="fld3" />
+				<td>
+					<span data-balloon="The railroad that serves the Destination Industry." data-balloon-pos="right" data-balloon-length="large">
+					<select id="fld3" name="fld3">
 					<?php for($r=0;$r<count($rr_kys);$r++){
 						$sel = ""; if($rr_options[$rr_kys[$r]]->id == $fld3){$sel = "selected=\"selected\" ";}
 						if($rr_options[$rr_kys[$r]]->common_flag != @$rr_options[$rr_kys[$r-1]]->common_flag && $r > 0){
@@ -245,11 +276,15 @@ if(@$myRR[0]->use_tz_time == 1 && strlen(@$myRR[0]->tzone) > 0){	date_default_ti
 						echo "<option ".$sel."value=\"".$rr_options[$rr_kys[$r]]->id."\">".$rr_options[$rr_kys[$r]]->rr_name." (".$rr_options[$rr_kys[$r]]->report_mark.")</option>\n";
 					} 
 					?>
+					</select>
+					</span>
 </td>
 			</tr>
 			<tr>
 				<td>Assigned to</td>
-				<td><select id="fld18" name="fld18" />
+				<td>
+					<span data-balloon="The railroad this waybill is currently assigned to. Normally this would be either the From or To railroad, or a railroad indicated in the Routing field, or an intermediate railroad that helps connect them." data-balloon-pos="right" data-balloon-length="large">
+					<select id="fld18" name="fld18">
 					<?php for($r=0;$r<count($rr_kys);$r++){
 						$sel = ""; if($rr_options[$rr_kys[$r]]->id == $fld18){$sel = "selected=\"selected\" ";}
 						if($rr_options[$rr_kys[$r]]->common_flag != @$rr_options[$rr_kys[$r-1]]->common_flag && $r > 0){
@@ -261,6 +296,7 @@ if(@$myRR[0]->use_tz_time == 1 && strlen(@$myRR[0]->tzone) > 0){	date_default_ti
 					} 
 					?>
 					</select>
+					</span>
 				<?php if(count($route_rr_arr) > 0){
 					echo "<div style=\"background-color: yellow; border: 1px solid red; margin: 2px; padding: 5px;\">The following railroads should have the waybill assigned to them when they need to action this waybill: ";
 					for($rri=0;$rri<count($route_rr_arr);$rri++){echo "<span style=\"background-color: red; color: white;\">".$route_rr_arr[$rri]."</span>&nbsp;";}
@@ -279,7 +315,9 @@ if(@$myRR[0]->use_tz_time == 1 && strlen(@$myRR[0]->tzone) > 0){	date_default_ti
 					// -->
 					<div id="autocomp">
 					<div id="field">
+					<span data-balloon="The route the car/s on the waybill will take to get from Origin to Destination (and back). This should include the reporting marks of ALL railroads that will handle this waybill, NOT just the Origin and Destination railroads." data-balloon-pos="right" data-balloon-length="xlarge">
 					<input type="text" id="fld6" size="25" name="fld6" value="<?php echo $fld6; ?>" />
+					</span>
 					</div>
 					</div>
 				</td>
@@ -340,7 +378,9 @@ if(@$myRR[0]->use_tz_time == 1 && strlen(@$myRR[0]->tzone) > 0){	date_default_ti
 			<tr>
 				<td valign="top"><span style="white-space: nowrap;">In / Allocated To</span></td>
 				<td>
+					<span data-balloon="The symbol of train the waybill is currently in or allocated to. To search for a train, enter either the location to be served, part or all of the train symbol, origin, or destination, or an auto train waypoint, then click the Find button." data-balloon-pos="right" data-balloon-length="xlarge">
                 <input type="text" size="35" name="fld14[]" id="fld14" value="<?php echo $fld14; ?>" onchange="this.value = this.value.toUpperCase();selTrain(this.value);" />&nbsp;<input type="button" name="fndTrn" value="Find" onclick="trainAutoComp(document.getElementById('fld14').value,'fld14','train_autocomp');" />
+                </span>
                 <div id="train_autocomp_span" style="display: none; border: 1px solid #777; background-color: yellow; font-size: 9pt; padding: 5px; margin: 1px; max-height: 150px; overflow: auto;">
                 </div>
             	 <div id="train_disp_span" style="display: none; border: 1px solid #777; background-color: yellow; font-size: 9pt; padding: 5px; margin: 1px;">
