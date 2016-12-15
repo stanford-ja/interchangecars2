@@ -71,6 +71,7 @@
 
     #mainMenu { display: block; }
     #mobMenu { display: none;}
+    #mobMenu { float: right; }
 
 /* #Tablet (Portrait)
 ================================================== */
@@ -125,6 +126,7 @@
         
         #mainMenu { display: none; }
         #mobMenu { display: inline; float: right;}
+        #mobMenu { float: right; }
    }
 
 
@@ -179,7 +181,8 @@
 
         #mainMenu { display: none; }
         #mobMenu { display: inline; float: right;}
-    }
+        #mobMenu { float: right; }
+   }
 
 
 /* #Mobile (Landscape)
@@ -214,6 +217,7 @@
 
         #mainMenu { display: none; }
         #mobMenu { display: inline; float: right;}
+        #mobMenu { float: right; }
     }
 
 
