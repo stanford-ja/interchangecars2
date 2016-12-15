@@ -36,6 +36,9 @@
 	$ca_lnk = "cars";
 	$mv_lnk = "locos";
 ?>
+	<div id="mobMenu" class="td_menu" style="margin-bottom: 5px;">
+		<a href="javascript:{}" onclick="document.getElementById('mainMenu').style.display = 'block'; document.getElementById('mobMenu').style.display = 'none';">Show Menu</a>
+	</div>
 	<div id="mainMenu"> <!-- START OF mainMenu MENU DIV // -->
 			<div class="tbl1" style="width: 100%;"> <!-- START OF tbl1 MENU TABLE // -->
 			<?php if($rr_sess != 9999){ /* START LOGIN FOR EXISTING MEMBER */ ?>
@@ -49,8 +52,9 @@
 					<?php echo @$phtml.@$rhtml.@$thtml.@$shtml.@$mhtml; /* - TEST OF DROPDOWN FOR RAILROADS AS MOBILE-FRIENDLY RE-DESIGN */ ?>
 				</div>
 				<div style="display: table-cell; padding: 10px; font-size: 13pt;" class="td_menu_title">
-					<div style="display: block; max-height: 140px; overflow: auto;">
+					<div style="display: block;">
 
+						<div class="td_menu" id="mobMenu2"><span style="float: right;" data-balloon="Hide menu" data-balloon-pos="right" data-balloon-length="large">[?]</span> <a href="javascript:{}" onclick="document.getElementById('mainMenu').style.display = 'none'; document.getElementById('mobMenu').style.display = 'block';">Hide Menu</a></div>
 						<div class="td_menu" style="display: inline-block;"><span style="float: right;" data-balloon="Go to Home page" data-balloon-pos="right" data-balloon-length="large">[?]</span> <?php echo anchor(WEB_ROOT."/home", "Home"); ?></div>
 						<div class="td_menu" style="display: inline-block;"><span style="float: right;" data-balloon="Create a new waybill / purchase order." data-balloon-pos="right" data-balloon-length="large">[?]</span> <?php echo anchor(WEB_ROOT."/".$wb_lnk, "New WB"); ?></div>
 						<div class="td_menu" style="display: inline-block;"><span style="float: right;" data-balloon="Customer P/Orders List." data-balloon-pos="right" data-balloon-length="large">[?]</span> <?php echo anchor(WEB_ROOT."/".$rwb_lnk, "Cust. POs"); ?></div>
