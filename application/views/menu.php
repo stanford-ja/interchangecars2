@@ -54,7 +54,7 @@
 				<div style="display: table-cell; padding: 10px; font-size: 13pt;" class="td_menu_title">
 					<div style="display: block;">
 
-						<div class="td_menu" id="mobMenu2"><span style="float: right;" data-balloon="Hide menu" data-balloon-pos="right" data-balloon-length="large">[?]</span> <a href="javascript:{}" onclick="document.getElementById('mainMenu').style.display = 'none'; document.getElementById('mobMenu').style.display = 'block';">Hide Menu</a></div>
+						<div class="td_menu" id="mobMenu2"> <a href="javascript:{}" onclick="document.getElementById('mainMenu').style.display = 'none'; document.getElementById('mobMenu').style.display = 'block';">Hide Menu</a></div>
 						<div class="td_menu" style="display: inline-block;"><span style="float: right;" data-balloon="Go to Home page" data-balloon-pos="right" data-balloon-length="large">[?]</span> <?php echo anchor(WEB_ROOT."/home", "Home"); ?></div>
 						<div class="td_menu" style="display: inline-block;"><span style="float: right;" data-balloon="Create a new waybill / purchase order." data-balloon-pos="right" data-balloon-length="large">[?]</span> <?php echo anchor(WEB_ROOT."/".$wb_lnk, "New WB"); ?></div>
 						<div class="td_menu" style="display: inline-block;"><span style="float: right;" data-balloon="Customer P/Orders List." data-balloon-pos="right" data-balloon-length="large">[?]</span> <?php echo anchor(WEB_ROOT."/".$rwb_lnk, "Cust. POs"); ?></div>
