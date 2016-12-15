@@ -70,7 +70,7 @@
     .container .offset-by-fifteen               { padding-left: 900px; }
 
     #mainMenu { display: block; }
-    #mobMenu { display: none; float: right;}
+    #mobMenu { display: none;}
     #mobMenu2 { display: none;}
 
 /* #Tablet (Portrait)
@@ -126,7 +126,7 @@
         
         #mainMenu { display: none; }
         #mobMenu { display: inline; float: right;}
-	     #mobMenu2 { display: inline-block;}
+	     #mobMenu2 { display: inline-block; float: right;}
    }
 
 
@@ -181,7 +181,7 @@
 
         #mainMenu { display: none; }
         #mobMenu { display: inline; float: right;}
-	     #mobMenu2 { display: inline-block;}
+	     #mobMenu2 { display: inline-block; float: right;}
     }
 
 
@@ -217,7 +217,7 @@
 
         #mainMenu { display: none; }
         #mobMenu { display: inline; float: right;}
-	     #mobMenu2 { display: inline-block;}
+	     #mobMenu2 { display: inline-block; float: right; }
     }
 
 
