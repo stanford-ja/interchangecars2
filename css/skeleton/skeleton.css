@@ -71,7 +71,6 @@
 
     #mainMenu { display: block; }
     #mobMenu { display: none;}
-    #mobMenu2 { display: none;}
 
 /* #Tablet (Portrait)
 ================================================== */
@@ -126,7 +125,6 @@
         
         #mainMenu { display: none; }
         #mobMenu { display: inline; float: right;}
-	     #mobMenu2 { display: inline-block; float: right;}
    }
 
 
@@ -181,7 +179,6 @@
 
         #mainMenu { display: none; }
         #mobMenu { display: inline; float: right;}
-	     #mobMenu2 { display: inline-block; float: right;}
     }
 
 
@@ -217,7 +214,6 @@
 
         #mainMenu { display: none; }
         #mobMenu { display: inline; float: right;}
-	     #mobMenu2 { display: inline-block; float: right; }
     }
 
 
