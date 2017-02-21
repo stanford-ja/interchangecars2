@@ -75,6 +75,7 @@
 						<div class="td_menu" style="display: inline-block;"><span style="float: right;" data-balloon="Upload a CSV file to update your railroads data." data-balloon-pos="right" data-balloon-length="large">[?]</span> <?php echo anchor(WEB_ROOT."/dat/csv_file", "Upload"); ?></div>
 						<div class="td_menu" style="display: inline-block;"><span style="float: right;" data-balloon="View Waybill Images." data-balloon-pos="right" data-balloon-length="large">[?]</span> <?php echo anchor(WEB_ROOT."/graphics/viewall", "WB Images"); ?></div>
 						<div class="td_menu" style="display: inline-block;"><span style="float: right;" data-balloon="View Railroads List." data-balloon-pos="right" data-balloon-length="large">[?]</span> <?php echo anchor(WEB_ROOT."/rr", "Railroads"); ?></div>
+						<div class="td_menu" style="display: inline-block;"><span style="float: right;" data-balloon="View the Currently Stored Freight List." data-balloon-pos="right" data-balloon-length="large">[?]</span> <?php echo anchor(WEB_ROOT."/storedfreight", "Stored"); ?></div>
 		
 						<?php if($rr_sess > 0){ ?>			
 						<div class="td_menu" style="display: inline-block;"><?php echo anchor(WEB_ROOT."/rr/edit/0", "Create RR"); ?></div>

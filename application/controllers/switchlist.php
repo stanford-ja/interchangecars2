@@ -137,9 +137,11 @@ class Switchlist extends CI_Controller {
 				// List of cars for Rr and affiliates
 				// Cars for waybill, incl affiliates
 				$cars = "";
+				$cars_cntr = 0;
 				$cars_arr = @json_decode($arrdat[$i]->cars,TRUE);
 				for($c=0;$c<count($cars_arr);$c++){
 					if(in_array($cars_arr[$c]['RR'],$this->my_rr_ids) && strlen($cars_arr[$c]['NUM']) > 0){
+						$cars_cntr++;
 						$cars .= $cars_arr[$c]['NUM']." (".$cars_arr[$c]['AAR'].") [".$this->arr['allRR'][$cars_arr[$c]['RR']]->report_mark."]<br />";
 					}
 				}						
@@ -167,24 +169,18 @@ class Switchlist extends CI_Controller {
 		  	   if($latest_ux < $last_prog_date_ux){$latest_ux = $last_prog_date_ux;}
 
 				if(in_array($arrdat[$i]->rr_id_handling,$this->my_rr_ids)){
-					/*
 					$wb_affected_ids .= $arrdat[$i]->id.";";
-					$this->dat['data'][$i]['move_to'] = "<span class=\"sw_hide\">".form_hidden('wb_id[]',$arrdat[$i]->id)."<select name=\"move_to_ind[]\" style=\"padding: 0px;\" onchange=\"var uli = document.getElementById('unload_in_".$arrdat[$i]->id."'); uli.style.display='none'; if(this.value=='UNLOADING'){uli.style.display = 'inline';}\">".$move_to_opts."
-						<option value=\"LOADING\">Loading at ".substr($this->mricf->qry("ichange_waybill", $arrdat[$i]->id, "id", "indust_origin_name"),0,20)."...</option>\n
-						<option value=\"UNLOADING\">Unloading at ".substr($this->mricf->qry("ichange_waybill", $arrdat[$i]->id, "id", "indust_dest_name"),0,20)."...</option>\n
-						</select>";
-					$this->dat['data'][$i]['move_to'] .= "<span style=\"display: none;\" id=\"unload_in_".$arrdat[$i]->id."\"><br /><select name=\"uli[]\" style=\"font-size:8pt;\">".$uli_opts."</select></span>";
-					$this->dat['data'][$i]['move_to'] .= "<br /><select name=\"move_to_dt[]\" style=\"font-size:8pt;\">".$this->dt_opts()."</select>";
-					$this->dat['data'][$i]['move_to'] .= "&nbsp;<select name=\"move_to_hr[]\" style=\"font-size:8pt;\">".$this->hr_opts()."</select>:";
-					$this->dat['data'][$i]['move_to'] .= "<select name=\"move_to_mi[]\" style=\"font-size:8pt;\">".$this->mi_opts()."</select>";
-					$this->dat['data'][$i]['move_to'] .= "</span>";
-					*/
-					$wb_affected_ids .= $arrdat[$i]->id.";";
+					$indust_name = $this->mricf->qry("ichange_waybill", $arrdat[$i]->id, "id", "indust_dest_name");
+					$tmp = (array)$this->Generic_model->qry("SELECT `id` FROM `ichange_indust` WHERE LENGTH(`indust_name`) > 5 AND `indust_name` = '".$indust_name."'"); 
+					$indust_id = 0; if(isset($tmp[0]->id)){ $indust_id = $tmp[0]->id; }
 					$this->dat['data'][$i]['waybill_num'] .= "<br /><span class=\"sw_hide\">".form_hidden('wb_id[]',$arrdat[$i]->id)."
 						<select name=\"move_to_ind[]\" style=\"padding: 0px;\" onchange=\"hideEle('wbdisp".$i."'); var uli = document.getElementById('unload_in_".$arrdat[$i]->id."'); uli.style.display='none'; if(this.value=='UNLOADING'){uli.style.display = 'inline';}if(this.value.length > 0){document.getElementById('wbdisp".$i."').style.display = 'inline';}\">".$move_to_opts."
 						<option value=\"LOADING\">Loading at ".substr($this->mricf->qry("ichange_waybill", $arrdat[$i]->id, "id", "indust_origin_name"),0,20)."...</option>\n
-						<option value=\"UNLOADING\">Unloading at ".substr($this->mricf->qry("ichange_waybill", $arrdat[$i]->id, "id", "indust_dest_name"),0,20)."...</option>\n
-						</select>";
+						<option value=\"UNLOADING\">Unloading at ".substr($indust_name,0,20)."...</option>\n";
+					if($indust_id > 0 && !in_array($arrdat[$i]->lading,array("","MT"))){ 
+						$this->dat['data'][$i]['waybill_num'] .= "<option value=\"STORING:".$indust_id.":".$cars_cntr.":".$arrdat[$i]->lading."\">Storing at ".substr($this->mricf->qry("ichange_waybill", $arrdat[$i]->id, "id", "indust_dest_name"),0,20)."...</option>\n"; 
+					}
+					$this->dat['data'][$i]['waybill_num'] .= "</select>";
 					$this->dat['data'][$i]['waybill_num'] .= "<span id=\"wbdisp".$i."\" style=\"display: none;\">";
 					$this->dat['data'][$i]['waybill_num'] .= "<span style=\"display: none;\" id=\"unload_in_".$arrdat[$i]->id."\"><br /><select name=\"uli[]\" style=\"font-size:8pt;\">".$uli_opts."</select></span>";
 					$this->dat['data'][$i]['waybill_num'] .= "<br /><select name=\"move_to_dt[]\" style=\"font-size:8pt;\">".$this->dt_opts($last_prog_date_ux)."</select>";
@@ -364,6 +360,17 @@ class Switchlist extends CI_Controller {
 					$loc = $this->loc_qry($ind,$rr);
 					$txt = "LOADING AT ".$ind;
 				}
+				if(strpos("z".$this->arr['move_to_ind'][$w],"STORING") > 0){
+					$this->mricf->storeFreight($this->arr['move_to_ind'][$w]) ;
+					$tmp_arr = explode(":",$this->arr['move_to_ind'][$w]);
+					$ind = $this->mricf->qry("ichange_indust", $tmp_arr[1], "id", "indust_name");
+					$rr = $this->mricf->qry("ichange_waybill", $this->arr['wb_id'][$w], "id", "rr_id_from");
+					$loc = $this->loc_qry($ind,$rr);
+					$txt = "FREIGHT UNLOADED AND STORED AT ".$ind.". WAYBILL CLOSED.";
+					$this->arr['move_to_ind'][$w] = "CLOSED";
+					$this->arr['alloc_to_train'][$w] = "";
+				}
+							
 				$prog = array(); //$this->mricf->progWB($this->arr['wb_id'][$w]); - COMMENTED OUT 2016-03-02 JS
 				/* DISABLED 2016-03-04 AS NOW IN ichange_progress TABLE!
 				$prog[] = array(
@@ -523,9 +530,9 @@ class Switchlist extends CI_Controller {
 	
 	function loc_qry($ind='',$rr=0){
 		// Sets location for progress report.
-		// $ind = industry to get town/location for
+		// $ind = industry (name OR indust.id) to get town/location for
 		// $rr = railroad id that serves the industry
-		$tmp = (array)$this->Generic_model->qry("SELECT `town` FROM `ichange_indust` WHERE `indust_name` LIKE '%".$ind."%' AND `rr` = '".$rr."'");
+		$tmp = (array)$this->Generic_model->qry("SELECT `town` FROM `ichange_indust` WHERE (`indust_name` LIKE '%".$ind."%' OR `id` = '".$ind."') AND `rr` = '".$rr."'");
 		if(isset($tmp[0]->town)){$loc = @$tmp[0]->town;}
 		return @$loc;
 	}

@@ -678,6 +678,36 @@ function aarOpts($ord_by="aar_code"){
 	
 }
 
+function storeFreight($dat){
+	// Inserts freight to be stored into the ichange_indust_stored table.
+	// $dat can be in either of these two formats:
+	/*
+		STORING:[indust id]:[qty of cars]:[commodity] - COLON DELIMITED TEXT STRING
+		array([0]=>"STORING",[1]=>{indust_id},[2]=>{qty of cars},[3]=>{commodity}) - ZERO KEYED ARRAY
+		array('indust_id'=>{indust_id},'qty_cars'=>{qty of cars},'commodity'=>{commodity}) - ASSOC ARRAY
+	*/
+	$arr = array();
+	if(strpos("z".$dat,"STORING:") > 0){ 
+		$dat = explode(":",$dat);
+	}
+	if(is_array($dat)){
+		if(isset($dat[0])){
+			$arr['indust_id'] = $dat[1];
+			$arr['qty_cars'] = $dat[2];
+			$arr['commodity'] = $dat[3];
+		}else{
+			$arr = $dat;
+		}
+	}
+	$sql = "INSERT INTO `ichange_indust_stored` SET 
+		`added` = '".date('U')."',
+		`indust_id` = '".$arr['indust_id']."',
+		`qty_cars` = '".$arr['qty_cars']."',
+		`commodity` = '".$arr['commodity']."'";
+	$sqli = $this->sqli_instance();
+	$sqli->query($sql);
+	$sqli->close();
+}
 
 }
 ?>
