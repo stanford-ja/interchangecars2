@@ -171,14 +171,15 @@ class Switchlist extends CI_Controller {
 				if(in_array($arrdat[$i]->rr_id_handling,$this->my_rr_ids)){
 					$wb_affected_ids .= $arrdat[$i]->id.";";
 					$indust_name = $this->mricf->qry("ichange_waybill", $arrdat[$i]->id, "id", "indust_dest_name");
-					$tmp = (array)$this->Generic_model->qry("SELECT `id` FROM `ichange_indust` WHERE LENGTH(`indust_name`) > 5 AND `indust_name` = '".$indust_name."'"); 
-					$indust_id = 0; if(isset($tmp[0]->id)){ $indust_id = $tmp[0]->id; }
 					$this->dat['data'][$i]['waybill_num'] .= "<br /><span class=\"sw_hide\">".form_hidden('wb_id[]',$arrdat[$i]->id)."
 						<select name=\"move_to_ind[]\" style=\"padding: 0px;\" onchange=\"hideEle('wbdisp".$i."'); var uli = document.getElementById('unload_in_".$arrdat[$i]->id."'); uli.style.display='none'; if(this.value=='UNLOADING'){uli.style.display = 'inline';}if(this.value.length > 0){document.getElementById('wbdisp".$i."').style.display = 'inline';}\">".$move_to_opts."
 						<option value=\"LOADING\">Loading at ".substr($this->mricf->qry("ichange_waybill", $arrdat[$i]->id, "id", "indust_origin_name"),0,20)."...</option>\n
 						<option value=\"UNLOADING\">Unloading at ".substr($indust_name,0,20)."...</option>\n";
-					if($indust_id > 0 && !in_array($arrdat[$i]->lading,array("","MT"))){ 
-						$this->dat['data'][$i]['waybill_num'] .= "<option value=\"STORING:".$indust_id.":".$cars_cntr.":".$arrdat[$i]->lading."\">Storing at ".substr($this->mricf->qry("ichange_waybill", $arrdat[$i]->id, "id", "indust_dest_name"),0,20)."...</option>\n"; 
+					if(!in_array($arrdat[$i]->lading,array("","MT","EMPTY","MTY"))){ 
+						$tmp = (array)$this->Generic_model->qry("SELECT `id`,`indust_name` FROM `ichange_indust` WHERE `storage` = '1' AND `rr` = '".$this->arr['rr_sess']."'");
+						for($ic=0;$ic<count($tmp);$ic++){ 
+							$this->dat['data'][$i]['waybill_num'] .= "<option value=\"STORING:".$tmp[$ic]->id.":".$cars_cntr.":".$arrdat[$i]->lading."\">Storing at ".substr($tmp[$ic]->indust_name,0,20)."...</option>\n";
+						} 
 					}
 					$this->dat['data'][$i]['waybill_num'] .= "</select>";
 					$this->dat['data'][$i]['waybill_num'] .= "<span id=\"wbdisp".$i."\" style=\"display: none;\">";

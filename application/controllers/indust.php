@@ -206,6 +206,11 @@ class Indust extends CI_Controller {
 		);
 
 		$this->field_defs[] =  array(
+			'type' => "select", 'label' => 'Allow Bulk Storage', 'name' => 'storage', 'value' => @$this->dat['data'][0]->storage, 
+			'other' => 'id="storage"', 'options' => array(0 => "No", 1 => "Yes")
+		);
+
+		$this->field_defs[] =  array(
 			'type' => "textarea", 'label' => 'RR Operation Info', 'def' => array(
               'name'        => 'op_info',
               'id'          => 'op_info',
