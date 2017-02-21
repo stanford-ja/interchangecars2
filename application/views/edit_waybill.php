@@ -108,7 +108,7 @@ if(@$myRR[0]->use_tz_time == 1 && strlen(@$myRR[0]->tzone) > 0){	date_default_ti
 					</td></tr>
 					<tr><td>Attach to RR</td>
 						<td>
-							<span data-balloon="Select the railroad the entred car will be added for." data-balloon-pos="right" data-balloon-length="large">
+							<span data-balloon="Select the railroad the entered car will be added for." data-balloon-pos="right" data-balloon-length="large">
 							<select name="fld21_rr" id="fld21_rr">
 							<?php for($i=0;$i<count($affil);$i++){echo "<option value=\"".$affil[$i]."\">".$allRR[$affil[$i]]->report_mark."</option>";} ?>
 							</select>
