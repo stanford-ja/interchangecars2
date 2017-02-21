@@ -93,10 +93,11 @@ class Storedfreight extends CI_Controller {
 	
 	public function acquire2(){
 		// Create waybill for selected acquisition
-		echo "<h2>NOT YET FINISHED!</h2>";
+		//echo "<h2>NOT YET FINISHED!</h2>";
 		$p = $_POST;
 		$dat = (array)$this->Storedfreight_model->get_single($p['id']);
 		$qty = intval($dat[0]->qty_cars-$p['qty_cars']);
+		if($p['qty_cars'] > $dat[0]->qty_cars){ $qty = $dat[0]->qty_cars; }
 
 		// Update qty_cars for ichange_indust_stored record
 		$arr = array(
@@ -104,23 +105,27 @@ class Storedfreight extends CI_Controller {
 			'qty_cars'=>$qty
 		);
 		//$this->Storedfreight_model->updateQtyCars($arr);
+		$this->Generic_model->change("UPDATE `ichange_indust_stored` SET `qty_cars` = '".$qty."' WHERE `id` = '".$p['id']."'");
 		
 		// Create waybill
 		$wbnum = date('YmdHis')."-A".$this->arr['rr_sess'];
 		$sql = "INSERT INTO `ichange_waybill` SET 
 			`waybill_num` = '".$wbnum."', 
+			`lading` = '".$dat[0]->commodity."', 
 			`status` = 'WAYBILL', 
 			`rr_id_to` = '".$this->arr['rr_sess']."', 
 			`rr_id_from` = '".$this->mricf->qry("ichange_indust",$dat[0]->indust_name,"indust_name","rr")."', 
 			`rr_id_handling` = '".$this->mricf->qry("ichange_indust",$dat[0]->indust_name,"indust_name","rr")."', 
 			`indust_origin_name` = '".$dat[0]->indust_name."', 
-			`notes` = 'REQUIRES ".$p['qty_cars']." CARS. CREATED FROM STORED FREIGHT', 
-			`date` = '".date('Y-m-d')."', 
-			";
-		
-		echo "<pre>"; print_r($dat); print_r($p); print_r($arr);echo "</pre>";
-		echo $sql;
-		//header("Location:".WEB_ROOT."/waybill/edit/".$wbnum);
+			`notes` = 'REQUIRES *".$p['qty_cars']."* CARS. CREATED FROM STORED FREIGHT', 
+			`date` = '".date('Y-m-d')."'";
+
+		$this->Generic_model->change($sql);
+		$wb = (array)$this->Generic_model->qry("SELECT `id` FROM `ichange_waybill` WHERE `waybill_num` = '".$wbnum."'");
+	
+		//echo "<pre>"; print_r($dat); print_r($p); print_r($arr); print_r($wb); echo "</pre>";
+		//echo $sql;
+		header("Location:".WEB_ROOT."/waybill/edit/".$wb[0]->id);
 	}
 	
 	

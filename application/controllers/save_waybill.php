@@ -40,7 +40,7 @@ class Save_waybill extends CI_Controller {
 		}
 		$this->dat['htm'] = "<strong>The waybill record has been saved. Click a link below, or a menu link above.</strong><br /><br />";
 		$this->dat['htm'] .= anchor('../home',"Home");
-		if(strlen($this->arr['goTo']) > 0){$this->dat['htm'] .= "<br /><a href=\"".$this->arr['goTo']."\">Return to ".$this->arr['goTo']."</a>";}
+		if(strlen($this->arr['goTo']) && strpos("z".$this->arr['goTo'],"acquire") < 1){$this->dat['htm'] .= "<br /><a href=\"".$this->arr['goTo']."\">Return to ".$this->arr['goTo']."</a>";}
 		//header('Location:home');
 		
 		$this->arr['pgTitle'] = "MRICF - Model Rail Interchangecars Facility - Waybill Saved";
