@@ -32,6 +32,7 @@ class Home extends CI_Controller {
 		
 		// Load generic model for custom queries
 		$this->load->model('Generic_model','',TRUE); // Database connection! TRUE means connect to db.
+		$this->load->model('Storedfreight_model','',TRUE); // Database connection! TRUE means connect to db.
 		
 		// Railroad array set up
 		$this->load->model('Railroad_model','',TRUE); // Database connection! TRUE means connect to db.
@@ -303,18 +304,33 @@ class Home extends CI_Controller {
 		$this->content['phtml'] = "<!-- <div class=\"box1\" style=\"left: ".$this->horiz_loc."px\"> // -->"; // 120px
 		$this->content['phtml'] .= "<br /><a href=\"#\" id=\"po_expand\" title=\"Click this link to view available purchase orders\"><strong>P/Orders</strong></a><br />";
 		$this->content['phtml'] .= "<div id=\"pos\" style=\"display: none; position: fixed; left: 10px; top: 25px; z-index:99; max-height: 300px; overflow: auto;\"><a href=\"#\" id=\"po_shrink\">Shrink</a><br />";
-		for($p=0;$p<count($this->porders);$p++){
-			$rr_from = "??"; if(isset($this->arr['allRR'][$this->porders[$p]->rr_id_from]->report_mark)){$rr_from = $this->arr['allRR'][$this->porders[$p]->rr_id_from]->report_mark;}
-			$rr_to = "??"; if(isset($this->arr['allRR'][$this->porders[$p]->rr_id_to]->report_mark)){$rr_to = $this->arr['allRR'][$this->porders[$p]->rr_id_to]->report_mark;}
-			$this->content['phtml'] .= "Rec # <a href=\"waybill/edit/".$this->porders[$p]->id."\">".$this->porders[$p]->waybill_num."</a><br />";
-			$this->content['phtml'] .= $this->porders[$p]->lading."<br />";
-			$this->content['phtml'] .= $rr_from." to ".$rr_to;
-			if(json_decode($this->porders[$p]->progress,TRUE)){
-				$j_tmp = json_decode($this->porders[$p]->progress,TRUE);
-				$this->content['phtml'] .= "<br /><span style=\"color: #888; font-size: 7pt;\">".$j_tmp[count($j_tmp)-1]['date']." - ".$j_tmp[count($j_tmp)-1]['text']."</span>";
+		$this->content['phtml'] .= "<strong>Purchase Orders</strong></a><br />";
+		if(count($this->porders) > 0){
+			for($p=0;$p<count($this->porders);$p++){
+				$rr_from = "??"; if(isset($this->arr['allRR'][$this->porders[$p]->rr_id_from]->report_mark)){$rr_from = $this->arr['allRR'][$this->porders[$p]->rr_id_from]->report_mark;}
+				$rr_to = "??"; if(isset($this->arr['allRR'][$this->porders[$p]->rr_id_to]->report_mark)){$rr_to = $this->arr['allRR'][$this->porders[$p]->rr_id_to]->report_mark;}
+				$this->content['phtml'] .= "Rec # <a href=\"waybill/edit/".$this->porders[$p]->id."\">".$this->porders[$p]->waybill_num."</a><br />";
+				$this->content['phtml'] .= $this->porders[$p]->lading."<br />";
+				$this->content['phtml'] .= $rr_from." to ".$rr_to;
+				if(json_decode($this->porders[$p]->progress,TRUE)){
+					$j_tmp = json_decode($this->porders[$p]->progress,TRUE);
+					$this->content['phtml'] .= "<br /><span style=\"color: #888; font-size: 7pt;\">".$j_tmp[count($j_tmp)-1]['date']." - ".$j_tmp[count($j_tmp)-1]['text']."</span>";
+				}
+				$this->content['phtml'] .= "<hr />";
 			}
-			$this->content['phtml'] .= "<hr />";
 		}
+
+		if(count($this->storedpo) > 0){
+			$this->content['phtml'] .= "<strong>Stored Freight</strong></a><br />";
+			for($p=0;$p<count($this->storedpo);$p++){
+				$this->content['phtml'] .= $this->storedpo[$p]->commodity." x ".$this->storedpo[$p]->qty_cars." cars<br />";
+				$this->content['phtml'] .= $this->storedpo[$p]->indust_name;
+				$this->content['phtml'] .= " (".$this->storedpo[$p]->town.")";
+				$this->content['phtml'] .= " <a href=\"storedfreight/acquire/".$this->storedpo[$p]->id."\">Acquire</a>";
+				$this->content['phtml'] .= "<hr />";
+			}
+		}
+
 		$this->content['phtml'] .= "</div>";
 		$this->content['phtml'] .= "<!-- </div> // -->";
 		$this->arr['phtml'] = $this->content['phtml'];
@@ -543,6 +559,7 @@ class Home extends CI_Controller {
 					$this->wbs_all[] = $this->Waybill_model->get_allOpenHome($this->whr,"train_id`,`sw_order`,`waybill_num");
 				}
 				$this->pos_all = $this->Waybill_model->get_POrders();
+				$this->pos_sto = $this->Storedfreight_model->get_all();
 			}
 		}
 
@@ -564,6 +581,9 @@ class Home extends CI_Controller {
 		}
 		//$this->arr['porders'] = $po_arr;
 		//$this->porders = $po_arr;
+		for($i=0;$i<count($this->pos_sto);$i++){
+			$this->storedpo[] = $this->pos_sto[$i];
+		}
    }
 
 	// Home Display methods

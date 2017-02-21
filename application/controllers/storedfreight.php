@@ -11,6 +11,7 @@ class Storedfreight extends CI_Controller {
 		$this->load->library('mricf');
 		
 		$this->load->model('Generic_model','',TRUE); // Database connection! TRUE means connect to db.
+		$this->load->model('Storedfreight_model','',TRUE); // Database connection! TRUE means connect to db.
 		$this->dat = array();
 
 		$this->load->library('settings');
@@ -27,11 +28,7 @@ class Storedfreight extends CI_Controller {
 	
 	public function lst(){
 		$this->arr['pgTitle'] .= " - List";
-		$sql = "SELECT `ichange_indust_stored`.*,`ichange_indust`.`indust_name` 
-			FROM `ichange_indust_stored` 
-			LEFT JOIN `ichange_indust` ON `ichange_indust_stored`.`indust_id` = `ichange_indust`.`id` 
-			ORDER BY `ichange_indust`.`indust_name`";
-		$stored = (array)$this->Generic_model->qry($sql);
+		$stored = (array)$this->Storedfreight_model->get_all();
 		//$this->dat = array();
 		$this->dat['fields'] 			= array('id', 'indust_name', 'qty_cars', 'commodity', 'added');
 		$this->dat['field_names'] 		= array("ID", "Stored at Industry", "Qty of Cars", "Commodity", "Added");
@@ -62,23 +59,17 @@ class Storedfreight extends CI_Controller {
 		$this->load->view('list', $this->dat);
 		$this->load->view('footer');
 	}
-	
-	public function edit($id=0){
-		// Used for editing existing (edit/[id]) and adding new (edit/0) records
+
+	public function acquire($id=0){
+		// Acquire some stored freight and create waybill stream
 		$this->dat['attribs'] = array('name' => "form"); // Attribs for form tag
 		$this->load->helper('form');
 		$this->dat['fields'] = array();
 		$this->dat['field_names'] = array();
-		if($id < 1){
-			$this->arr['pgTitle'] .= " - New";
-			$this->dat['data'][0] = array('id' => 0);
-		}else{
-			$this->arr['pgTitle'] .= " - Edit";
-			$this->dat['data'] = (array)$this->Randomwb_model->get_single($id);
-		}
-		
-		//echo "<pre>"; print_r($this->dat['data']); echo "</pre>";
-		$this->setFieldSpecs(); // Set field specs
+		$this->arr['pgTitle'] .= " - Acquire";
+		$this->dat['data'] = (array)$this->Storedfreight_model->get_single($id);
+
+		$this->setFieldSpecs();
 		for($i=0;$i<count($this->field_defs);$i++){
 			$this->dat['field_names'][$i] = $this->field_defs[$i]['label'];
 			if($this->field_defs[$i]['type'] == "checkbox"){
@@ -90,6 +81,7 @@ class Storedfreight extends CI_Controller {
 			if($this->field_defs[$i]['type'] == "select"){$this->dat['fields'][$i] = "<br />".form_dropdown($this->field_defs[$i]['name'],$this->field_defs[$i]['options'],$this->field_defs[$i]['value'],$this->field_defs[$i]['other']);}
 			if($this->field_defs[$i]['type'] == "statictext"){$this->dat['fields'][$i] = "<br />".$this->field_defs[$i]['value'];}
 		}
+
 		$this->load->view('header', $this->arr);
 		$this->load->view('menu', $this->arr);
 		if($this->arr['rr_sess'] > 0){$this->load->view('edit', $this->dat);}
@@ -99,31 +91,67 @@ class Storedfreight extends CI_Controller {
 		$this->load->view('footer');
 	}
 	
+	public function acquire2(){
+		// Create waybill for selected acquisition
+		echo "<h2>NOT YET FINISHED!</h2>";
+		$p = $_POST;
+		$dat = (array)$this->Storedfreight_model->get_single($p['id']);
+		$qty = intval($dat[0]->qty_cars-$p['qty_cars']);
+
+		// Update qty_cars for ichange_indust_stored record
+		$arr = array(
+			'id'=>$p['id'],
+			'qty_cars'=>$qty
+		);
+		//$this->Storedfreight_model->updateQtyCars($arr);
+		
+		// Create waybill
+		$wbnum = date('YmdHis')."-A".$this->arr['rr_sess'];
+		$sql = "INSERT INTO `ichange_waybill` SET 
+			`waybill_num` = '".$wbnum."', 
+			`status` = 'WAYBILL', 
+			`rr_id_to` = '".$this->arr['rr_sess']."', 
+			`rr_id_from` = '".$this->mricf->qry("ichange_indust",$dat[0]->indust_name,"indust_name","rr")."', 
+			`rr_id_handling` = '".$this->mricf->qry("ichange_indust",$dat[0]->indust_name,"indust_name","rr")."', 
+			`indust_origin_name` = '".$dat[0]->indust_name."', 
+			`notes` = 'REQUIRES ".$p['qty_cars']." CARS. CREATED FROM STORED FREIGHT', 
+			`date` = '".date('Y-m-d')."', 
+			";
+		
+		echo "<pre>"; print_r($dat); print_r($p); print_r($arr);echo "</pre>";
+		echo $sql;
+		//header("Location:".WEB_ROOT."/waybill/edit/".$wbnum);
+	}
+	
+	
 	public function setFieldSpecs(){
 		// Sets specific field definitions for the controller being used.
 		$this->dat['fields'] = array();
 		
-		// Add custom model calls / queries under this line...
-		$this->load->model('Aar_model', '', TRUE);
-		$this->load->model('Railroad_model', '', TRUE);
-		
-		// Add other code for fields under this line...
-		$aar_opts = array();
-		$aar_tmp = (array)$this->Aar_model->get_allSorted();
-		for($i=0;$i<count($aar_tmp);$i++){$aar_opts[$aar_tmp[$i]->aar_code] = $aar_tmp[$i]->aar_code." - ".substr($aar_tmp[$i]->desc,0,70);}
-		
-		$rr_opts = array();
-		$rr_tmp = (array)$this->Railroad_model->get_allActive();
-		for($i=0;$i<count($rr_tmp);$i++){$rr_opts[$rr_tmp[$i]->id] = $rr_tmp[$i]->report_mark." - ".substr($rr_tmp[$i]->rr_name,0,70);}
-		
 		// Add form and field definitions specific to this controller under this line... 
-		$this->dat['hidden'] = array('tbl' => 'randomwb', 'id' => @$this->dat['data'][0]->id);
-		$this->dat['form_url'] = "../save";
+		$this->dat['hidden'] = array('tbl' => 'ichange_indust_stored', 'id' => @$this->dat['data'][0]->id);
+		$this->dat['form_url'] = "../storedfreight/acquire2";
+
+
 		$this->field_defs[] =  array(
-			'type' => "input", 'label' => 'Origin Industry', 'def' => array(
+			'type' => "statictext", 'label' => '', 
+              'value'       => "From: ".@$this->dat['data'][0]->indust_name.", located at ".@$this->dat['data'][0]->town.
+              	"<br />Commodity: ".@$this->dat['data'][0]->commodity
+		);
+
+		$car_opts = array();
+		for($c=0;$c<=@$this->dat['data'][0]->qty_cars;$c++){ $car_opts[$c] = $c; }
+		$this->field_defs[] =  array(
+			'type' => "select", 'label' => 'Qty of Cars to Acquire', 'name' => 'qty_cars', 'value' => 0, 
+			'other' => 'id="car_aar"', 'options' => $car_opts
+		);
+
+		/*
+		$this->field_defs[] =  array(
+			'type' => "statictext", 'label' => 'Origin Industry', 'def' => array(
               'name'        => 'indust_origin_name',
               'id'          => 'indust_origin_name',
-              'value'       => @$this->dat['data'][0]->indust_origin_name,
+              'value'       => @$this->dat['data'][0]->indust_name,
               'maxlength'   => '50',
               'size'        => '50'
 			)
@@ -199,6 +227,7 @@ class Storedfreight extends CI_Controller {
               'cols'        => '50'
 			)
 		);
+		*/
 	}
 
 }
