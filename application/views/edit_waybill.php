@@ -233,6 +233,19 @@ if(@$myRR[0]->use_tz_time == 1 && strlen(@$myRR[0]->tzone) > 0){	date_default_ti
 				<td>
 				</td>
 			</tr>
+			<?php if(!in_array($fld11,array("","MT","EMPTY","MTY"))){ ?>
+			<tr>
+				<td>Store at</td>
+				<td>
+					<select name="storage" onchange="if(this.value.length > 0){if(confirm('This will store the lading\nfor the number of cars indicated\nand close this waybill.\n\nAre you sure?')){ window.location = '<?php echo WEB_ROOT."/waybill/store/".$id."/"; ?>'+this.value;} }">
+						<option value="" selected="selected">To Bulk Store this WB, select...</option>
+						<?php for($st=0;$st<count($stodat);$st++){
+							echo "<option value=\"".$stodat[$st]->id."\">".substr($stodat[$st]->indust_name,0,35)."... (".$stodat[$st]->town.")</option>"; 
+						} ?>
+					</select>
+				</td>
+			</tr>
+			<?php } ?>
 			<tr>
 			<td colspan="3" style="background-color: peru;">&nbsp;&nbsp;Railroad Operation details</td>
 			</tr>

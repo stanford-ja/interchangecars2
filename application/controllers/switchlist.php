@@ -57,6 +57,7 @@ class Switchlist extends CI_Controller {
 		$trdat = (array)$this->Train_model->get_single($id); // Single train indicated by `id`
 		$trsdat = (array)$this->Train_model->get_all4RR_Sorted($this->arr['rr_sess'],'train_id',1);
 		$rrdat = (array)$this->Railroad_model->get_allActive();
+		$stodat = (array)$this->Generic_model->qry("SELECT `id`,`indust_name` FROM `ichange_indust` WHERE `storage` = '1' AND `rr` = '".$this->arr['rr_sess']."'");
 		//echo "<pre>"; print_r($trdat); echo "</pre>";
 		$op_days = "";
 		if($trdat[0]->sun == 1){$op_days .= "SUN ";}
@@ -176,7 +177,7 @@ class Switchlist extends CI_Controller {
 						<option value=\"LOADING\">Loading at ".substr($this->mricf->qry("ichange_waybill", $arrdat[$i]->id, "id", "indust_origin_name"),0,20)."...</option>\n
 						<option value=\"UNLOADING\">Unloading at ".substr($indust_name,0,20)."...</option>\n";
 					if(!in_array($arrdat[$i]->lading,array("","MT","EMPTY","MTY"))){ 
-						$tmp = (array)$this->Generic_model->qry("SELECT `id`,`indust_name` FROM `ichange_indust` WHERE `storage` = '1' AND `rr` = '".$this->arr['rr_sess']."'");
+						$tmp = $stodat; // = (array)$this->Generic_model->qry("SELECT `id`,`indust_name` FROM `ichange_indust` WHERE `storage` = '1' AND `rr` = '".$this->arr['rr_sess']."'");
 						for($ic=0;$ic<count($tmp);$ic++){ 
 							$this->dat['data'][$i]['waybill_num'] .= "<option value=\"STORING:".$tmp[$ic]->id.":".$cars_cntr.":".$arrdat[$i]->lading."\">Storing at ".substr($tmp[$ic]->indust_name,0,20)."...</option>\n";
 						} 

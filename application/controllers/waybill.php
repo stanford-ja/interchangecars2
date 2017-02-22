@@ -148,6 +148,9 @@ class Waybill extends CI_Controller {
 		for($ca=0;$ca<count($cars_opts);$ca++){
 			$this->dat['cars_options'][$ca] = array('car_num' => @$cars_opts[$ca]->car_num, 'aar_type' => @$cars_opts[$ca]->aar_type, 'desc' => @$cars_opts[$ca]->desc, 'rr' => @$this->arr['allRR'][$cars_opts[$ca]->rr]->report_mark);
 		}
+		
+		// Bulk Storage industries
+		$this->dat['stodat'] = (array)$this->Generic_model->qry("SELECT `id`,`indust_name`,`town` FROM `ichange_indust` WHERE `storage` = '1' AND `rr` = '".$this->arr['rr_sess']."'");
 
 		// Transhipped waybills
 		$status_dropdown = $this->stat_opts().$this->stat_opt_ic();
