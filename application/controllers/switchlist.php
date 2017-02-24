@@ -368,8 +368,8 @@ class Switchlist extends CI_Controller {
 					$ind = $this->mricf->qry("ichange_indust", $tmp_arr[1], "id", "indust_name");
 					$rr = $this->mricf->qry("ichange_waybill", $this->arr['wb_id'][$w], "id", "rr_id_from");
 					$loc = $this->loc_qry($ind,$rr);
-					$txt = "FREIGHT UNLOADED AND STORED AT ".$ind.". WAYBILL CLOSED.";
-					$this->arr['move_to_ind'][$w] = "CLOSED";
+					$txt = "FREIGHT UNLOADED AND STORED AT ".$ind.". READY TO START EMPTY RETURN JOURNEY.";
+					$this->arr['move_to_ind'][$w] = "UNLOADED";
 					$this->arr['alloc_to_train'][$w] = "";
 				}
 							

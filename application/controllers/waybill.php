@@ -587,15 +587,15 @@ class Waybill extends CI_Controller {
 		$prog_sql = "INSERT INTO `ichange_progress` SET 
 			`date` = '".date('Y-m-d')."', 
 			`time` = '".date('H:i')."', 
-			`text` = 'FREIGHT UNLOADED AND STORED AT ".$indat[0]->indust_name.". WAYBILL CLOSED.', 
+			`text` = 'FREIGHT UNLOADED AND STORED AT ".$indat[0]->indust_name.". READY TO START EMPTY RETURN JOURNEY.', 
 			`waybill_num` = '".$wbdat[0]->waybill_num."', 
 			`map_location` = '".$indat[0]->town."', 
-			`status` = 'CLOSED', 
+			`status` = 'UNLOADED', 
 			`train` = '".$wbdat[0]->train_id."', 
 			`tzone` = 'America/Chicago', 
 			`added` = '".date('U')."'";
 		$this->Generic_model->change($prog_sql);
-		$s = "UPDATE `ichange_waybill` SET `train_id` = '', `status` = 'CLOSED' WHERE `id` = '".$wb_id."'";
+		$s = "UPDATE `ichange_waybill` SET `train_id` = '', `status` = 'UNLOADED', `lading` = 'MT' WHERE `id` = '".$wb_id."'";
 		$this->Generic_model->change($s);
 
 		header("Location:".WEB_ROOT."/home");
