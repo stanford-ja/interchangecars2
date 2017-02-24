@@ -28,6 +28,7 @@ class Storedfreight extends CI_Controller {
 	
 	public function lst(){
 		$this->arr['pgTitle'] .= " - List";
+		$this->Generic_model->change("DELETE FROM `ichange_indust_stored` WHERE `qty_cars` = 0");
 		$stored = (array)$this->Storedfreight_model->get_all();
 		//$this->dat = array();
 		$this->dat['fields'] 			= array('id', 'indust_name', 'qty_cars', 'commodity', 'added');

@@ -150,7 +150,7 @@ class Waybill extends CI_Controller {
 		}
 		
 		// Bulk Storage industries
-		$this->dat['stodat'] = (array)$this->Generic_model->qry("SELECT `id`,`indust_name`,`town` FROM `ichange_indust` WHERE `storage` = '1' AND `rr` = '".$this->arr['rr_sess']."'");
+		$this->dat['stodat'] = $this->mricf->getStoredIndust($this->arr['rr_sess']);
 
 		// Transhipped waybills
 		$status_dropdown = $this->stat_opts().$this->stat_opt_ic();
@@ -195,6 +195,7 @@ class Waybill extends CI_Controller {
   	   $this->dat['fld19'] = @$this->dat['data'][0]->return_to;
    	$this->dat['fld21'] = @json_decode($this->dat['data'][0]->cars, true);
   	   $this->arr['fld21'] = @$this->dat['data'][0]->cars;
+  	   $this->arr['fld21_cntr'] = count($this->mricf->cars4RR4WB($this->arr['rr_sess'],$this->dat['id'])); //count(json_decode($this->arr['fld21'],true));
   	   $this->dat['prog_lst'] = $this->prog_lst($prog_data); //$prog_dat);//(@$this->dat['data'][0]->progress);
   	   $this->dat['oth_dat_json'] = @$this->dat['data'][0]->other_data;
   	   $this->dat['sugg_car_types'] = ""; 
@@ -256,9 +257,7 @@ class Waybill extends CI_Controller {
   	   	}
   	   	
   	   }
-  	   
-  	   
-		
+  	   	
 		$this->load->view('header', $this->arr);
 		$this->load->view('menu', $this->arr);
 		//if($this->arr['rr_sess'] > 0){$this->load->view('edit', $this->dat);}
@@ -576,6 +575,30 @@ class Waybill extends CI_Controller {
 		
 		//$other_data = json_decode($orig_wb[0]->other_data,TRUE);
 		header("Location:../../waybill/edit/".$id);
+	}
+	
+	function store($wb_id=0,$indust_id=0){
+		// Store waybill at selected industry, close waybill, add progress report.
+		$wbdat = (array)$this->Waybill_model->get_single($wb_id,"id");
+		$indat = (array)$this->Generic_model->qry("SELECT * FROM `ichange_indust` WHERE `id` = '".$indust_id."'")	;	
+		$dat = array('indust_id'=>$indust_id,'qty_cars'=>count($this->mricf->cars4RR4WB($this->arr['rr_sess'],$wb_id)),'commodity'=>$wbdat[0]->lading);
+		$this->mricf->storeFreight($dat);
+
+		$prog_sql = "INSERT INTO `ichange_progress` SET 
+			`date` = '".date('Y-m-d')."', 
+			`time` = '".date('H:i')."', 
+			`text` = 'FREIGHT UNLOADED AND STORED AT ".$indat[0]->indust_name.". WAYBILL CLOSED.', 
+			`waybill_num` = '".$wbdat[0]->waybill_num."', 
+			`map_location` = '".$indat[0]->town."', 
+			`status` = 'CLOSED', 
+			`train` = '".$wbdat[0]->train_id."', 
+			`tzone` = 'America/Chicago', 
+			`added` = '".date('U')."'";
+		$this->Generic_model->change($prog_sql);
+		$s = "UPDATE `ichange_waybill` SET `train_id` = '', `status` = 'CLOSED' WHERE `id` = '".$wb_id."'";
+		$this->Generic_model->change($s);
+
+		header("Location:".WEB_ROOT."/home");
 	}
 
 }

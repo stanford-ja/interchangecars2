@@ -709,5 +709,26 @@ function storeFreight($dat){
 	$sqli->close();
 }
 
+function getStoredIndust($rr=0){
+	$stodat = (array)$this->CI->Generic_model->qry("SELECT `id`,`indust_name`,`town` FROM `ichange_indust` WHERE `storage` = '1' AND `rr` = '".$rr."'");
+	return $stodat;
+}
+
+function cars4RR4WB($rr=0,$wb=0){
+	// Gets all cars for waybill id $wb, for railroad id $rr, as an associative array
+	$sql = "SELECT `cars` FROM `ichange_waybill` WHERE `id` = '".$wb."'";
+	$sqli = $this->sqli_instance();
+	$q = $sqli->query($sql);
+	while($r = $q->fetch_assoc()){
+		$cars = json_decode($r['cars'],true);
+	}
+	$cars_rr = array();
+	for($i=0;$i<count($cars);$i++){
+		if($cars[$i]['RR'] == $rr){ $cars_rr[] = $cars[$i]; }
+	}
+	$sqli->close();
+	return $cars_rr;
+}
+
 }
 ?>

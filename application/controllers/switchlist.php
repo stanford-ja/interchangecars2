@@ -57,7 +57,7 @@ class Switchlist extends CI_Controller {
 		$trdat = (array)$this->Train_model->get_single($id); // Single train indicated by `id`
 		$trsdat = (array)$this->Train_model->get_all4RR_Sorted($this->arr['rr_sess'],'train_id',1);
 		$rrdat = (array)$this->Railroad_model->get_allActive();
-		$stodat = (array)$this->Generic_model->qry("SELECT `id`,`indust_name` FROM `ichange_indust` WHERE `storage` = '1' AND `rr` = '".$this->arr['rr_sess']."'");
+		$stodat = $this->mricf->getStoredIndust($this->arr['rr_sess']); //(array)$this->Generic_model->qry("SELECT `id`,`indust_name` FROM `ichange_indust` WHERE `storage` = '1' AND `rr` = '".$this->arr['rr_sess']."'");
 		//echo "<pre>"; print_r($trdat); echo "</pre>";
 		$op_days = "";
 		if($trdat[0]->sun == 1){$op_days .= "SUN ";}

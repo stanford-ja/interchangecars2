@@ -712,6 +712,14 @@ class Home extends CI_Controller {
 		$str .= "<br />";
 		$str .= form_hidden("wb_id[]",$this->waybills[$tmp]->id);
 		$str .= "In Train: <select name=\"tr_sel[]\" style=\"font-size: 8pt; height: 22px;\" onchange=\"home_update('allocTrain',this.value,".$this->waybills[$tmp]->id.");\"><option selected=\"selected\" value=\"".@$this->waybills[$tmp]->train_id."\">".@$this->waybills[$tmp]->train_id."</option>".$this->trains_opts_lst."</select><br />";
+		if(count($this->mricf->cars4RR4WB($this->arr['rr_sess'],$this->waybills[$tmp]->id)) > 1 && !in_array($this->waybills[$tmp]->lading,array("","MT","EMPTY","MTY"))){ 
+			$stodat = $this->mricf->getStoredIndust($this->arr['rr_sess']);
+			$str .= "Store: <select name=\"stome[]\" style=\"font-size: 8pt; height: 22px;\" onchange=\"if(this.value.length > 0){if(confirm('This will store the lading\\nfor the number of cars indicate\\nand close this waybill.\\n\\nAre you sure?')){ window.location = '".WEB_ROOT."/waybill/store/".$this->waybills[$tmp]->id."/'+this.value;} }\"><option value=\"\">To Bulk Store this WB, select...</option>";
+			for($st=0;$st<count($stodat);$st++){
+				$str .= "<option value=\"".$stodat[$st]->id."\">".substr($stodat[$st]->indust_name,0,35)."... (".$stodat[$st]->town.")</option>";
+			} 
+			$str .= "</select>";
+		}
 		$str .= form_hidden("wb_num[]",$this->waybills[$tmp]->waybill_num);
 		$str .= "</span><br />";
 		return $str;
