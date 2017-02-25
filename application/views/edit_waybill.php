@@ -81,11 +81,12 @@ if(@$myRR[0]->use_tz_time == 1 && strlen(@$myRR[0]->tzone) > 0){	date_default_ti
 					<table style="margin-bottom: 5px; background-color: #F4A460;">
 					<tr><td colspan="2">
 					<strong>Cars attached to waybill</strong>
-					</td><td rowspan="4">
-					<span style="font-size: 9pt; font-weight: bold;">Cars on waybill</span><br />
-					<div id="carsHTM" style="font-size: 9pt; padding: 2px; border: 1px solid #777;background-color: #DEB887;min-width: 140px;">&nbsp;</div>
 					</td>
-					<td rowspan="5" style="font-weight: bold; color: maroon; font-size: 8pt;"><?php echo $sugg_car_types; ?></td>
+					<td rowspan="7" style="vertical-align: top;">
+					<span style="font-size: 9pt; font-weight: bold;">Cars on waybill</span><br />
+					<div id="carsHTM" style="font-size: 9pt; padding: 2px; border: 1px solid #777;background-color: #DEB887;min-width: 180px; max-height: 150px; overflow: auto">&nbsp;</div>
+					</td>
+					<td rowspan="5" style="font-weight: bold; color: maroon; font-size: 8pt; vertical-align: top;"><?php echo $sugg_car_types; ?></td>
 					</tr>
 					<tr><td>Car </td>
 					<td>
@@ -115,7 +116,7 @@ if(@$myRR[0]->use_tz_time == 1 && strlen(@$myRR[0]->tzone) > 0){	date_default_ti
 							</span>
 							&nbsp;<input type="button" value="Add" onclick="addCar();" />
 							</td></tr>
-							<tr><td colspan="3"><span id="fld9drop">
+							<tr><td colspan="2"><span id="fld9drop">
 							<?php echo "<pre>"; /* print_r($cars_options);*/ echo "</pre>"; ?>
 							Car Select
 							<span data-balloon="Select a car from the list, then click the Add Car button to add it to the car list for this waybill." data-balloon-pos="right" data-balloon-length="large"> 
