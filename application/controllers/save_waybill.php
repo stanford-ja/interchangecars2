@@ -38,19 +38,24 @@ class Save_waybill extends CI_Controller {
 		if($this->arr['id'] == 0 || isset($this->email_wb)){
 			$this->email_wb_to_grp();
 		}
+		$wb_id = $this->arr['id']; if($wb_id < 1){ $wb_id = $this->Generic_model->insert_id(); }
 		$this->dat['htm'] = "<strong>The waybill record has been saved. Click a link below, or a menu link above.</strong><br /><br />";
 		$this->dat['htm'] .= anchor('../home',"Home");
 		if(strlen($this->arr['goTo']) && strpos("z".$this->arr['goTo'],"acquire") < 1){$this->dat['htm'] .= "<br /><a href=\"".$this->arr['goTo']."\">Return to ".$this->arr['goTo']."</a>";}
 		//header('Location:home');
 		
-		$this->arr['pgTitle'] = "MRICF - Model Rail Interchangecars Facility - Waybill Saved";
-		$this->arr['rr_sess'] = 0;
-		if(isset($_POST['express'])){ $this->arr['redirect'] = $this->arr['goTo']; }
-		if(isset($_COOKIE['rr_sess'])){$this->arr['rr_sess'] = $_COOKIE['rr_sess'];}
-		$this->load->view('header', $this->arr);
-		$this->load->view('menu', $this->arr);
-		$this->load->view('save', $this->dat);
-		$this->load->view('footer');
+		if(isset($_POST['addXtraAutos']) && $_POST['addXtraAutos'] == 1){
+			header("Location:".WEB_ROOT."/waybill/addAutoTrain/".$wb_id);
+		}else{
+			$this->arr['pgTitle'] = "MRICF - Model Rail Interchangecars Facility - Waybill Saved";
+			$this->arr['rr_sess'] = 0;
+			if(isset($_POST['express'])){ $this->arr['redirect'] = $this->arr['goTo']; }
+			if(isset($_COOKIE['rr_sess'])){$this->arr['rr_sess'] = $_COOKIE['rr_sess'];}
+			$this->load->view('header', $this->arr);
+			$this->load->view('menu', $this->arr);
+			$this->load->view('save', $this->dat);
+			$this->load->view('footer');
+		}
 	}
 	
 	function var_build(){

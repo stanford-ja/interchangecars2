@@ -601,5 +601,39 @@ class Waybill extends CI_Controller {
 		header("Location:".WEB_ROOT."/home");
 	}
 
+	function addAutoTrain($id=0){
+		// Allow addition of extra Auto Trains
+		$wb = (array)$this->Generic_model->qry("SELECT * FROM `ichange_waybill` WHERE `id` = '".$id."'"); // Waybill data
+		$prog = (array)$this->Generic_model->qry("SELECT `date`,`map_location`,`text` FROM `ichange_progress` WHERE `waybill_num` = '".$wb[0]->waybill_num."' ORDER BY `date` DESC LIMIT 1"); // Latest Progress report date
+		$auto = (array)$this->Generic_model->qry("SELECT `act_date`,`waypoint`,`train_id` FROM `ichange_auto` WHERE `waybill_num` = '".$wb[0]->waybill_num."' AND `description` = 'SPOTTED' ORDER BY `act_date` DESC LIMIT 1"); // Latest Auto Train date
+		//echo "<pre>"; print_r($wb); print_r($prog);print_r($auto);echo "</pre>";
+		$last_date = date('Y-m-d');
+		$last_location = "";
+		$details = "";
+		if($prog[0]->date > $last_date){ 
+			$last_date = $prog[0]->date; 
+			$last_location = $prog[0]->map_location;
+			$details = $prog[0]->text;
+		}
+		if($auto[0]->act_date > $last_date){ 
+			$last_date = $auto[0]->act_date; 
+			$last_location = $auto[0]->waypoint;
+			$details = $auto[0]->train_id;
+		}
+
+		$this->dat['field_names'] = array("waybill_num","date","indust_origin_name","indust_dest_name","return_to","status","routing","notes","last_action","last_location","details");
+		$this->dat['data'][0] = array($wb[0]->waybill_num,$wb[0]->date,$wb[0]->indust_origin_name,$wb[0]->indust_dest_name,$wb[0]->return_to,$wb[0]->status,$wb[0]->routing,$wb[0]->notes,$last_date,$last_location,$details);
+		$this->dat2 = array(
+			'last_action' => $last_date,
+			'id' => $id
+		);
+
+		// Load views
+		$this->load->view('header', $this->arr);
+		$this->load->view('menu', $this->arr);
+		$this->load->view('view', $this->dat);
+		$this->load->view('waybill_add_auto_train', $this->dat2);
+		$this->load->view('footer');
+	}
 }
 ?>

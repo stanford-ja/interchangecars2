@@ -8,6 +8,8 @@ class Waybill_model extends CI_Model {
         parent::__construct();
         $this->load->library('mricf');
     }
+
+	function insert_id(){ return $this->db->insert_id(); }
     
     function get_latest_entries($a=10){
         //$query = $this->db->get($this->tbl, $a);

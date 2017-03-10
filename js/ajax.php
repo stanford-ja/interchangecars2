@@ -57,12 +57,12 @@ function selTrain($fld14){
 		//if(intval($res['auto']) > 0 || strlen($res['auto']) > 4){
 		if(strlen($res['auto']) > 4){
 			$lst .= "<div id=\"tr_valid8\" style=\"font-size: 12pt; font-weight: bold; color: maroon;\">Make sure you select an Entry and Exit Waypoint or the Auto Train routing will not be correct!</div>";
-			$lst .= "Entry Waypoint: <select id=\"entry_waypoint\" name=\"entry_waypoint\" onchange=\"route_valid8();\"><option value=\"\" selected=\"selected\">Select Entry</option>".$opts."</select><br />";
-			$lst .= "Exit Waypoint: <select id=\"exit_waypoint\" name=\"exit_waypoint\" onchange=\"route_valid8();\"><option value=\"\" selected=\"selected\">Select Exit</option>".$opts."</select><br />";
+			$lst .= "<div style=\"display: inline-block; padding: 3px; white-space: nowrap;\">Entry Waypoint: <select id=\"entry_waypoint\" name=\"entry_waypoint\" onchange=\"route_valid8();\"><option value=\"\" selected=\"selected\">Select Entry</option>".$opts."</select></div>";
+			$lst .= "<div style=\"display: inline-block; padding: 3px; white-space: nowrap;\">Exit Waypoint: <select id=\"exit_waypoint\" name=\"exit_waypoint\" onchange=\"route_valid8();\"><option value=\"\" selected=\"selected\">Select Exit</option>".$opts."</select></div>";
 		}elseif(intval($res['auto']) > 0){
 			$lst .= "<div id=\"tr_valid8\" style=\"font-size: 12pt; font-weight: bold; color: maroon;\">Enter the Entry and Exit Waypoint or the Auto Train routing will not be correct!</div>";
-			$lst .= "Entry Waypoint: <input type=\"text\" id=\"entry_waypoint\" name=\"entry_waypoint\" value=\"\" onchange=\"this.value = this.value.toUpperCase();route_valid8();\" /><br />";
-			$lst .= "Exit Waypoint: <input type=\"text\" id=\"exit_waypoint\" name=\"exit_waypoint\" value=\"\" onchange=\"this.value = this.value.toUpperCase(); document.form1.pfld6.value = this.value;route_valid8();\" />";
+			$lst .= "<div style=\"display: inline-block; padding: 3px; white-space: nowrap;\">Entry Waypoint: <input type=\"text\" id=\"entry_waypoint\" name=\"entry_waypoint\" value=\"\" onchange=\"this.value = this.value.toUpperCase();route_valid8();\" /></div>";
+			$lst .= "<div style=\"display: inline-block; padding: 3px; white-space: nowrap;\">Exit Waypoint: <input type=\"text\" id=\"exit_waypoint\" name=\"exit_waypoint\" value=\"\" onchange=\"this.value = this.value.toUpperCase(); document.form1.pfld6.value = this.value;route_valid8();\" /></div>";
 		}else{
 			$lst .= "<input type=\"hidden\" id=\"entry_waypoint\" name=\"entry_waypoint\" value=\"\" />";
 			$lst .= "Exit Waypoint: <input type=\"text\" id=\"exit_waypoint\" name=\"exit_waypoint\" value=\"\" onchange=\"this.value = this.value.toUpperCase(); document.form1.pfld6.value = this.value;\" />";
@@ -73,7 +73,8 @@ function selTrain($fld14){
 				$dt_unix = intval(date('U')+($md*86400));
 				$dy_opts .= "<option value=\"".$md."\">".date('Y-m-d',$dt_unix)."</option>";
 			}
-			$lst .= "Start Move On: <select name=\"auto_start_dt\" id=\"auto_start_dt\" onchange=\"route_valid8();\">".$dy_opts."</select>";
+			$lst .= "<div style=\"display: inline-block; padding: 3px; white-space: nowrap;\">Start Move On: <select name=\"auto_start_dt\" id=\"auto_start_dt\" onchange=\"route_valid8();\">".$dy_opts."</select></div>";
+			$lst .= "<div style=\"display: inline-block; padding: 3px; white-space: nowrap;\">Add extra Auto Trains on Save: <select name=\"addXtraAutos\"><option value=\"0\">No</option><option value=\"1\">Yes</option></select></div>";
 			$lst .= "&nbsp;<input type=\"button\" name=\"calc_route\" value=\"Calc Route\" onclick=\"selRoute();\" />";
 		}
 		//$lst .= "<a href=\"javascript:{}\" onclick=\"document.getElementById('exit_waypoint').value = '".$res['destination']."'\">".$res['destination']."</a>, ";
