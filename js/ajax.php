@@ -9,7 +9,7 @@ if(isset($_GET['f'])){
 	//for($g=0;$g<count($get_kys);$g++){$_GET[$get_kys[$g]] = str_replace("&","[AMP]",$_GET[$get_kys[$g]]);}
 	//print_r($_GET);
 	if($_GET['f'] == "carUsed"){carUsed(@$_GET['d'],@$_GET['r']);}
-	if($_GET['f'] == "selTrain"){selTrain(@$_GET['d']);}//,@$_GET['r']);}
+	if($_GET['f'] == "selTrain"){selTrain(@$_GET['d'],$_GET['la']);}//,@$_GET['r']);}
 	if($_GET['f'] == "selRoute"){selRoute(@$_GET['d'],@$_GET['s'],@$_GET['e'],@$_GET['g']);}//,@$_GET['r']);}
 	if($_GET['f'] == "carsAutoFind"){carsAutoFind(@$_GET['a'],@$_GET['b']);}
 	if($_GET['f'] == "industAutoComp"){industAutoComp(@$_GET['a'],@$_GET['b'],@$_GET['c'],@$_GET['d'],@$_GET['e']);}
@@ -35,10 +35,13 @@ function carUsed($cn,$rr){
 	echo $w;
 }
 
-function selTrain($fld14){
+function selTrain($fld14,$la=''){
 	// Display Train Selected function called by AJAX.
 	db_conn();
 	$fld14 = charConv($fld14,"[AMP]","&"); // Require to convert [AMP] back to '&'
+	if(strlen($la) < 1){ $la = date('Y-m-d'); }
+	$la_arr = explode("-",$la);
+	$la_ts = intval(mktime (12, 0, 0, $la_arr[1], $la_arr[2], $la_arr[0]) + 86400);
 	//echo $fld14;
 	$sql = "SELECT * FROM `ichange_trains` WHERE `train_id` = '".$fld14."' LIMIT 1";
 	$qry = mysql_query($sql);
@@ -62,15 +65,15 @@ function selTrain($fld14){
 		}elseif(intval($res['auto']) > 0){
 			$lst .= "<div id=\"tr_valid8\" style=\"font-size: 12pt; font-weight: bold; color: maroon;\">Enter the Entry and Exit Waypoint or the Auto Train routing will not be correct!</div>";
 			$lst .= "<div style=\"display: inline-block; padding: 3px; white-space: nowrap;\">Entry Waypoint: <input type=\"text\" id=\"entry_waypoint\" name=\"entry_waypoint\" value=\"\" onchange=\"this.value = this.value.toUpperCase();route_valid8();\" /></div>";
-			$lst .= "<div style=\"display: inline-block; padding: 3px; white-space: nowrap;\">Exit Waypoint: <input type=\"text\" id=\"exit_waypoint\" name=\"exit_waypoint\" value=\"\" onchange=\"this.value = this.value.toUpperCase(); document.form1.pfld6.value = this.value;route_valid8();\" /></div>";
+			$lst .= "<div style=\"display: inline-block; padding: 3px; white-space: nowrap;\">Exit Waypoint: <input type=\"text\" id=\"exit_waypoint\" name=\"exit_waypoint\" value=\"\" onchange=\"this.value = this.value.toUpperCase(); if(document.form1.pfld6){ document.form1.pfld6.value = this.value; } route_valid8();\" /></div>";
 		}else{
 			$lst .= "<input type=\"hidden\" id=\"entry_waypoint\" name=\"entry_waypoint\" value=\"\" />";
-			$lst .= "Exit Waypoint: <input type=\"text\" id=\"exit_waypoint\" name=\"exit_waypoint\" value=\"\" onchange=\"this.value = this.value.toUpperCase(); document.form1.pfld6.value = this.value;\" />";
+			$lst .= "Exit Waypoint: <input type=\"text\" id=\"exit_waypoint\" name=\"exit_waypoint\" value=\"\" onchange=\"this.value = this.value.toUpperCase(); if(document.form1.pfld6){ document.form1.pfld6.value = this.value; }\" />";
 		}
 		if(intval($res['auto']) > 0 || strlen($res['auto']) > 4){
 			$mx_dys = 10; $dy_opts = "";
 			for($md=0;$md<$mx_dys;$md++){
-				$dt_unix = intval(date('U')+($md*86400));
+				$dt_unix = intval($la_ts+($md*86400)); //intval(date('U')+($md*86400));
 				$dy_opts .= "<option value=\"".$md."\">".date('Y-m-d',$dt_unix)."</option>";
 			}
 			$lst .= "<div style=\"display: inline-block; padding: 3px; white-space: nowrap;\">Start Move On: <select name=\"auto_start_dt\" id=\"auto_start_dt\" onchange=\"route_valid8();\">".$dy_opts."</select></div>";

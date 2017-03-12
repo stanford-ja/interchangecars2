@@ -5,9 +5,10 @@ if(strpos($_SERVER['DOCUMENT_ROOT'].$_SERVER['SCRIPT_NAME'],"www/Applications/")
 }
 ?>
 
-			<form id="form1" name="form1" method="post" action="../../save_waybill" onSubmit="return chckFrm()" autocomplete="off">
+			<form id="form1" name="form1" method="post" action="../../waybill/addAutoTrain/<?php echo $id; ?>" autocomplete="off">
 	<input type="hidden" name="id" id="id" value="<?php echo $id; ?>" />
 	<input type="hidden" name="tbl" id="tbl" value="ichange_waybill" />
+	<input type="hidden" name="last_action" id="last_action" value="<?php echo $last_action; ?>" />
 		<table border="0" width="100%" align="center" style="background-color: transparent; border: none;">						
 			<tr>
 			<td colspan="3" style="background-color: peru;">&nbsp;&nbsp;Train details</td>

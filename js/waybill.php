@@ -90,6 +90,7 @@ $f21 = str_replace("{\"AAR_REQD\":\"UNDEFINED\",\"NUM\":\"UNDEFINED\",\"AAR\":\"
 			tds.style.display = 'none';
 			tds.innerHTML = '&nbsp;';
 			var p = "<?php echo JS_ROOT; ?>/ajax.php?f=selTrain&d=" + trd;
+			if(document.getElementById('last_action')){ p += "&la=" + document.getElementById('last_action').value; }
 			$.get(p,function(data){		
 				fnd = data;
 				if(fnd.length > 0){
@@ -273,28 +274,30 @@ $f21 = str_replace("{\"AAR_REQD\":\"UNDEFINED\",\"NUM\":\"UNDEFINED\",\"AAR\":\"
 
 		var rr_found = 0;
 		var rr_mark = '';
-		document.getElementById('carsHTM').innerHTML = '';
-		var fld21 = document.getElementById('fld21'); 
-		var carsHTM = document.getElementById('carsHTM');
-		fld21.value = '[';
-		for(i=0;i<carsJson.length;i++){
-			rr_mark = '';
-			if(rr_repmarks[carsJson[i].RR]){rr_mark = rr_repmarks[carsJson[i].RR];}
-			//carsHTM.innerHTML += "<strong>"+carsJson[i].NUM+"</strong> ("+carsJson[i].AAR+") <em>["+rr_mark+"]</em>";
-			carsHTM.innerHTML += "<strong>"+carsJson[i].NUM+"</strong> ("+carsJson[i].AAR+") <em>["+rr_mark+"]</em>";
-			rr_found = 0;
-			for(r=0;r<rr_afil.length;r++){
-				if(carsJson[i].RR == rr_afil[r]){rr_found++;};
+		if(document.getElementById('carsHTM')){
+			document.getElementById('carsHTM').innerHTML = '';
+			var fld21 = document.getElementById('fld21'); 
+			var carsHTM = document.getElementById('carsHTM');
+			fld21.value = '[';
+			for(i=0;i<carsJson.length;i++){
+				rr_mark = '';
+				if(rr_repmarks[carsJson[i].RR]){rr_mark = rr_repmarks[carsJson[i].RR];}
+				//carsHTM.innerHTML += "<strong>"+carsJson[i].NUM+"</strong> ("+carsJson[i].AAR+") <em>["+rr_mark+"]</em>";
+				carsHTM.innerHTML += "<strong>"+carsJson[i].NUM+"</strong> ("+carsJson[i].AAR+") <em>["+rr_mark+"]</em>";
+				rr_found = 0;
+				for(r=0;r<rr_afil.length;r++){
+					if(carsJson[i].RR == rr_afil[r]){rr_found++;};
+				}
+				if(rr_found > 0){
+					carsHTM.innerHTML += '&nbsp;<a href="javascript:{}" onclick="delCar(\''+i+'\')">Del</a>';
+				}
+				carsHTM.innerHTML += "<br />";
+				if(i>0){fld21.value += ',';}
+				fld21.value += '{"AAR_REQD":"'+carsJson[i].AAR_REQD+'","NUM":"'+carsJson[i].NUM+'","AAR":"'+carsJson[i].AAR+'","RR":"'+carsJson[i].RR+'"}';
 			}
-			if(rr_found > 0){
-				carsHTM.innerHTML += '&nbsp;<a href="javascript:{}" onclick="delCar(\''+i+'\')">Del</a>';
-			}
-			carsHTM.innerHTML += "<br />";
-			if(i>0){fld21.value += ',';}
-			fld21.value += '{"AAR_REQD":"'+carsJson[i].AAR_REQD+'","NUM":"'+carsJson[i].NUM+'","AAR":"'+carsJson[i].AAR+'","RR":"'+carsJson[i].RR+'"}';
-		}
-		fld21.value += ']';
-    	document.getElementById('fld21_car').value = '';
+			fld21.value += ']';
+    		document.getElementById('fld21_car').value = '';
+    	}
 	}
 
 
@@ -374,20 +377,22 @@ $f21 = str_replace("{\"AAR_REQD\":\"UNDEFINED\",\"NUM\":\"UNDEFINED\",\"AAR\":\"
 		//var m = document.getElementById('pfld2_m');
 		//var d = document.getElementById('pfld2_d');
 
-		var fdt = document.getElementById(i);
-		var y = document.getElementById(i+'_y');
-		var m = document.getElementById(i+'_m');
-		var d = document.getElementById(i+'_d');
+		if(document.getElementById(i)){
+			var fdt = document.getElementById(i);
+			var y = document.getElementById(i+'_y');
+			var m = document.getElementById(i+'_m');
+			var d = document.getElementById(i+'_d');
 		
-		fdt.value = y.value + "-" + m.value + "-" + d.value;
+			fdt.value = y.value + "-" + m.value + "-" + d.value;
+		}
 	}
 	
 	window.onload = function(){
 		hideEle('auto_ul_lab');
 		dispCars();
 		set_human_date('pfld2_0');
-		if(document.getElementById('fld4_indDesc').value.length > 0){document.getElementById('fld4_indDescDiv').style.display = 'block';}
-		if(document.getElementById('fld5_indDesc').value.length > 0){document.getElementById('fld5_indDescDiv').style.display = 'block';}
+		if(document.getElementById('fld4_indDesc')){ if(document.getElementById('fld4_indDesc').value.length > 0){document.getElementById('fld4_indDescDiv').style.display = 'block';} }
+		if(document.getElementById('fld5_indDesc')){ if(document.getElementById('fld5_indDesc').value.length > 0){document.getElementById('fld5_indDescDiv').style.display = 'block';} }
 	} 
 
 	function addProgFrm(){
@@ -415,7 +420,7 @@ $f21 = str_replace("{\"AAR_REQD\":\"UNDEFINED\",\"NUM\":\"UNDEFINED\",\"AAR\":\"
 	setInterval(function() {
 			<?php if($rr_sess > 0){ ?>
 			if(document.getElementById('wb_image_div')){
-			var p = "<?php echo WEB_ROOT; ?>/ajax/wbImages/<?php echo $this->dat['id']; ?>";
+			var p = "<?php echo WEB_ROOT; ?>/ajax/wbImages/<?php echo $id; ?>";
 			$.get(p,function(data){		
 				fnd = data;
 				if(fnd.length > 0){

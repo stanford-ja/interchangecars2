@@ -621,6 +621,7 @@ class Waybill extends CI_Controller {
 			$details = $auto[0]->train_id;
 		}
 
+		$this->arr['id'] = $id;
 		$this->dat['field_names'] = array("waybill_num","date","indust_origin_name","indust_dest_name","return_to","status","routing","notes","last_action","last_location","details");
 		$this->dat['data'][0] = array($wb[0]->waybill_num,$wb[0]->date,$wb[0]->indust_origin_name,$wb[0]->indust_dest_name,$wb[0]->return_to,$wb[0]->status,$wb[0]->routing,$wb[0]->notes,$last_date,$last_location,$details);
 		$this->dat2 = array(

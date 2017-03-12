@@ -87,11 +87,15 @@
 	}
 
 	function hideEle(e){
-		document.getElementById(e).style.display = 'none';
+		if(document.getElementById(e)){
+			document.getElementById(e).style.display = 'none';
+		}
 	}
 
 	function showEle(e){
-		document.getElementById(e).style.display = 'block';
+		if(document.getElementById(e)){
+			document.getElementById(e).style.display = 'block';
+		}
 	}
 
 	function winOpn(u,w,h){
