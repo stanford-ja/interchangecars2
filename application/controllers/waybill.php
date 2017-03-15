@@ -604,13 +604,37 @@ class Waybill extends CI_Controller {
 	function addAutoTrain($id=0){
 		// Allow addition of extra Auto Trains
 		$wb = (array)$this->Generic_model->qry("SELECT * FROM `ichange_waybill` WHERE `id` = '".$id."'"); // Waybill data
+		
+		// START PROCESS OF SUBMISSION
+		if(isset($_POST['submit'])){
+			$po = $_POST;
+			$last_arr = explode("-",$po['last_action']);
+			$po['start_date'] = intval(mktime(23,0,0,$last_arr[1],$last_arr[2],$last_arr[0]));
+			$po['route_arr'] = json_decode($po['route_json'],TRUE);
+			
+			$ra_kys = array_keys($po['route_arr']);
+			for($z=0;$z<count($ra_kys);$z++){
+				$act_date = date('Y-m-d',$po['start_date']+($po['route_arr'][$ra_kys[$z]]*86400)+86400);
+				$desc = "";
+				if($z == count($ra_kys)-1){ $desc = "SPOTTED"; }
+				$sql = "INSERT INTO `ichange_auto` SET 
+					`act_date` = '".$act_date."', 
+					`waypoint` = '".$ra_kys[$z]."', 
+					`description` = '".$desc."', 
+					`train_id` = '".$po['fld14'][0]."', 
+					`waybill_num` = '".$wb[0]->waybill_num."'	";
+				$this->Generic_model->change($sql);
+			}
+		}
+		// END PROCESS OF SUBMISSION
+		
 		$prog = (array)$this->Generic_model->qry("SELECT `date`,`map_location`,`text` FROM `ichange_progress` WHERE `waybill_num` = '".$wb[0]->waybill_num."' ORDER BY `date` DESC LIMIT 1"); // Latest Progress report date
-		$auto = (array)$this->Generic_model->qry("SELECT `act_date`,`waypoint`,`train_id` FROM `ichange_auto` WHERE `waybill_num` = '".$wb[0]->waybill_num."' AND `description` = 'SPOTTED' ORDER BY `act_date` DESC LIMIT 1"); // Latest Auto Train date
+		$auto = (array)$this->Generic_model->qry("SELECT * FROM `ichange_auto` WHERE `waybill_num` = '".$wb[0]->waybill_num."' ORDER BY `act_date` DESC, `description` DESC"); // Latest Auto Train date
 		//echo "<pre>"; print_r($wb); print_r($prog);print_r($auto);echo "</pre>";
 		$last_date = date('Y-m-d');
 		$last_location = "";
 		$details = "";
-		if($prog[0]->date > $last_date){ 
+		if(isset($prog[0]->date) && $prog[0]->date > $last_date){ 
 			$last_date = $prog[0]->date; 
 			$last_location = $prog[0]->map_location;
 			$details = $prog[0]->text;
@@ -628,6 +652,7 @@ class Waybill extends CI_Controller {
 			'last_action' => $last_date,
 			'id' => $id
 		);
+		$this->dat2['auto_data'] = $auto;
 
 		// Load views
 		$this->load->view('header', $this->arr);

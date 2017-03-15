@@ -4,6 +4,27 @@ if(strpos($_SERVER['DOCUMENT_ROOT'].$_SERVER['SCRIPT_NAME'],"www/Applications/")
 	$local=1;
 }
 ?>
+<div style="text-align: center;">
+<div style="display: inline-block; width: 80%;">
+<table border="0" width="100%" align="center" style="background-color: transparent; border: none;">
+	<tr>
+		<td class="td_title">Action Date</td>
+		<td class="td_title">Waypoint</td>
+		<td class="td_title">Description</td>
+		<td class="td_title">Train ID</td>
+	</tr>
+<?php 
+for($i=0;$i<count($auto_data);$i++){ $styl = "td1"; if(floatval($i/2) == intval($i/2)){ $styl = "td2"; } ?>
+	<tr>
+		<td class="<?php echo $styl; ?>"><?php echo $auto_data[$i]->act_date; ?></td>
+		<td class="<?php echo $styl; ?>"><?php echo $auto_data[$i]->waypoint; ?></td>
+		<td class="<?php echo $styl; ?>"><?php echo $auto_data[$i]->description; ?></td>
+		<td class="<?php echo $styl; ?>"><?php echo $auto_data[$i]->train_id; ?></td>
+	</td>
+<?php } ?>
+</table>
+</div>
+</div>
 
 			<form id="form1" name="form1" method="post" action="../../waybill/addAutoTrain/<?php echo $id; ?>" autocomplete="off">
 	<input type="hidden" name="id" id="id" value="<?php echo $id; ?>" />

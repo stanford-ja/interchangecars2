@@ -197,6 +197,7 @@ $f21 = str_replace("{\"AAR_REQD\":\"UNDEFINED\",\"NUM\":\"UNDEFINED\",\"AAR\":\"
 			var dd = d.replace("&","[AMP]");
 			//var p = "<?php echo JS_ROOT; ?>/ajax.php?f=trainAutoComp&a=" + ad + "&b=" + bd + "&c=" + cd + "&d=" + dd;
 			var p = "<?php echo JS_ROOT; ?>/ajax.php?f=trainAutoComp&a=" + ad + "&c=" + cd + "&d=" + dd;
+			if(document.getElementById('last_action')){ p += "&la=1"; }
 			$.get(p,function(data){		
 				fnd = data;
 				if(fnd.length > 0){
@@ -420,7 +421,7 @@ $f21 = str_replace("{\"AAR_REQD\":\"UNDEFINED\",\"NUM\":\"UNDEFINED\",\"AAR\":\"
 	setInterval(function() {
 			<?php if($rr_sess > 0){ ?>
 			if(document.getElementById('wb_image_div')){
-			var p = "<?php echo WEB_ROOT; ?>/ajax/wbImages/<?php echo $id; ?>";
+			var p = "<?php echo WEB_ROOT; ?>/ajax/wbImages/<?php echo @$id; ?>";
 			$.get(p,function(data){		
 				fnd = data;
 				if(fnd.length > 0){

@@ -9,11 +9,11 @@ if(isset($_GET['f'])){
 	//for($g=0;$g<count($get_kys);$g++){$_GET[$get_kys[$g]] = str_replace("&","[AMP]",$_GET[$get_kys[$g]]);}
 	//print_r($_GET);
 	if($_GET['f'] == "carUsed"){carUsed(@$_GET['d'],@$_GET['r']);}
-	if($_GET['f'] == "selTrain"){selTrain(@$_GET['d'],$_GET['la']);}//,@$_GET['r']);}
+	if($_GET['f'] == "selTrain"){selTrain(@$_GET['d'],@$_GET['la']);}//,@$_GET['r']);}
 	if($_GET['f'] == "selRoute"){selRoute(@$_GET['d'],@$_GET['s'],@$_GET['e'],@$_GET['g']);}//,@$_GET['r']);}
 	if($_GET['f'] == "carsAutoFind"){carsAutoFind(@$_GET['a'],@$_GET['b']);}
 	if($_GET['f'] == "industAutoComp"){industAutoComp(@$_GET['a'],@$_GET['b'],@$_GET['c'],@$_GET['d'],@$_GET['e']);}
-	if($_GET['f'] == "trainAutoComp"){trainAutoComp(@$_GET['a'],@$_GET['c'],@$_GET['d']);}
+	if($_GET['f'] == "trainAutoComp"){trainAutoComp(@$_GET['a'],@$_GET['c'],@$_GET['d'],$_GET['la']);}
 	if($_GET['f'] == "autoComp"){autoComp(@$_GET['a'],@$_GET['b'],@$_GET['c'],@$_GET['d']);}
 	if($_GET['f'] == "allocTrain"){allocTrain(@$_GET['w'],@$_GET['t']);}
 	if($_GET['f'] == "allocRR"){allocRR(@$_GET['w'],@$_GET['t']);}
@@ -76,8 +76,8 @@ function selTrain($fld14,$la=''){
 				$dt_unix = intval($la_ts+($md*86400)); //intval(date('U')+($md*86400));
 				$dy_opts .= "<option value=\"".$md."\">".date('Y-m-d',$dt_unix)."</option>";
 			}
-			$lst .= "<div style=\"display: inline-block; padding: 3px; white-space: nowrap;\">Start Move On: <select name=\"auto_start_dt\" id=\"auto_start_dt\" onchange=\"route_valid8();\">".$dy_opts."</select></div>";
-			$lst .= "<div style=\"display: inline-block; padding: 3px; white-space: nowrap;\">Add extra Auto Trains on Save: <select name=\"addXtraAutos\"><option value=\"0\">No</option><option value=\"1\">Yes</option></select></div>";
+			$lst .= "<div style=\"display: inline-block; padding: 3px; white-space: nowrap;\">Start Move On: <select name=\"auto_start_dt\" id=\"auto_start_dt\" onchange=\"route_valid8();\">".$dy_opts."</select></div>"; 
+			if(strlen($la) < 1){ $lst .= "<div style=\"display: inline-block; padding: 3px; white-space: nowrap;\">Add extra Auto Trains on Save: <select name=\"addXtraAutos\"><option value=\"0\">No</option><option value=\"1\">Yes</option></select></div>"; }
 			$lst .= "&nbsp;<input type=\"button\" name=\"calc_route\" value=\"Calc Route\" onclick=\"selRoute();\" />";
 		}
 		//$lst .= "<a href=\"javascript:{}\" onclick=\"document.getElementById('exit_waypoint').value = '".$res['destination']."'\">".$res['destination']."</a>, ";
@@ -218,7 +218,7 @@ function industAutoComp($str,$tbl,$fld,$sct = NULL,$sr = NULL){
 	echo $lst;
 }
 
-function trainAutoComp($str,$fld,$sct = NULL){
+function trainAutoComp($str,$fld,$sct = NULL,$la=0){
 	// Auto Complete function called by AJAX.
 	// Checks whether an entry exists in the database
 	// $fld = field to search in
@@ -230,7 +230,9 @@ function trainAutoComp($str,$fld,$sct = NULL){
 	$str = charConv($str,"[AMP]","&"); // Require to convert [AMP] back to '&'
 	$tbl = "ichange_trains";
 	$str = strtoupper($str);
-	$sql = "SELECT * FROM `".$tbl."` WHERE `train_id` LIKE '%".$str."%' OR `train_desc` LIKE '%".$str."%' OR `origin` LIKE '%".$str."%' OR `destination` LIKE '%".$str."%' OR `auto` LIKE '%".$str."%' OR `op_notes` LIKE '%".$str."%' ORDER BY `train_id`";
+	$sql = "SELECT * FROM `".$tbl."` WHERE (`train_id` LIKE '%".$str."%' OR `train_desc` LIKE '%".$str."%' OR `origin` LIKE '%".$str."%' OR `destination` LIKE '%".$str."%' OR `auto` LIKE '%".$str."%' OR `op_notes` LIKE '%".$str."%')";
+	if($la == 1){ $sql .= " AND (`auto` > 0 OR `auto` LIKE '%:%')"; }
+	$sql .= " ORDER BY `train_id`";
 	//echo $sql;
 	$qry = mysql_query($sql);
 	//echo "<pre>"; print_r($qry); echo "</pre>";
