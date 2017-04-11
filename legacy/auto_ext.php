@@ -91,9 +91,9 @@
 		}
 		if($desc == "SPOTTED"){
 			$train = "NOT ALLOCATED"; 
-			$auto_rem_qry = mysql_query("SELECT waybill_num FROM ichange_auto WHERE waybill_num = '".$wb."' LIMIT 1");
+			$auto_rem_qry = mysql_query("SELECT COUNT(waybill_num) AS cntr FROM ichange_auto WHERE waybill_num = '".$wb."' AND train_id != '".$ti."' LIMIT 1");
 			while($auto_rem_res = mysql_fetch_array($auto_rem_qry)){
-				$train = "AUTO TRAIN"; 
+				if($auto_rem_res['cntr'] > 0){ $train = "AUTO TRAIN"; } 
 			}
 
 			$t = "*AUTO GENERATED* - CARS ON WAYBILL ".$wb." SPOTTED AT <strong>".$wp."</strong> BY TRAIN <strong>".$ti."</strong>.";
