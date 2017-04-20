@@ -622,6 +622,7 @@ class Waybill extends CI_Controller {
 					`waypoint` = '".$ra_kys[$z]."', 
 					`description` = '".$desc."', 
 					`train_id` = '".$po['fld14'][0]."', 
+					`rr_id` = '".$po['setRRAutos']."', 
 					`waybill_num` = '".$wb[0]->waybill_num."'	";
 				$this->Generic_model->change($sql);
 			}

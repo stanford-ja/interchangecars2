@@ -60,6 +60,7 @@
 		$dt = $res['act_date'];
 		$wp = $res['waypoint'];
 		$ti = $res['train_id'];
+		$rr_id = $res['rr_id'];
 		$wb = $res['waybill_num'];
 		$desc = $res['description'];
 		$ret_to = $res['w_return_to'];
@@ -91,12 +92,16 @@
 		}
 		if($desc == "SPOTTED"){
 			$train = "NOT ALLOCATED"; 
+			$more_autos = "";
 			$auto_rem_qry = mysql_query("SELECT COUNT(waybill_num) AS cntr FROM ichange_auto WHERE waybill_num = '".$wb."' AND train_id != '".$ti."' LIMIT 1");
 			while($auto_rem_res = mysql_fetch_array($auto_rem_qry)){
-				if($auto_rem_res['cntr'] > 0){ $train = "AUTO TRAIN"; } 
+				if($auto_rem_res['cntr'] > 0){ 
+					$train = "AUTO TRAIN"; 
+					$more_autos = "<div style=\"display: block; color: red; background-color: lightskyblue; padding: 5px;\">ANOTHER <strong>AUTO TRAIN</strong> IS SCHEDULED TO PICK UP THE CAR/S FOR THIS WAYBILL.</span>";
+				} 
 			}
-
-			$t = "*AUTO GENERATED* - CARS ON WAYBILL ".$wb." SPOTTED AT <strong>".$wp."</strong> BY TRAIN <strong>".$ti."</strong>.";
+			$t = "*AUTO GENERATED* - CARS ON WAYBILL ".$wb." SPOTTED AT <strong>".$wp."</strong> BY TRAIN <strong>".$ti."</strong>.".$more_autos;
+			if($rr_id > 0){ $oth_flds .= ", `rr_id_handling` = '".$rr_id."'"; }
 		}
 		$oth_flds .= ", `train_id` = '".$train."'";
 		$t .= " (added by cron)";
