@@ -9,7 +9,7 @@ if(isset($_GET['f'])){
 	//for($g=0;$g<count($get_kys);$g++){$_GET[$get_kys[$g]] = str_replace("&","[AMP]",$_GET[$get_kys[$g]]);}
 	//print_r($_GET);
 	if($_GET['f'] == "carUsed"){carUsed(@$_GET['d'],@$_GET['r']);}
-	if($_GET['f'] == "selTrain"){selTrain(@$_GET['d'],@$_GET['la']);}//,@$_GET['r']);}
+	if($_GET['f'] == "selTrain"){selTrain(@$_GET['d'],@$_GET['la'],@$_GET['rr']);}//,@$_GET['r']);}
 	if($_GET['f'] == "selRoute"){selRoute(@$_GET['d'],@$_GET['s'],@$_GET['e'],@$_GET['g']);}//,@$_GET['r']);}
 	if($_GET['f'] == "carsAutoFind"){carsAutoFind(@$_GET['a'],@$_GET['b']);}
 	if($_GET['f'] == "industAutoComp"){industAutoComp(@$_GET['a'],@$_GET['b'],@$_GET['c'],@$_GET['d'],@$_GET['e']);}
@@ -35,7 +35,7 @@ function carUsed($cn,$rr){
 	echo $w;
 }
 
-function selTrain($fld14,$la=''){
+function selTrain($fld14,$la='',$rr=0){
 	// Display Train Selected function called by AJAX.
 	db_conn();
 	$fld14 = charConv($fld14,"[AMP]","&"); // Require to convert [AMP] back to '&'
@@ -78,6 +78,16 @@ function selTrain($fld14,$la=''){
 			}
 			$lst .= "<div style=\"display: inline-block; padding: 3px; white-space: nowrap;\">Start Move On: <select name=\"auto_start_dt\" id=\"auto_start_dt\" onchange=\"route_valid8();\">".$dy_opts."</select></div>"; 
 			$lst .= "<div style=\"display: inline-block; padding: 3px; white-space: nowrap;\">Add extra Auto Trains on Save: <select name=\"addXtraAutos\"><option value=\"0\">No</option><option value=\"1\">Yes</option></select></div>";
+			if($rr > 0){
+				$sql_rr = "SELECT `id`,`report_mark` FROM `ichange_rr` WHERE `inactive` = 0 ORDER BY `report_mark`";
+				$qry_rr = mysql_query($sql_rr);
+				$rr_opts = "";
+				while($res_rr = mysql_fetch_array($qry_rr)){
+					$sel_rr = ""; if($res_rr['id'] == $rr){ $sel_rr = " selected=\"selected\""; }
+					$rr_opts .= "<option value=\"".$res_rr['id']."\"".$sel_rr.">".$res_rr['report_mark']."</option>";
+				}
+				$lst .= "<div style=\"display: inline-block; padding: 3px; white-space: nowrap;\">Allocate to RR: <select name=\"setRRAutos\">".$rr_opts."</select></div>";
+			}	
 			$lst .= "&nbsp;<input type=\"button\" name=\"calc_route\" value=\"Calc Route\" onclick=\"selRoute();\" />";
 		}
 		//$lst .= "<a href=\"javascript:{}\" onclick=\"document.getElementById('exit_waypoint').value = '".$res['destination']."'\">".$res['destination']."</a>, ";

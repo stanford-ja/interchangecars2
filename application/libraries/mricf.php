@@ -438,6 +438,7 @@ function autoSav($arr){
 	$sqli = $this->sqli_instance();
 	if(!isset($arr['train_id'])){$arr['train_id'] = "";}
 	if(!isset($arr['description'])){$arr['description'] = "";}
+	if(!isset($arr['rr_id'])){$arr['rr_id'] = 0;}
 
 	$trsql = "SELECT `train_desc`,`destination`, `origin`, `auto` FROM `ichange_trains` WHERE `train_id` = '".$arr['train_id']."'";
 	$qry = $sqli->query($trsql);
@@ -467,11 +468,15 @@ function autoSav($arr){
 				$dt_auto_prog = date('Y-m-d',$nxt_date_tmp);
 				$ti_auto_prog = date('H:i',$nxt_date_tmp);
 			}
-			if($u == count($arr['route'])-1){$arr['description'] = "SPOTTED"; $exit_waypoint = $mdKys[$u];}
+			if($u == count($arr['route'])-1){
+				$arr['description'] = "SPOTTED"; 
+				$exit_waypoint = $mdKys[$u];
+			}
 			$sql_cro = "INSERT INTO `ichange_auto` SET 
 				`act_date` = '".$nxt_date."', 
 				`waypoint` = '".$mdKys[$u]."', 
 				`train_id` = '".$arr['train_id']."', 
+				`rr_id` = '".$arr['rr_id']."', 
 				`waybill_num` = '".$arr['waybill_num']."', 
 				`description` = '".$arr['description']."'";
 			$sqli->query($sql_cro);

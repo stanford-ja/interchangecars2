@@ -89,7 +89,7 @@ $f21 = str_replace("{\"AAR_REQD\":\"UNDEFINED\",\"NUM\":\"UNDEFINED\",\"AAR\":\"
 			var trd = tr.replace("&","[AMP]"); // Require to convert & to [AMP] so that the GET vars work properly in ajax script
 			tds.style.display = 'none';
 			tds.innerHTML = '&nbsp;';
-			var p = "<?php echo JS_ROOT; ?>/ajax.php?f=selTrain&d=" + trd;
+			var p = "<?php echo JS_ROOT; ?>/ajax.php?f=selTrain&d=" + trd + "&rr=<?php echo $rr_sess; ?>";
 			if(document.getElementById('last_action')){ p += "&la=" + document.getElementById('last_action').value; }
 			$.get(p,function(data){		
 				fnd = data;
