@@ -444,14 +444,15 @@ function autoSav($arr){
 	$qry = $sqli->query($trsql);
 	$res = $qry->fetch_array();
 	$t_qry = $res['train_desc'];
-	$date_now_t = date('Y-m-d');
-	$date_now = strtotime($date_now_t);
+	//$date_now_t = date('Y-m-d H:i:s');
+	$date_now = date('U')+86400; //strtotime($date_now_t);
 	$res['destination'] = str_replace(", ",",",@$res['destination']);
 	$res['origin'] = str_replace(", ",",",@$res['origin']); // added 2012-02-09
 	//$retArr = array(); // Array to return to calling application code
 
 	if(isset($arr['autotrain'])){
 		$date_wb = strtotime($arr['waybill_date']);
+		if($date_wb > $date_now){$date_now = $date_wb;}
 		$mdKys = @array_keys($arr['route']);
 		$sqli->query("DELETE FROM `ichange_auto` WHERE `waybill_num` = '".$arr['waybill_num']."'");
 		$entry_waypoint = $mdKys[0];
@@ -460,9 +461,10 @@ function autoSav($arr){
 		$dt_auto_prog = date('Y-m-d');
 		$ti_auto_prog = date('H:i');
 		for($u=0;$u<count($mdKys);$u++){
-			$nxt_date_tmp = $date_now;
-			if($date_wb > $date_now){$nxt_date_tmp = $date_wb;}
-			$nxt_date_tmp = $nxt_date_tmp + (60*60*24*($arr['route'][$mdKys[$u]]));
+			//$nxt_date_tmp = $date_now;
+			//if($date_wb > $date_now){$nxt_date_tmp = $date_wb;}
+			//$nxt_date_tmp = $nxt_date_tmp + (60*60*24*($arr['route'][$mdKys[$u]]));
+			$nxt_date_tmp = $date_now + (60*60*24*($arr['route'][$mdKys[$u]]));
 			$nxt_date = date('Y-m-d', $nxt_date_tmp);
 			if($u==0){
 				$dt_auto_prog = date('Y-m-d',$nxt_date_tmp);
@@ -484,7 +486,7 @@ function autoSav($arr){
 
 		$txt = "*AUTO GENERATED* - ALLOCATED TO CONSIST FOR TRAIN <strong>".$arr['train_id']." (".$t_qry.")</strong> @ ".$entry_waypoint.". CAR/S ON THIS WAYBILL WILL BE SPOTTED AT ".$exit_waypoint.".";
 		$wb_id = $this->qry("ichange_waybill", $arr['waybill_num'], "waybill_num", "id");
-		$prog = $this->progWB($wb_id);
+		$prog = array(); //$this->progWB($wb_id);
 		$prog[] = array(
 			'date' => $dt_auto_prog, 
 			'time' => $ti_auto_prog, 
@@ -498,6 +500,19 @@ function autoSav($arr){
 		$jprog = json_encode($prog);
 		$sql_prog_auto = "UPDATE `ichange_waybill` SET `progress` = '".$jprog."' WHERE `waybill_num` = '".$arr['waybill_num']."'";
 		$sqli->query($sql_prog_auto);
+		
+		// Insert to progress table.
+		$prog_sql = "INSERT INTO `ichange_progress` SET 
+			`date` = '".date('Y-m-d')."', 
+			`time` = '".date('H:i')."', 
+			`waybill_num` = '".$arr['waybill_num']."',
+			`text` = '$txt', 
+			`status` = 'IN TRANSIT', 
+			`train` = '".str_replace("NOT ALLOCATED","",$arr['train_id'])."', 
+			`map_location` = '$entry_waypoint', 
+			`tzone` = '".@$_SESSION['_tz']."'";
+		$sqli->query($prog_sql);
+		
 	}
 	if(isset($arr['unload'])){
 		$sql_cro = "INSERT INTO `ichange_auto` SET 
