@@ -82,7 +82,6 @@ class Save_waybill extends CI_Controller {
 		}
 		// if($d_qry != 0 || strlen($d_qry) > 4){ // || count($d_wps) > 0){
 		if(($d_qry != 0 || strlen($d_qry) > 4) && strlen(str_replace(array("{","}","\"",":"),"",$this->arr['route_json'])) > 3){ // || count($d_wps) > 0){
-			echo "auto train.";
 			//$autoSav = array("autotrain" => 1, "entry_waypoint" => $this->arr['entry_waypoint'], "exit_waypoint" => $this->arr['exit_waypoint'], "train_id" => $this->arr['fld14'][0], "waybill_num" => $this->arr['fld8'], "waybill_date" => $this->arr['fld1']);
 			$autoSav = array("autotrain" => 1, "route" => @json_decode($this->arr['route_json'],TRUE), "train_id" => $this->arr['fld14'][0], "waybill_num" => $this->arr['fld8'], "waybill_date" => $this->arr['fld1'], "rr_id" => $this->arr['setRRAutos']);
 			$this->mricf->autoSav($autoSav); // insert record into ichange_auto, update ichange_waybill.progress.				//if($action != "NEW"){$this->arr['fld14'][0] = "AUTO TRAIN";}

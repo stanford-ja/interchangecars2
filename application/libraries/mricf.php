@@ -440,8 +440,6 @@ function autoSav($arr){
 	if(!isset($arr['description'])){$arr['description'] = "";}
 	if(!isset($arr['rr_id'])){$arr['rr_id'] = 0;}
 	
-	echo "<pre>"; print_r($arr); echo "</pre>"; exit();
-
 	$trsql = "SELECT `train_desc`,`destination`, `origin`, `auto` FROM `ichange_trains` WHERE `train_id` = '".$arr['train_id']."'";
 	$qry = $sqli->query($trsql);
 	$res = $qry->fetch_array();
