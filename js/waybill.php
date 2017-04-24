@@ -119,6 +119,7 @@ $f21 = str_replace("{\"AAR_REQD\":\"UNDEFINED\",\"NUM\":\"UNDEFINED\",\"AAR\":\"
 			//tds.style.display = 'none';
 			//tds.value = '&nbsp;';
 			var p = "<?php echo JS_ROOT; ?>/ajax.php?f=selRoute&d=" + trd + "&s=" + tre + "&e=" + trx + "&g=" + tra;
+			alert(p);
 			//$.getJSON(p,function(data){
 			$.get(p,function(data){		
 				fnd = data;
@@ -131,6 +132,7 @@ $f21 = str_replace("{\"AAR_REQD\":\"UNDEFINED\",\"NUM\":\"UNDEFINED\",\"AAR\":\"
 					document.getElementById('train_disp_span2').style.display = 'block';
 				}
 			});
+			alert(tds.value);
 			<?php } ?>
 		});
 	}

@@ -74,7 +74,7 @@ function selTrain($fld14,$la='',$rr=0){
 			$mx_dys = 10; $dy_opts = "";
 			for($md=0;$md<$mx_dys;$md++){
 				$dt_unix = intval($la_ts+($md*86400)); //intval(date('U')+($md*86400));
-				$dy_opts .= "<option value=\"".$md."\">".date('Y-m-d',$dt_unix)."</option>";
+				$dy_opts .= "<option value=\"".intval($md+1)."\">".date('Y-m-d',$dt_unix)."</option>";
 			}
 			$lst .= "<div style=\"display: inline-block; padding: 3px; white-space: nowrap;\">Start Move On: <select name=\"auto_start_dt\" id=\"auto_start_dt\" onchange=\"route_valid8();\">".$dy_opts."</select></div>"; 
 			$lst .= "<div style=\"display: inline-block; padding: 3px; white-space: nowrap;\">Add extra Auto Trains on Save: <select name=\"addXtraAutos\"><option value=\"0\">No</option><option value=\"1\">Yes</option></select></div>";
