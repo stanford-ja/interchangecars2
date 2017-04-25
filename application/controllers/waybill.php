@@ -614,7 +614,7 @@ class Waybill extends CI_Controller {
 			
 			$ra_kys = array_keys($po['route_arr']);
 			for($z=0;$z<count($ra_kys);$z++){
-				$act_date = date('Y-m-d',$po['start_date']+($po['route_arr'][$ra_kys[$z]]*86400)+86400);
+				$act_date = date('Y-m-d',$po['start_date']+($po['route_arr'][$ra_kys[$z]]*86400));
 				$desc = "";
 				if($z == count($ra_kys)-1){ $desc = "SPOTTED"; }
 				$sql = "INSERT INTO `ichange_auto` SET 
