@@ -38,7 +38,7 @@ class Save_waybill extends CI_Controller {
 		if($this->arr['id'] == 0 || isset($this->email_wb)){
 			$this->email_wb_to_grp();
 		}
-		$wb_id = $this->arr['id']; if($wb_id < 1){ $wb_id = $this->Generic_model->insert_id(); }
+		$wb_id = $this->arr['id']; if($wb_id < 1){ $wb_id = $this->Generic_model->db->insert_id(); }
 		$this->dat['htm'] = "<strong>The waybill record has been saved. Click a link below, or a menu link above.</strong><br /><br />";
 		$this->dat['htm'] .= anchor('../home',"Home");
 		if(strlen($this->arr['goTo']) && strpos("z".$this->arr['goTo'],"acquire") < 1){$this->dat['htm'] .= "<br /><a href=\"".$this->arr['goTo']."\">Return to ".$this->arr['goTo']."</a>";}
@@ -207,7 +207,9 @@ class Save_waybill extends CI_Controller {
 		$sql_comm = "";
 		for($i=1;$i<count($flds_arr);$i++){
 			if($i>1){$sql_comm .= ", ";}
-			$sql_comm .= "`".$flds_arr[$i]."` = '".@$this->arr['fld'.$i]."'";
+			$t_arr_tmp = ""; if(isset($this->arr['fld'.$i])){ $t_arr_tmp = $this->arr['fld'.$i]; }
+			if(is_array($t_arr_tmp)){ $t_arr_tmp = $t_arr_tmp[0]; }
+			$sql_comm .= "`".$flds_arr[$i]."` = '".$t_arr_tmp."'";
 		}
 				
 		$sql_comm .= ", `cars` = '".$jcars."'".$this->prog_sql;
