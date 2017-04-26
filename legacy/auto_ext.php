@@ -97,7 +97,7 @@
 			while($auto_rem_res = mysql_fetch_array($auto_rem_qry)){
 				if($auto_rem_res['cntr'] > 0){ 
 					$train = "AUTO TRAIN"; 
-					$more_autos = "<div style=\"display: block; color: red; background-color: lightskyblue; padding: 5px;\">ANOTHER <strong>AUTO TRAIN</strong> IS SCHEDULED TO PICK UP THE CAR/S FOR THIS WAYBILL.</span>";
+					$more_autos = "<div style=\"display: block; color: red; background-color: lightskyblue; padding: 5px;\">ANOTHER <strong>AUTO TRAIN</strong> IS SCHEDULED TO PICK UP THE CAR/S FOR THIS WAYBILL.</div>";
 				} 
 			}
 			$t = "*AUTO GENERATED* - CARS ON WAYBILL ".$wb." SPOTTED AT <strong>".$wp."</strong> BY TRAIN <strong>".$ti."</strong>.".$more_autos;
