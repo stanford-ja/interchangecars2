@@ -559,7 +559,7 @@ class Home extends CI_Controller {
 					$this->wbs_all[] = $this->Waybill_model->get_allOpenHome($this->whr,"train_id`,`sw_order`,`waybill_num");
 				}
 				$this->pos_all = $this->Waybill_model->get_POrders();
-				$this->pos_sto = $this->Storedfreight_model->get_all();
+				$this->pos_sto = $this->Storedfreight_model->get_all_nonzero(); //get_all();
 			}
 		}
 

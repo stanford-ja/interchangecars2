@@ -21,12 +21,20 @@ class Storedfreight_model extends CI_Model {
     }
 
     function get_all(){
+    	if(!isset($this->whr)){ $this->whr = "`ichange_indust_stored`.`id` > 0"; }
 		$sql = "SELECT `ichange_indust_stored`.*,`ichange_indust`.`indust_name`, `ichange_indust`.`town` 
 			FROM `ichange_indust_stored` 
 			LEFT JOIN `ichange_indust` ON `ichange_indust_stored`.`indust_id` = `ichange_indust`.`id` 
+			WHERE ".$this->whr."
 			ORDER BY `ichange_indust`.`indust_name`";
         $query = $this->db->query($sql);
         return $query->result();
+    }
+    
+    function get_all_nonzero(){
+    	// Get all non-zero cars available records
+    	$this->whr = "`ichange_indust_stored`.`qty_cars` > 0";
+    	return $this->get_all();
     }
 
     function get_single($id=0,$fld='ichange_indust_stored`.`id'){
