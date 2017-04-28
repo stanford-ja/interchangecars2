@@ -49,6 +49,7 @@ Once you have done that you will need to change the application/config/database.
 		$this->load->dbutil();
 		$this->load->helper('file');
 		$fil_nam = "/uploaded_files/mricf-".date('Ymd-His').".sql";
+		$backup =& $this->dbutil->backup($prefs); 
 		write_file(DOC_ROOT.$fil_nam, $backup); 
 		/*
 		$this->load->helper('download');
