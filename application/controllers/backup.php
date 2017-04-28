@@ -47,9 +47,17 @@ Once you have done that you will need to change the application/config/database.
                 'newline'     => "\n"               // Newline character used in backup file
               );
 		$this->load->dbutil();
+		$this->load->helper('file');
+		$fil_nam = "/uploaded_files/mricf-".date('Ymd-His').".sql";
+		write_file(DOC_ROOT.$fil_nam, $backup); 
+		/*
 		$this->load->helper('download');
 		$backup =& $this->dbutil->backup($prefs); 
-		force_download('mricf-'.date('Ymd-His').'.sql', $backup); 
+		force_download('../../uploaded_files/mricf-'.date('Ymd-His').'.sql', $backup);
+		*/
+		header("Location:".WEB_ROOT.$fil_nam); 
+		
+		// Load the file helper and write the file to your server
 	}	
 }
 ?>
