@@ -40,15 +40,16 @@ Once you have done that you will need to change the application/config/database.
 	}
 	
 	public function databaseDownload(){
+		$fil_nam = "/uploaded_files/mricf-".date('Ymd-His').".sql";
 		$prefs = array(
-                'format'      => 'txt',             // gzip, zip, txt
+                'format'      => 'zip',             // gzip, zip, txt
+                 'filename'    => 'mricf-'.date('Ymd-His').'.sql',    // File name - NEEDED ONLY WITH ZIP FILES
                 'add_drop'    => TRUE,              // Whether to add DROP TABLE statements to backup file
                 'add_insert'  => TRUE,              // Whether to add INSERT data to backup file
                 'newline'     => "\n"               // Newline character used in backup file
               );
 		$this->load->dbutil();
 		$this->load->helper('file');
-		$fil_nam = "/uploaded_files/mricf-".date('Ymd-His').".sql";
 		$backup =& $this->dbutil->backup($prefs); 
 		write_file(DOC_ROOT.$fil_nam, $backup); 
 		/*
