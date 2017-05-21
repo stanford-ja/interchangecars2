@@ -69,6 +69,13 @@ class Home extends CI_Controller {
 		$this->trains_opts_lst = $this->mricf->trainOpts(array('rr' => $this->arr['rr_sess'], 'auto' => "Y", 'onlyrr' => 1));
 		$this->railroad_opts_lst = $this->mricf->rrOpts();
 		//print_r($this->mricf->rrOpts());
+
+		// ONLY NEEDED TO CREATE messages TABLE AND DATA! ONCE DONE, CAN BE REMOVED. 2017-05-21
+		$tbls = (array)$this->Generic_model->qry("SHOW TABLES WHERE Tables_in_jstan2_general LIKE 'ichange_messages'");
+		if(count($tbls) == 0){ 
+			header("Location:messaging");
+			exit(); 
+		}
 	}
 
 	public function index(){
@@ -473,17 +480,27 @@ class Home extends CI_Controller {
 		$tmp = "";
 		$cntr=0;
 		for($ri=0;$ri<count($this->my_rr_ids);$ri++){
-			$wbdat = (array)$this->Waybill_model->get_messages(0,$this->my_rr_ids[$ri]);
+			$wbdat = (array)$this->Waybill_model->get_messages(0,$this->my_rr_ids[$ri],1);
 			for($i=0;$i<count($wbdat);$i++){
-				$mess = @json_decode($wbdat[$i]->messages);
+				$mess = $wbdat[$i]; //]@json_decode($wbdat[$i]->messages);
+				/*
 				for($m=0;$m<count($mess);$m++){
 					if(isset($mess[$m]->datetime)){
 						if($mess[$m]->torr == $this->my_rr_ids[$ri]){
 						$m = (array)$mess[$m];
-						$tmp .= "<a href=\"messaging/lst/".$wbdat[$i]->id."\">".$wbdat[$i]->waybill_num."</a> - ".$this->wb_message_details($m);
+						$tmp .= "<a href=\"messaging/lst/".$wbdat[$i]->wb_id."\">".$wbdat[$i]->waybill_num."</a> - ".$this->wb_message_details($m);
 						$tmp .= "<hr />";
 						$cntr++;
 						}
+					}
+				}
+				*/
+				if(isset($mess->datetime)){
+					if($mess->torr == $this->my_rr_ids[$ri]){
+					$m = (array)$mess;
+					$tmp .= "<a href=\"messaging/lst/".$wbdat[$i]->wb_id."\">".$wbdat[$i]->waybill_num."</a> - ".$this->wb_message_details($m);
+					$tmp .= "<hr />";
+					$cntr++;
 					}
 				}
 			}
@@ -608,15 +625,26 @@ class Home extends CI_Controller {
 	}
 	
 	function wb_messages($me){
-		$mess = @json_decode($this->waybills[$me]->messages, TRUE);
-		if(count($mess) > 0){
-			$this->content['html'] .= "<br />".count($mess)." messages:<br />";
-			$this->content['html'] .= "Latest: ";
-			$this->content['html'] .= $this->wb_message_details($mess[count($mess)-1])."<hr />";
-			for($wi=0;$wi<count($mess)-1;$wi++){
-				$this->content['html'] .= $this->wb_message_details($mess[$wi])."<hr />";
+		//$mess = @json_decode($this->waybills[$me]->messages, TRUE);
+		$msgs = "";
+		$cntr = 0;
+		//for($ri=0;$ri<count($this->my_rr_ids);$ri++){
+			$mess = (array)$this->Waybill_model->get_messages($this->waybills[$me]->id,0);
+			if(count($mess) > 0){
+				//echo "<pre>";print_r($this->waybills[$me]); echo "</pre>";
+				//echo "<pre>";print_r($mess); echo "</pre>";
+				//$this->content['html'] .= "<br />".count($mess)." messages:<br />";
+				//$this->content['html'] .= "Latest: ";
+				//$this->content['html'] .= $this->wb_message_details($mess[count($mess)-1])."<hr />";
+				//for($wi=0;$wi<count($mess)-1;$wi++){
+				for($wi=0;$wi<count($mess);$wi++){
+					$mess[$wi] = (array)$mess[$wi];
+					$msgs .= $this->wb_message_details($mess[$wi])."<hr />";
+					$cntr++;
+				}
 			}
-		}
+		//}
+		if($cntr > 0){ $this->content['html'] .= "<br />".$cntr." messages:<br />".$msgs; }
 	}
 	
 	function wb_images($me){
@@ -638,6 +666,7 @@ class Home extends CI_Controller {
 	
 	function wb_message_details($mess_arr){
 		$m = $mess_arr['datetime']."<br />From: ".$this->mricf->qry("ichange_rr", $mess_arr['rr'], "id", "report_mark").", To: ".$this->mricf->qry("ichange_rr", $mess_arr['torr'], "id", "report_mark")."&nbsp;<br /><strong>".$mess_arr['text']."</strong>"; //.anchor("../messaging/lst/".$wbdat[$i]->id,"View");
+		if($mess_arr['ack'] < 1){ $m .= "<div style=\"background-yellow; padding: 5px; text-align: center;\">Not acknowledged</div>"; }
 		return $m;
 	}
 

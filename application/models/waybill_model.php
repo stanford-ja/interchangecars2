@@ -72,15 +72,27 @@ class Waybill_model extends CI_Model {
 		return $fields;
 	}
 	
-	function get_messages($id=0,$rr=0){
+	function get_messages($id=0,$rr=0,$no_ack=0){
 		// $id = waybill to get messages for.
 		// $rr = railroad id to get messages for 
 		// If $id=0 and $rr=0, get all messages.
+		// $no_ack - 0 = get all, 1 = only get un-Acknowledged
+		/* REPLACED JSON with TABLE - 2017-05
 		$sql = "SELECT `id`,`waybill_num`,`messages` FROM `ichange_waybill` WHERE ";
 		if($id > 0){$sql .= "`id` = '".$id."'";}
 		elseif($rr > 0){$sql .= "`messages` LIKE '%\"torr\":\"".$rr."\"%' AND `status` != 'CLOSED'";}
 		else{$sql .= "`status` != 'CLOSED' AND LENGTH(`messages`) > 5";}
 		$sql .= " ORDER BY `date` DESC";
+		*/
+		$sql = "SELECT ichange_messages.*,ichange_waybill.id AS wb_id, ichange_waybill.waybill_num 
+			FROM `ichange_messages` 
+			LEFT JOIN ichange_waybill ON ichange_messages.waybill_id = ichange_waybill.id 
+			WHERE ";
+		if($id > 0){$sql .= "ichange_messages.waybill_id = '".$id."'";}
+		elseif($rr > 0){$sql .= "torr = '".$rr."' AND ichange_waybill.status != 'CLOSED'";}
+		else{$sql .= "ichange_waybill.status != 'CLOSED'";}
+		if($no_ack == 1){ $sql .= " AND ichange_messages.ack != 1"; }
+		$sql .= " ORDER BY ichange_messages.datetime DESC";
 		$query = $this->db->query($sql);
 		return $query->result();
 	}
