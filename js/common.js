@@ -1,7 +1,8 @@
-	function pushMessage(m,t){
+	function pushMessage(m,t,i){
+		// m = Message, t = Title of notification, i = Image / Icon (full path)
 		Push.create('MRICF: '+t, {
 			body: m,
-			icon: 'icon.png',
+			icon: i,
 			timeout: 25000,
 			onClick: function () {
 				console.log("Fired!");

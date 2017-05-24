@@ -11,9 +11,17 @@
 */
 
 $hook['post_controller_constructor'][] = array(
-	'class'    => 'MessageHook',
-	'function' => 'getCntr',
-	'filename' => 'messages.php',
+	'class'    => 'NotificationHook',
+	'function' => 'getMessageCntr',
+	'filename' => 'notifications.php',
+	'filepath' => 'hooks',
+	'params'   => array()
+);
+
+$hook['post_controller_constructor'][] = array(
+	'class'    => 'NotificationHook',
+	'function' => 'getPOCntr',
+	'filename' => 'notifications.php',
 	'filepath' => 'hooks',
 	'params'   => array()
 );

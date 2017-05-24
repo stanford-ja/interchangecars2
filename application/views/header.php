@@ -2,7 +2,12 @@
 // Home view
 //echo $_SERVER['REQUEST_URI'];
 //echo "<pre>"; print_r($myRR); echo "</pre>";
-// $msCntr is set via post_controller_constructor hook MessageHook::getCntr() in application/hooks/messages.php 
+/* 
+	$msCntr and $poCntr are set via post_controller_constructor hook 
+	NotificationHook::getMessageCntr() &
+	NotificationHook::getPOCntr()
+	in application/hooks/messages.php 
+*/
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- <!DOCTYPE html> // -->
@@ -123,7 +128,10 @@
 		});
 		<?php // START ACTIONS TO DO ON SUCCESSFULL LOGIN
 		if($msCntr > 0){
-			echo "pushMessage('You have ".$msCntr." message/s that require acknowledgement for your railroad/s.','Messages')";
+			echo "pushMessage('You have ".$msCntr." message/s that require acknowledgement for your railroad/s.','Messages','".WEB_ROOT."/images/directory-icon.png'); ";
+		}
+		if($poCntr > 0){
+			echo "pushMessage('You have ".$poCntr." Purchase Order/s that require your attention.','Purchase Order requested','".WEB_ROOT."/images/notepad-icon.png'); ";
 		}
 		// END ACTIONS TO DO ON SUCCESSFULL LOGIN
 		?>
