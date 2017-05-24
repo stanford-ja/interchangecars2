@@ -2,6 +2,7 @@
 // Home view
 //echo $_SERVER['REQUEST_URI'];
 //echo "<pre>"; print_r($myRR); echo "</pre>";
+// $msCntr is set via post_controller_constructor hook MessageHook::getCntr() in application/hooks/messages.php 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- <!DOCTYPE html> // -->
@@ -26,6 +27,7 @@
 		<meta name="keywords" content="model, railroad, railway, freight, car, freight, forwarding, interchange, application, waybill, train sheet, rollingstock, management">
 		<meta name="description" content="The MRICF is a Model Railroad Virtual Freight and Cars Forwarding Application with Waybills, Industries, Train Sheets, Rollingstock management and more">
 		<script type="text/javascript" src="<?php echo JS_ROOT; ?>/jquery-1.8.2.min.js"></script>
+		<script type="text/javascript" src="<?php echo JS_ROOT; ?>/push.min.js"></script>
 		<!-- 
 		<script type="text/javascript" src="<?php echo JS_ROOT; ?>/jquery-1.9.1.min.js"></script>
 		<script type="text/javascript" src="<?php echo JS_ROOT; ?>/jquery.autocomplete.min.js"></script>
@@ -119,6 +121,12 @@
 			$("#search").slideUp("slow");
 			return false;
 		});
+		<?php // START ACTIONS TO DO ON SUCCESSFULL LOGIN
+		if($msCntr > 0){
+			echo "pushMessage('You have ".$msCntr." message/s that require acknowledgement for your railroad/s.','Messages')";
+		}
+		// END ACTIONS TO DO ON SUCCESSFULL LOGIN
+		?>
 	});
 	
 	</script>

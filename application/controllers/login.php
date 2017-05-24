@@ -61,6 +61,7 @@ class Login extends CI_Controller {
 			$this->input->set_cookie('_tz',$this->arr['allRR'][$_POST['rr_selected']]->tzone,86500);
 			if(@$this->arr['allRR'][$_POST['rr_selected']]->admin_flag == 1){$this->input->set_cookie('_mricfadmin',1,86500);}
 			$this->last_act_update($_POST['rr_selected']);
+			$this->session->set_flashdata('loginSuccess', '1');
 			header('Location:'.WEB_ROOT.'/index.php/home');
 		}else{header('Location:'.WEB_ROOT.'/index.php/login');}
 	}
