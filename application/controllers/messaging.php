@@ -39,7 +39,20 @@ class Messaging extends CI_Controller {
 	}
 	
 	public function lst($id=0){
-		//$wbdat = (array)$this->Waybill_model->get_messages($id);
+		$wbdat = (array)$this->Waybill_model->get_single($id,'id');
+		
+		$this->htm['html'] = "<div style=\"padding: 10px; padding-left: 11%; padding-right: 10%; font-size: 14pt;\">";
+		$this->htm['html'] .= "Date: ".$wbdat[0]->date."<br />";
+		$this->htm['html'] .= "Waybill: ".$wbdat[0]->waybill_num."<br />";
+		$this->htm['html'] .= "Lading: ".$wbdat[0]->lading."<br />";
+		$this->htm['html'] .= "Origin: ".$wbdat[0]->indust_origin_name."<br />";
+		$this->htm['html'] .= "Destination: ".$wbdat[0]->indust_dest_name."<br />";
+		$this->htm['html'] .= "Status: ".$wbdat[0]->status."<br />";
+		$this->htm['html'] .= "Routing: ".$wbdat[0]->routing."<br />";
+		$this->htm['html'] .= "Return to: ".$wbdat[0]->return_to."<br />";
+		$this->htm['html'] .= "Alloc to RR: ".$this->mricf->qry("ichange_rr", $wbdat[0]->rr_id_handling,"id","rr_name")."<br />";
+		$this->htm['html'] .= "</div>";
+		
 		$messdat = (array)$this->Waybill_model->get_messages($id);
 		//$messdat = @json_decode($wbdat[0]->messages,TRUE);
 		$this->arr['pgTitle'] .= " - Messages for ".$messdat[0]->waybill_num; //$wbdat[0]->waybill_num;
@@ -71,7 +84,7 @@ class Messaging extends CI_Controller {
 			$this->datl['data'][$i]['text']					= $messdat[$i]['text'];
 			$this->datl['data'][$i]['read']					= "";
 			if($messdat[$i]['ack'] != 1 && in_array($messdat[$i]['torr'],$this->my_rr_ids)){
-				$this->datl['data'][$i]['read']	 = "<a href=\"".WEB_ROOT."/index.php/messaging/ack/".$messdat[$i]['id']."\">Acknowledge</a>";
+				$this->datl['data'][$i]['read']	 = "<a href=\"".WEB_ROOT."/index.php/messaging/ack/".$messdat[$i]['id']."/".$id."\">Acknowledge</a>";
 			}elseif($messdat[$i]['ack'] == 1 && in_array($messdat[$i]['torr'],$this->my_rr_ids)){
 				$this->datl['data'][$i]['read']	 = "Yes";
 			}
@@ -95,6 +108,7 @@ class Messaging extends CI_Controller {
 		$this->load->view('header', $this->arr);
 		$this->load->view('menu', $this->arr);
 		//$this->load->view('edit', @$this->flddat);
+		$this->load->view('html',$this->htm);
 		if($this->arr['rr_sess'] > 0){
 			$this->load->view('edit', $this->dat);
 			$this->load->view('list', $this->datl);
@@ -108,11 +122,11 @@ class Messaging extends CI_Controller {
 		// Used for editing existing (edit/[id]) and adding new (edit/0) records
 	}
 	
-	public function ack($id=0){
+	public function ack($id=0,$wbid=0){
 		// Mark message with $id sent to railroad id $rr as acknowledged.
 		$sql = "UPDATE ichange_messages SET ack = 1 WHERE id = '".$id."'";
 		$this->Generic_model->change($sql);
-		header("Location:".WEB_ROOT."/index.php/messaging");
+		header("Location:".WEB_ROOT."/index.php/messaging/lst/".$wbid);
 	}
 	
 	public function setFieldSpecs(){
@@ -136,7 +150,7 @@ class Messaging extends CI_Controller {
 		
 		// Add form and field definitions specific to this controller under this line... 
 		$this->dat['hidden'] = array('rr' => $this->arr['rr_sess'], 'waybill_id' => $this->id); //'tbl' => 'indust', 'id' => @$this->dat['data'][0]->id);
-		$this->dat['form_url'] = "../messaging/send_it";
+		$this->dat['form_url'] = "../messaging/send_it/";
 		$this->field_defs[] =  array(
 			'type' => "select", 'label' => 'Message Type', 'name' => 'type', 'value' => "", 
 			'other' => 'id="type"', 'options' => array(0 => "Message", 1 => "Email")
@@ -187,7 +201,7 @@ class Messaging extends CI_Controller {
 	// Message sending methods
 	function send_it(){
 		// $id is id from ichange_waybill
-		$id = $_POST['id'];
+		$id = $_POST['waybill_id'];
 		if($_POST['type'] == 0){$this->send_message($id);}
 		if($_POST['type'] == 1){$this->send_email($id);}
 	}
