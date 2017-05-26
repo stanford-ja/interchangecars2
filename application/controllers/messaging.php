@@ -40,17 +40,19 @@ class Messaging extends CI_Controller {
 	
 	public function lst($id=0){
 		$wbdat = (array)$this->Waybill_model->get_single($id,'id');
+		$last_prog = (array)$this->Generic_model->qry("SELECT * FROM ichange_progress WHERE waybill_num = '".$wbdat[0]->waybill_num."' ORDER BY date DESC, time DESC LIMIT 1");
 		
 		$this->htm['html'] = "<div style=\"padding: 10px; padding-left: 11%; padding-right: 10%; font-size: 14pt;\">";
-		$this->htm['html'] .= "Date: ".$wbdat[0]->date."<br />";
-		$this->htm['html'] .= "Waybill: ".$wbdat[0]->waybill_num."<br />";
-		$this->htm['html'] .= "Lading: ".$wbdat[0]->lading."<br />";
-		$this->htm['html'] .= "Origin: ".$wbdat[0]->indust_origin_name."<br />";
-		$this->htm['html'] .= "Destination: ".$wbdat[0]->indust_dest_name."<br />";
-		$this->htm['html'] .= "Status: ".$wbdat[0]->status."<br />";
-		$this->htm['html'] .= "Routing: ".$wbdat[0]->routing."<br />";
-		$this->htm['html'] .= "Return to: ".$wbdat[0]->return_to."<br />";
-		$this->htm['html'] .= "Alloc to RR: ".$this->mricf->qry("ichange_rr", $wbdat[0]->rr_id_handling,"id","rr_name")."<br />";
+		$this->htm['html'] .= "<div style=\"display: block; padding: 3px;\"><div style=\"font-size: 11pt; display: inline-block; width: 130px; vertical-align: top;\">Date:</div><div style=\"display: inline-block;\">".$wbdat[0]->date."</div></div>";
+		$this->htm['html'] .= "<div style=\"display: block; padding: 3px;\"><div style=\"font-size: 11pt; display: inline-block; width: 130px; vertical-align: top;\">Waybill:</div><div style=\"display: inline-block;\">".$wbdat[0]->waybill_num."</div></div>";
+		$this->htm['html'] .= "<div style=\"display: block; padding: 3px;\"><div style=\"font-size: 11pt; display: inline-block; width: 130px; vertical-align: top;\">Lading:</div><div style=\"display: inline-block;\">".$wbdat[0]->lading."</div></div>";
+		$this->htm['html'] .= "<div style=\"display: block; padding: 3px;\"><div style=\"font-size: 11pt; display: inline-block; width: 130px; vertical-align: top;\">Origin:</div><div style=\"display: inline-block;\">".$wbdat[0]->indust_origin_name."</div></div>";
+		$this->htm['html'] .= "<div style=\"display: block; padding: 3px;\"><div style=\"font-size: 11pt; display: inline-block; width: 130px; vertical-align: top;\">Destination:</div><div style=\"display: inline-block;\">".$wbdat[0]->indust_dest_name."</div></div>";
+		$this->htm['html'] .= "<div style=\"display: block; padding: 3px;\"><div style=\"font-size: 11pt; display: inline-block; width: 130px; vertical-align: top;\">Status:</div><div style=\"display: inline-block;\">".$wbdat[0]->status."</div></div>";
+		$this->htm['html'] .= "<div style=\"display: block; padding: 3px;\"><div style=\"font-size: 11pt; display: inline-block; width: 130px; vertical-align: top;\">Routing:</div><div style=\"display: inline-block;\">".$wbdat[0]->routing."</div></div>";
+		$this->htm['html'] .= "<div style=\"display: block; padding: 3px;\"><div style=\"font-size: 11pt; display: inline-block; width: 130px; vertical-align: top;\">Return to:</div><div style=\"display: inline-block;\">".$wbdat[0]->return_to."</div></div>";
+		$this->htm['html'] .= "<div style=\"display: block; padding: 3px;\"><div style=\"font-size: 11pt; display: inline-block; width: 130px; vertical-align: top;\">Allocated to RR:</div><div style=\"display: inline-block;\">".$this->mricf->qry("ichange_rr", $wbdat[0]->rr_id_handling,"id","rr_name")."</div></div>";
+		if(isset($last_prog[0]->text)){ $this->htm['html'] .= "<div style=\"display: block; padding: 3px;\"><div style=\"font-size: 11pt; display: inline-block; width: 150px; vertical-align: top;\">Last Progress Report:</div><div style=\"display: inline-block;\">".$last_prog[0]->date." ".$last_prog[0]->time." : ".$last_prog[0]->text."</div></div>"; }
 		$this->htm['html'] .= "</div>";
 		
 		$messdat = (array)$this->Waybill_model->get_messages($id);

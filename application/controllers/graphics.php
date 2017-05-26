@@ -68,9 +68,9 @@ class Graphics extends CI_Controller {
 		$this->uconfig['upload_path'] = $this->filePath;
 		$this->uconfig['overwrite'] = true;
 		$this->uconfig['allowed_types'] = 'jpg'; //'gif|jpg|png';
-		$this->uconfig['max_size']	= '100';
-		$this->uconfig['max_width'] = '1024';
-		$this->uconfig['max_height'] = '768';
+		//$this->uconfig['max_size']	= '100';
+		//$this->uconfig['max_width'] = '1024';
+		//$this->uconfig['max_height'] = '768';
 	}
 
 	public function index(){
@@ -89,7 +89,9 @@ class Graphics extends CI_Controller {
 		$content2['field_names'] = array("Waybill #","Origin Industry","Destination Industry");
 		
 		$content3['html'] = "<div style=\"text-align: center; color: #555; padding: 10px; margin: 3px;  background-color: antiquewhite;\">";
-		$content3['html'] .= "Max file size: ".$this->uconfig['max_size']."kb, ".$this->uconfig['max_width']."px X ".$this->uconfig['max_height']."px,<br />Allowed File Type: ".$this->uconfig['allowed_types']."<br />Max Description Length: 80 characters.<br />";
+		//$content3['html'] .= "Max file size: ".@$this->uconfig['max_size']."kb, ".@$this->uconfig['max_width']."px X ".@$this->uconfig['max_height']."px,<br />Allowed File Type: ".$this->uconfig['allowed_types']."<br />Max Description Length: 80 characters.<br />";
+		//$content3['html'] .= @$this->uconfig['max_width']."px X ".@$this->uconfig['max_height']."px,";
+		$content3['html'] .= "Allowed File Type: ".$this->uconfig['allowed_types']."<br />Max Description Length: 80 characters.<br />";
 		$content3['html'] .= "One image per railroad per waybill is allowed. If you upload a new image and one already exists for your railroad it will replace the previous one. If the replacement image does not display after the upload, <a href=\"javascript:{}\" onclick=\"window.location.reload();\">Click Here</a>.<br />";
 		$fils = get_filenames($this->filePath);
 		//echo "<pre>"; print_r($fils); echo "</pre>";
@@ -128,6 +130,12 @@ class Graphics extends CI_Controller {
 			//echo "<pre>"; print_r($this->upload->data()); echo "</pre>";
 			//exit();
 		}else	{
+			//$imagick = new \Imagick(realpath(DOC_ROOT."/waybill_images/".$this->uconfig['file_name']));
+			//$imagick->resizeImage($width, $height, $filterType, $blur, $bestFit);
+			//$imagick->resizeImage( 200, 200,  $imagick::FILTER_LANCZOS, 1, TRUE);
+			$ex = "convert ".DOC_ROOT."/waybill_images/".$this->uconfig['file_name']." -resize 500 ".DOC_ROOT."/waybill_images/".$this->uconfig['file_name'];
+			//echo $ex; exit();
+			shell_exec($ex);
 			$this->Generic_model->change("DELETE FROM `ichange_wb_img` WHERE `img_name` = '".$this->uconfig['file_name']."'");
 			if(strlen($p['description']) > 0){
 				$this->Generic_model->change("INSERT INTO `ichange_wb_img` SET `added` = '".date('U')."', `img_name` = '".$this->uconfig['file_name']."', `description` = '".str_replace("'","",$p['description'])."'");
