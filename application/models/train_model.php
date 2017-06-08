@@ -36,11 +36,15 @@ class Train_model extends CI_Model {
 
 	function get_all4day_sorted($rr=0,$d='sun',$a=0){
 		// $rr = railroad, $d = day, $au = show auto trains (0=no, 1=yes)
-		$s = "SELECT * FROM `".$this->tbl."` WHERE `railroad_id` = '".$rr."' AND `".$d."` = 1";
+		$s = "SELECT `".$this->tbl."`.*, COUNT(`ichange_waybill`.`id`) AS `wb_alloc`  
+			FROM `".$this->tbl."` 
+			LEFT JOIN `ichange_waybill` ON `".$this->tbl."`.`train_id` = `ichange_waybill`.`train_id` 
+			WHERE `railroad_id` = '".$rr."' AND `".$d."` = 1";
 		//if($a == 0){$s .= " AND (LENGTH(`auto`) < 1 OR `auto` < 1)";}
 		if($a == 0){$s .= " AND `auto` = 0 AND LENGTH(`auto`) < 2";}
-		$s .= " ORDER BY `tr_sheet_ord`";
+		$s .= " GROUP BY ichange_trains.train_id, tr_sheet_ord";
 		//echo $s; exit();
+
 		$query = $this->db->query($s);
 		return $query->result();
 	}
