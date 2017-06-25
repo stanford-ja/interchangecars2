@@ -167,9 +167,10 @@ class Switchlist extends CI_Controller {
 				$this->dat['data'][$i]['move_to']				= "";
 
 				// Get last progress date for waybill
-				$prog_dat_json = @json_decode($arrdat[$i]->progress,TRUE);
-  	   		$last_prog_date_arr = explode("-",$prog_dat_json[count($prog_dat_json)-1]['date']);
-		  	   $last_prog_date_ux = @mktime(12,0,0,$last_prog_date_arr[1],$last_prog_date_arr[2],$last_prog_date_arr[0]);
+				//$prog_dat_json = @json_decode($arrdat[$i]->progress,TRUE);
+  	   		//$last_prog_date_arr = explode("-",$prog_dat_json[count($prog_dat_json)-1]['date']);
+  	   		$last_prog_date_arr = array(); if(isset($prog[0]['date'])){ $last_prog_date_arr = explode("-",$prog[0]['date']); }
+		  	   $last_prog_date_ux = 0; if(count($last_prog_date_arr) == 3){ $last_prog_date_ux = mktime(12,0,0,$last_prog_date_arr[1],$last_prog_date_arr[2],$last_prog_date_arr[0]); }
 		  	   if($latest_ux < $last_prog_date_ux){$latest_ux = $last_prog_date_ux;}
 
 				if(in_array($arrdat[$i]->rr_id_handling,$this->my_rr_ids)){
