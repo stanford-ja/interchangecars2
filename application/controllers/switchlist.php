@@ -210,7 +210,10 @@ class Switchlist extends CI_Controller {
 				$prog_locs_txt = "";				
 				$prog_locs = (array)$this->Generic_model->qry("SELECT `map_location` FROM `ichange_progress` WHERE LENGTH(`map_location`) > 0 AND `waybill_num` = '".$arrdat[$i]->waybill_num."' ORDER BY date,time");
 				for($pl=0;$pl<count($prog_locs);$pl++){
-					if(strlen($prog_locs[$pl]->map_location) > 0){ $prog_locs_txt .= "[".$prog_locs[$pl]->map_location."] -> "; }
+					$prev_prog_loc = ""; if(isset($prog_locs[($pl-1)]->map_location)){ $prev_prog_loc = $prog_locs[($pl-1)]->map_location; }
+					if(strlen($prog_locs[$pl]->map_location) > 0 && $prog_locs[$pl]->map_location != $prev_prog_loc){ 
+						$prog_locs_txt .= "[".$prog_locs[$pl]->map_location."] -> "; 
+					}
 				}
 				if(strlen($prog_locs_txt) > 0){ $this->dat['data'][$i]['info'] .= "<hr />Journey so far: ".$prog_locs_txt; }
 				if(strlen($arrdat[$i]->notes) > 0){			$this->dat['data'][$i]['info'] .= "<hr /><span style=\"font-size: 9pt;\"><em>".$arrdat[$i]->notes."</em></span>";}
