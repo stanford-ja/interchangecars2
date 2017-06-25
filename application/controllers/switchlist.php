@@ -151,12 +151,15 @@ class Switchlist extends CI_Controller {
 				//$prog = @json_decode($arrdat[$i]->progress,TRUE);
 				$last_prog_sql = "SELECT * FROM `ichange_progress` WHERE `waybill_num` = '".$arrdat[$i]->waybill_num."' ORDER BY date DESC, time DESC LIMIT 1";
 				$prog_res = (array)$this->Generic_model->qry($last_prog_sql);
-				$prog[0] = (array)$prog_res[0]; //json_decode($this->waybills[$tmp]->progress, true);
+				$prog[0] = array(); if(isset($prog_res[0])){ $prog[0] = (array)$prog_res[0]; } //json_decode($this->waybills[$tmp]->progress, true);
 				$map_loc = "";
 				if(isset($prog[count($prog)-1]['map_location'])){
 					if(strlen($prog[count($prog)-1]['map_location']) > 0 && strpos("Z".$arrdat[$i]->status,"AT") < 1){$map_loc = "<br />At: ".$prog[count($prog)-1]['map_location'];}
 				}
-				$last_prog = $prog[count($prog)-1]['date']."&nbsp;".$prog[count($prog)-1]['time']." - ".$prog[count($prog)-1]['text'];
+				$last_prog = "";
+				if(isset($prog[count($prog)-1])){
+					$last_prog = @$prog[count($prog)-1]['date']."&nbsp;".@$prog[count($prog)-1]['time']." - ".@$prog[count($prog)-1]['text'];
+				}
 				
 				// Listing of waybill details allocated to train
 				$this->dat['data'][$i]['id']						= $arrdat[$i]->id;
@@ -166,7 +169,7 @@ class Switchlist extends CI_Controller {
 				// Get last progress date for waybill
 				$prog_dat_json = @json_decode($arrdat[$i]->progress,TRUE);
   	   		$last_prog_date_arr = explode("-",$prog_dat_json[count($prog_dat_json)-1]['date']);
-		  	   $last_prog_date_ux = mktime(12,0,0,$last_prog_date_arr[1],$last_prog_date_arr[2],$last_prog_date_arr[0]);
+		  	   $last_prog_date_ux = @mktime(12,0,0,$last_prog_date_arr[1],$last_prog_date_arr[2],$last_prog_date_arr[0]);
 		  	   if($latest_ux < $last_prog_date_ux){$latest_ux = $last_prog_date_ux;}
 
 				if(in_array($arrdat[$i]->rr_id_handling,$this->my_rr_ids)){
@@ -204,6 +207,12 @@ class Switchlist extends CI_Controller {
 				}
 				$this->dat['data'][$i]['cars']				 	= $cars; //$arrdat[$i]->cars;
 				$this->dat['data'][$i]['info']					= "<div style=\"border: 1px solid red; background-color: antiquewhite; padding: 3px; float: right;\">".$arrdat[$i]->status.$map_loc."</div>"."From ".$arrdat[$i]->indust_origin_name."<br />To ".$arrdat[$i]->indust_dest_name."<hr /><em>".$last_prog."</em>";
+				$prog_locs_txt = "";				
+				$prog_locs = (array)$this->Generic_model->qry("SELECT `map_location` FROM `ichange_progress` WHERE LENGTH(`map_location`) > 0 AND `waybill_num` = '".$arrdat[$i]->waybill_num."' ORDER BY date,time");
+				for($pl=0;$pl<count($prog_locs);$pl++){
+					if(strlen($prog_locs[$pl]->map_location) > 0){ $prog_locs_txt .= $prog_locs[$pl]->map_location." -> "; }
+				}
+				if(strlen($prog_locs_txt) > 0){ $this->dat['data'][$i]['info'] .= "<hr />Journey so far: ".$prog_locs_txt; }
 				if(strlen($arrdat[$i]->notes) > 0){			$this->dat['data'][$i]['info'] .= "<hr /><span style=\"font-size: 9pt;\"><em>".$arrdat[$i]->notes."</em></span>";}
 				$this->dat['data'][$i]['routing']				= $arrdat[$i]->routing;
 				$this->dat['data'][$i]['lading']				= $arrdat[$i]->lading;
