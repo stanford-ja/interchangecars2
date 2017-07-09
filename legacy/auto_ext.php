@@ -358,10 +358,24 @@
 	//$s[] = "SELECT `status`,`date` FROM `ichange_waybill` WHERE `status` = 'CLOSED' AND `date` < '".$dt."'";
 	//$s[] = "SELECT `date` FROM `ichange_progress` WHERE `date` < '".$dt."'";
 	//$s[] = "SELECT `date_avail` FROM `ichange_availcars` WHERE `date_avail` < '".$dt."' OR LENGTH(`date_avail`) < 10 OR `date_avail` NOT LIKE '%-%'";
+	
+	// START changed P_ORDER purger
+	$sql = "SELECT `waybill_num` FROM `ichange_waybill` WHERE `date` < '".$po_dt."' AND `status` = 'P_ORDER'";
+	$qry_po = mysql_query($sql);
+	while($res_po = mysql_fetch_array($qry_po)){
+		$sql = "SELECT COUNT(`id`) AS `cntr` FROM `ichange_progress` WHERE `waybill_num` = '".$res_po['waybill_num']."' LIMIT 1";
+		$qry_po2 = mysql_query($sql);
+		while($res_po2 = mysql_fetch_array($qry_po2)){
+			if($res_po2['cntr'] < 1){
+				$s[] = "DELETE FROM `ichange_waybill` WHERE `waybill_num` = '".$res_po['waybill_num']."'"; 
+			}
+		}
+	}
+	// END changed P_ORDER purger
 
 	$s[] = "DELETE FROM `ichange_waybill` WHERE `status` = 'CLOSED' AND `date` < '".$dt."'";
 	$s[] = "DELETE FROM `ichange_waybill` WHERE `date` < '".$yr."'";
-	$s[] = "DELETE FROM `ichange_waybill` WHERE `date` < '".$po_dt."' AND `status` = 'P_ORDER'";
+	//$s[] = "DELETE FROM `ichange_waybill` WHERE `date` < '".$po_dt."' AND `status` = 'P_ORDER'";
 	$s[] = "DELETE FROM `ichange_availcars` WHERE `date_avail` < '".$dt."' OR LENGTH(`date_avail`) < 10 OR `date_avail` NOT LIKE '%-%'";
 	$s[] = "DELETE FROM `ichange_activity` WHERE `added` < ".$act_unix." OR `added` IS NULL";
 	$s[] = "DELETE FROM `ichange_auto` WHERE `act_date` < '".date('Y-m-d')."'";
