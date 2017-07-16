@@ -59,6 +59,7 @@ class Switchlist extends CI_Controller {
 		$rrdat = (array)$this->Railroad_model->get_allActive();
 		$stodat = $this->mricf->getStoredIndust($this->arr['rr_sess']); //(array)$this->Generic_model->qry("SELECT `id`,`indust_name` FROM `ichange_indust` WHERE `storage` = '1' AND `rr` = '".$this->arr['rr_sess']."'");
 		//echo "<pre>"; print_r($trdat); echo "</pre>";
+		$this->traindat = $trdat;
 		$op_days = "";
 		if($trdat[0]->sun == 1){$op_days .= "SUN ";}
 		if($trdat[0]->mon == 1){$op_days .= "MON ";}
@@ -516,9 +517,20 @@ class Switchlist extends CI_Controller {
 		if($ux > $dt){$dt = $ux;}
 		$dt_end = $dt + intval(15*86400); // 15 days
 		$opts = "";
+		$op_days = array();
+		if($this->traindat[0]->sun == 1){$op_days[] = "Sun";}
+		if($this->traindat[0]->mon == 1){$op_days[] = "Mon";}
+		if($this->traindat[0]->tues == 1){$op_days[] = "Tue";}
+		if($this->traindat[0]->wed == 1){$op_days[] = "Wed";}
+		if($this->traindat[0]->thu == 1){$op_days[] = "Thu";}
+		if($this->traindat[0]->fri == 1){$op_days[] = "Fri";}
+		if($this->traindat[0]->sat == 1){$op_days[] = "Sat";}
+
 		for($i=$dt;$i<$dt_end;$i=$i+86400){
-			$sel = ""; if($i == date('Y-m-d')){$sel = " selected=\"selected\"";}
-			$opts .= "<option value=\"".date('Y-m-d',$i)."\"".$sel.">".date('Y-m-d (D)',$i)."</option>";
+			if(in_array(date('D',$i),$op_days) || count($op_days) == 0){
+				$sel = ""; if($i == date('Y-m-d')){$sel = " selected=\"selected\"";}
+				$opts .= "<option value=\"".date('Y-m-d',$i)."\"".$sel.">".date('Y-m-d (D)',$i)."</option>";
+			}
 		}
 		return $opts;
 	}

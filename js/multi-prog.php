@@ -18,19 +18,33 @@ function multiProg($c,$w,$t,$r){
 	// $t = timezone
 	// $r = railroad id
 	db_conn();
+	$sqli = new mysqli()
 	$t = charConv($t,"[AMP]","&"); // Require to convert [AMP] back to '&'
 	$c++; // Advance one so that IDs of new form are not the same the existing ones.
 
 	if(qry("ichange_rr", $r, "id", "use_tz_time") == 1 && strlen(@$_GET['t']) > 0){date_default_timezone_set($t);}
+
+	$op_days = array();
+	if($traindata[0]->sun == 1){$op_days[] = "Sun";}
+	if($traindata[0]->mon == 1){$op_days[] = "Mon";}
+	if($traindata[0]->tues == 1){$op_days[] = "Tue";}
+	if($traindata[0]->wed == 1){$op_days[] = "Wed";}
+	if($traindata[0]->thu == 1){$op_days[] = "Thu";}
+	if($traindata[0]->fri == 1){$op_days[] = "Fri";}
+	if($traindata[0]->sat == 1){$op_days[] = "Sat";}
 	
 	// Get last progress report info and create date options.
+	$prog_sql = "SELECT * FROM `ichange_progress` WHERE `` ORDER BY `date` DESC, `time` DESC LIMIT 1";
+	
 	$progs = @json_decode(qry("ichange_waybill",$w,"waybill_num","progress"),TRUE);
 	$last_prog_date = explode("-",$progs[count($progs)-1]['date']);
 	$last_prog_date_ux = mktime(12,0,0,$last_prog_date[1],$last_prog_date[2],$last_prog_date[0]);
 	$dt_opts = "";
 	for($joe=date('U',$last_prog_date_ux);$joe<intval(date('U')+(86400*15));$joe=$joe+86400){
-		$sel = ""; if(date('Ymd') == date('Ymd',$joe)){$sel = " selected=\"selected\"";}
-		$dt_opts .= "<option value=\"".date('Y-m-d',$joe)."\"".$sel.">".date('Y-m-d (D)',$joe)."</option>";
+		if(in_array(date('D',$joe),$op_days) || count($op_days) == 0){
+			$sel = ""; if(date('Ymd') == date('Ymd',$joe)){$sel = " selected=\"selected\"";}
+			$dt_opts .= "<option value=\"".date('Y-m-d',$joe)."\"".$sel.">".date('Y-m-d (D)',$joe)."</option>";
+		}
 	}
 
 	$bgcol = "#eee"; if(intval($c/2) == floatval($c/2)){$bgcol = "#DCDCDC";}
@@ -153,6 +167,17 @@ function multiProg($c,$w,$t,$r){
 
 // Supporting functions
 function db_conn(){
+	$dbs = db_conn_settings();
+	$dbhost=$dbs['dbhost'];
+	$dbusername=$dbs['dbusername']; //"jstan_6_w";
+	$dbpassword=$dbs['dbpassword']; //"Js120767";
+	$dbname=$dbs['dbname']; //"jstan_general";
+
+	$dbcnx = mysql_connect($dbhost, $dbusername, $dbpassword);
+	$seldb = mysql_select_db($dbname);
+}
+
+function db_conn_settings(){
 	// LIVE SERVER
 	$dbhost="db150c.pair.com";//"db72d.pair.com";
 	$dbusername="jstan2_2"; //"jstan_6_w";
@@ -167,9 +192,13 @@ function db_conn(){
 		$dbpassword="admin";
 		$dbname="jstan_general";
 	}
-
-	$dbcnx = mysql_connect($dbhost, $dbusername, $dbpassword);
-	$seldb = mysql_select_db($dbname);
+	$tmp = array(
+		'dbhost' => $dbhost,
+		'dbusername' => $dbusername,
+		'dbpassword' => $dbpassword,
+		'dbname' => $dbname
+	);
+	return $tmp;
 }
 
 function charConv($str,$from,$to){

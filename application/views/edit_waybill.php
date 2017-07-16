@@ -6,6 +6,15 @@ if(strpos($_SERVER['DOCUMENT_ROOT'].$_SERVER['SCRIPT_NAME'],"www/Applications/")
 $mths = array("","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec");
 if(@$myRR[0]->use_tz_time == 1 && strlen(@$myRR[0]->tzone) > 0){	date_default_timezone_set($myRR[0]->tzone);}
 
+$op_days = array();
+if($traindata[0]->sun == 1){$op_days[] = "Sun";}
+if($traindata[0]->mon == 1){$op_days[] = "Mon";}
+if($traindata[0]->tues == 1){$op_days[] = "Tue";}
+if($traindata[0]->wed == 1){$op_days[] = "Wed";}
+if($traindata[0]->thu == 1){$op_days[] = "Thu";}
+if($traindata[0]->fri == 1){$op_days[] = "Fri";}
+if($traindata[0]->sat == 1){$op_days[] = "Sat";}
+
 ?>
 
 			<div style="display: none;">
@@ -452,8 +461,14 @@ if(@$myRR[0]->use_tz_time == 1 && strlen(@$myRR[0]->tzone) > 0){	date_default_ti
 				<!-- <input type="hidden" id="pfld2_0" name="pfld2[]" size="12" maxsize="12" value="<?php echo date('Y-m-d'); ?>" /> // -->
 				<select id="pfld2_0" name="pfld2[]">
 					<?php for($joe=date('U',$last_prog_date_ux);$joe<intval(date('U')+(86400*15));$joe=$joe+86400){
-						$sel = ""; if(date('Ymd') == date('Ymd',$joe)){$sel = " selected=\"selected\"";}
-						echo "<option value=\"".date('Y-m-d',$joe)."\"".$sel.">".date('Y-m-d (D)',$joe)."</option>";
+						if(in_array(date('D',$joe),$op_days) || count($op_days) == 0){
+							$sel = ""; 
+							if(date('U') <= $joe && !isset($trselected)){
+								$sel = " selected=\"selected\"";
+								$trselected = 1;
+							}
+							echo "<option value=\"".date('Y-m-d',$joe)."\"".$sel.">".date('Y-m-d (D)',$joe)."</option>";
+						}
 					} ?>
 				</select>
 				<!--
