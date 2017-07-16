@@ -188,8 +188,8 @@ class Trains extends CI_Controller {
 		$randpos = array();
 		$traindat = (array)$this->Train_model->get_all4day_sorted($this->arr['rr_sess'],$tarr['day'],$tarr['auto']); //get_all4RR_Sorted($this->arr['rr_sess']);
 		//$this->dat = array();
-		$this->dat['fields'] 			= array('id', 'train_id', 'train_desc', 'no_cars', 'wb_alloc', 'op_notes', 'direction', 'tr_sheet_ord', 'origin', 'destination','location');
-		$this->dat['field_names'] 		= array("ID", "Train ID", "Description", "Max Cars", "WBs (Cars)", "Op Notes", "Direction", "Sheet Order", "Origin", "Destination","Location (Enter a new location and click Update to change)");
+		$this->dat['fields'] 			= array('id', 'train_id', 'train_desc', 'no_cars', 'wb_alloc', 'op_notes', 'route','location');
+		$this->dat['field_names'] 		= array("ID", "Train ID", "Description", "Max Cars", "Sheet Order<br />WBs (Cars)", "Op Notes", "Route<br />Direction","Location (Enter a new location and click Update to change)");
 		$this->dat['options']			= array(
 				'Crew&nbsp;Allocated' => $_SERVER['SCRIPT_NAME']."/trains/crewTrId/".$tarr['day']."/".$tarr['auto']."/", 
 				'Started' => $_SERVER['SCRIPT_NAME']."/trains/strtTrId/".$tarr['day']."/".$tarr['auto']."/", 
@@ -199,6 +199,7 @@ class Trains extends CI_Controller {
 				'Train List' => $_SERVER['SCRIPT_NAME']."/trains", 
 				'Reset Train Statuses' => array('href' => "javascript:{}", 'onclick' => "if(confirm('Are you sure you want to reset the status of all your trains?')){window.location = '".$_SERVER['SCRIPT_NAME']."/trains/compReset/".$tarr['day']."/".$tarr['auto']."';}")
 			); // Paths for other links!
+		$this->dat['widths'] = array(0=>"5%",1=>"10%",2=>"18%",3=>"4%",4=>"5%",5=>"25%",6=>"10%",7=>"13%");
 		
 		for($i=0;$i<count($traindat);$i++){
 			$aut_inf = "";
@@ -232,16 +233,14 @@ class Trains extends CI_Controller {
 			}
 			//if(($is_auto == 0 && $tarr['auto'] == 0) || $tarr['auto'] == 1){
 				$this->dat['data'][$i]['id'] 						= $traindat[$i]->id;
-				$this->dat['data'][$i]['train_id']			 		= $hl.$traindat[$i]->train_id.$c_omp."</div>";
+				$this->dat['data'][$i]['train_id']			 		= $hl.$traindat[$i]->train_id." (".$traindat[$i]->loco_num.") ".$c_omp."</div>";
 				$this->dat['data'][$i]['train_desc'] 				= $hl.$traindat[$i]->train_desc.$aut_inf."</div>";
 				$this->dat['data'][$i]['no_cars'] 				= $hl.$traindat[$i]->no_cars."</div>";
-				$this->dat['data'][$i]['wb_alloc'] 				= $hl.$wb_alloc."</div>";
+				$this->dat['data'][$i]['wb_alloc'] 				= $hl.$traindat[$i]->tr_sheet_ord."<br />".$wb_alloc."</div>";
 				$this->dat['data'][$i]['op_notes'] 				= $hl.$traindat[$i]->op_notes."</div>";
-				$this->dat['data'][$i]['direction'] 				= $hl.$traindat[$i]->direction."</div>";
-				$this->dat['data'][$i]['tr_sheet_ord']			= $hl.$traindat[$i]->tr_sheet_ord."</div>";
-				$this->dat['data'][$i]['origin']					= $hl.$traindat[$i]->origin."</div>";
+				$this->dat['data'][$i]['route']					= $hl.$traindat[$i]->origin." -> ".$traindat[$i]->destination." (".$traindat[$i]->direction.")</div>";
 				$this->dat['data'][$i]['destination']				= $hl.$traindat[$i]->destination."</div>";
-				$this->dat['data'][$i]['location']				= "<input type=\"text\" name=\"location".$traindat[$i]->id."\" style=\"border: 1px solid #555;\" value=\"".@$traindat[$i]->location."\" onchange=\"window.location = '".$_SERVER['SCRIPT_NAME']."/trains/locationTrId/".$tarr['day']."/".$tarr['auto']."/".$traindat[$i]->id."/' + this.value;\"/>&nbsp;<input type=\"button\" value=\"Update\" />";
+				$this->dat['data'][$i]['location']				= "<input type=\"text\" name=\"location".$traindat[$i]->id."\" style=\"border: 1px solid #555; width: 150px;\" value=\"".@$traindat[$i]->location."\" onchange=\"window.location = '".$_SERVER['SCRIPT_NAME']."/trains/locationTrId/".$tarr['day']."/".$tarr['auto']."/".$traindat[$i]->id."/' + this.value;\"/>&nbsp;<input type=\"button\" value=\"Update\" />";
 				//$this->dat['data'][$i]['railroad_id']				= $this->mricf->qry("ichange_rr",$traindat[$i]->railroad_id,"id","report_mark");
 			//}
 		}
