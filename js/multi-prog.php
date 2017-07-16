@@ -17,34 +17,40 @@ function multiProg($c,$w,$t,$r){
 	// $w = waybill number (NOT record id)
 	// $t = timezone
 	// $r = railroad id
+	// $tr = train_id
 	db_conn();
-	$sqli = new mysqli()
+	$dbs = db_conn_settings();
+	$sqli = new mysqli($dbs['dbhost'],$dbs['dbusername'],$dbs['dbpassword'],$dbs['dbname']);
 	$t = charConv($t,"[AMP]","&"); // Require to convert [AMP] back to '&'
 	$c++; // Advance one so that IDs of new form are not the same the existing ones.
 
 	if(qry("ichange_rr", $r, "id", "use_tz_time") == 1 && strlen(@$_GET['t']) > 0){date_default_timezone_set($t);}
+	//$wbd = $sqli->query("SELECT * FROM `ichange_waybill` WHERE `waybill_num` = '".$w."'"); // Waybill data
+	//$wbres = $wbd->fetch_assoc();
+	$trd = $sqli->query("SELECT sun,mon,tues,wed,thu,fri,sat FROM `ichange_trains` WHERE `train_id` = '".$tr."'");
+	$trres = $trd->fetch_assoc();
 
 	$op_days = array();
-	if($traindata[0]->sun == 1){$op_days[] = "Sun";}
-	if($traindata[0]->mon == 1){$op_days[] = "Mon";}
-	if($traindata[0]->tues == 1){$op_days[] = "Tue";}
-	if($traindata[0]->wed == 1){$op_days[] = "Wed";}
-	if($traindata[0]->thu == 1){$op_days[] = "Thu";}
-	if($traindata[0]->fri == 1){$op_days[] = "Fri";}
-	if($traindata[0]->sat == 1){$op_days[] = "Sat";}
+	if($trres['sun'] == 1){$op_days[] = "Sun";}
+	if($trres['mon'] == 1){$op_days[] = "Mon";}
+	if($trres['tues'] == 1){$op_days[] = "Tue";}
+	if($trres['wed'] == 1){$op_days[] = "Wed";}
+	if($trres['thu'] == 1){$op_days[] = "Thu";}
+	if($trres['fri'] == 1){$op_days[] = "Fri";}
+	if($trres['sat'] == 1){$op_days[] = "Sat";}
 	
-	// Get last progress report info and create date options.
-	$prog_sql = "SELECT * FROM `ichange_progress` WHERE `` ORDER BY `date` DESC, `time` DESC LIMIT 1";
-	
-	$progs = @json_decode(qry("ichange_waybill",$w,"waybill_num","progress"),TRUE);
-	$last_prog_date = explode("-",$progs[count($progs)-1]['date']);
+	// Get last progress report info and create date options.	
+	$prd  = $sqli->query("SELECT * FROM `ichange_progress` WHERE `waybill_num` = '".$w."' ORDER BY `date` DESC, `time` DESC LIMIT 1"); // Latest Progress data
+	$progs = $prd->fetch_assoc();
+	//$progs = @json_decode(qry("ichange_waybill",$w,"waybill_num","progress"),TRUE);
+	$last_prog_date = explode("-",$progs['date']); //explode("-",$progs[count($progs)-1]['date']);
 	$last_prog_date_ux = mktime(12,0,0,$last_prog_date[1],$last_prog_date[2],$last_prog_date[0]);
 	$dt_opts = "";
 	for($joe=date('U',$last_prog_date_ux);$joe<intval(date('U')+(86400*15));$joe=$joe+86400){
-		if(in_array(date('D',$joe),$op_days) || count($op_days) == 0){
+		//if(in_array(date('D',$joe),$op_days) || count($op_days) == 0){
 			$sel = ""; if(date('Ymd') == date('Ymd',$joe)){$sel = " selected=\"selected\"";}
 			$dt_opts .= "<option value=\"".date('Y-m-d',$joe)."\"".$sel.">".date('Y-m-d (D)',$joe)."</option>";
-		}
+		//}
 	}
 
 	$bgcol = "#eee"; if(intval($c/2) == floatval($c/2)){$bgcol = "#DCDCDC";}
@@ -161,6 +167,7 @@ function multiProg($c,$w,$t,$r){
    $htm .= "</div>"; // end table
 
 	@mysql_close();
+	$sqli->close();
 	echo $htm;
 }
 
@@ -190,7 +197,7 @@ function db_conn_settings(){
 		$dbhost="localhost";
 		$dbusername="admin";
 		$dbpassword="admin";
-		$dbname="jstan_general";
+		//$dbname="jstan_general";
 	}
 	$tmp = array(
 		'dbhost' => $dbhost,
@@ -214,13 +221,16 @@ function qry($tbl, $data, $ky, $fld){
 	// $ky = the name of the field to search in.
 	// $fld = Field name to return value of.
 	// $ret = Returned value of the function.
-	db_conn();
+	//db_conn();
+	$dbs = db_conn_settings();
+	$sqli = new mysqli($dbs['dbhost'],$dbs['dbusername'],$dbs['dbpassword'],$dbs['dbname']);
 	$sql_com = "SELECT * FROM `".$tbl."` WHERE `".$ky."` = '".$data."' LIMIT 1";
-	$dosql_com = mysql_query($sql_com);
+	$dosql_com = $sqli->query($sql_com); //mysql_query($sql_com);
 	$ret = "";
-	while($resultcom = mysql_fetch_array($dosql_com)){			
+	while($resultcom = $dosql_com->fetch_assoc()){ //mysql_fetch_array($dosql_com)){			
 		$ret = $resultcom[$fld];		
 	}
+	$sqli->close();
 		
 	return $ret; //Value to return.
 }
