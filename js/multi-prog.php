@@ -6,6 +6,7 @@
 // Start function caller
 if(isset($_GET['f'])){
 	if($_GET['f'] == "multiProg"){multiProg(@$_GET['i'],@$_GET['w'],@$_GET['t'],@$_GET['r']);}
+	if($_GET['f'] == "dateRebuild"){dateRebuild(@$_GET['t'],@$_GET['r'],@$_GET['w']);}
 }
 // End function caller
 
@@ -17,7 +18,6 @@ function multiProg($c,$w,$t,$r){
 	// $w = waybill number (NOT record id)
 	// $t = timezone
 	// $r = railroad id
-	// $tr = train_id
 	db_conn();
 	$dbs = db_conn_settings();
 	$sqli = new mysqli($dbs['dbhost'],$dbs['dbusername'],$dbs['dbpassword'],$dbs['dbname']);
@@ -25,34 +25,10 @@ function multiProg($c,$w,$t,$r){
 	$c++; // Advance one so that IDs of new form are not the same the existing ones.
 
 	if(qry("ichange_rr", $r, "id", "use_tz_time") == 1 && strlen(@$_GET['t']) > 0){date_default_timezone_set($t);}
-	//$wbd = $sqli->query("SELECT * FROM `ichange_waybill` WHERE `waybill_num` = '".$w."'"); // Waybill data
-	//$wbres = $wbd->fetch_assoc();
-	$trd = $sqli->query("SELECT sun,mon,tues,wed,thu,fri,sat FROM `ichange_trains` WHERE `train_id` = '".$tr."'");
-	$trres = $trd->fetch_assoc();
-
-	$op_days = array();
-	if($trres['sun'] == 1){$op_days[] = "Sun";}
-	if($trres['mon'] == 1){$op_days[] = "Mon";}
-	if($trres['tues'] == 1){$op_days[] = "Tue";}
-	if($trres['wed'] == 1){$op_days[] = "Wed";}
-	if($trres['thu'] == 1){$op_days[] = "Thu";}
-	if($trres['fri'] == 1){$op_days[] = "Fri";}
-	if($trres['sat'] == 1){$op_days[] = "Sat";}
+	$wbd = $sqli->query("SELECT * FROM `ichange_waybill` WHERE `waybill_num` = '".$w."'"); // Waybill data
+	$wbres = $wbd->fetch_assoc();
+	$dt_opts = dateRebuildReturn("",$r,$w); // dateRebuildReturn($wbres['train_id'],$r,$w); // HERE!
 	
-	// Get last progress report info and create date options.	
-	$prd  = $sqli->query("SELECT * FROM `ichange_progress` WHERE `waybill_num` = '".$w."' ORDER BY `date` DESC, `time` DESC LIMIT 1"); // Latest Progress data
-	$progs = $prd->fetch_assoc();
-	//$progs = @json_decode(qry("ichange_waybill",$w,"waybill_num","progress"),TRUE);
-	$last_prog_date = explode("-",$progs['date']); //explode("-",$progs[count($progs)-1]['date']);
-	$last_prog_date_ux = mktime(12,0,0,$last_prog_date[1],$last_prog_date[2],$last_prog_date[0]);
-	$dt_opts = "";
-	for($joe=date('U',$last_prog_date_ux);$joe<intval(date('U')+(86400*15));$joe=$joe+86400){
-		//if(in_array(date('D',$joe),$op_days) || count($op_days) == 0){
-			$sel = ""; if(date('Ymd') == date('Ymd',$joe)){$sel = " selected=\"selected\"";}
-			$dt_opts .= "<option value=\"".date('Y-m-d',$joe)."\"".$sel.">".date('Y-m-d (D)',$joe)."</option>";
-		//}
-	}
-
 	$bgcol = "#eee"; if(intval($c/2) == floatval($c/2)){$bgcol = "#DCDCDC";}
 	$htm = "";
 	$htm .= "<div style=\"display: table; background-color: transparent; border: 1px solid brown; width: 100%; padding: 1px;\">"; // start table
@@ -120,7 +96,7 @@ function multiProg($c,$w,$t,$r){
 	while($tr_r = mysql_fetch_array($tr_q)){
 		//$tr_lst .= "<option value=\"".$tr_r['train_id']."\">(".$tr_r['train_id'].") ".substr($tr_r['train_desc'],0,15)."</option>";
 		//$tr_lst .= "<option value=\"".$tr_r['train_id']."\">".$tr_r['train_id']."</option>";
-		$tr_lst .= "<input type=\"radio\" name=\"tr_tmp_".$c."\" onchange=\"document.getElementById('fld14_".$c."').value = '".$tr_r['train_id']."';\" />(".$tr_r['train_id'].") ".$tr_r['train_desc']."<br />";
+		$tr_lst .= "<input type=\"radio\" name=\"tr_tmp_".$c."\" onchange=\"document.getElementById('fld14_".$c."').value = '".$tr_r['train_id']."';rebuildDateSel('pfld2_".$c."','fld14_".$c."');\" />(".$tr_r['train_id'].") ".$tr_r['train_desc']."<br />";
 	}
 	$htm .= "</select><br />";
 	$htm .= "TZ:<input type=\"text\" readonly=\"readonly\" name=\"tzone[]\" value=\"".$t."\" style=\"border: none; background-color: transparent; width: auto;\" />";
@@ -171,6 +147,51 @@ function multiProg($c,$w,$t,$r){
 	echo $htm;
 }
 
+function dateRebuildReturn($t,$r,$w){ // Non-AJAX date options rebuild
+	// Returns option tags for the train indicated in $t	
+	// $t = train id
+	// $r = railroad id
+	// $w = waybill_num
+	$t = charConv($t,"[AMP]","&");
+	$dbs = db_conn_settings();
+	$sqli = new mysqli($dbs['dbhost'],$dbs['dbusername'],$dbs['dbpassword'],$dbs['dbname']);
+	$trd = $sqli->query("SELECT sun,mon,tues,wed,thu,fri,sat FROM `ichange_trains` WHERE `train_id` = '".$t."'");
+	$trres = $trd->fetch_assoc();
+
+	$op_days = array();
+	if($trres['sun'] == 1){$op_days[] = "Sun";}
+	if($trres['mon'] == 1){$op_days[] = "Mon";}
+	if($trres['tues'] == 1){$op_days[] = "Tue";}
+	if($trres['wed'] == 1){$op_days[] = "Wed";}
+	if($trres['thu'] == 1){$op_days[] = "Thu";}
+	if($trres['fri'] == 1){$op_days[] = "Fri";}
+	if($trres['sat'] == 1){$op_days[] = "Sat";}
+
+	// Get last progress report info and create date options.
+	$prd  = $sqli->query("SELECT * FROM `ichange_progress` WHERE `waybill_num` = '".$w."' ORDER BY `date` DESC, `time` DESC LIMIT 1"); // Latest Progress data
+	$progs = $prd->fetch_assoc();
+	//$progs = @json_decode(qry("ichange_waybill",$w,"waybill_num","progress"),TRUE);
+	$last_prog_date = explode("-",$progs['date']); //explode("-",$progs[count($progs)-1]['date']);
+	$last_prog_date_ux = mktime(12,0,0,$last_prog_date[1],$last_prog_date[2],$last_prog_date[0]);
+	$dt_opts = "";
+	for($joe=date('U',$last_prog_date_ux);$joe<intval(date('U')+(86400*15));$joe=$joe+86400){
+		if(in_array(date('D',$joe),$op_days) || count($op_days) == 0){
+			$sel = ""; 
+			if(date('U') <= $joe && !isset($trselected)){
+				$sel = " selected=\"selected\"";
+				$trselected = 1;
+			}
+			$dt_opts .= "<option value=\"".date('Y-m-d',$joe)."\"".$sel.">".date('Y-m-d (D)',$joe)."</option>";
+		}
+	}
+
+	$sqli->close();
+	return $dt_opts;
+}
+
+function dateRebuild($t,$r,$w){ // Container for AJAX date options rebuild
+	echo dateRebuildReturn($t,$r,$w);
+}
 
 // Supporting functions
 function db_conn(){

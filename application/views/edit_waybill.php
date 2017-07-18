@@ -402,7 +402,7 @@ if($traindata[0]->sat == 1){$op_days[] = "Sat";}
 				<td valign="top"><span style="white-space: nowrap;">In / Allocated To</span></td>
 				<td>
 					<span data-balloon="The symbol of train the waybill is currently in or allocated to. To search for a train, enter either the location to be served, part or all of the train symbol, origin, or destination, or an auto train waypoint, then click the Find button." data-balloon-pos="right" data-balloon-length="xlarge">
-                <input type="text" size="35" name="fld14[]" id="fld14" value="<?php echo $fld14; ?>" onchange="this.value = this.value.toUpperCase();selTrain(this.value);" />&nbsp;<input type="button" name="fndTrn" value="Find" onclick="trainAutoComp(document.getElementById('fld14').value,'fld14','train_autocomp');" />
+                <input type="text" size="35" name="fld14[]" id="fld14" value="<?php echo $fld14; ?>" onchange="this.value = this.value.toUpperCase();selTrain(this.value);rebuildDateSel('pfld2_0','fld14');" />&nbsp;<input type="button" name="fndTrn" value="Find" onclick="trainAutoComp(document.getElementById('fld14').value,'fld14','train_autocomp');" />
                 </span>
                 <div id="train_autocomp_span" style="display: none; border: 1px solid #777; background-color: yellow; font-size: 9pt; padding: 5px; margin: 1px; max-height: 150px; overflow: auto;">
                 </div>
@@ -463,7 +463,7 @@ if($traindata[0]->sat == 1){$op_days[] = "Sat";}
 					<?php for($joe=date('U',$last_prog_date_ux);$joe<intval(date('U')+(86400*15));$joe=$joe+86400){
 						if(in_array(date('D',$joe),$op_days) || count($op_days) == 0){
 							$sel = ""; 
-							if(date('U') <= $joe && !isset($trselected)){
+							if(date('U') <= ($joe+(60*60*24*6)) && !isset($trselected)){
 								$sel = " selected=\"selected\"";
 								$trselected = 1;
 							}

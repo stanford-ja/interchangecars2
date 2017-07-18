@@ -259,7 +259,7 @@ function trainAutoComp($str,$fld,$sct = NULL,$la=0){
 			if(strpos("z".$res['op_notes'],$str) > 0 && $fnd == 0){$xtra .= "&nbsp;&nbsp;&nbsp;".strtoupper($str)." is mentioned in the Op Notes.<br />";}
 		}
 		if(strlen($xtra) > 0){$xtra = "<span style=\"font-size: 8pt;\"> ".$xtra."</span>";}
-		$lst .= "<a href=\"javascript:{}\" class=\"autocompletetxt\" style=\"text-decoration: none;\" onclick=\"document.getElementById('".$fld."').value='".trim(strtoupper($res['train_id']))."'; document.getElementById('".$sct."_span').style.display='none'; selTrain('".$res['train_id']."');\">".$res['train_id']."</a> - ".$res['train_desc']."<br />".$xtra;
+		$lst .= "<a href=\"javascript:{}\" class=\"autocompletetxt\" style=\"text-decoration: none;\" onclick=\"document.getElementById('".$fld."').value='".trim(strtoupper($res['train_id']))."'; document.getElementById('".$sct."_span').style.display='none'; selTrain('".$res['train_id']."');rebuildDateSel('pfld2_0','fld14');\">".$res['train_id']."</a> - ".$res['train_desc']."<br />".$xtra;
 	}
 	if(strlen($lst) < 1){
 		$lst = "No results found!";

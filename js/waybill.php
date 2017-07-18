@@ -417,6 +417,28 @@ $f21 = str_replace("{\"AAR_REQD\":\"UNDEFINED\",\"NUM\":\"UNDEFINED\",\"AAR\":\"
 			<?php } ?>
 		});
 	}
+	
+	function rebuildDateSel(e,t){
+		// Re-builds Data selector for a progress report so it is re-built according to days a train runs on
+		// e = the ID of the SELECT element to re-build in.
+		// t = the ID of the field where the train_id is located.
+		$(document).ready(function(){
+			<?php if($rr_sess > 0){ ?>
+			if(document.getElementById(e) && document.getElementById(t)){
+				var ti = document.getElementById(t);
+				var tid = ti.value.replace("&","[AMP]"); // Require to convert & to [AMP] so that the GET vars work properly in ajax script
+				//alert('e='+e+' ('+document.getElementById(e).value+'), t='+t+' ('+tid+')');
+				var p = "<?php echo JS_ROOT; ?>/multi-prog.php?f=dateRebuild&t=" + tid + "&r=<?php echo @$rr_sess; ?>&w="+document.getElementById('fld8').value;
+				$.get(p,function(data){
+					fnd = data;
+					if(fnd.length > 0){
+						document.getElementById(e).innerHTML = fnd;
+					}	 
+				});
+			}
+			<?php } ?>
+		});
+	}
 
 	setInterval(function() {
 			<?php if($rr_sess > 0){ ?>
