@@ -58,23 +58,22 @@ class Trains extends CI_Controller {
 		$this->dat['links']				= array(
 				'New' => "trains/edit/0"
 			); // Paths for other links!
-		$this->dat['before_table'] = "Train Sheets: <select onchange=\"window.location = '".WEB_ROOT."/' + this.value;\">".
+		$this->dat['before_table'] = "Train Sheets: <select id=\"bf_day\">".
 			"<option value=\"\" selected=\"selected\">-- Select --</option>".
-			"<option value=\"trains/sheet/sun/0\">Sun, no Auto</option>".
-			"<option value=\"trains/sheet/sun/1\">Sun, incl. Auto</option>".
-			"<option value=\"trains/sheet/mon/0\">Mon, no Auto</option>".
-			"<option value=\"trains/sheet/mon/1\">Mon, incl. Auto</option>".
-			"<option value=\"trains/sheet/tues/0\">Tue, no Auto</option>".
-			"<option value=\"trains/sheet/tues/1\">Tue, incl. Auto</option>".
-			"<option value=\"trains/sheet/wed/0\">Wed, no Auto</option>".
-			"<option value=\"trains/sheet/wed/1\">Wed, incl. Auto</option>".
-			"<option value=\"trains/sheet/thu/0\">Thu, no Auto</option>".
-			"<option value=\"trains/sheet/thu/1\">Thu, incl. Auto</option>".
-			"<option value=\"trains/sheet/fri/0\">Fri, no Auto</option>".
-			"<option value=\"trains/sheet/fri/1\">Fri, incl. Auto</option>".
-			"<option value=\"trains/sheet/sat/0\">Sat, no Auto</option>".
-			"<option value=\"trains/sheet/sat/1\">Sat, incl. Auto</option>".
-			"</select>";
+			"<option value=\"sun\">Sunday</option>".
+			"<option value=\"mon\">Monday</option>".
+			"<option value=\"tues\">Tuesday</option>".
+			"<option value=\"wed\">Wednesday</option>".
+			"<option value=\"thu\">Thursday</option>".
+			"<option value=\"fri\">Friday</option>".
+			"<option value=\"sat\">Saturday</option>".
+			"</select> ".
+			"<select id=\"bf_trains\">".
+			"<option value=\"0\">No Auto Trains</option>".
+			"<option value=\"1\">Incl. Auto Trains</option>".
+			"<option value=\"2\">Train with Sheet Order</option>".
+			"</select> ".
+			"<a href=\"javascript:{}\" style=\"display: inline-block; padding: 5px; border: 1px solid brown; background-color: peru; text-decoration: none;\" onclick=\"if(document.getElementById('bf_day').value.length > 0){ window.location = '".WEB_ROOT."/trains/sheet/' + document.getElementById('bf_day').value + '/' + document.getElementById('bf_trains').value; }else{ alert('Select a Day'); }\">DISPLAY</a>";
 			/*
 				'[Sun, no Auto]' => "trains/sheet/sun/0'", 
 				'[Sun, incl. Auto]' => "trains/sheet/sun/1", 
