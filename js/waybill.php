@@ -307,6 +307,8 @@ $f21 = str_replace("{\"AAR_REQD\":\"UNDEFINED\",\"NUM\":\"UNDEFINED\",\"AAR\":\"
 	   var warnMess = "WARNING:\n";
 	  	var errGen = 0;
 	  	var warnGen = 0;
+	  	var tmp = '';
+	  	var tmp2 = '';
 
 		var fld1 = document.getElementById('fld1');
 		var fld2 = document.getElementById('fld2');
@@ -330,10 +332,20 @@ $f21 = str_replace("{\"AAR_REQD\":\"UNDEFINED\",\"NUM\":\"UNDEFINED\",\"AAR\":\"
 		if(fld2.value == fld3.value){warnMess = warnMess+" [From Railroad] and [To Railroad] are the same.\n"; warnGen = warnGen+1}; 
 		if(fld4.value == 0){textMess = textMess+" [Origin Industry] needs a value.\n"; errGen = errGen+1}; 
 		if(fld8.value == 0){textMess = textMess+" [Waybill Number] needs a value.\n"; errGen = errGen+1};
-		//if(autoStartDate.value.length < 1 && isAuto.value > 0){textMess = textMess+" [Start Date From] needs a value.\n"; errGen = errGen+1;} 
+		//if(autoStartDate.value.length < 1 && isAuto.value > 0){textMess = textMess+" [Start Date From] needs a value.\n"; errGen = errGen+1;}
+		
+		for(i=1;i<100;i++){
+			if(document.getElementById('pfld2_'+i)){
+				tmp = document.getElementById('pfld2_'+i).value + document.getElementById('pfld7_'+i).value + document.getElementById('pfld8_'+i).value;
+				tmp2 = document.getElementById('pfld2_'+(i-1)).value + document.getElementById('pfld7_'+(i-1)).value + document.getElementById('pfld8_'+(i-1)).value;
+				if(tmp < tmp2){textMess += " [Date / Time "+(i+1)+"] is before [Date / Time "+i+"].\n"; errGen = errGen+1}; 
+			}else{
+				i=100;
+			}
+		} 
 	
 		if (warnGen>0){
-			alert(warnMess);
+			confirm(warnMess);
 		}
 
 		if (errGen>0){

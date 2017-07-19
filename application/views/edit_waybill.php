@@ -463,7 +463,7 @@ if($traindata[0]->sat == 1){$op_days[] = "Sat";}
 					<?php for($joe=date('U',$last_prog_date_ux);$joe<intval(date('U')+(86400*15));$joe=$joe+86400){
 						if(in_array(date('D',$joe),$op_days) || count($op_days) == 0){
 							$sel = ""; 
-							if(date('U') <= ($joe+(60*60*24*6)) && !isset($trselected)){
+							if(date('U') <= $joe && !isset($trselected)){
 								$sel = " selected=\"selected\"";
 								$trselected = 1;
 							}
@@ -510,7 +510,7 @@ if($traindata[0]->sat == 1){$op_days[] = "Sat";}
 				<!-- </div>
 				<div style="display: table-cell; vertical-align: top; background-color: #DCDCDC; padding: 4px; border: 1px solid peru; width: 12%;">
 				// -->
-					<select name="pfld7[]">
+					<select id="pfld7_0" name="pfld7[]">
 					<?php 
 					$p_hr = 0;
 					$p_hr2 = 23;
@@ -522,7 +522,7 @@ if($traindata[0]->sat == 1){$op_days[] = "Sat";}
 						echo "<option".$sel." value=\"".$ii."\">".$ii."</option>";
 					} ?>
 					</select>:
-					<select name="pfld8[]">
+					<select id="pfld8_0" name="pfld8[]">
 					<?php 
 					$p_mi = 0;
 					$p_mi2 = 59;

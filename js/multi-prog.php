@@ -70,7 +70,7 @@ function multiProg($c,$w,$t,$r){
 	//$htm .= "<select name=\"tzone_NOT\" id=\"tzone_NOT\" style=\"display: none;\">".$tz_opts."</select>";
 	//$htm .= "</div>"; // end table-cell
 	//$htm .= "<div style=\"display: table-cell; vertical-align: top; background-color: ".$bgcol."; padding: 4px; border: 1px solid peru; width: 12%;\">"; // start table-cell
-	$htm .= "<select name=\"pfld7[]\">";
+	$htm .= "<select id=\"pfld7_".$c."\" name=\"pfld7[]\">";
 	$p_hr = 0;
 	$p_hr2 = 23;
 	$hr_sel = date('H');
@@ -80,7 +80,7 @@ function multiProg($c,$w,$t,$r){
 		$htm .= "<option".$sel." value=\"".$ii."\">".$ii."</option>";
 	}
 	$htm .= "</select>:";
-	$htm .= "<select name=\"pfld8[]\">";
+	$htm .= "<select id=\"pfld8_".$c."\" name=\"pfld8[]\">";
 	$p_mi = 0;
 	$p_mi2 = 59;
 	$mi_sel = date("i");
@@ -159,13 +159,15 @@ function dateRebuildReturn($t,$r,$w){ // Non-AJAX date options rebuild
 	$trres = $trd->fetch_assoc();
 
 	$op_days = array();
-	if($trres['sun'] == 1){$op_days[] = "Sun";}
-	if($trres['mon'] == 1){$op_days[] = "Mon";}
-	if($trres['tues'] == 1){$op_days[] = "Tue";}
-	if($trres['wed'] == 1){$op_days[] = "Wed";}
-	if($trres['thu'] == 1){$op_days[] = "Thu";}
-	if($trres['fri'] == 1){$op_days[] = "Fri";}
-	if($trres['sat'] == 1){$op_days[] = "Sat";}
+	if(strlen($t) > 0){
+		if($trres['sun'] == 1){$op_days[] = "Sun";}
+		if($trres['mon'] == 1){$op_days[] = "Mon";}
+		if($trres['tues'] == 1){$op_days[] = "Tue";}
+		if($trres['wed'] == 1){$op_days[] = "Wed";}
+		if($trres['thu'] == 1){$op_days[] = "Thu";}
+		if($trres['fri'] == 1){$op_days[] = "Fri";}
+		if($trres['sat'] == 1){$op_days[] = "Sat";}
+	}
 
 	// Get last progress report info and create date options.
 	$prd  = $sqli->query("SELECT * FROM `ichange_progress` WHERE `waybill_num` = '".$w."' ORDER BY `date` DESC, `time` DESC LIMIT 1"); // Latest Progress data
