@@ -92,7 +92,7 @@ function multiProg($c,$w,$t,$r){
 	$tr_s = "SELECT * FROM `ichange_trains` WHERE `railroad_id` = '".$r."' AND (LENGTH(`auto`) < 2 AND `auto` < 1) AND `train_id` != 'NOT ALLOCATED' ORDER BY `train_id`";
 	$tr_q = mysql_query($tr_s);
 	//$tr_lst = "<option value=\"\">NOT ALLOCATED</option>";
-	$tr_lst = "<input type=\"hidden\" name=\"fld14[]\" id=\"fld14_".$c."\" /><input type=\"radio\" name=\"tr_tmp_".$c."\" onchange=\"document.getElementById('fld14_".$c."').value = '';\" /> NOT ALLOCATED<br />";
+	$tr_lst = "<input type=\"hidden\" name=\"fld14[]\" id=\"fld14_".$c."\" /><input type=\"radio\" name=\"tr_tmp_".$c."\" onchange=\"document.getElementById('fld14_".$c."').value = '';rebuildDateSel('pfld2_".$c."','fld14_".$c."');\" /> NOT ALLOCATED<br />";
 	while($tr_r = mysql_fetch_array($tr_q)){
 		//$tr_lst .= "<option value=\"".$tr_r['train_id']."\">(".$tr_r['train_id'].") ".substr($tr_r['train_desc'],0,15)."</option>";
 		//$tr_lst .= "<option value=\"".$tr_r['train_id']."\">".$tr_r['train_id']."</option>";
