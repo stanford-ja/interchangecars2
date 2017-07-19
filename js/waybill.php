@@ -345,7 +345,7 @@ $f21 = str_replace("{\"AAR_REQD\":\"UNDEFINED\",\"NUM\":\"UNDEFINED\",\"AAR\":\"
 		} 
 	
 		if (warnGen>0){
-			confirm(warnMess);
+			if(confirm(warnMess)){ return true; }else{ return false; }
 		}
 
 		if (errGen>0){
