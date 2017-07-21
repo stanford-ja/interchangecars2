@@ -72,10 +72,13 @@ function selTrain($fld14,$la='',$rr=0){
 		}
 		if(intval($res['auto']) > 0 || strlen($res['auto']) > 4){
 			$mx_dys = 10; $dy_opts = "";
+			$dy_opts = dateRebuildReturnCommon($fld14,$rr,$la_ts,1);
+			/*
 			for($md=0;$md<$mx_dys;$md++){
 				$dt_unix = intval($la_ts+($md*86400)); //intval(date('U')+($md*86400));
 				$dy_opts .= "<option value=\"".intval($md+1)."\">".date('Y-m-d',$dt_unix)."</option>";
 			}
+			*/
 			$lst .= "<div style=\"display: inline-block; padding: 3px; white-space: nowrap;\">Start Move On: <select name=\"auto_start_dt\" id=\"auto_start_dt\" onchange=\"route_valid8();\">".$dy_opts."</select></div>"; 
 			$lst .= "<div style=\"display: inline-block; padding: 3px; white-space: nowrap;\">Add extra Auto Trains on Save: <select name=\"addXtraAutos\"><option value=\"0\">No</option><option value=\"1\">Yes</option></select></div>";
 			if($rr > 0){
@@ -416,8 +419,19 @@ function glDel($i){
 
 // Supporting functions
 function db_conn(){
+	$dbs = db_conn_settings();
+	$dbhost=$dbs['dbhost'];
+	$dbusername=$dbs['dbusername']; //"jstan_6_w";
+	$dbpassword=$dbs['dbpassword']; //"Js120767";
+	$dbname=$dbs['dbname']; //"jstan_general";
+
+	$dbcnx = mysql_connect($dbhost, $dbusername, $dbpassword);
+	$seldb = mysql_select_db($dbname);
+}
+
+function db_conn_settings(){
 	// LIVE SERVER
-	$dbhost="db150c.pair.com"; //"db72d.pair.com";
+	$dbhost="db150c.pair.com";//"db72d.pair.com";
 	$dbusername="jstan2_2"; //"jstan_6_w";
 	$dbpassword="Rs300777"; //"Js120767";
 	$dbname="jstan2_general"; //"jstan_general";
@@ -430,13 +444,13 @@ function db_conn(){
 		$dbpassword="admin";
 		//$dbname="jstan_general";
 	}
-
-	$dbcnx = mysql_connect($dbhost, $dbusername, $dbpassword);
-	$seldb = mysql_select_db($dbname);
-	
-	//$sqli = new mysqli($dbhost, $dbusername, $dbpassword,$dbname);
-	//return $sqli;
-	
+	$tmp = array(
+		'dbhost' => $dbhost,
+		'dbusername' => $dbusername,
+		'dbpassword' => $dbpassword,
+		'dbname' => $dbname
+	);
+	return $tmp;
 }
 
 function charConv($str,$from,$to){
@@ -476,5 +490,70 @@ function qry_cntr($tbl, $data, $ky){
 	if(mysql_num_rows($qry)){return mysql_num_rows($qry);}
 	else{return 0;} //$resultcom['cntr']; //Value to return.
 	//}
+}
+
+function dateRebuildReturnCommon($t,$r,$ts,$f=0){ 
+	// Non-AJAX date options rebuild - COPIED FROM dateRebuildReturn IN multi-prog.php!
+	// Returns option tags for the train indicated in $t	
+	// $t = train id
+	// $r = railroad id
+	// $ts = timestamp for first possible option
+	// $f = format of option value. If 1 then use timestamp instead of YYYY-MM-DD format
+	//$t = charConv($t,"[AMP]","&");
+	$dbs = db_conn_settings();
+	$drr_sqli = new mysqli($dbs['dbhost'],$dbs['dbusername'],$dbs['dbpassword'],$dbs['dbname']);
+	$trd = $drr_sqli->query("SELECT sun,mon,tues,wed,thu,fri,sat FROM `ichange_trains` WHERE `train_id` = '".$t."'");
+	$trres = $trd->fetch_assoc();
+
+	$op_days = array();
+	if(strlen($t) > 0){
+		if($trres['sun'] == 1){$op_days[] = "Sun";}
+		if($trres['mon'] == 1){$op_days[] = "Mon";}
+		if($trres['tues'] == 1){$op_days[] = "Tue";}
+		if($trres['wed'] == 1){$op_days[] = "Wed";}
+		if($trres['thu'] == 1){$op_days[] = "Thu";}
+		if($trres['fri'] == 1){$op_days[] = "Fri";}
+		if($trres['sat'] == 1){$op_days[] = "Sat";}
+	}
+
+	// Get last progress report info and create date options.
+	//$prd  = $sqli->query("SELECT * FROM `ichange_progress` WHERE `waybill_num` = '".$w."' ORDER BY `date` DESC, `time` DESC LIMIT 1"); // Latest Progress data
+	//$progs = $prd->fetch_assoc();
+	//$progs = @json_decode(qry("ichange_waybill",$w,"waybill_num","progress"),TRUE);
+	//$last_prog_date = explode("-",$progs['date']); //explode("-",$progs[count($progs)-1]['date']);
+	$last_prog_date_ux = $ts; //mktime(12,0,0,$last_prog_date[1],$last_prog_date[2],$last_prog_date[0]);
+	$dt_opts = "";
+	//$dt_opts .= "<option value=\"\">t = ".$t."</option>";
+	//$dt_opts .= "<option value=\"\">rr = ".$r."</option>";
+	//$dt_opts .= "<option value=\"\">tr = ".$ts."</option>";
+	//$dt_opts .= "<option value=\"\">ts h-r = ".date('Y-m-d H:i:s',$ts)."</option>";
+	if($last_prog_date_ux < intval(date('U')-(86400*20))){ $last_prog_date_ux = intval(date('U')-(86400*20)); }
+
+	$mx_dys = 15;
+	if($f == 1){
+		for($md=0;$md<$mx_dys;$md++){
+			$dt_unix = intval($ts+($md*86400)); //intval(date('U')+($md*86400));
+			if(in_array(date('D',$dt_unix),$op_days) || count($op_days) == 0){
+				$dt_opts .= "<option value=\"".intval($md+1)."\">".date('Y-m-d (D)',$dt_unix)."</option>";
+			}
+		}
+	}else{
+		//for($joe=date('U',$last_prog_date_ux);$joe<intval(date('U')+(86400*15));$joe=$joe+86400){
+		for($joe=$last_prog_date_ux;$joe<intval($last_prog_date_ux+(86400*$mx_dys));$joe=$joe+86400){
+			if(in_array(date('D',$joe),$op_days) || count($op_days) == 0){
+				$sel = ""; 
+				$joe_val = date('Y-m-d',$joe);
+				if($f == 1){ $joe_val = $joe; 	}
+				if($last_prog_date_ux <= $joe && !isset($trselected)){
+					$sel = " selected=\"selected\"";
+					$trselected = 1;
+				}
+				$dt_opts .= "<option value=\"".$joe_val."\"".$sel.">".date('Y-m-d (D)',$joe)."</option>";
+			}
+		}
+	}
+
+	$drr_sqli->close();
+	return $dt_opts;
 }
 ?>

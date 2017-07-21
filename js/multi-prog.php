@@ -175,6 +175,7 @@ function dateRebuildReturn($t,$r,$w){ // Non-AJAX date options rebuild
 	//$progs = @json_decode(qry("ichange_waybill",$w,"waybill_num","progress"),TRUE);
 	$last_prog_date = explode("-",$progs['date']); //explode("-",$progs[count($progs)-1]['date']);
 	$last_prog_date_ux = mktime(12,0,0,$last_prog_date[1],$last_prog_date[2],$last_prog_date[0]);
+	if($last_prog_date_ux < intval(date('U')-(86400*20))){ $last_prog_date_ux = intval(date('U')-(86400*20)); }
 	$dt_opts = "";
 	for($joe=date('U',$last_prog_date_ux);$joe<intval(date('U')+(86400*15));$joe=$joe+86400){
 		if(in_array(date('D',$joe),$op_days) || count($op_days) == 0){
