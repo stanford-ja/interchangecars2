@@ -84,7 +84,6 @@ class Home extends CI_Controller {
 				if(strlen($tmp2[$ii]['NUM']) > 0 && $tmp2[$ii]['NUM'] != "UNDEFINED"){ $this->carsOnAllMyWBs[] = $tmp2[$ii]; }
 			}
 		}
-		echo "<pre>"; print_r($this->carsOnAllMyWBs); echo "</pre>";
 
 		// ONLY NEEDED TO CREATE messages TABLE AND DATA! ONCE DONE, CAN BE REMOVED. 2017-05-21
 		$tbls = (array)$this->Generic_model->qry("SHOW TABLES WHERE Tables_in_jstan2_general LIKE 'ichange_messages'");
@@ -164,6 +163,7 @@ class Home extends CI_Controller {
 		// Home 0 view html generation
 		$this->content['html'] = "<div style=\"width: 100%;\">".form_open_multipart("bulk_update")."<input type=\"checkbox\" name=\"do_bulk\" id=\"do_bulk\" value=\"1\" onchange=\"hideEle('ubu'); if(this.checked === true){document.getElementById('ubu').style.display = 'inline';}\" />Do bulk update (not individual selections!)";
 		$this->content['html'] .= "<span style=\"display: none; float: right;\" id=\"ubu\">".form_submit("bulk","Update Bulk")."</span>";
+		$this->wb_cars_in_use();
 		//$this->content['html'] .= "<div id=\"container\" class=\"js-masonry\" data-masonry-options='{ \"columnWidth\": 200, \"itemSelector\": \".item\" }'>";
 
 		// Start element display definitions
@@ -227,16 +227,7 @@ class Home extends CI_Controller {
 		$this->content['html'] = "<div style=\"width: 100%;\">".form_open_multipart("bulk_update")."
 			<input type=\"checkbox\" name=\"do_bulk\" id=\"do_bulk\" value=\"1\" onchange=\"hideEle('ubu'); if(this.checked === true){document.getElementById('ubu').style.display = 'inline';}\" />Do bulk update (not individual selections!)";
 		$this->content['html'] .= "<span style=\"display: none; float: right;\" id=\"ubu\">".form_submit("bulk","Update Bulk")."</span>";
-
-		if(count($this->carsOnAllMyWBs) > 0){
-			$this->content['html'] .= "<div style=\"display: block; border: 1px solid peru; background-color: lightgreen; padding: 5px;\">
-				<strong>Cars in Use Summary:</strong><br />";
-			for($i=0;$i<count($this->carsOnAllMyWBs);$i++){
-				$this->content['html'] .= $this->carsOnAllMyWBs[$i]['NUM']."&nbsp;(".$this->carsOnAllMyWBs[$i]['AAR'].")&nbsp;&nbsp; ";
-			}
-			$this->content['html'] .= "</div>";
-		}
-
+		$this->wb_cars_in_use();
 		$this->content['html'] .= "<div id=\"container\" class=\"js-masonry\" data-masonry-options='{ \"columnWidth\": 650, \"itemSelector\": \".item\" }'>";	
 		
 		// Start element display definitions
@@ -648,6 +639,17 @@ class Home extends CI_Controller {
 	function wb_link_image($id){
 		//$this->content['html'] .= "<input type=\"button\" value=\"Email / Messages\" onclick=\"window.location = '".WEB_ROOT."/messaging/lst/".$id."'\" />&nbsp;"; //"<a href=\"messaging/lst/".$id."\">Email / Messages</a> ";
 		$this->content['html'] .= "<div class=\"wb_btn\"><a href=\"javascript:{}\" onclick=\"window.open('".WEB_ROOT."/graphics/waybill/".$id."','".$id."','width=500,height=700');\">Upload Img</a></div>";
+	}
+	
+	function wb_cars_in_use(){
+		if(count($this->carsOnAllMyWBs) > 0){
+			$this->content['html'] .= "<div style=\"display: block; border: 1px solid peru; background-color: lightgreen; padding: 5px;\">
+				<strong>Cars in Use Summary:</strong><br />";
+			for($i=0;$i<count($this->carsOnAllMyWBs);$i++){
+				$this->content['html'] .= $this->carsOnAllMyWBs[$i]['NUM']."&nbsp;(".$this->carsOnAllMyWBs[$i]['AAR'].")&nbsp;&nbsp; ";
+			}
+			$this->content['html'] .= "</div>";
+		}
 	}
 	
 	function wb_messages($me){
