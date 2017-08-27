@@ -69,6 +69,22 @@ class Home extends CI_Controller {
 		$this->trains_opts_lst = $this->mricf->trainOpts(array('rr' => $this->arr['rr_sess'], 'auto' => "Y", 'onlyrr' => 1));
 		$this->railroad_opts_lst = $this->mricf->rrOpts();
 		//print_r($this->mricf->rrOpts());
+		
+		// Get cars where from / to is a rr of user.
+		$s = "SELECT `ichange_waybill`.`cars` 
+			FROM `ichange_waybill` 
+			LEFT JOIN `ichange_rr` AS `rrto` ON `ichange_waybill`.`rr_id_to` = `rrto`.`id` 
+			LEFT JOIN `ichange_rr` AS `rrfr` ON `ichange_waybill`.`rr_id_from` = `rrfr`.`id` 
+			WHERE `rrto`.`owner_name` = '".@$this->arr['myRR'][0]->owner_name."' OR `rrfr`.`owner_name` = '".@$this->arr['myRR'][0]->owner_name."'"; 
+		$tmp = (array)$this->Generic_model->qry($s);
+		$this->carsOnAllMyWBs = array();
+		for($i=0;$i<count($tmp);$i++){
+			$tmp2 = @json_decode($tmp[$i]->cars,TRUE);
+			for($ii=0;$ii<count($tmp2);$ii++){
+				if(strlen($tmp2[$ii]['NUM']) > 0 && $tmp2[$ii]['NUM'] != "UNDEFINED"){ $this->carsOnAllMyWBs[] = $tmp2[$ii]; }
+			}
+		}
+		echo "<pre>"; print_r($this->carsOnAllMyWBs); echo "</pre>";
 
 		// ONLY NEEDED TO CREATE messages TABLE AND DATA! ONCE DONE, CAN BE REMOVED. 2017-05-21
 		$tbls = (array)$this->Generic_model->qry("SHOW TABLES WHERE Tables_in_jstan2_general LIKE 'ichange_messages'");
@@ -149,7 +165,7 @@ class Home extends CI_Controller {
 		$this->content['html'] = "<div style=\"width: 100%;\">".form_open_multipart("bulk_update")."<input type=\"checkbox\" name=\"do_bulk\" id=\"do_bulk\" value=\"1\" onchange=\"hideEle('ubu'); if(this.checked === true){document.getElementById('ubu').style.display = 'inline';}\" />Do bulk update (not individual selections!)";
 		$this->content['html'] .= "<span style=\"display: none; float: right;\" id=\"ubu\">".form_submit("bulk","Update Bulk")."</span>";
 		//$this->content['html'] .= "<div id=\"container\" class=\"js-masonry\" data-masonry-options='{ \"columnWidth\": 200, \"itemSelector\": \".item\" }'>";
-		
+
 		// Start element display definitions
 		$elements = array("waybill_num","indust_origin_name","indust_dest_name","return_to","status","routing","notes","lading","cars");
 		if(isset($this->arr['home_view_settings']['elements'])){$elements = $this->arr['home_view_settings']['elements'];}
@@ -211,7 +227,17 @@ class Home extends CI_Controller {
 		$this->content['html'] = "<div style=\"width: 100%;\">".form_open_multipart("bulk_update")."
 			<input type=\"checkbox\" name=\"do_bulk\" id=\"do_bulk\" value=\"1\" onchange=\"hideEle('ubu'); if(this.checked === true){document.getElementById('ubu').style.display = 'inline';}\" />Do bulk update (not individual selections!)";
 		$this->content['html'] .= "<span style=\"display: none; float: right;\" id=\"ubu\">".form_submit("bulk","Update Bulk")."</span>";
-		$this->content['html'] .= "<div id=\"container\" class=\"js-masonry\" data-masonry-options='{ \"columnWidth\": 650, \"itemSelector\": \".item\" }'>";
+
+		if(count($this->carsOnAllMyWBs) > 0){
+			$this->content['html'] .= "<div style=\"display: block; border: 1px solid peru; background-color: lightgreen; padding: 5px;\">
+				<strong>Cars in Use Summary:</strong><br />";
+			for($i=0;$i<count($this->carsOnAllMyWBs);$i++){
+				$this->content['html'] .= $this->carsOnAllMyWBs[$i]['NUM']."&nbsp;(".$this->carsOnAllMyWBs[$i]['AAR'].")&nbsp;&nbsp; ";
+			}
+			$this->content['html'] .= "</div>";
+		}
+
+		$this->content['html'] .= "<div id=\"container\" class=\"js-masonry\" data-masonry-options='{ \"columnWidth\": 650, \"itemSelector\": \".item\" }'>";	
 		
 		// Start element display definitions
 		$elements = array("waybill_num","indust_origin_name","indust_dest_name","return_to","status","routing","notes","lading","cars");
