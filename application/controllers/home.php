@@ -78,10 +78,14 @@ class Home extends CI_Controller {
 			WHERE `rrto`.`owner_name` = '".@$this->arr['myRR'][0]->owner_name."' OR `rrfr`.`owner_name` = '".@$this->arr['myRR'][0]->owner_name."'"; 
 		$tmp = (array)$this->Generic_model->qry($s);
 		$this->carsOnAllMyWBs = array();
+		$this->carsOnAllMyWBsKys = array();
 		for($i=0;$i<count($tmp);$i++){
 			$tmp2 = @json_decode($tmp[$i]->cars,TRUE);
 			for($ii=0;$ii<count($tmp2);$ii++){
-				if(strlen($tmp2[$ii]['NUM']) > 0 && $tmp2[$ii]['NUM'] != "UNDEFINED"){ $this->carsOnAllMyWBs[] = $tmp2[$ii]; }
+				if(strlen($tmp2[$ii]['NUM']) > 0 && $tmp2[$ii]['NUM'] != "UNDEFINED" && !in_array($this->carsOnAllMyWBsKys,$tmp2[$ii]['NUM'])){
+					$this->carsOnAllMyWBsKys[] = $tmp2[$ii]['NUM']; 
+					$this->carsOnAllMyWBs[] = $tmp2[$ii]; 
+				}
 			}
 		}
 
