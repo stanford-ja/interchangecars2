@@ -59,7 +59,7 @@
 		$tiny_mce_arr['theme_advanced_buttons'][2] : Theme Buttons 3 (OPTIONAL)
 		$tiny_mce_arr['theme_advanced_buttons'][3] : Theme Buttons 4 (OPTIONAL)
 		*/
-		include(str_replace("/apps/interchangecars2","/common",DOC_ROOT)."/tiny_mce/tinymce_init.php");
+		@include(str_replace("/apps/interchangecars2","/common",DOC_ROOT)."/tiny_mce/tinymce_init.php");
 	}
 	?>	
 	<?php if(strpos($_SERVER['REQUEST_URI'],"waybill/edit") < 1){ ?>
