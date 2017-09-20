@@ -92,7 +92,7 @@ class Waybill extends CI_Controller {
 			}
 
 			//$prog_dat = $this->prog_lst($wbdat[0]->progress);
-			$prog_dat = (array)$this->Generic_model->qry("SELECT * FROM `ichange_progress` WHERE `waybill_num` = '".$wbdat[$i]->waybill_num."' ORDER BY `date` DESC, `time` DESC");
+			$prog_dat = (array)$this->Generic_model->qry("SELECT * FROM `ichange_progress` WHERE `waybill_num` = '".$wbdat[$i]->waybill_num."' ORDER BY `id` DESC, `date` DESC, `time` DESC");
 
 			$this->dat['data'][0]['id'] 					= $wbdat[$i]->id;
 			$this->dat['data'][0]['date']			 	= $wbdat[$i]->date;
