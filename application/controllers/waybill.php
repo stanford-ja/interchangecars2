@@ -169,7 +169,7 @@ class Waybill extends CI_Controller {
 		// Progress Array
 		$prog_dat = @$this->dat['data'][0]->progress;
 		//$prog_dat_json = @json_decode($prog_dat,TRUE);
-		$prog_data = (array)$this->Generic_model->qry("SELECT * FROM `ichange_progress` WHERE `waybill_num` = '".$wb_num."' ORDER BY `date` DESC, `time` DESC");
+		$prog_data = (array)$this->Generic_model->qry("SELECT * FROM `ichange_progress` WHERE `waybill_num` = '".$wb_num."' ORDER BY `id` DESC, `date` DESC, `time` DESC");
 		$this->dat['traindata'] = (array)$this->Generic_model->qry("SELECT * FROM `ichange_trains` WHERE `train_id` = '".@$this->dat['data'][0]->train_id."'");
 				
 		// Create data variables for waybill form fields
