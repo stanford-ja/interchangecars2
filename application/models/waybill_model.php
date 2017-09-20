@@ -96,6 +96,34 @@ class Waybill_model extends CI_Model {
 		$query = $this->db->query($sql);
 		return $query->result();
 	}
+	
+	function get_carsOnAllMyWaybills($owner_name=""){
+		// Get cars where from / to is a rr of user.
+		$s = "SELECT `ichange_waybill`.`cars`, ichange_waybill.waybill_num, `rral`.`report_mark` 
+			FROM `ichange_waybill` 
+			LEFT JOIN `ichange_rr` AS `rrto` ON `ichange_waybill`.`rr_id_to` = `rrto`.`id` 
+			LEFT JOIN `ichange_rr` AS `rrfr` ON `ichange_waybill`.`rr_id_from` = `rrfr`.`id` 
+			LEFT JOIN `ichange_rr` AS `rral` ON `ichange_waybill`.`rr_id_handling` = `rral`.`id`
+			WHERE (`rrto`.`owner_name` = '".$owner_name."' OR `rrfr`.`owner_name` = '".$owner_name."')";// AND `rral`.`owner_name` != '".$owner_name."'";
+			//echo $s; 
+		$tmp = $this->db->query($s);
+		$tmp = $tmp->result();
+		//echo "<pre>"; print_r($tmp); echo "</pre>";
+		$this->carsOnAllMyWBs = array();
+		$this->carsOnAllMyWBsKys = array();
+		for($i=0;$i<count($tmp);$i++){
+			$tmp2 = @json_decode($tmp[$i]->cars,TRUE);
+			for($ii=0;$ii<count($tmp2);$ii++){
+				if(strlen($tmp2[$ii]['NUM']) > 0 && $tmp2[$ii]['NUM'] != "UNDEFINED" && !in_array($tmp2[$ii]['NUM'],$this->carsOnAllMyWBsKys)){
+					$tmp2[$ii]['NUM'] = str_replace(" ","",$tmp2[$ii]['NUM']);
+					$tmp2[$ii]['WB_NUM'] = $tmp[$i]->waybill_num;
+					$tmp2[$ii]['REP_MK'] = $tmp[$i]->report_mark;
+					$this->carsOnAllMyWBsKys[] = $tmp2[$ii]['NUM']; 
+					$this->carsOnAllMyWBs[] = $tmp2[$ii]; 
+				}
+			}
+		}		
+	}
     
     function insert_entry($arr){
         $this->rr_name = $arr['rr_name'];

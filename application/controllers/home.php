@@ -33,6 +33,7 @@ class Home extends CI_Controller {
 		// Load generic model for custom queries
 		$this->load->model('Generic_model','',TRUE); // Database connection! TRUE means connect to db.
 		$this->load->model('Storedfreight_model','',TRUE); // Database connection! TRUE means connect to db.
+		$this->load->model('Waybill_model','',TRUE);
 		
 		// Railroad array set up
 		$this->load->model('Railroad_model','',TRUE); // Database connection! TRUE means connect to db.
@@ -71,24 +72,9 @@ class Home extends CI_Controller {
 		//print_r($this->mricf->rrOpts());
 		
 		// Get cars where from / to is a rr of user.
-		$s = "SELECT `ichange_waybill`.`cars` 
-			FROM `ichange_waybill` 
-			LEFT JOIN `ichange_rr` AS `rrto` ON `ichange_waybill`.`rr_id_to` = `rrto`.`id` 
-			LEFT JOIN `ichange_rr` AS `rrfr` ON `ichange_waybill`.`rr_id_from` = `rrfr`.`id` 
-			WHERE `rrto`.`owner_name` = '".@$this->arr['myRR'][0]->owner_name."' OR `rrfr`.`owner_name` = '".@$this->arr['myRR'][0]->owner_name."'"; 
-		$tmp = (array)$this->Generic_model->qry($s);
-		$this->carsOnAllMyWBs = array();
-		$this->carsOnAllMyWBsKys = array();
-		for($i=0;$i<count($tmp);$i++){
-			$tmp2 = @json_decode($tmp[$i]->cars,TRUE);
-			for($ii=0;$ii<count($tmp2);$ii++){
-				if(strlen($tmp2[$ii]['NUM']) > 0 && $tmp2[$ii]['NUM'] != "UNDEFINED" && !in_array($tmp2[$ii]['NUM'],$this->carsOnAllMyWBsKys)){
-					$tmp2[$ii]['NUM'] = str_replace(" ","",$tmp2[$ii]['NUM']); 
-					$this->carsOnAllMyWBsKys[] = $tmp2[$ii]['NUM']; 
-					$this->carsOnAllMyWBs[] = $tmp2[$ii]; 
-				}
-			}
-		}
+		$this->Waybill_model->get_carsOnAllMyWaybills(@$this->arr['myRR'][0]->owner_name);
+		$this->carsOnAllMyWBs = $this->Waybill_model->carsOnAllMyWBs;
+		//$this->carsOnAllMyWBsKys = $this->Waybill_model->carsOnAllMyWBsKys;
 
 		// ONLY NEEDED TO CREATE messages TABLE AND DATA! ONCE DONE, CAN BE REMOVED. 2017-05-21
 		$tbls = (array)$this->Generic_model->qry("SHOW TABLES WHERE Tables_in_jstan2_general LIKE 'ichange_messages'");
@@ -100,7 +86,7 @@ class Home extends CI_Controller {
 
 	public function index(){
 		//	Generate list of waybills for rr logged in as
-		$this->load->model('Waybill_model','',TRUE);
+		//$this->load->model('Waybill_model','',TRUE);
 		
 		// Get list of waybill images
 		$this->fils = get_filenames(DOC_ROOT."/waybill_images/");
@@ -138,7 +124,7 @@ class Home extends CI_Controller {
 	// START PINTEREST-LIKE COLUMN DISPLAY PRIMARY METHOD
 	public function columns(){
 		//	Generate list of waybills for rr logged in as
-		$this->load->model('Waybill_model','',TRUE);
+		//$this->load->model('Waybill_model','',TRUE);
 
 		// Generate Afil WB list (if applicable)
 		$this->my_rr_ids = $this->mricf->affil_ids($this->arr['rr_sess'],$this->arr['allRR']);
@@ -652,9 +638,9 @@ class Home extends CI_Controller {
 		$cars_in_use = "";
 		if(count($this->carsOnAllMyWBs) > 0){
 			$cars_in_use .= "<div style=\"display: block; border: 1px solid peru; background-color: lightgreen; padding: 5px;\">
-				<strong>Cars in Use Summary:</strong><br />";
+				<strong>Cars in Use But Not Allocated to My RR Summary:</strong><br />";
 			for($i=0;$i<count($this->carsOnAllMyWBs);$i++){
-				$cars_in_use .= $this->carsOnAllMyWBs[$i]['NUM']."&nbsp;(".$this->carsOnAllMyWBs[$i]['AAR'].")&nbsp;&nbsp; ";
+				$cars_in_use .= "<div style=\"display: inline-block; padding: 3px; border: 1px solid white; margin: 2px; background-color: #ccc;\">".$this->carsOnAllMyWBs[$i]['NUM']."&nbsp;(".$this->carsOnAllMyWBs[$i]['AAR'].")&nbsp;on&nbsp;".$this->carsOnAllMyWBs[$i]['REP_MK']."&nbsp;for&nbsp;".$this->carsOnAllMyWBs[$i]['WB_NUM']."</div>";
 			}
 			$cars_in_use .= "</div>";
 		}
