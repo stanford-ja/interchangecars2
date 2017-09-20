@@ -640,7 +640,7 @@ class Home extends CI_Controller {
 			$cars_in_use .= "<div style=\"display: block; border: 1px solid peru; background-color: lightgreen; padding: 5px;\">
 				<strong>Cars in Use Summary:</strong><br />";
 			for($i=0;$i<count($this->carsOnAllMyWBs);$i++){
-				$cars_in_use .= "<div style=\"display: inline-block; padding: 3px; border: 1px solid white; margin: 2px; background-color: #ccc;\">".$this->carsOnAllMyWBs[$i]['NUM']."&nbsp;(".$this->carsOnAllMyWBs[$i]['AAR'].")&nbsp;on&nbsp;".$this->carsOnAllMyWBs[$i]['REP_MK']."&nbsp;for&nbsp;".$this->carsOnAllMyWBs[$i]['WB_NUM']."</div>";
+				$cars_in_use .= "<div style=\"display: inline-block; padding: 3px; border: 1px solid white; margin: 2px; background-color: #ccc; font-size: 9pt;\">".$this->carsOnAllMyWBs[$i]['NUM']."&nbsp;(".$this->carsOnAllMyWBs[$i]['AAR'].")&nbsp;on&nbsp;".$this->carsOnAllMyWBs[$i]['REP_MK']."&nbsp;for&nbsp;".$this->carsOnAllMyWBs[$i]['WB_NUM']."</div>";
 			}
 			$cars_in_use .= "</div>";
 		}
