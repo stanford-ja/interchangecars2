@@ -99,7 +99,7 @@ class Waybill_model extends CI_Model {
 	
 	function get_carsOnAllMyWaybills($owner_name=""){
 		// Get cars where from / to is a rr of user.
-		$s = "SELECT `ichange_waybill`.`cars`, ichange_waybill.waybill_num, `rral`.`report_mark` 
+		$s = "SELECT `ichange_waybill`.`cars`, ichange_waybill.waybill_num, `rral`.`report_mark`, `ichange_waybill`.`train_id` 
 			FROM `ichange_waybill` 
 			LEFT JOIN `ichange_rr` AS `rrto` ON `ichange_waybill`.`rr_id_to` = `rrto`.`id` 
 			LEFT JOIN `ichange_rr` AS `rrfr` ON `ichange_waybill`.`rr_id_from` = `rrfr`.`id` 
@@ -116,7 +116,7 @@ class Waybill_model extends CI_Model {
 			for($ii=0;$ii<count($tmp2);$ii++){
 				if(strlen($tmp2[$ii]['NUM']) > 0 && $tmp2[$ii]['NUM'] != "UNDEFINED" && !in_array($tmp2[$ii]['NUM'],$this->carsOnAllMyWBsKys)){
 					$tmp2[$ii]['NUM'] = str_replace(" ","",$tmp2[$ii]['NUM']);
-					$tmp2[$ii]['WB_NUM'] = $tmp[$i]->waybill_num;
+					$tmp2[$ii]['TR_ID'] = $tmp[$i]->train_id;
 					$tmp2[$ii]['REP_MK'] = $tmp[$i]->report_mark;
 					$this->carsOnAllMyWBsKys[] = $tmp2[$ii]['NUM']; 
 					$this->carsOnAllMyWBs[] = $tmp2[$ii]; 
