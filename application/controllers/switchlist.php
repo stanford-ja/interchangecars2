@@ -150,7 +150,7 @@ class Switchlist extends CI_Controller {
 				
 				// Progress entries array
 				//$prog = @json_decode($arrdat[$i]->progress,TRUE);
-				$last_prog_sql = "SELECT * FROM `ichange_progress` WHERE `waybill_num` = '".$arrdat[$i]->waybill_num."' ORDER BY date id DESC, DESC, time DESC LIMIT 1";
+				$last_prog_sql = "SELECT * FROM `ichange_progress` WHERE `waybill_num` = '".$arrdat[$i]->waybill_num."' ORDER BY id DESC, date DESC, time DESC LIMIT 1";
 				$prog_res = (array)$this->Generic_model->qry($last_prog_sql);
 				$prog[0] = array(); if(isset($prog_res[0])){ $prog[0] = (array)$prog_res[0]; } //json_decode($this->waybills[$tmp]->progress, true);
 				$map_loc = "";
