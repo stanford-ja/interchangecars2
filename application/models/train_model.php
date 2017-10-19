@@ -71,19 +71,25 @@ class Train_model extends CI_Model {
 
 	// Methods for train sheet status updating!
 	function crewTrId($arr){
-		$s = "UPDATE `".$this->tbl."` SET `complete` = 'C' WHERE `id` = '".$arr['id']."'";
+		$complete = $this->getCompleteArr($arr['id']);	
+		$complete[$arr['day']] = "C";	
+		$s = "UPDATE `".$this->tbl."` SET `complete` = '".json_encode($complete)."' WHERE `id` = '".$arr['id']."'";
 		$this->db->query($s);
 		//$this->db->update($this->tbl, $this, array('id' => $arr['id']));
 	}
 
 	function compTrId($arr){
-		$s = "UPDATE `".$this->tbl."` SET `complete` = 'Y' WHERE `id` = '".$arr['id']."'";
+		$complete = $this->getCompleteArr($arr['id']);	
+		$complete[$arr['day']] = "Y";	
+		$s = "UPDATE `".$this->tbl."` SET `complete` = '".json_encode($complete)."' WHERE `id` = '".$arr['id']."'";
 		$this->db->query($s);
 		//$this->db->update($this->tbl, $this, array('id' => $arr['id']));
 	}
 	
 	function strtTrId($arr){
-		$s = "UPDATE `".$this->tbl."` SET `complete` = 'S' WHERE `id` = '".$arr['id']."'";
+		$complete = $this->getCompleteArr($arr['id']);	
+		$complete[$arr['day']] = "S";	
+		$s = "UPDATE `".$this->tbl."` SET `complete` = '".json_encode($complete)."' WHERE `id` = '".$arr['id']."'";
 		$this->db->query($s);
 		//$this->db->update($this->tbl, $this, array('id' => $arr['id']));
 	}
@@ -94,5 +100,40 @@ class Train_model extends CI_Model {
 		//$this->db->update($this->tbl, $this, array('railroad_id' => $arr['railroad_id']));
 	}
 
+	function getCompleteArr($id=0){
+		$s = "SELECT `complete` FROM `".$this->tbl."` WHERE `id` = '".$id."'";
+		$q = $this->db->query($s);
+		$r = $q->result();
+
+		if(strlen($r[0]->complete) < 5){
+			$arr = array(
+				"sun" => $r[0]->complete,
+				"mon" => $r[0]->complete,
+				"tues" => $r[0]->complete,
+				"wed" => $r[0]->complete,
+				"thu" => $r[0]->complete,
+				"fri" => $r[0]->complete,
+				"sat" => $r[0]->complete,
+			);
+		}else{ $arr = @json_decode($r[0]->complete,true); }
+		if(!isset($arr['sun'])){ $arr['sun'] = ""; }
+		if(!isset($arr['mon'])){ $arr['mon'] = ""; }
+		if(!isset($arr['tues'])){ $arr['tues'] = ""; }
+		if(!isset($arr['wed'])){ $arr['wed'] = ""; }
+		if(!isset($arr['thu'])){ $arr['thu'] = ""; }
+		if(!isset($arr['fri'])){ $arr['fri'] = ""; }
+		if(!isset($arr['sat'])){ $arr['sat'] = ""; }
+		
+		return $arr;
+	}
+	
+	function getNonCompletedCountXDay($day="",$rrid=0){
+		$s = "SELECT COUNT(`id`) AS `cntr` FROM `".$this->tbl."` WHERE `complete` NOT LIKE '%\"".$day."\":\"Y\"%' AND `".$day."` = '1' AND `auto` < 1 AND LENGTH(`auto`) < 5 AND (`railroad_id` = '".$rrid."' OR `railroad_id` = '0' OR LENGTH(`railroad_id`) < 1)";
+		$q = $this->db->query($s);
+		$r = $q->result();
+		$cntr = $r[0]->cntr;
+
+		return $cntr;
+	}
 }
 ?>

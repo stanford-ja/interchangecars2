@@ -59,15 +59,15 @@ class Trains extends CI_Controller {
 				'New' => "trains/edit/0"
 			); // Paths for other links!
 		$this->dat['before_table'] = "Train Sheets: <select id=\"bf_day\">".
-			"<option value=\"\" selected=\"selected\">-- Select --</option>".
-			"<option value=\"sun\">Sunday</option>".
-			"<option value=\"mon\">Monday</option>".
-			"<option value=\"tues\">Tuesday</option>".
-			"<option value=\"wed\">Wednesday</option>".
-			"<option value=\"thu\">Thursday</option>".
-			"<option value=\"fri\">Friday</option>".
-			"<option value=\"sat\">Saturday</option>".
-			"</select> ".
+			"<option value=\"\" selected=\"selected\">-- Select --</option>";
+		$this->dat['before_table'] .= "<option value=\"sun\">Sunday - ".$this->Train_model->getNonCompletedCountXDay("sun",$this->arr['rr_sess'])." incomplete</option>"; 
+		$this->dat['before_table'] .= "<option value=\"mon\">Monday - ".$this->Train_model->getNonCompletedCountXDay("mon",$this->arr['rr_sess'])." incomplete</option>"; 
+		$this->dat['before_table'] .= "<option value=\"tues\">Tuesday - ".$this->Train_model->getNonCompletedCountXDay("tues",$this->arr['rr_sess'])." incomplete</option>"; 
+		$this->dat['before_table'] .= "<option value=\"wed\">Wednesday - ".$this->Train_model->getNonCompletedCountXDay("wed",$this->arr['rr_sess'])." incomplete</option>"; 
+		$this->dat['before_table'] .= "<option value=\"thu\">Thursday - ".$this->Train_model->getNonCompletedCountXDay("thu",$this->arr['rr_sess'])." incomplete</option>"; 
+		$this->dat['before_table'] .= "<option value=\"fri\">Friday - ".$this->Train_model->getNonCompletedCountXDay("fri",$this->arr['rr_sess'])." incomplete</option>"; 
+		$this->dat['before_table'] .= "<option value=\"sat\">Saturday - ".$this->Train_model->getNonCompletedCountXDay("sat",$this->arr['rr_sess'])." incomplete</option>"; 
+		$this->dat['before_table'] .= "</select> ".
 			"<select id=\"bf_trains\">".
 			"<option value=\"0\">No Auto Trains</option>".
 			"<option value=\"1\">Incl. Auto Trains</option>".
@@ -196,11 +196,30 @@ class Trains extends CI_Controller {
 			); // Paths to options method, with trailling slash!
 		$this->dat['links']				= array(
 				'Train List' => $_SERVER['SCRIPT_NAME']."/trains", 
-				'Reset Train Statuses' => array('href' => "javascript:{}", 'onclick' => "if(confirm('Are you sure you want to reset the status of all your trains?')){window.location = '".$_SERVER['SCRIPT_NAME']."/trains/compReset/".$tarr['day']."/".$tarr['auto']."';}")
+				'Reset Train Statuses' => array('href' => "javascript:{}", 'onclick' => "if(confirm('Are you sure you want to reset the status of all your trains for every day?')){window.location = '".$_SERVER['SCRIPT_NAME']."/trains/compReset/".$tarr['day']."/".$tarr['auto']."';}")
 			); // Paths for other links!
 		$this->dat['widths'] = array(0=>"5%",1=>"10%",2=>"18%",3=>"4%",4=>"5%",5=>"25%",6=>"10%",7=>"13%");
 		
 		for($i=0;$i<count($traindat);$i++){
+			if(strlen($traindat[$i]->complete) < 5){
+				$tr_status = array(
+					"sun" => $traindat[$i]->complete,
+					"mon" => $traindat[$i]->complete,
+					"tues" => $traindat[$i]->complete,
+					"wed" => $traindat[$i]->complete,
+					"thu" => $traindat[$i]->complete,
+					"fri" => $traindat[$i]->complete,
+					"sat" => $traindat[$i]->complete,
+				);
+			}else{ $tr_status = json_decode($traindat[$i]->complete,true); }
+			if(!isset($tr_status['sun'])){$tr_status['sun'] = "";}
+			if(!isset($tr_status['mon'])){$tr_status['mon'] = "";}
+			if(!isset($tr_status['tues'])){$tr_status['tues'] = "";}
+			if(!isset($tr_status['wed'])){$tr_status['wed'] = "";}
+			if(!isset($tr_status['thu'])){$tr_status['thu'] = "";}
+			if(!isset($tr_status['fri'])){$tr_status['fri'] = "";}
+			if(!isset($tr_status['sat'])){$tr_status['sat'] = "";}
+
 			$aut_inf = "";
 			$is_auto = 0;
 			if(intval($traindat[$i]->auto) > 0){
@@ -220,9 +239,14 @@ class Trains extends CI_Controller {
 			if($aut_inf != ''){$aut_inf = "<span style=\"color: #555; font-size: 9pt;\">".$aut_inf."</span>";}
 
 			$c_omp = "";
+			/*
 			if(strtoupper($traindat[$i]->complete) == "Y"){$c_omp = "<br /><span style=\"background-color:yellow; color: blue\">[COMPLETED]</span>";}
 			if(strtoupper($traindat[$i]->complete) == "S"){$c_omp = "<br /><span style=\"background-color:brown; color: white\">[STARTED]</span>";}
 			if(strtoupper($traindat[$i]->complete) == "C"){$c_omp = "<br /><span style=\"background-color:gray; color: yellow\">[CREW ALLOCATED]</span>";}
+			*/
+			if(strtoupper($tr_status[$day]) == "Y"){$c_omp = "<br /><span style=\"background-color:yellow; color: blue\">[COMPLETED]</span>";}
+			elseif(strtoupper($tr_status[$day]) == "S"){$c_omp = "<br /><span style=\"background-color:brown; color: white\">[STARTED]</span>";}
+			elseif(strtoupper($tr_status[$day]) == "C"){$c_omp = "<br /><span style=\"background-color:gray; color: yellow\">[CREW ALLOCATED]</span>";}
 
 			$hl = "<div style=\"color: #444\">"; 
 			$wb_alloc = "";
@@ -575,7 +599,7 @@ class Trains extends CI_Controller {
 	// Methods for changing status of train on train sheet
 	function crewTrId($day="sun",$auto=0,$id=0){
 		// Allocate crew
-		$arr = array('id' => $id);
+		$arr = array('id' => $id,'day'=>$day);
 		$this->Train_model->crewTrId($arr);
 		header("Location:".$_SERVER['SCRIPT_NAME']."/trains/sheet/".$day."/".$auto);
 	}
@@ -592,14 +616,14 @@ class Trains extends CI_Controller {
 
 	function compTrId($day="sun",$auto=0,$id=0){
 		// Complete train
-		$arr = array('id' => $id);
+		$arr = array('id' => $id,'day'=>$day);
 		$this->Train_model->compTrId($arr);
 		header("Location:".$_SERVER['SCRIPT_NAME']."/trains/sheet/".$day."/".$auto);
 	}
 	
 	function strtTrId($day="sun",$auto=0,$id=0){
 		// Start train
-		$arr = array('id' => $id);
+		$arr = array('id' => $id,'day'=>$day);
 		$this->Train_model->strtTrId($arr);
 		header("Location:".$_SERVER['SCRIPT_NAME']."/trains/sheet/".$day."/".$auto);
 	}
