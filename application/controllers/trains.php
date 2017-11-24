@@ -249,14 +249,16 @@ class Trains extends CI_Controller {
 			elseif(strtoupper($tr_status[$day]) == "C"){$c_omp = "<br /><span style=\"background-color:gray; color: yellow\">[CREW ALLOCATED]</span>";}
 
 			$hl = "<div style=\"color: #444\">"; 
+			$swlnk = "";
 			$wb_alloc = "";
 			if($traindat[$i]->wb_alloc > 0){ 
 				$hl = "<div style=\"color: black; font-weight: bold; font-size: 110%;\">";
 				$wb_alloc =  $traindat[$i]->wb_alloc." (".count(json_decode($traindat[$i]->wb_cars,TRUE)).")";
+				$swlnk = "<br /><a href=\"".WEB_ROOT."/switchlist/lst/".$traindat[$i]->id."\" target=\"swlist".$traindat[$i]->id."\">Switchlist</a>";
 			}
 			//if(($is_auto == 0 && $tarr['auto'] == 0) || $tarr['auto'] == 1){
 				$this->dat['data'][$i]['id'] 						= $traindat[$i]->id;
-				$this->dat['data'][$i]['train_id']			 		= $hl.$traindat[$i]->train_id." (".$traindat[$i]->loco_num.") ".$c_omp."</div>";
+				$this->dat['data'][$i]['train_id']			 		= $hl.$traindat[$i]->train_id." (".$traindat[$i]->loco_num.") ".$c_omp.$swlnk."</div>";
 				$this->dat['data'][$i]['train_desc'] 				= $hl.$traindat[$i]->train_desc.$aut_inf."</div>";
 				$this->dat['data'][$i]['no_cars'] 				= $hl.$traindat[$i]->no_cars."</div>";
 				$this->dat['data'][$i]['wb_alloc'] 				= $hl.$traindat[$i]->tr_sheet_ord."<br />".$wb_alloc."</div>";
