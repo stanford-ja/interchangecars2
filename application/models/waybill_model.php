@@ -97,14 +97,17 @@ class Waybill_model extends CI_Model {
 		return $query->result();
 	}
 	
-	function get_carsOnAllMyWaybills($owner_name=""){
+	function get_carsOnAllMyWaybills($rr_affil=array()){ // WAS - ($owner_name=""){ - 2018-01-14
 		// Get cars where from / to is a rr of user.
+		// $rr_affil = Array of affiliate RR id's and RR logged in as.
+		//print_r($rr_affil); exit();
 		$s = "SELECT `ichange_waybill`.`cars`, ichange_waybill.waybill_num, `rral`.`report_mark`, `ichange_waybill`.`train_id` 
 			FROM `ichange_waybill` 
 			LEFT JOIN `ichange_rr` AS `rrto` ON `ichange_waybill`.`rr_id_to` = `rrto`.`id` 
 			LEFT JOIN `ichange_rr` AS `rrfr` ON `ichange_waybill`.`rr_id_from` = `rrfr`.`id` 
 			LEFT JOIN `ichange_rr` AS `rral` ON `ichange_waybill`.`rr_id_handling` = `rral`.`id`
-			WHERE (`rrto`.`owner_name` = '".$owner_name."' OR `rrfr`.`owner_name` = '".$owner_name."')";// AND `rral`.`owner_name` != '".$owner_name."'";
+			WHERE `rrto`.`id` IN (".implode(",",$rr_affil).") OR `rrfr`.`id` IN (".implode(",",$rr_affil).")"; // OR `rral`.`id` IN (".implode(",",$rr_affil).")";
+			// WHERE (`rrto`.`owner_name` = '".$owner_name."' OR `rrfr`.`owner_name` = '".$owner_name."')";// AND `rral`.`owner_name` != '".$owner_name."'";
 			//echo $s; 
 		$tmp = $this->db->query($s);
 		$tmp = $tmp->result();
@@ -113,13 +116,16 @@ class Waybill_model extends CI_Model {
 		$this->carsOnAllMyWBsKys = array();
 		for($i=0;$i<count($tmp);$i++){
 			$tmp2 = @json_decode($tmp[$i]->cars,TRUE);
+			//echo "<pre>"; print_r($tmp2); echo "</pre>";
 			for($ii=0;$ii<count($tmp2);$ii++){
 				if(strlen($tmp2[$ii]['NUM']) > 0 && $tmp2[$ii]['NUM'] != "UNDEFINED" && !in_array($tmp2[$ii]['NUM'],$this->carsOnAllMyWBsKys)){
 					$tmp2[$ii]['NUM'] = str_replace(" ","",$tmp2[$ii]['NUM']);
 					$tmp2[$ii]['TR_ID'] = $tmp[$i]->train_id;
 					$tmp2[$ii]['REP_MK'] = $tmp[$i]->report_mark;
-					$this->carsOnAllMyWBsKys[] = $tmp2[$ii]['NUM']; 
-					$this->carsOnAllMyWBs[] = $tmp2[$ii]; 
+					if(in_array($tmp2[$ii]['RR'],$rr_affil)){
+						$this->carsOnAllMyWBsKys[] = $tmp2[$ii]['NUM']; 
+						$this->carsOnAllMyWBs[] = $tmp2[$ii]; 
+					}
 				}
 			}
 		}		

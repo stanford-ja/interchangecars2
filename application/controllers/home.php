@@ -71,11 +71,14 @@ class Home extends CI_Controller {
 		$this->railroad_opts_lst = $this->mricf->rrOpts();
 		//print_r($this->mricf->rrOpts());
 		
+		// Generate RR ids of affiliates
+		$this->my_rr_ids = $this->mricf->affil_ids($this->arr['rr_sess'],$this->arr['allRR']);
+
 		// Get cars where from / to is a rr of user.
-		$this->Waybill_model->get_carsOnAllMyWaybills(@$this->arr['myRR'][0]->owner_name);
+		$this->Waybill_model->get_carsOnAllMyWaybills($this->my_rr_ids); // WAS - (@$this->arr['myRR'][0]->owner_name); - 2018-01-14
 		$this->carsOnAllMyWBs = $this->Waybill_model->carsOnAllMyWBs;
 		//$this->carsOnAllMyWBsKys = $this->Waybill_model->carsOnAllMyWBsKys;
-
+		
 		// ONLY NEEDED TO CREATE messages TABLE AND DATA! ONCE DONE, CAN BE REMOVED. 2017-05-21
 		$tbls = (array)$this->Generic_model->qry("SHOW TABLES WHERE Tables_in_jstan2_general LIKE 'ichange_messages'");
 		if(count($tbls) == 0){ 
@@ -92,7 +95,7 @@ class Home extends CI_Controller {
 		$this->fils = get_filenames(DOC_ROOT."/waybill_images/");
 
 		// Generate Afil WB list (if applicable)
-		$this->my_rr_ids = $this->mricf->affil_ids($this->arr['rr_sess'],$this->arr['allRR']);
+		//$this->my_rr_ids = $this->mricf->affil_ids($this->arr['rr_sess'],$this->arr['allRR']); - MOVED INTO __construct() METHOD 2018-01-14 
 
 		$this->wbs_all = array();
 		$this->pos_all = array();
