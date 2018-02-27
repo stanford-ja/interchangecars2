@@ -79,15 +79,24 @@ class Switchlist extends CI_Controller {
 			if($lo_tmp[$i]->avail_to == 2 && $lo_tmp[$i]->rr != $this->arr['rr_sess']){$who_owns = "Other RR";}
 			$lo_opts[$lo_tmp[$i]->loco_num] = $lo_tmp[$i]->loco_num." - ".$lo_tmp[$i]->model." (".$who_owns.")";
 		}
-		$lo_select = "<div style=\"z-index: 15; position: absolute; left: 200px; top: 200px; background-color: antiquewhite; border: 1px solid brown; padding: 5px; display: none\" id=\"loco_sel_div\">".
-			"<h2>Change Loco for Switchlist</h2>".
+		$lo_select = "<div style=\"background-color: antiquewhite; border: 1px solid brown; padding: 5px; margin: 5px; display: none\" id=\"loco_sel_div\">".
+			"<strong>Change Loco for Switchlist</strong><br /><br />".
 			form_open_multipart(WEB_ROOT.'/switchlist/chgloco').
 			form_hidden('id',$id).
 			form_dropdown("loco_select",$lo_opts,$trdat[0]->loco_num,'style="display: inline;"')."&nbsp;".
 			form_submit("submit","Change").form_close()."<a href=\"javascript:{}\" onclick=\"document.getElementById('loco_sel_div').style.display = 'none';\">[ Close ]</a></div>";
+		$wb_select = "<div id=\"add2SWLst\" style=\"background-color: antiquewhite; border: 1px solid brown; padding: 5px; margin: 5px; display: none\">
+			<strong>Add A Waybill to Switchlist</strong><br /><div id=\"add2SWLst2\" style=\"display: block;\">This is the add to switchlist list.</div>
+			<a href=\"javascript:{}\" onclick=\"document.getElementById('add2SWLst').style.display = 'none';\">[ Close ]</a>
+			</div>";
 
 		$this->trdat['field_names'] = array("Train ID / Motive Power", "Train Description", "Origin / Destination", "Operation Days", "Direction", "Operation Notes");
-		$this->trdat['data'][0]['train_id'] = $lo_select.$trdat[0]->train_id." / ".$trdat[0]->loco_num."&nbsp;<a href=\"javascript:{}\" onclick=\"document.getElementById('loco_sel_div').style.display = 'block';\">Change / Add Motive Power</a>";
+		$this->trdat['data'][0]['train_id'] = "<span style=\"float: right;\">
+			<a href=\"javascript:{}\" onclick=\"document.getElementById('loco_sel_div').style.display = 'block'; document.getElementById('add2SWLst').style.display = 'none';\">Change / Add Motive Power</a>&nbsp; 
+			<a href=\"javascript:{}\" onclick=\"add2SW('".$id."');\">Add Waybill to Switchlist</a>
+			</span>".
+			$trdat[0]->train_id." / ".$trdat[0]->loco_num."&nbsp;".
+			$lo_select.$wb_select;
 		//$this->trdat['data'][0]['loco_num'] = $trdat[0]->loco_num;
 		$this->trdat['data'][0]['train_desc'] = $trdat[0]->train_desc;
 		//if(strlen($trdat[0]->location) < 1){$trdat[0]->location = $trdat[0]->destination;}
@@ -465,6 +474,24 @@ class Switchlist extends CI_Controller {
 		$s = "UPDATE `ichange_waybill` SET `sw_order` = '".$ord."' WHERE `id` = '".$wbid."'";
 		$this->Generic_model->change($s);
 		header("Location:".WEB_ROOT."/switchlist/lst/".$trid);
+	}
+	
+	public function add2SW($wb_id,$sw_id){
+		// Adds waybill to switchlist and redirects to switchlist to display it.
+		// $wb_id = ichange_waybill.id value.
+		// $sw_id = ichange_trains.id value.
+
+		// Get train id from ichange_trains table.
+		$this->load->model('Generic_model','',TRUE);
+		$s = "SELECT `train_id` FROM `ichange_trains` WHERE `id` = '".$sw_id."'";
+		$tr = $this->Generic_model->qry($s);
+		$train_id = $tr[0]->train_id;
+		
+		// Update waybill so it is on switchlist for train
+		$t = "UPDATE `ichange_waybill` SET `train_id` = '".$train_id."' WHERE `id` = '".$wb_id."'";
+		$this->Generic_model->change($t);
+		
+		header("Location:".WEB_ROOT."/switchlist/lst/".$sw_id);
 	}
 
 	public function setFieldSpecs(){

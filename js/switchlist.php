@@ -12,5 +12,20 @@ $f21 = str_replace("{\"AAR_REQD\":\"UNDEFINED\",\"NUM\":\"UNDEFINED\",\"AAR\":\"
 	function confirm_remove(){
 		var v = confirm('Are you sure you want to remove\nthis waybill from the switchlist');
 		return v;
-	}	
+	}
+	
+	function add2SW(id){
+		// Adding a waybill to a switchlist.
+		document.getElementById('add2SWLst').style.display = 'block';
+		document.getElementById('loco_sel_div').style.display = 'none';
+
+		$(document).ready(function(){
+			var p = "<?php echo JS_ROOT; ?>/ajax.php?f=add2SW&s=" + id;
+			$.get(p,function(data){
+				document.getElementById('add2SWLst2').innerHTML = data;
+			});
+		});
+
+
+	}
 	

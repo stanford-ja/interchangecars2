@@ -22,6 +22,7 @@ if(isset($_GET['f'])){
 	if($_GET['f'] == "mapWBDetails"){mapWBDetails(@$_GET['w']);}
 	if($_GET['f'] == "glCreate"){glCreate(@$_GET['i']);}
 	if($_GET['f'] == "glDel"){glDel(@$_GET['i']);}
+	if($_GET['f'] == "add2SW"){add2SW(@$_GET['s']);}
 }
 // End function caller
 
@@ -415,6 +416,29 @@ function glDel($i){
 	db_conn();
 	$sql = "DELETE FROM `ichange_generated_loads` WHERE `id` = '".$i."'";
 	mysql_query($sql);
+}
+
+function add2SW($id){
+	// Get waybills allocated to railroad logged in as that are not already in switchlist id = $id
+	db_conn();
+	$ret = "";
+	$path = explode("js/ajax.php",$_SERVER['REQUEST_URI']);
+	
+	// Get train details
+	$sql = "SELECT `train_id` FROM `ichange_trains` WHERE `id` = '".$id."'";
+	$qry = mysql_query($sql);
+	$res = mysql_fetch_assoc($qry);
+	$train_id = $res['train_id'];
+	
+	// Get waybills not already on switchlist
+	$sql = "SELECT `id`, `lading`, `train_id`, `waybill_num`, `indust_origin_name`, `indust_dest_name`, `status` FROM `ichange_waybill` WHERE `rr_id_handling` = '".@$_COOKIE['rr_sess']."' AND `train_id` != '".$train_id."'";
+	$qry = mysql_query($sql);
+	while($res = mysql_fetch_assoc($qry)){
+		$ret .= "<div style=\"display: inline-block; border: 1px solid #ccc; background-color: ivory; padding: 4px; margin: 2px; width: 300px; height: 80px; overflow: hidden;\"><a href=\"javascript:{}\" onclick=\"if(confirm('Add this waybill to this switchlist?')){ window.location = '".$path[0]."switchlist/add2SW/".$res['id']."/".$id."'; }\">".$res['waybill_num']."</a> - ".$res['status'].".<br /><strong>".$res['indust_origin_name']." -> ".$res['indust_dest_name']."</strong>.<br />In train: <strong>".$res['train_id']."</strong><br />Lading: ".$res['lading']."</div>";
+	}
+	$ret .= "";
+	
+	echo $ret;
 }
 
 // Supporting functions
