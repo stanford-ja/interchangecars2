@@ -431,10 +431,10 @@ function add2SW($id){
 	$train_id = $res['train_id'];
 	
 	// Get waybills not already on switchlist
-	$sql = "SELECT `id`, `lading`, `train_id`, `waybill_num`, `indust_origin_name`, `indust_dest_name`, `status` FROM `ichange_waybill` WHERE `rr_id_handling` = '".@$_COOKIE['rr_sess']."' AND `train_id` != '".$train_id."'";
+	$sql = "SELECT `id`, `routing`, `return_to`, `lading`, `train_id`, `waybill_num`, `indust_origin_name`, `indust_dest_name`, `status` FROM `ichange_waybill` WHERE `rr_id_handling` = '".@$_COOKIE['rr_sess']."' AND `train_id` != '".$train_id."' AND `train_id` != 'AUTO TRAIN' AND `status` != 'CLOSED'";
 	$qry = mysql_query($sql);
 	while($res = mysql_fetch_assoc($qry)){
-		$ret .= "<div style=\"display: inline-block; border: 1px solid #ccc; background-color: ivory; padding: 4px; margin: 2px; width: 300px; height: 80px; overflow: hidden;\"><a href=\"javascript:{}\" onclick=\"if(confirm('Add this waybill to this switchlist?')){ window.location = '".$path[0]."switchlist/add2SW/".$res['id']."/".$id."'; }\">".$res['waybill_num']."</a> - ".$res['status'].".<br /><strong>".$res['indust_origin_name']." -> ".$res['indust_dest_name']."</strong>.<br />In train: <strong>".$res['train_id']."</strong><br />Lading: ".$res['lading']."</div>";
+		$ret .= "<div style=\"display: inline-block; border: 1px solid #ccc; border-radius: 5px; background-color: ivory; padding: 4px; margin: 2px; width: 300px; height: 93px; overflow: hidden; font-size: 9pt;\"><a href=\"javascript:{}\" onclick=\"if(confirm('Add this waybill to this switchlist?')){ window.location = '".$path[0]."switchlist/add2SW/".$res['id']."/".$id."'; }\">".$res['waybill_num']."</a> - ".$res['status'].".<br /><strong>".$res['indust_origin_name']." -> ".$res['indust_dest_name']." -> ".$res['return_to']."</strong><br />In train: <strong>".$res['train_id']."</strong><br />Lading: <strong>".$res['lading']."</strong><br />Routing: <strong>".$res['routing']."</strong></div>";
 	}
 	$ret .= "";
 	
