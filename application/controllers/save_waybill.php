@@ -329,8 +329,8 @@ class Save_waybill extends CI_Controller {
 
 		// Include latest progress report
 		$sql = "SELECT * FROM `ichange_progress` WHERE `waybill_num` LIKE '".$this->arr['fld8']."' ORDER BY `id` DESC LIMIT 5";
-		$tmp = (array)$this->Generic_model->qry($sql);
-		$p_tmp = @json_decode($this->full_jprog, TRUE);
+		$p_tmp = (array)$this->Generic_model->qry($sql);
+		//$p_tmp = @json_decode($this->full_jprog, TRUE);
 		//$ps = count($p_tmp)-5; if($ps < 0){$ps = 0;}
 		for($p=0;$p<count($p_tmp);$p++){
 		//for($p=$ps;$p<count($p_tmp);$p++){
