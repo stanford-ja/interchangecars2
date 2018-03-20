@@ -103,6 +103,21 @@ class Home extends CI_Controller {
 		$this->set_po_arr();
 
 		if($this->arr['rr_sess'] > 0){$this->home_view_settings();}
+		else{
+			// Add stats block
+			$wb_cntr = (array)$this->Generic_model->qry("SELECT COUNT(`id`) AS `cntr` FROM `ichange_waybill` WHERE `status` != 'CLOSED'");
+			$rr_cntr = (array)$this->Generic_model->qry("SELECT COUNT(`id`) AS `cntr` FROM `ichange_rr` WHERE `inactive` != '1'");
+			$in_cntr = (array)$this->Generic_model->qry("SELECT COUNT(`id`) AS `cntr` FROM `ichange_indust`");
+			$ca_cntr = (array)$this->Generic_model->qry("SELECT COUNT(`id`) AS `cntr` FROM `ichange_cars`");
+			$tr_cntr = (array)$this->Generic_model->qry("SELECT COUNT(`id`) AS `cntr` FROM `ichange_trains`");
+			$co_cntr = (array)$this->Generic_model->qry("SELECT COUNT(`id`) AS `cntr` FROM `ichange_commod`");
+			$this->mricf_stats = "Current Waybills: ".$wb_cntr[0]->cntr."<br />
+				Cars in use: ".$ca_cntr[0]->cntr."<br />
+				Trains scheduled: ".$tr_cntr[0]->cntr."<br />
+				Industries Served: ".$in_cntr[0]->cntr."<br />
+				Commodities: ".$co_cntr[0]->cntr."<br />
+				Active Railroads: ".$rr_cntr[0]->cntr."<br />";
+		}
 		if(!isset($this->arr['myRR'][0]->home_disp)){
 			$this->view0_build(); // Display list view
 		}elseif($this->arr['myRR'][0]->home_disp == 0){
@@ -155,10 +170,11 @@ class Home extends CI_Controller {
 	
 	function view0_build(){
 		// Home 0 view html generation
+		$mricf_stats = ""; if(isset($this->mricf_stats)){ $mricf_stats = "<div style=\"display: block; padding: 12px; margin: 2px; margin-bottom: 5px; background-color: lightgreen; border: 2px solid yellow; border-radius: 10px;\"><h3>Statistics</h3>".$this->mricf_stats."</div>"; }
 		$tbl_start = "<div style=\"display: table; width: 100%; border-top: 2px solid black;\"><div style=\"display: table-row;\">";
 		$this->content['html'] = "<div style=\"width: 100%;\">".form_open_multipart("bulk_update")."<input type=\"checkbox\" name=\"do_bulk\" id=\"do_bulk\" value=\"1\" onchange=\"hideEle('ubu'); if(this.checked === true){document.getElementById('ubu').style.display = 'inline';}\" />Do bulk update (not individual selections!)";
 		$this->content['html'] .= "<span style=\"display: none; float: right;\" id=\"ubu\">".form_submit("bulk","Update Bulk")."</span>";
-		$this->content['html'] .= $tbl_start.$this->wb_cars_in_use()."</div></div>";
+		$this->content['html'] .= $mricf_stats.$tbl_start.$this->wb_cars_in_use()."</div></div>";
 		//$this->content['html'] .= "<div id=\"container\" class=\"js-masonry\" data-masonry-options='{ \"columnWidth\": 200, \"itemSelector\": \".item\" }'>";
 
 		// Start element display definitions

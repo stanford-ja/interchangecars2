@@ -327,10 +327,14 @@ class Save_waybill extends CI_Controller {
 		$message .= "Notes: ".$this->arr['fld17']."\n";
 		$message .= "--------------------\n";
 
+		// Include latest progress report
+		$sql = "SELECT * FROM `ichange_progress` WHERE `waybill_num` LIKE '".$this->arr['fld8']."' ORDER BY `id` DESC LIMIT 5";
+		$tmp = (array)$this->Generic_model->qry($sql);
 		$p_tmp = @json_decode($this->full_jprog, TRUE);
 		$ps = count($p_tmp)-5; if($ps < 0){$ps = 0;}
 		//for($p=0;$p<count($p_tmp);$p++){
 		for($p=$ps;$p<count($p_tmp);$p++){
+			$p_tmp[$p] = (array)$p_tmp[$p];
 			if(!isset($p_tmp[$p]['train'])){$p_tmp[$p]['train'] = "";}
 			$message .= $p_tmp[$p]['date']." ".$p_tmp[$p]['time']." - ".$p_tmp[$p]['status']." - ".$p_tmp[$p]['train']." - ".$p_tmp[$p]['text']."\n";
 		}
