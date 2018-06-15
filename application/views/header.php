@@ -238,4 +238,14 @@
 		</span>
 		// -->
 		<?php } ?>
-	<?php if(isset($pgTitle)){ ?><h2 style="text-align: right;"><?php echo $pgTitle; ?></h2><?php } ?>
+	<?php if(isset($pgTitle)){ ?>
+</span>
+	<h2 style="text-align: right;">
+	<span class="small_txt" style="float:left; font-weight: bold; text-align: left;">
+		<?php if(isset($_COOKIE['_tz'])){ ?>
+		<?php echo @$_COOKIE['_tz']; ?>
+		<?php } ?>
+	</span>
+	<?php echo $pgTitle; ?>
+	</h2>
+	<?php } ?>

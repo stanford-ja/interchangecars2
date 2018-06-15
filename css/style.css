@@ -231,7 +231,7 @@ hr {color: #ccc;}
 }
 .box1 a {text-decoration: none; color: maroon;}
 
-#pos, #rrs, #trs, #afs, #search, #mes {
+#pos, #rrs, #trs, #afs, #search, #mes, #next_trains_contain {
 	background-color: white;
 	background-image: url('../images/semi_transparent_light.png');
 	background-repeat: repeat;
@@ -402,3 +402,15 @@ background-color: yellow;
 	/* color: #858585; */
 }
 
+.nextTrains {
+	display: block; 
+	margin: 3px; 
+	background-color: brown; 
+	color: white;
+	padding: 3px;
+	border-radius: 5px;
+}
+
+.optionHeading {
+	background-color: brown; color: white;
+}
