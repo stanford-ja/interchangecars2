@@ -371,7 +371,12 @@ function trainOpts($opts=array(),$trainsArr=array()){ //$rr=0,$auto="N",$trainsA
 		$onlyrr = 0; if(isset($opts['onlyrr'])){$onlyrr = 1;}
 		$tOpts_rr = "";
 		$tOpts_oth = "";
+		$tOpts_nxt = "";
 		if($rr < 1 && isset($_COOKIE['rr_sess'])){$rr = $_COOKIE['rr_sess'];}
+		$nxt_trs = $this->getNxtTrains(5,1);
+		for($nx=0;$nx<count($nxt_trs);$nx++){
+			$tOpts_nxt .= "<option value=\"".$nxt_trs[$nx]['train_id']."\">".substr($nxt_trs[$nx]['train_desc'],0,20)." (".$nxt_trs[$nx]['train_id'].")</option>";
+		}
 		$s = array();
 		$kys = @array_keys($trainsArr);
 		for($i=0;$i<count($kys);$i++){
@@ -388,9 +393,14 @@ function trainOpts($opts=array(),$trainsArr=array()){ //$rr=0,$auto="N",$trainsA
 				else{$tOpts_oth .= "<option ".$opt_styl."value=\"".$trainsArr[$kys[$i]]['train_id']."\">".$td." (".$trainsArr[$kys[$i]]['train_id'].")</option>";}
 			}
 		}
-		$tOpts = "<option value=\"\" style=\"background-color: brown; color: white;\">-- Your trains --</option>".
+		$tOpts = "";
+		if(strlen($tOpts_nxt) > 0){
+			$tOpts .= "<option value=\"\" class=\"optionHeading\">-- Next trains on Switchlist --</option>".
+			$tOpts_nxt;
+		}
+		$tOpts .= "<option value=\"\" class=\"optionHeading\">-- Your trains --</option>".
 			$tOpts_rr.
-			"<option value=\"\" style=\"background-color: brown; color: white;\">-- Other trains --</option>".
+			"<option value=\"\" class=\"optionHeading\">-- Other trains --</option>".
 			$tOpts_oth;
 		$this->train_select_options = $tOpts;
 	}
@@ -748,6 +758,39 @@ function cars4RR4WB($rr=0,$wb=0){
 	}
 	$sqli->close();
 	return $cars_rr;
+}
+
+function getNxtTrains($i=3,$full=0){
+	// Gets the next $i trains, according to the switchlist.
+	// $full = 1 means include full array, not just the 
+	if(!isset($this->CI->Train_model)){ $this->CI->load->model("Train_model",'',TRUE); }
+	$nxt_trains = array();
+	$day_arr = array("sun","mon","tues","wed","thu","fri","sat");
+	for($d=0;$d<count($day_arr);$d++){
+		if($this->CI->Train_model->getNonCompletedCountXDay($day_arr[$d],$this->CI->arr['rr_sess']) > 0){
+			$nxt_day = $day_arr[0];
+			if(isset($day_arr[intval($d+1)])){ $nxt_day = $day_arr[intval($d+1)]; }
+			$sqli = $this->sqli_instance();
+			$sql = "SELECT `train_id`, `train_desc` 
+				FROM `ichange_trains` 
+				WHERE `railroad_id` = '".$this->CI->arr['rr_sess']."' 
+					AND `complete` NOT LIKE '%\"".$day_arr[$d]."\":\"Y\"%'
+					AND `".$day_arr[$d]."` = '1' 
+					AND (LENGTH(`auto`) < 1 AND `auto` < 1) 
+				ORDER BY `tr_sheet_ord` LIMIT ".$i;
+				// AND `complete` NOT LIKE '%\"".$nxt_day."\":\"Y\"%' - removed from above query.
+				// AND `".$day_arr[$d]."` = '1' - WAS - AND (`".$day_arr[$d]."` = '1' OR `".$nxt_day."` = '1')
+
+			$q = $sqli->query($sql);
+			while($r = $q->fetch_assoc()){
+				if($full == 1){ $nxt_trains[] = $r; }
+				else{ $nxt_trains[] = $r['train_id']; }
+			}
+			$sqli->close();
+			$d = count($day_arr);
+		}
+	}
+	return $nxt_trains;
 }
 
 }

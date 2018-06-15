@@ -34,6 +34,7 @@ class Home extends CI_Controller {
 		$this->load->model('Generic_model','',TRUE); // Database connection! TRUE means connect to db.
 		$this->load->model('Storedfreight_model','',TRUE); // Database connection! TRUE means connect to db.
 		$this->load->model('Waybill_model','',TRUE);
+		$this->load->model("Train_model",'',TRUE);
 		
 		// Railroad array set up
 		$this->load->model('Railroad_model','',TRUE); // Database connection! TRUE means connect to db.
@@ -101,6 +102,7 @@ class Home extends CI_Controller {
 		$this->pos_all = array();
 		$this->set_wb_arr();
 		$this->set_po_arr();
+		$this->arr['next_trains'] = $this->mricf->getNxtTrains(5);
 
 		if($this->arr['rr_sess'] > 0){$this->home_view_settings();}
 		else{
@@ -135,6 +137,7 @@ class Home extends CI_Controller {
 			$this->mess_build();
 			$this->genload_build();
 		}
+
 		$this->view();
 		//echo "<pre>"; print_r(get_browser(null,true)); echo "</pre><br />".$_SERVER['HTTP_USER_AGENT'];
 	}
@@ -693,6 +696,7 @@ class Home extends CI_Controller {
 	}
 	
 	function wb_images($me){
+		$fil_html = "";
 		for($i=0;$i<count($this->fils);$i++){
 			if(strpos("Z".$this->fils[$i],$this->waybills[$me]->id."-") > 0){
 				$tmp = explode("-",str_replace(".jpg","",$this->fils[$i]));
@@ -764,13 +768,18 @@ class Home extends CI_Controller {
 		// Get latest Progress Report
 		$sql = "SELECT * FROM `ichange_progress` WHERE `waybill_num` = '".$this->waybills[$tmp]->waybill_num."' ORDER BY id DESC, date DESC, time DESC LIMIT 1";
 		$prog_res = (array)$this->Generic_model->qry($sql);
-		$prog_all[0] = (array)$prog_res[0]; //json_decode($this->waybills[$tmp]->progress, true);
+		if(isset($prog_res[0])){ $prog_all[0] = (array)$prog_res[0]; } //json_decode($this->waybills[$tmp]->progress, true);
 		$last_prog = 0; //count($prog_all) - 1; 
-		$this->fld1_1 = $prog_all[$last_prog]['date']; //"Server Date/Time: ".$prog_all[$last_prog]['date'];
-		$this->fld1_2 = $prog_all[$last_prog]['text'];
-		$this->fld1_3 = $prog_all[$last_prog]['map_location'];
+		$this->fld1_1 = "";
+		$this->fld1_2 = "";
+		$this->fld1_3 = "";
+		$this->fld1_4 = "";
+		$this->fld1_5 = "";
+		if(isset($prog_all[$last_prog]['date'])){ $this->fld1_1 = $prog_all[$last_prog]['date']; } //"Server Date/Time: ".$prog_all[$last_prog]['date'];
+		if(isset($prog_all[$last_prog]['text'])){ $this->fld1_2 = $prog_all[$last_prog]['text']; }
+		if(isset($prog_all[$last_prog]['map_location'])){ $this->fld1_3 = $prog_all[$last_prog]['map_location']; }
 		$this->fld1_4 = ""; //if(isset($prog_all[$last_prog]['tzone']) && isset($_COOKIE['_tz'])){$this->fld1_4 = " (TZ Time: ".$prog_all[$last_prog]['tzone']." ".date('Y-m-d H:i',date('U')+$this->dates_times->get_timezone_offset($prog_all[$last_prog]['tzone'],$_COOKIE['_tz'])).")";}
-		$this->fld1_5 = $prog_all[$last_prog]['time'];
+		if(isset($prog_all[$last_prog]['time'])){ $this->fld1_5 = $prog_all[$last_prog]['time']; }
 	}
 	
 	function wb_update_frm($tmp){

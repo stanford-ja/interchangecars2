@@ -47,12 +47,15 @@
 			<?php if($rr_sess != 9999){ /* START LOGIN FOR EXISTING MEMBER */ ?>
 			<div style="display: table-row;">
 				<div style="display: table-cell; max-width: 230px; padding: 10px;" class="td_menu_title">
-					<span class="small_txt" style="font-weight: bold;"><!-- Management Menu&nbsp;&nbsp;&nbsp;<br /> // -->
-					<?php if(isset($_COOKIE['_tz'])){ ?>
-						<?php echo @$_COOKIE['_tz']; ?>
-					<?php } ?>
-					</span>
 					<?php echo @$phtml.@$rhtml.@$thtml.@$shtml.@$mhtml; /* - TEST OF DROPDOWN FOR RAILROADS AS MOBILE-FRIENDLY RE-DESIGN */ ?>
+					<?php if(isset($next_trains) && count($next_trains) > 0){ ?>
+					<a href="javascript:{}" onclick="document.getElementById('next_trains_contain').style.display = 'block';">Next Trains</a>
+					<div id="next_trains_contain" style="display: none; position: fixed; left: 10px; top: 25px; z-index:99; max-height: 300px; max-width: 100px; overflow: auto;">
+						<a href="javascript:{}" onclick="document.getElementById('next_trains_contain').style.display = 'none';">Shrink</a><br />
+						Next <?php echo count($next_trains); ?> trains, on Switchlist not Completed: 
+						<?php echo "<div class=\"nextTrains\">".implode("</div><div class=\"nextTrains\">",$this->arr['next_trains'])."</div>"; ?>
+					</div>
+					<?php } ?>
 				</div>
 				<div style="display: table-cell; padding: 10px; font-size: 13pt;" class="td_menu_title">
 					<div style="display: block;">
@@ -102,6 +105,7 @@
 
 
 			</div>
+			
 			<?php /* END LOGIN FOR EXISTING MEMBER */ }else{ /* START LOGIN FOR NEW MEMBER (no RR's) */ ?>
 			<div style="display: table-row;">
 				<div style="display: table-cell" class="td_menu_title" colspan="4">
