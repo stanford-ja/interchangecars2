@@ -352,6 +352,7 @@
 	$dt_unix = date('U') - $mth_unix;
 	$dt = date('Y-m-d', $dt_unix);
 	$yr = date('Y-m-d', $yr_unix);
+	$dt_prog = intval(date('Y')-1).date('-m-d'); // 1 Year of Progress reports
 	$act_unix = date('U') - (60*60*24*30); // 1 month of activity kept!
 
 	$s = array();
@@ -382,6 +383,7 @@
 	$s[] = "DELETE FROM `ichange_generated_loads` WHERE `added` < '".$act_unix."'";
 	$s[] = "DELETE FROM `ichange_carsused_index` WHERE `added` < '".$yr_unix."'";
 	$s[] = "UPDATE `ichange_rr` SET `inactive` = 1 WHERE `last_act` > 0 AND `last_act` < '".$yr_unix."' AND `common_flag` != 1";
+	$s[] = "DELETE FROM `ichange_progress` WHERE `date` < '".$dt_prog."'";
 
 	for($i=0;$i<count($s);$i++){
 		$q = mysql_query($s[$i]);
