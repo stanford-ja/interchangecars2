@@ -776,8 +776,8 @@ function getNxtTrains($i=3,$full=0){
 				WHERE `railroad_id` = '".$this->CI->arr['rr_sess']."' 
 					AND `complete` NOT LIKE '%\"".$day_arr[$d]."\":\"Y\"%'
 					AND `".$day_arr[$d]."` = '1' 
-					AND (LENGTH(`auto`) < 1 AND `auto` < 1) 
-				ORDER BY `tr_sheet_ord` LIMIT ".$i;
+					AND (LENGTH(`auto`) < 2 AND `auto` < 1) 
+				ORDER BY `tr_sheet_ord` LIMIT 0,".$i;
 				// AND `complete` NOT LIKE '%\"".$nxt_day."\":\"Y\"%' - removed from above query.
 				// AND `".$day_arr[$d]."` = '1' - WAS - AND (`".$day_arr[$d]."` = '1' OR `".$nxt_day."` = '1')
 
