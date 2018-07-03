@@ -7,13 +7,13 @@ $mths = array("","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","No
 if(@$myRR[0]->use_tz_time == 1 && strlen(@$myRR[0]->tzone) > 0){	date_default_timezone_set($myRR[0]->tzone);}
 
 $op_days = array();
-if($traindata[0]->sun == 1){$op_days[] = "Sun";}
-if($traindata[0]->mon == 1){$op_days[] = "Mon";}
-if($traindata[0]->tues == 1){$op_days[] = "Tue";}
-if($traindata[0]->wed == 1){$op_days[] = "Wed";}
-if($traindata[0]->thu == 1){$op_days[] = "Thu";}
-if($traindata[0]->fri == 1){$op_days[] = "Fri";}
-if($traindata[0]->sat == 1){$op_days[] = "Sat";}
+if(isset($traindata[0]->sun) && $traindata[0]->sun == 1){$op_days[] = "Sun";}
+if(isset($traindata[0]->mon) && $traindata[0]->mon == 1){$op_days[] = "Mon";}
+if(isset($traindata[0]->tues) && $traindata[0]->tues == 1){$op_days[] = "Tue";}
+if(isset($traindata[0]->wed) && $traindata[0]->wed == 1){$op_days[] = "Wed";}
+if(isset($traindata[0]->thu) && $traindata[0]->thu == 1){$op_days[] = "Thu";}
+if(isset($traindata[0]->fri) && $traindata[0]->fri == 1){$op_days[] = "Fri";}
+if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 
 ?>
 
@@ -88,7 +88,13 @@ if($traindata[0]->sat == 1){$op_days[] = "Sat";}
 					<span style="display: none;"><textarea name="fld21" id="fld21" cols="50" rows="3"><?php echo $fld21; ?></textarea>
 					</span><input type="hidden" name="fld10" id="fld10" value="<?php echo $fld10; ?>" />
 					<table style="margin-bottom: 5px; background-color: #F4A460;">
-					<tr><td colspan="2">
+					<tr>
+						<td colspan="7">
+							<div id="alreadyOnWB" style="width: 90%; background-color: yellow; border: 1px solid maroon; border-radius: 4px; padding: 5px; font-size: 12pt; display: none; text-align: center;"></div>
+						</td>
+					</tr>
+					<tr>
+					<td colspan="2">
 					<strong>Cars attached to waybill</strong>
 					</td>
 					<td rowspan="7" style="vertical-align: top;">
@@ -194,7 +200,7 @@ if($traindata[0]->sat == 1){$op_days[] = "Sat";}
 						$fil_html .= "</a>";
 					}
 				}
-				if(strlen($fil_html) > 0){
+				if(isset($fil_html) && strlen($fil_html) > 0){
 					$fil_html = "<div id=\"wb_image_div\" style=\"color: #555; padding: 10px; margin: 3px; background-color: antiquewhite;\">
 						".$fil_html."
 						</div>";

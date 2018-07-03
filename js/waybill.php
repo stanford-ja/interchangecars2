@@ -236,9 +236,15 @@ $f21 = str_replace("{\"AAR_REQD\":\"UNDEFINED\",\"NUM\":\"UNDEFINED\",\"AAR\":\"
 			<?php if($rr_sess > 0){ ?>
 			var crd = cr.replace("&","[AMP]"); // Require to convert & to [AMP] so that the GET vars work properly in ajax script
 			var p = "<?php echo JS_ROOT; ?>/ajax.php?f=carUsed&d=" + crd;
+			document.getElementById('alreadyOnWB').innerHTML = '';
+			document.getElementById('alreadyOnWB').style.display = 'none';
 			$.get(p,function(data){		
 				fnd = data;
-				if(fnd.length > 0){alert('Car '+cr+' is on waybill '+fnd);}
+				if(fnd.length > 0){
+					//alert('Car '+cr+' is on waybill '+fnd);
+					document.getElementById('alreadyOnWB').innerHTML = 'Car '+cr+' is also on waybill <a href="<?php echo WEB_ROOT; ?>/waybill/edit2/'+fnd+'/waybill_num">'+fnd+'</a>';
+					document.getElementById('alreadyOnWB').style.display = 'block';
+				}
 			});
 			<?php } ?>
 		});

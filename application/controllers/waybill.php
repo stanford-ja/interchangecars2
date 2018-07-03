@@ -121,10 +121,16 @@ class Waybill extends CI_Controller {
 		$this->load->view('view', $this->dat);
 		$this->load->view('footer');
 	}
+
+	public function edit2($id=0,$fld="id"){
+		// Used to get waybill ID and then redirect to edit
+		$tmp = (array)$this->Waybill_model->get_single($id,$fld);
+		header("Location:".WEB_ROOT."/waybill/edit/".$tmp[0]->id);
+	}
 	
 	public function edit($id=0){
 		// Used for editing existing (edit/[id]) and adding new (edit/0) records
-		if($this->arr['rr_sess'] == 0){header("Location:../../waybill/view/".$id); exit();}
+		if($this->arr['rr_sess'] == 0){header("Location:".WEB_ROOT."/waybill/view/".$id); exit();}
 		$this->load->helper('form');
 		$this->dat['attribs'] = array('name' => "form"); // Attribs for form tag
 		$this->dat['fields'] = array();
@@ -174,6 +180,7 @@ class Waybill extends CI_Controller {
 				
 		// Create data variables for waybill form fields
 		$this->dat['id'] = $id;
+		//$this->arr['id'] = $id;
 		$this->dat['fld1'] = $wb_date;
 		$this->dat['fld2'] = @$this->dat['data'][0]->rr_id_from;
 		$this->dat['fld3'] = @$this->dat['data'][0]->rr_id_to;
@@ -224,7 +231,7 @@ class Waybill extends CI_Controller {
   	   
   	   $this->dat['tz_opts'] = $this->dates_times->getTZOptions();
   	   //$prog_data2 = (array)$prog_data[count($prog_data)-1];
-  	   $prog_data2 = (array)$prog_data[0];
+  	   $prog_data2 = array(); if(isset($prog_data[0])){ $prog_data2 = (array)$prog_data[0]; }
   	   if(!isset($prog_data2['date'])){ $prog_data2['date'] = date('Y-m-d'); }
   	   if(!isset($prog_data2['time'])){ $prog_data2['time'] = "00:00"; }
   	   /*
