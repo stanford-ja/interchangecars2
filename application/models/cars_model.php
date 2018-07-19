@@ -28,6 +28,7 @@ class Cars_model extends CI_Model {
     		$olist .= "`".$ord[$o]."`";
     	}
     	if(strlen($olist) > 0){$olist = " ORDER BY ".$olist;}
+    	if(isset($this->order_by) && strlen($this->order_by) > 0){ $olist = " ORDER BY ".$this->order_by; }
     	$crs = ""; // Array list of cars already on waybill
     	$sql = "SELECT * FROM `".$this->tbl."` WHERE `rr` = '".$id."' OR `rr` = '0' OR LENGTH(`rr`) = 0".$olist;
   		$car_sql_arr = "";

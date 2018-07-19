@@ -30,6 +30,7 @@ class Cars extends CI_Controller {
 	
 	public function lst(){
 		$this->arr['pgTitle'] .= " - List";
+		$this->Cars_model->order_by = ""; if(isset($_POST['order_by'])){ $this->Cars_model->order_by = $_POST['order_by']; }
 		$randpos = array();
 		if(isset($_POST['search_for'])){
 			$carsdat = (array)$this->Generic_model->get_search_results($_POST['search_for'],$_POST['search_in'],"ichange_cars");
@@ -75,6 +76,14 @@ class Cars extends CI_Controller {
 		}
 
 		$this->search_build();
+		
+		// List order form
+		$this->dat['list_order'] = array(
+			array('field' => "car_num", 'label' => "Car Number"),
+			array('field' => "aar_type", 'label' => "AAR Type"),
+			array('field' => "`desc`", 'label' => "Description"),
+			array('field' => "car_num", 'label' => "Car Number"),
+		);
 
 		// Load views
 		$this->load->view('header', $this->arr);
@@ -156,8 +165,8 @@ class Cars extends CI_Controller {
 		);
 
 		$this->field_defs[] =  array(
-			'type' => "select", 'label' => 'AAR Type', 'name' => 'aar_type', 'value' => @$this->dat['data'][0]->aar_type, 
-			'other' => 'id="aar_type"', 'options' => $aar_opts
+			'type' => "select", 'label' => 'AAR Type', 'name' => 'aar_type[]', 'value' => explode("|", @$this->dat['data'][0]->aar_type), 
+			'other' => 'id="aar_type" multiple="multiple"', 'options' => $aar_opts
 		);
 
 		$this->field_defs[] =  array(
