@@ -14,7 +14,19 @@ for($i=0;$i<count($lnk_kys);$i++){
 	}
 }
 if(isset($before_table)){echo $before_table;}
-?>
+if(isset($list_order)){ ?>
+	<div style="display: inline-block; padding: 5px; float: right;">
+	<form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
+		<select name="order_by"> 
+		<?php for($ol=0;$ol<count($list_order);$ol++){ 
+			$sel = ""; if(isset($_POST['order_by']) && $_POST['order_by'] == $list_order[$ol]['field']){ $sel = " selected=\"selected\""; }
+			echo "<option value=\"".$list_order[$ol]['field']."\"".$sel.">".$list_order[$ol]['label']."</option>\n";
+		} ?>
+		</select> 
+		<input type="submit" name="list_order" value="Order List" />
+	</form>
+	</div>
+<?php } ?>
 <div style="width: 100%; display: block;">
 	<div style="display: block;" class="td_title">
 	<?php

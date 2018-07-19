@@ -133,7 +133,7 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 							</td></tr>
 							<tr><td colspan="2"><span id="fld9drop">
 							<?php echo "<pre>"; /* print_r($cars_options);*/ echo "</pre>"; ?>
-							Car Select
+							Car Select<br />
 							<span data-balloon="Select a car from the list, then click the Add Car button to add it to the car list for this waybill." data-balloon-pos="right" data-balloon-length="large"> 
 							<select id="fld9sel" name="fld9sel" style="width: 320px;" onChange="var expSt = explodeStr('\,',document.getElementById('fld9sel').value); option0 = new Option(expSt[1],expSt[1]); document.form1.fld21_car.value = expSt[0]; document.form1.fld21_aar.options[0] = option0; document.form1.fld21_aar.options[0].selected = true;">
 							<option value="">--Select Car Number or enter in Field above--</option>
@@ -144,7 +144,8 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 								echo "<option value=\"".$opt_val."\">".$opt_val." - ".substr($cars_options[$c]['desc'],0,25)."</option>";
 								$last_aar = substr($cars_options[$c]['aar_type'],0,1);
 							} ?>
-							</select></span><br />
+							</select></span>
+							<br />
 							<span style="font-size: 8pt;">(Only cars not already allocated to a waybill are shown in the Car Selector!)</span>
 						</td></tr></table><br />
 				</td>

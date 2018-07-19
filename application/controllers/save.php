@@ -62,10 +62,15 @@ class Save extends CI_Controller {
 		$arr_kys = array_keys($this->arr);
 		$i=0;
 		$cntr = 0;
+		//echo "<pre>"; print_r($this->arr); echo "</pre>"; exit();
 		while($i<count($arr_kys)){
 			if(!in_array($arr_kys[$i],$ignore) && strpos("z".$arr_kys[$i],"OpenLayers_Control") < 1){
 				if($cntr > 0){$this->sql .= ", ";}
-				$val_tmp = $this->arr[$arr_kys[$i]];
+				if(is_array($this->arr[$arr_kys[$i]])){
+					$val_tmp = implode("|",$this->arr[$arr_kys[$i]]);
+				}else{
+					$val_tmp = $this->arr[$arr_kys[$i]];
+				}
 				$val_tmp = $this->mricf->strip_spec($val_tmp);
 				if(!isset($this->arr['not_uppercase'])){$val_tmp = strtoupper($val_tmp);}
 				//$this->sql .= "`".$arr_kys[$i]."` = '".strtoupper($this->arr[$arr_kys[$i]])."'";

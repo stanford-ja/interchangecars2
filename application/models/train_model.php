@@ -23,11 +23,12 @@ class Train_model extends CI_Model {
         return $query->result();
     }
 
-    function get_all4RR_Sorted($rr=0,$fld='train_id',$notAuto=0){
-			$aut = ""; if($notAuto == 1){$aut = " AND `auto` < 1 AND LENGTH(`auto`) < 5";}
-        $query = $this->db->query("SELECT * FROM `".$this->tbl."` WHERE (`railroad_id` = '".$rr."' OR `railroad_id` = '0' OR LENGTH(`railroad_id`) < 1)".$aut." ORDER BY `railroad_id` DESC, `".$fld."`");
-        return $query->result();
-    }
+	function get_all4RR_Sorted($rr=0,$fld='train_id',$notAuto=0){
+		$aut = ""; if($notAuto == 1){$aut = " AND `auto` < 1 AND LENGTH(`auto`) < 5";}
+		$ord_by = "`railroad_id` DESC"; if(isset($this->order_by) & strlen($this->order_by) > 0){ $ord_by = $this->order_by; }
+		$query = $this->db->query("SELECT * FROM `".$this->tbl."` WHERE (`railroad_id` = '".$rr."' OR `railroad_id` = '0' OR LENGTH(`railroad_id`) < 1)".$aut." ORDER BY ".$ord_by.", `".$fld."`");
+		return $query->result();
+	}
 
     function get_allNot4RR_Sorted($rr=0,$fld='train_id'){
         $query = $this->db->query("SELECT * FROM `".$this->tbl."` WHERE `railroad_id` != '".$rr."' ORDER BY `railroad_id` DESC, `".$fld."`");

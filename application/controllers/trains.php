@@ -45,6 +45,7 @@ class Trains extends CI_Controller {
 	public function lst(){
 		$this->arr['pgTitle'] .= " - List";
 		$randpos = array();
+		$this->Train_model->order_by = ""; if(isset($_POST['order_by'])){ $this->Train_model->order_by = $_POST['order_by']; }
 		if(isset($_POST['search_for'])){
 			$traindat = (array)$this->Generic_model->get_search_results($_POST['search_for'],$_POST['search_in'],"ichange_trains");
 		}else{$traindat = (array)$this->Train_model->get_all4RR_Sorted($this->arr['rr_sess']);}
@@ -122,6 +123,15 @@ class Trains extends CI_Controller {
 		}
 
 		$this->search_build();
+
+		// List order form
+		$this->dat['list_order'] = array(
+			array('field' => "train_id", 'label' => "Train ID"),
+			array('field' => "loco_num", 'label' => "Motive Power"),
+			array('field' => "origin", 'label' => "Origin"),
+			array('field' => "destination", 'label' => "Destination"),
+			array('field' => "tr_sheet_ord", 'label' => "Train Sheet Order"),
+		);
 
 		// Load views
 		$this->load->view('header', $this->arr);
