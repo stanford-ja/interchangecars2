@@ -22,6 +22,8 @@ class Cars extends CI_Controller {
 		$this->arr['script_file'] = "js/".strtolower(get_class()).".php";
 		if(isset($_COOKIE['rr_sess'])){$this->arr['rr_sess'] = $_COOKIE['rr_sess'];}
 
+		$this->Cars_model->order_by = ""; 
+		if(isset($_POST['order_by'])){ $this->Cars_model->order_by = $_POST['order_by']; }
 	}
 
 	public function index(){
@@ -30,7 +32,6 @@ class Cars extends CI_Controller {
 	
 	public function lst(){
 		$this->arr['pgTitle'] .= " - List";
-		$this->Cars_model->order_by = ""; if(isset($_POST['order_by'])){ $this->Cars_model->order_by = $_POST['order_by']; }
 		$randpos = array();
 		if(isset($_POST['search_for'])){
 			$carsdat = (array)$this->Generic_model->get_search_results($_POST['search_for'],$_POST['search_in'],"ichange_cars");
