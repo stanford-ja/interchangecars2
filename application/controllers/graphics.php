@@ -235,7 +235,7 @@ class Graphics extends CI_Controller {
 		}
 	}
 	
-	public function viewall(){
+	public function wbviewall(){
 		// Display all waybill images as thumbnails
 		
 		$fils = get_filenames($this->filePath);
@@ -250,7 +250,7 @@ class Graphics extends CI_Controller {
 			$im = (array)$this->Generic_model->qry("SELECT * FROM `ichange_wb_img` WHERE `img_name` = '".$fils[$i]."'");
 			//echo "<pre>"; print_r($wb); echo "</pre>";
 			$content['html'] .= "<div style=\"display: inline-block; padding: 5px; text-align: center; vertical-align: top; height: auto; max-width: 200px;\">";
-			$content['html'] .= "<a href=\"javascript:{}\" onclick=\"window.open('".WEB_ROOT."/graphics/view/".str_replace(".jpg","",$fils[$i])."','".$i."','width=600,height=650');\">";
+			$content['html'] .= "<a href=\"javascript:{}\" onclick=\"window.open('".WEB_ROOT."/graphics/wbview/".str_replace(".jpg","",$fils[$i])."','".$i."','width=600,height=650');\">";
 			$content['html'] .= "<img src=\"".$this->webPath.$fils[$i]."\" style=\"height: 100px; margin: 3px;\">";
 			$content['html'] .= "</a>";
 			$content['html'] .= "<br />Uploaded by ".$rr[0]->report_mark;
@@ -280,10 +280,10 @@ class Graphics extends CI_Controller {
 
 
 	
-	public function view($img=''){
+	public function wbview($img=''){
 		// Displays a single image, with info.
 		$img .= ".jpg";
-		echo $img;
+		//echo $img;
 		$tmp = explode("-",str_replace(".jpg","",$img));
 		$wb = (array)$this->Generic_model->qry("SELECT * FROM `ichange_waybill` WHERE `id` = '".$tmp[0]."'");
 		$rr = (array)$this->Generic_model->qry("SELECT `report_mark` FROM `ichange_rr` WHERE `id` = '".$tmp[1]."'");

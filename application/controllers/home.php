@@ -700,7 +700,7 @@ class Home extends CI_Controller {
 		for($i=0;$i<count($this->fils);$i++){
 			if(strpos("Z".$this->fils[$i],$this->waybills[$me]->id."-") > 0){
 				$tmp = explode("-",str_replace(".jpg","",$this->fils[$i]));
-				$fil_html .= "<a href=\"javascript:{}\" onclick=\"window.open('".WEB_ROOT."/graphics/view/".str_replace(".jpg","",$this->fils[$i])."','".$i."','width=600,height=650');\">";
+				$fil_html .= "<a href=\"javascript:{}\" onclick=\"window.open('".WEB_ROOT."/graphics/wbview/".str_replace(".jpg","",$this->fils[$i])."','".$i."','width=600,height=650');\">";
 				$fil_html .= "<img src=\"".WEB_ROOT."/waybill_images/".$this->fils[$i]."\" title=\"Uploaded by ".$this->arr['allRR'][$tmp[1]]->report_mark."\" alt=\"\" style=\"width: 100px; margin: 3px;\">";
 				$fil_html .= "</a>";
 			}

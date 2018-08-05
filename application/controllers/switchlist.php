@@ -216,8 +216,27 @@ class Switchlist extends CI_Controller {
 					//$this->dat['data'][$i]['waybill_num'] .= "<select name=\"sw_order[]\">".$sw_ord_opts."</select>";
 					$this->dat['data'][$i]['waybill_num'] .= "<br /><select name=\"sw_ord_".$i."\" onchange=\"window.location = '".WEB_ROOT."/switchlist/sword/".$id."/".$arrdat[$i]->id."/' + this.value;\">".$sw_ord_opts."</select>";
 				}
+
+				// Detect whether imag for industries exist, andif so create link to allow user to view the image.
+				$origin_name = $arrdat[$i]->indust_origin_name; 
+				if(strpos($arrdat[$i]->indust_origin_name,"]") > 0){
+					$ind_name = explode("]",$arrdat[$i]->indust_origin_name);
+					$ind_name[0] = str_replace("[","",$ind_name[0]);
+					if(file_exists(DOC_ROOT."/indust_images/".$ind_name[0].".jpg")){ 
+						$origin_name = "<span data-balloon=\"Click to view Industry image\" data-balloon-pos=\"right\" data-balloon-length=\"large\"><a href=\"javascript:{}\" onclick=\"window.open('".WEB_ROOT."/indust_images/".$ind_name[0].".jpg"."','','width=300,height=300');\">".$origin_name."</a></span>"; 
+					}
+				}
+				$dest_name = $arrdat[$i]->indust_dest_name;
+				if(strpos($arrdat[$i]->indust_dest_name,"]") > 0){
+					$ind_name = explode("]",$arrdat[$i]->indust_dest_name);
+					$ind_name[0] = str_replace("[","",$ind_name[0]);
+					if(file_exists(DOC_ROOT."/indust_images/".$ind_name[0].".jpg")){ 
+						$dest_name = "<span data-balloon=\"Click to view Industry image\" data-balloon-pos=\"right\" data-balloon-length=\"large\"><a href=\"javascript:{}\" onclick=\"window.open('".WEB_ROOT."/indust_images/".$ind_name[0].".jpg"."','','width=300,height=300');\">".$dest_name."</a></span>"; 
+					}
+				}
+				
 				$this->dat['data'][$i]['cars']				 	= $cars; //$arrdat[$i]->cars;
-				$this->dat['data'][$i]['info']					= "<div style=\"border: 1px solid red; background-color: antiquewhite; padding: 3px; float: right;\">".$arrdat[$i]->status.$map_loc."</div>"."From ".$arrdat[$i]->indust_origin_name."<br />To ".$arrdat[$i]->indust_dest_name."<hr /><em>".$last_prog."</em>";
+				$this->dat['data'][$i]['info']					= "<div style=\"border: 1px solid red; background-color: antiquewhite; padding: 3px; float: right;\">".$arrdat[$i]->status.$map_loc."</div>"."From ".$origin_name."<br />To ".$dest_name."<hr /><em>".$last_prog."</em>";
 				$prog_locs_txt = "";				
 				$prog_locs = (array)$this->Generic_model->qry("SELECT `map_location` FROM `ichange_progress` WHERE LENGTH(`map_location`) > 0 AND `waybill_num` = '".$arrdat[$i]->waybill_num."' ORDER BY date,time");
 				for($pl=0;$pl<count($prog_locs);$pl++){

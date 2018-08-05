@@ -36,6 +36,9 @@ class Trains extends CI_Controller {
 		$this->arr['allRR'][$this->arr['rr_sess']]->show_affil_wb = 1; // Required to get affil locos using affil_ids method! Not required elsewhere in class.
 		$this->my_rr_ids = $this->mricf->affil_ids($this->arr['rr_sess'],$this->arr['allRR']);
 
+		$this->Train_model->order_by = ""; 
+		if(isset($_POST['order_by'])){ $this->Train_model->order_by = $_POST['order_by']; }
+
 	}
 
 	public function index(){
@@ -45,7 +48,6 @@ class Trains extends CI_Controller {
 	public function lst(){
 		$this->arr['pgTitle'] .= " - List";
 		$randpos = array();
-		$this->Train_model->order_by = ""; if(isset($_POST['order_by'])){ $this->Train_model->order_by = $_POST['order_by']; }
 		if(isset($_POST['search_for'])){
 			$traindat = (array)$this->Generic_model->get_search_results($_POST['search_for'],$_POST['search_in'],"ichange_trains");
 		}else{$traindat = (array)$this->Train_model->get_all4RR_Sorted($this->arr['rr_sess']);}
