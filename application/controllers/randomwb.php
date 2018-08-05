@@ -133,8 +133,17 @@ class Randomwb extends CI_Controller {
               'id'          => 'indust_origin_name',
               'value'       => @$this->dat['data'][0]->indust_origin_name,
               'maxlength'   => '50',
-              'size'        => '50'
+              'size'        => '50',
+              'onKeyUp'		=> "industAutoComp(this.value,'ichange_indust','indust_origin_name','indust_origin_name',1)",
+              'onfocus'		=> "showEle('indust_origin_name_span');",
+              'onblur'		=> "hideEle('orig_ind_info');"
 			)
+		);
+
+		$this->field_defs[] =  array(
+			'type' => "statictext", 'label' => '', 
+              'value'       => "<div id=\"indust_origin_name_span\" style=\"display: none; border: 1px solid black; background-color: yellow; font-size: 9pt; padding: 5px; max-height: 100px; overflow: auto;\"></div>
+											<div id=\"indust_origin_name_indDescDiv\" style=\"display: none;\"></div>"
 		);
 
 		$this->field_defs[] =  array(
@@ -143,8 +152,17 @@ class Randomwb extends CI_Controller {
               'id'          => 'indust_dest_name',
               'value'       => @$this->dat['data'][0]->indust_dest_name,
               'maxlength'   => '50',
-              'size'        => '50'
+              'size'        => '50',
+              'onKeyUp'		=> "industAutoComp(this.value,'ichange_indust','indust_dest_name','indust_dest_name',1)",
+              'onfocus'		=> "showEle('indust_dest_name_span');",
+              'onblur'		=> "hideEle('dest_ind_info');"
 			)
+		);
+
+		$this->field_defs[] =  array(
+			'type' => "statictext", 'label' => '', 
+              'value'       => "<div id=\"indust_dest_name_span\" style=\"display: none; border: 1px solid black; background-color: yellow; font-size: 9pt; padding: 5px; max-height: 100px; overflow: auto;\"></div>
+											<div id=\"indust_dest_name_indDescDiv\" style=\"display: none;\"></div>"
 		);
 
 		$this->field_defs[] =  array(
