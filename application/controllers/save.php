@@ -46,17 +46,24 @@ class Save extends CI_Controller {
 
 	public function index(){
 		$this->arr = $_POST;
+		$this->message = "";
 		$this->load->model('Generic_model','',TRUE);
 		$this->qry_build();
 		//echo $this->sql."<br />";
 		$this->Generic_model->change($this->sql);
+		if(isset($this->arr['filepath']) && isset($this->arr['save_as_filename'])){
+			$this->img_upload(); 
+		}
+		//if(strlen($this->message) > 0){ 
+			$this->session->set_flashdata('Message', $this->message); 
+		//}
 		header('Location:'.$this->arr['tbl']);
 	}
 	
 	function qry_build(){
 		// Builds SQL query string from $this->arr keys / values
 		$this->sql = "";
-		$ignore = array('tbl','id','submit', 'not_uppercase'); // 'not_uppercase', if exists, disables conversion of strings to UPPER CASE!
+		$ignore = array('tbl','id','submit', 'not_uppercase','userfile','filepath','save_as_filename','filemaxdim'); // 'not_uppercase', if exists, disables conversion of strings to UPPER CASE!
 		if($this->arr['tbl'] == "rr" && strlen($this->arr['pw']) < 1){ unset($this->arr['pw']); }
 		elseif($this->arr['tbl'] == "rr"){ $this->arr['pw'] = md5($this->arr['pw']); }
 		$arr_kys = array_keys($this->arr);
@@ -85,6 +92,37 @@ class Save extends CI_Controller {
 
 	function last_act_update(){
 		$this->Generic_model->change("UPDATE `ichange_rr` SET `last_act` = '".date('U')."' WHERE `id` = '".@$_COOKIE['rr_sess']."'");		
+	}
+	
+	function img_upload(){
+		// Saves uploaded file selected in waybill() method.
+		// Requires...
+		// $this->arr['save_as_filename'] which the actual file name incl. extension (eg, picture.jpg)
+		// $this->arr['filepath'] which is the path to save $this->arr['save_as_filename'] in (eg, /var/www/html/img/).
+		// Optional...
+		// $this->arr['filemaxdim'] which is the maximum length of the longest side in pixels (eg, 500).
+
+		$this->uconfig = array();
+		$this->uconfig['upload_path'] = DOC_ROOT.$this->arr['filepath'];
+		$this->uconfig['allowed_types'] = 'jpg';
+		$this->uconfig['file_name'] = $this->arr['save_as_filename'];
+		$this->uconfig['overwrite'] = true;
+		$this->uconfig['max_size']	= '512';
+		//$this->uconfig['max_width'] = '350';
+		//$this->uconfig['max_height'] = '350';
+		$this->load->library('upload', $this->uconfig);
+		//$this->upload->initialize($this->uconfig);
+
+		if(!$this->upload->do_upload()){
+			//echo "There was a problem uploading the file!<br /><a href=\"".WEB_ROOT."/graphics/waybill/".$p['id']."\">Try Again!</a><br />";
+			//echo $this->upload->display_errors()."<br />";
+			$this->message = "There was a problem uploading the file! ".$this->upload->display_errors();
+		}else	{
+			if(!isset($this->arr['filemaxdim'])){ $this->arr['filemaxdim'] = 500; }
+			$ex = "convert ".DOC_ROOT.$this->arr['filepath'].$this->uconfig['file_name']." -resize ".$this->arr['filemaxdim']." ".DOC_ROOT.$this->arr['filepath'].$this->uconfig['file_name'];
+			shell_exec($ex);
+			$this->message = "Industry graphic <strong>".$this->uconfig['file_name']."</strong> uploaded successfully.";
+		}
 	}
 
 }

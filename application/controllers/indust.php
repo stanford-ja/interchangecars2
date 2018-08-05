@@ -38,8 +38,8 @@ class Indust extends CI_Controller {
 			$industdat = (array)$this->Indust_model->get_all4RR_Sorted($this->arr['rr_sess']);
 		}
 		//$this->dat = array();
-		$this->dat['fields'] 			= array('id', 'indust_name', 'town', 'desc', 'rr', 'freight_in', 'freight_out','modified');
-		$this->dat['field_names'] 		= array("ID", "Name", "Town", "Desc", "RR", "Freight In", "Freight Out","Added/Modified");
+		$this->dat['fields'] 			= array('id', 'image', 'indust_name', 'town', 'desc', 'rr', 'freight_in', 'freight_out','modified');
+		$this->dat['field_names'] 		= array("ID", "Image", "Name", "Town", "Desc", "RR", "Freight In", "Freight Out","Added/Modified");
 		$this->dat['options']			= array(
 				'Edit' => "indust/edit/"
 			); // Paths to options method, with trailling slash!
@@ -50,6 +50,7 @@ class Indust extends CI_Controller {
 		
 		for($i=0;$i<count($industdat);$i++){
 			$this->dat['data'][$i]['id'] 						= $industdat[$i]->id;
+			$this->dat['data'][$i]['image']			 	= ""; if(file_exists(DOC_ROOT."/indust_images/".$industdat[$i]->id.".jpg")){ $this->dat['data'][$i]['image'] = "<img src=\"".WEB_ROOT."/indust_images/".$industdat[$i]->id.".jpg"."\" style=\"height: 70px;\" />"; }
 			$this->dat['data'][$i]['indust_name']			 	= $industdat[$i]->indust_name;
 			$this->dat['data'][$i]['town']			 	= $industdat[$i]->town;
 			$this->dat['data'][$i]['desc'] 					= "<div style=\"overflow: auto; max-height: 50px;\">".$industdat[$i]->desc."</div>";
@@ -121,6 +122,7 @@ class Indust extends CI_Controller {
 	public function setFieldSpecs(){
 		// Sets specific field definitions for the controller being used.
 		$this->dat['fields'] = array();
+		$filepath = "/indust_images/";
 		
 		// Add custom model calls / queries under this line...
 		//$this->load->model('Aar_model', '', TRUE);
@@ -138,6 +140,17 @@ class Indust extends CI_Controller {
 		// Add form and field definitions specific to this controller under this line... 
 		$this->dat['hidden'] = array('tbl' => 'indust', 'id' => @$this->dat['data'][0]->id);
 		$this->dat['form_url'] = "../save";
+		
+		if(isset($this->dat['data'][0]->id)){
+			$img_name = $filepath.@$this->dat['data'][0]->id.".jpg";
+			if(file_exists(DOC_ROOT.$img_name)){
+				$this->field_defs[] =  array(
+					'type' => "statictext", 'label' => 'Industry Image',
+					'value' => '<div style="float:right;"><img src="'.WEB_ROOT.$img_name.'" style="width: 350px;" /></div>'
+				);			
+			}
+		}
+
 		$this->field_defs[] =  array(
 			'type' => "textarea", 'label' => 'Industry Name', 'def' => array(
               'name'        => 'indust_name',
@@ -219,6 +232,16 @@ class Indust extends CI_Controller {
               'cols'        => '50'
 			)
 		);
+
+		if(isset($this->dat['data'][0]->id)){
+			$this->field_defs[] =  array(
+				'type' => "statictext", 'label' => 'Industry Image Upload (jpg only!)',
+				'value' => '<input type="file" name="userfile" value="" />
+					<input type="hidden" name="save_as_filename" value="'.$this->dat['data'][0]->id.'.jpg" />
+					<input type="hidden" name="filepath" value="'.$filepath.'" />
+					<input type="hidden" name="filemaxdim" value="250" />'
+			);
+		}
 
 	}
 

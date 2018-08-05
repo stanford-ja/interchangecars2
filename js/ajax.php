@@ -213,7 +213,7 @@ function industAutoComp($str,$tbl,$fld,$sct = NULL,$sr = NULL){
 
 		$op_info = trim($res['op_info']); $show_indDescDiv = "";
 		if(strlen($op_info) > 0){$show_indDescDiv = " document.getElementById('".$sct."_indDescDiv').style.display = 'block';";}		
-		$lst .= "<a href=\"javascript:{}\" class=\"autocompletetxt\" style=\"text-decoration: none;\" onClick=\"document.getElementById('".$sct."').value = '".trim($res['indust_name'])."'; document.getElementById('".$sct."_indDesc').value = '".trim($res['op_info'])."'; document.getElementById('".$fld."_span').style.display = 'none';".$show_indDescDiv."\">".$res['indust_name']."</a>&nbsp;".$autoCompNote."&nbsp(".$rr_mark.")<br />";
+		$lst .= "<a href=\"javascript:{}\" class=\"autocompletetxt\" style=\"text-decoration: none;\" onClick=\"document.getElementById('".$sct."').value = '[".$res['id']."] ".trim($res['indust_name'])."'; document.getElementById('".$sct."_indDesc').value = '".trim($res['op_info'])."'; document.getElementById('".$fld."_span').style.display = 'none';".$show_indDescDiv."\">".$res['indust_name']."</a>&nbsp;".$autoCompNote."&nbsp(".$rr_mark.")<br />";
 		if(strlen($res['desc']) > 1){$lst .= "<div style=\"display: block; font-size:8pt; max-width: 600px; color: #333\">&nbsp;&nbsp;&nbsp;".$res['desc']."</div>";}
 	}
 	$sql = "SELECT * FROM `ichange_ind40k` WHERE `industry` LIKE '%".$str."%' OR `city` LIKE '%".$str."%' OR `state` LIKE '%".$str."%' OR `commodity` LIKE '%".$str."%' LIMIT 9";

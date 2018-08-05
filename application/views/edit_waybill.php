@@ -196,7 +196,7 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 				$fils = get_filenames(DOC_ROOT."/waybill_images/");
 				for($i=0;$i<count($fils);$i++){
 					if(strpos("Z".$fils[$i],$id."-") > 0){ // ".WEB_ROOT."/waybill_images/".$fils[$i]."
-						$fil_html .= "<a href=\"javascript:{}\" onclick=\"window.open('".WEB_ROOT."/graphics/view/".str_replace(".jpg","",$fils[$i])."','".$i."','width=500,height=650');\">";
+						$fil_html .= "<a href=\"javascript:{}\" onclick=\"window.open('".WEB_ROOT."/graphics/wbview/".str_replace(".jpg","",$fils[$i])."','".$i."','width=500,height=650');\">";
 						$fil_html .= "<img src=\"".WEB_ROOT."/waybill_images/".$fils[$i]."\" style=\"height: 80px; margin: 3px;\">";
 						$fil_html .= "</a>";
 					}

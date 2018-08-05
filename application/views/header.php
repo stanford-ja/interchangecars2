@@ -249,3 +249,4 @@
 	<?php echo $pgTitle; ?>
 	</h2>
 	<?php } ?>
+	<?php if(isset($message) && strlen($message) > 0){ echo "<div style=\"background-color: yellow; padding: 5px; border: 1px solid red; text-align: center; font-size: 14pt; margin: 3px; border-radius: 5px;\">Message: ".$message."</div>"; } ?>

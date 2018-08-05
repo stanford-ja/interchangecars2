@@ -3,4 +3,5 @@ NOT*.jpg
 car_images/*.*
 uploaded_files/*.*
 waybill_images/*.jpg
+indust_images/*.jpg
 *.sql
