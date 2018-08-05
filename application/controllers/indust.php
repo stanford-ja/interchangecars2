@@ -145,8 +145,8 @@ class Indust extends CI_Controller {
 			$img_name = $filepath.@$this->dat['data'][0]->id.".jpg";
 			if(file_exists(DOC_ROOT.$img_name)){
 				$this->field_defs[] =  array(
-					'type' => "statictext", 'label' => 'Industry Image',
-					'value' => '<div style="float:right;"><img src="'.WEB_ROOT.$img_name.'" style="width: 350px;" /></div>'
+					'type' => "statictext", 'label' => '',
+					'value' => '<div style="float:right;">Industry Image<br /><img src="'.WEB_ROOT.$img_name.'" style="width: 270px;" /></div>'
 				);			
 			}
 		}
