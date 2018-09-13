@@ -353,7 +353,7 @@ class Waybill extends CI_Controller {
 		$fld8_t = explode("T",$fld8);
 		$ts1 = "SELECT `waybill_num`,`id` FROM `ichange_waybill` WHERE `waybill_num` LIKE '".$fld8."T%' AND `waybill_num` != '".$fld8."'";
 		$tq1 = (array)$this->Generic_model->qry($ts1);
-		//while($tr1 = mysql_fetch_array($tq1)){
+		//while($tr1 = mysqli_fetch_array($tq1)){
 		for($t=0;$t<count($tq1);$t++){
 			$twbs .=  "&nbsp;".anchor("../waybill/edit/".$tq1[$t]->id, $tq1[$t]->waybill_num, 'title="'.$tq1[$t]->waybill_num.'"'); //<a href=\"../waybill/edit/".$tr1['waybill_num']."\">".$tr1['waybill_num']."</a>";
 		}
@@ -407,9 +407,9 @@ class Waybill extends CI_Controller {
 		$r3 = (array)$this->Waybill_model->get_allTranshipped($wb[0]->waybill_num);
 		$flds_arr = $this->Waybill_model->get_fld_names();
 		/*
-		$q3 = mysql_query($s3);
+		$q3 = mysqli_query($s3);
 		$wb_arr = array();
-		while($r3 = mysql_fetch_array($q3)){$wb_arr[] = $r3['waybill_num'];}
+		while($r3 = mysqli_fetch_array($q3)){$wb_arr[] = $r3['waybill_num'];}
 		$t_wb = $id; if(strpos($t_wb,"T") < 1){$t_wb = $id."T";}
 		for($i3=1;$i3<10;$i3++){
 			if(!in_array($t_wb.$i3, $wb_arr)){
@@ -431,8 +431,8 @@ class Waybill extends CI_Controller {
 		//$s1 = "SELECT * FROM `ichange_waybill` WHERE `waybill_num` = '".$id."'";
 		//$r1 = (array)$this->Generic_model->qry($s1);
 		/*
-		$q1 = mysql_query($s1);
-		$r1 = mysql_fetch_assoc($q1);
+		$q1 = mysqli_query($s1);
+		$r1 = mysqli_fetch_assoc($q1);
 		$r1['waybill_num'] = $t_wb;
 		$r1['notes'] = "";
 		$r1['date'] = date('Y-m-d');
@@ -513,7 +513,7 @@ class Waybill extends CI_Controller {
 			if($i2 > 1){$s2 .= ", ";}
 			$s2 .= "`".$r1_kys[$i2]."` = '".$r1[$r1_kys[$i2]]."'";
 		}
-		//mysql_query($s2);
+		//mysqli_query($s2);
 		$this->Generic_model->change($s2);
 		// End create new waybill
 
@@ -530,7 +530,7 @@ class Waybill extends CI_Controller {
 		$json_prog = json_encode($r1_prog);
 		//$s4 = "UPDATE `ichange_waybill` SET `progress` = '".$json_prog."', `status` = 'UNLOADED', `lading` = 'MT' WHERE `waybill_num` = '".$id."'";
 		$s4 = "UPDATE `ichange_waybill` SET `progress` = '".$json_prog."', `status` = 'UNLOADED', `lading` = 'MT' WHERE `id` = '".$id."'";
-		//mysql_query($s4);
+		//mysqli_query($s4);
 		$this->Generic_model->change($s4);
 		// End Update Orig Waybill
 

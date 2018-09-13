@@ -133,10 +133,10 @@
 			<?php if($q_select == 1){
 				echo "Quick Select:";
 				$q1s = "SELECT `ichange_trains`.`train_id` FROM `ichange_trains` WHERE `ichange_trains`.`railroad_id` = '".$rr_sess."' ORDER BY `ichange_trains`.`train_id`";
-				$q1q = mysql_query($q1s);
+				$q1q = mysqli_query($q1s);
 				echo "<select name=\"qs1\" onChange=\"window.location = 'view.php?type=SWITCHLIST&id=' + this.value;\" style=\"font-size: 7pt;\">";
 				echo "<option value=\"\">S/list for train</option>";
-				while($q1r = mysql_fetch_array($q1q)){
+				while($q1r = mysqli_fetch_array($q1q)){
 					$tr_cntr = @q_cntr("ichange_waybill", "`train_id` = '".$q1r['train_id']."' AND `status` != 'CLOSED' AND `train_id` != 'NOT ALLOCATED'");
 					$wb_on_tr = ""; $sw_styl = "";
 					if($tr_cntr > 0){
@@ -148,25 +148,25 @@
 				echo "</select>&nbsp;";
 				
 				$q2s = "SELECT `status`,`waybill_num` FROM `ichange_waybill` WHERE `status` != 'CLOSED' AND (`rr_id_to` = '".$rr_sess."' OR `rr_id_from` = '".$rr_sess."' OR `rr_id_handling` = '".$rr_sess."' OR `routing` LIKE '%".$sess_option."%') ORDER BY `waybill_num`";
-				$q2q = mysql_query($q2s);
+				$q2q = mysqli_query($q2s);
 				echo "<select name=\"qs2\" onChange=\"window.location = 'edit.php?type=WAYBILL&action=EDIT&id=' + this.value;\" style=\"font-size: 7pt; width: 100px;\">";
 				echo "<option value=\"\">Edit Waybill</option>";
-				while($q2r = mysql_fetch_array($q2q)){echo "<option value=\"".$q2r['waybill_num']."\">".$q2r['waybill_num']." - ".$q2r['status']."</option>";}
+				while($q2r = mysqli_fetch_array($q2q)){echo "<option value=\"".$q2r['waybill_num']."\">".$q2r['waybill_num']." - ".$q2r['status']."</option>";}
 				echo "</select>&nbsp;";
 
 				$q4s = "SELECT `id`,`indust_name` FROM `ichange_indust` WHERE `rr` = '".$rr_sess."' ORDER BY `indust_name`";
-				$q4q = mysql_query($q4s);
+				$q4q = mysqli_query($q4s);
 				echo "<select name=\"qs2\" onChange=\"window.location = 'manage.php?view=indust&trans=EDIT&id=' + this.value;\" style=\"font-size: 7pt; width: 100px;\">";
 				echo "<option value=\"\">Industry</option>";
-				while($q4r = mysql_fetch_array($q4q)){echo "<option value=\"".$q4r['id']."\">".substr($q4r['indust_name'],0,45)."</option>";}
+				while($q4r = mysqli_fetch_array($q4q)){echo "<option value=\"".$q4r['id']."\">".substr($q4r['indust_name'],0,45)."</option>";}
 				echo "</select>&nbsp;";
 			}
 			?>
 
 			<?php if(isset($_COOKIE['rr_admin'])){
 				$rr_adm_lst = "";
-				$q_rr_adm = mysql_query("SELECT `id`,`report_mark` FROM `ichange_rr` ORDER BY `report_mark`");
-				while($r_rr_adm = mysql_fetch_array($q_rr_adm)){
+				$q_rr_adm = mysqli_query("SELECT `id`,`report_mark` FROM `ichange_rr` ORDER BY `report_mark`");
+				while($r_rr_adm = mysqli_fetch_array($q_rr_adm)){
 					$rr_adm_lst .= "<option value=\"".$r_rr_adm['id']."\">".$r_rr_adm['report_mark']."</option> ";
 				}
 				echo "&nbsp;Admin Direct Links:&nbsp;<select name=\"jumpTo\" onchange=\"window.location = 'index.php?rr_sess=' + this.value;\" style=\"font-size: 7pt;\"><option selected=\"selected\" value=\"0\">Railroad</option>".$rr_adm_lst."</select>";
@@ -188,7 +188,7 @@
 			<?php if(isset($_COOKIE['_mricfadmin']) && isset($this->Generic_model)){
 				$rr_adm_lst = "<select name=\"adm_lst\" onchange=\"window.location = '".WEB_ROOT."/index.php/login/switch_to/' + this.value;\"><option selected=\"selected\" value=\"0\">Select</option>";
 				$q_rr_adm = $this->Generic_model->qry("SELECT `id`,`report_mark` FROM `ichange_rr` ORDER BY `report_mark`");
-				//while($r_rr_adm = mysql_fetch_array($q_rr_adm)){
+				//while($r_rr_adm = mysqli_fetch_array($q_rr_adm)){
 				for($rrid=0;$rrid<count($q_rr_adm);$rrid++){
 					//$rr_adm_lst .= "<a href=\"".WEB_ROOT."/index.php/login/switch_to/".$q_rr_adm[$rrid]->id."\">".$q_rr_adm[$rrid]->report_mark."</a> ";
 					$rr_adm_lst .= "<option value=\"".$q_rr_adm[$rrid]->id."\">".$q_rr_adm[$rrid]->report_mark."</option>";

@@ -170,9 +170,9 @@ function qry($tbl, $data, $ky, $fld){
 	// $ret = Returned value of the function.
 	$sql_com = "SELECT * FROM `".$tbl."` WHERE `".$ky."` = '".$data."' LIMIT 1";
 	/*
-	$dosql_com = mysql_query($sql_com);
+	$dosql_com = mysqli_query($sql_com);
 	$ret = "";
-	while($resultcom = mysql_fetch_array($dosql_com)){			
+	while($resultcom = mysqli_fetch_array($dosql_com)){			
 		$ret = $resultcom[$fld];		
 	}
 	*/
@@ -195,8 +195,8 @@ function q_cntr($tbl, $where){
 	$q = $sqli->query($sql_com);
 	$ret = $sqli->num_rows($q);
 	/*
-	$dosql_com = mysql_query($sql_com);
-	$ret = mysql_num_rows($dosql_com);
+	$dosql_com = mysqli_query($sql_com);
+	$ret = mysqli_num_rows($dosql_com);
 	*/ 
 	return $ret;
 }
@@ -215,9 +215,9 @@ function rr_ichange_lst($curr_stat,$retArr=0,$opts=array()){
 	$sql = "SELECT * FROM `ichange_rr`".$whr.$ord_by;
 	$sqli = $this->sqli_instance();
 	$qry = $sqli->query($sql);
-	//$qry = mysql_query($sql);
+	//$qry = mysqli_query($sql);
 	if($retArr == 0){$lst = "";}else{$lst = array();}
-	//while($res = mysql_fetch_array($qry)){
+	//while($res = mysqli_fetch_array($qry)){
 	while($res = $qry->fetch_array()){
 		$report_mark = $res['report_mark'];
 		$interchanges = $res['interchanges'];
@@ -337,8 +337,8 @@ function rrOpts(){
 function rrArray($rr=0,$rr_rep_mark = ""){
 	// used to return all railroad for rr id in $rr variables in an associative array
 	$s = "SELECT * FROM `ichange_rr` WHERE `id` = '".$rr."'";
-	$q = mysql_query($s);
-	$r = mysql_fetch_array($q);
+	$q = mysqli_query($s);
+	$r = mysqli_fetch_array($q);
 	return $r;
 }
 */
@@ -416,8 +416,8 @@ function trainsArray($opts=array()){
 	$ret = "";
 	$arr = array();
 	while($r = $q->fetch_assoc()){
-	//$q = mysql_query($s);
-	//while($r = mysql_fetch_assoc($q)){
+	//$q = mysqli_query($s);
+	//while($r = mysqli_fetch_assoc($q)){
 		//$arr[$r['id']] = $r;
 		$arr[] = $r;
 	}
@@ -436,7 +436,7 @@ function carStatusUpd($carArr){
 	for($i=0;$i<count($cars);$i++){
 		if(strlen($cars[$i]) > 0 && strtoupper($rarr) != "UNDEFINED"){
 			$sql = "UPDATE `ichange_cars` SET `location` = '".$locn."', `lading` = '".$lading."' WHERE `car_num` = '".$cars[$i]."' AND `rr` IN (".$rarr.")";
-			//mysql_query($sql);
+			//mysqli_query($sql);
 			$sqli->query($sql);
 		}
 	}
@@ -654,7 +654,7 @@ function progWB($id=0){
 		$sql_p = "SELECT `progress` FROM `ichange_waybill` WHERE `id` = '".$id."'";
 		$sqli = $this->sqli_instance();
 		$q = $sqli->query($sql_p);
-		//$res_p = mysql_fetch_array($qry_p);
+		//$res_p = mysqli_fetch_array($qry_p);
 		$res_p = $q->fetch_array();	
 		$prog = json_decode($res_p['progress'], true);
 		if(!is_array($prog)){$prog = array();}
@@ -666,7 +666,7 @@ function carsWB($id=0){
 		$sql_p = "SELECT `cars` FROM `ichange_waybill` WHERE `id` = '".$id."'";
 		$sqli = $this->sqli_instance();
 		$q = $sqli->query($sql_p);
-		//$res_p = mysql_fetch_array($qry_p);
+		//$res_p = mysqli_fetch_array($qry_p);
 		$res_p = $q->fetch_array();	
 		$cars = json_decode($res_p['cars'], true);
 		if(!is_array($cars)){$cars = array();}

@@ -17,8 +17,8 @@ $jsonArr = "";
 if(!isset($_REQUEST['submit'])){
 	// Initial opener
 	$sql = "SELECT `home_disp_v2` FROM `ichange_rr` WHERE `id` = '".$_COOKIE['rr_sess']."'";
-	$qry = mysql_query($sql);
-	$res = mysql_fetch_array($qry);
+	$qry = mysqli_query($sql);
+	$res = mysqli_fetch_array($qry);
 	$jsonArr = $res['home_disp_v2'];
 }else{
 	// Update of forms and creating of JSON array.

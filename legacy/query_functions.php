@@ -13,9 +13,9 @@ VALUES OF A QUERY ACCORDING TO THE FUNCTION'S OPTIONS.
 		// $fld = Field name to return value of.
 		// $ret = Returned value of the function.
 		$sql_com = "SELECT * FROM `".$tbl."` WHERE `".$ky."` = '".$data."' LIMIT 1";
-		$dosql_com = mysql_query($sql_com);
+		$dosql_com = mysqli_query($sql_com);
 		$ret = "";
-		while($resultcom = mysql_fetch_array($dosql_com)){			
+		while($resultcom = mysqli_fetch_array($dosql_com)){			
 			$ret = $resultcom[$fld];		
 		}
 		
@@ -26,9 +26,9 @@ VALUES OF A QUERY ACCORDING TO THE FUNCTION'S OPTIONS.
 		// Fields the same as for qry() above,
 		// $other = any remaining clauses to include (eg, LIMIT and ORDER BY **NOT WHERE!**).
 		$sql_com = "SELECT * FROM `".$tbl."` WHERE `".$ky."` = '".$data."' ".$other;
-		$dosql_com = mysql_query($sql_com);
+		$dosql_com = mysqli_query($sql_com);
 		$ret = "";
-		while($resultcom = mysql_fetch_array($dosql_com)){			
+		while($resultcom = mysqli_fetch_array($dosql_com)){			
 			$ret = $resultcom[$fld];				
 		}
 		return $ret;
@@ -39,8 +39,8 @@ VALUES OF A QUERY ACCORDING TO THE FUNCTION'S OPTIONS.
 		// $where is the WHERE portion of the query. eg. WHERE `id` = '27'. The `id` = '27' would be the string in $where.
 		$sql_com = "SELECT `id` FROM `".$tbl."`";
 		if(strlen($where) > 0){$sql_com = $sql_com." WHERE ".$where;}
-		$dosql_com = mysql_query($sql_com);
-		$ret = mysql_num_rows($dosql_com); 
+		$dosql_com = mysqli_query($sql_com);
+		$ret = mysqli_num_rows($dosql_com); 
 		return $ret;
 	}
 
@@ -56,9 +56,9 @@ function rr_ichange_lst($curr_stat,$retArr=0,$opts=array()){
 	$ord_by = " ORDER BY `report_mark`";
 	if(isset($opts['ordby'])){$ord_by = " ORDER BY ".$opts['ordby'];}
 	$sql = "SELECT * FROM `ichange_rr`".$whr.$ord_by;
-	$qry = mysql_query($sql);
+	$qry = mysqli_query($sql);
 	if($retArr == 0){$lst = "";}else{$lst = array();}
-	while($res = mysql_fetch_array($qry)){
+	while($res = mysqli_fetch_array($qry)){
 		$report_mark = $res['report_mark'];
 		$interchanges = $res['interchanges'];
 		$interchanges = str_replace("; ", ";", $interchanges);
@@ -83,8 +83,8 @@ function rr_ichange_lst($curr_stat,$retArr=0,$opts=array()){
 function affil($rr=0){
 	if($rr < 1){return "";}
 	$af_sql = "SELECT `affiliates`,`id` FROM `ichange_rr` WHERE `id` = '".$rr."' LIMIT 1";
-	$af_qry = mysql_query($af_sql);
-	$af_res = mysql_fetch_array($af_qry);
+	$af_qry = mysqli_query($af_sql);
+	$af_res = mysqli_fetch_array($af_qry);
 	$af_lst = explode(";",str_replace(" ","",$af_res['affiliates']));
 	if(strlen($af_res['affiliates']) > 0){
 		$af_ret = ""; //"<span style=\"font-size: 10pt;\">Affiliated RRs: </span>";
@@ -106,8 +106,8 @@ function rrOpts($c=""){
 	// Generates a set of Options tags for Railroads, with $c as the selected value.
 	$o = "";
 	$s = "SELECT `id`,`report_mark` FROM `ichange_rr` WHERE `inactive` = 0 OR `common_flag` = 1 ORDER BY `report_mark`";
-	$q = mysql_query($s);
-	while($r = mysql_fetch_array($q)){
+	$q = mysqli_query($s);
+	while($r = mysqli_fetch_array($q)){
 		$sel = "";
 		if($c == $r['id']){$sel = " selected=\"selected\" ";}
 		$o .= "<option value=\"".$r['id']."\"".$sel.">".$r['report_mark']."</option>";
@@ -118,8 +118,8 @@ function rrOpts($c=""){
 function rrArray($rr=0,$rr_rep_mark = ""){
 	// used to return all railroad for rr id in $rr variables in an associative array
 	$s = "SELECT * FROM `ichange_rr` WHERE `id` = '".$rr."'";
-	$q = mysql_query($s);
-	$r = mysql_fetch_array($q);
+	$q = mysqli_query($s);
+	$r = mysqli_fetch_array($q);
 	return $r;
 }
 
@@ -128,9 +128,9 @@ function rrFullArr($srt="rr_name"){
 	$s = "SELECT `ichange_rr`.* FROM `ichange_rr` ORDER BY `ichange_rr`.`".$srt."`";
 	//$s = "SELECT `ichange_rr`.*, COUNT(`ichange_waybill`.`id`) AS `wb_cntr` FROM `ichange_rr`,`ichange_waybill` ORDER BY `ichange_rr`.`".$srt."`";
 	//$s = "SELECT `ichange_rr`.*, COUNT(`ichange_waybill`.`id`) AS `wb_cntr` FROM `ichange_rr` LEFT JOIN `ichange_waybill` ON `ichange_waybill`.`rr_id_handling` = `ichange_rr`.`id` WHERE `ichange_waybill`.`status` != 'CLOSED' ORDER BY `ichange_rr`.`".$srt."`";
-	$q = mysql_query($s);
+	$q = mysqli_query($s);
 	$arr = array();
-	while($r = mysql_fetch_assoc($q)){
+	while($r = mysqli_fetch_assoc($q)){
 		$rtmp = $r['id'];
 		$r['pw'] = "[PRIVATE]";
 		$arr[$rtmp] = $r;
@@ -178,9 +178,9 @@ function trainsArray($opts=array()){
 	// Builds a multi-dim assoc array
 	$ord_by = "id"; if(isset($opts['sort'])){$ord_by = $opts['sort'];}
 	$s = "SELECT * FROM `ichange_trains` ORDER BY `".$ord_by."`";
-	$q = mysql_query($s);
+	$q = mysqli_query($s);
 	$arr = array();
-	while($r = mysql_fetch_assoc($q)){
+	while($r = mysqli_fetch_assoc($q)){
 		//$arr[$r['id']] = $r;
 		$arr[] = $r;
 	}
@@ -195,9 +195,9 @@ function carArray($rr){
 			'{car_num}' => array($r)
 	*/
 	$s = "SELECT * FROM `ichange_cars` WHERE `rr` = '".$rr."'";
-	$q = mysql_query($s);
+	$q = mysqli_query($s);
 	$arr = array();
-	while($r = mysql_fetch_array($q)){
+	while($r = mysqli_fetch_array($q)){
 		$rtmp = $r['car_num'];
 		$arr[$rtmp] = $r;
 	}
@@ -214,7 +214,7 @@ function carStatusUpd($carArr){
 	for($i=0;$i<count($cars);$i++){
 		if(strlen($cars[$i]) > 0){
 			$sql = "UPDATE `ichange_cars` SET `location` = '".$locn."', `lading` = '".$lading."' WHERE `car_num` = '".$cars[$i]."' AND `rr` IN (".$rarr.")";
-			mysql_query($sql);
+			mysqli_query($sql);
 		}
 	}
 }
@@ -229,8 +229,8 @@ function autoSav($arr){
 
 	$trsql = "SELECT `train_desc`,`destination`, `origin`, `auto` FROM `ichange_trains` WHERE `train_id` = '".$arr['train_id']."'";
 	//echo $trsql."";
-	$qry = mysql_query($trsql);
-	$res = mysql_fetch_array($qry);
+	$qry = mysqli_query($trsql);
+	$res = mysqli_fetch_array($qry);
 	$t_qry = $res['train_desc'];
 	$date_now_t = date('Y-m-d');
 	$date_now = strtotime($date_now_t);
@@ -283,7 +283,7 @@ function autoSav($arr){
 		// Getting keys for json array and loop through results and add to ichange_auto table.
 		$mdKys = @array_keys($autoArr);
 		//for($u=0;$u<count($mdKys);$u++){
-		mysql_query("DELETE FROM `ichange_auto` WHERE `waybill_num` = '".$arr['waybill_num']."'");
+		mysqli_query("DELETE FROM `ichange_auto` WHERE `waybill_num` = '".$arr['waybill_num']."'");
 		//for($u=$p;$u<count($mdKys);$u++){
 		for($u=0;$u<count($mdKys);$u++){
 			$nxt_date_tmp = $date_now;
@@ -299,7 +299,7 @@ function autoSav($arr){
 					`waybill_num` = '".$arr['waybill_num']."', 
 					`description` = '".$arr['description']."'";
 				//echo $sql_cro."<hr />";
-				mysql_query($sql_cro);
+				mysqli_query($sql_cro);
 			}
 		}
 
@@ -318,7 +318,7 @@ function autoSav($arr){
 		//'exit_location' => strtoupper($autoSav['entry_waypoint'])
 		$jprog = json_encode($prog);
 		$sql_prog_auto = "UPDATE `ichange_waybill` SET `progress` = '".$jprog."' WHERE `waybill_num` = '".$arr['waybill_num']."'";
-		mysql_query($sql_prog_auto);
+		mysqli_query($sql_prog_auto);
 	}
 	if(isset($arr['unload'])){
 		$sql_cro = "INSERT INTO `ichange_auto` SET 
@@ -327,7 +327,7 @@ function autoSav($arr){
 			`train_id` = 'NOT ALLOCATED', 
 			`waybill_num` = '".$arr['waybill_num']."', 
 			`description` = 'UNLOADED'";
-		mysql_query($sql_cro);
+		mysqli_query($sql_cro);
 	}
 	//return $retArr; // return PHP array of Progress.
 }
@@ -335,8 +335,8 @@ function autoSav($arr){
 // JSON progress array functions
 function progWB($id=0){
 		$sql_p = "SELECT `progress` FROM `ichange_waybill` WHERE `waybill_num` = '".$id."'";
-		$qry_p = mysql_query($sql_p);
-		$res_p = mysql_fetch_array($qry_p);
+		$qry_p = mysqli_query($sql_p);
+		$res_p = mysqli_fetch_array($qry_p);
 		$prog = json_decode($res_p['progress'], true);
 		if(!is_array($prog)){$prog = array();}
 		return $prog;
