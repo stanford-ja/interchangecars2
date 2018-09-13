@@ -220,7 +220,7 @@ function industAutoComp($str,$tbl,$fld,$sct = NULL,$sr = NULL){
 	}
 	$sql = "SELECT * FROM `ichange_ind40k` WHERE `industry` LIKE '%".$str."%' OR `city` LIKE '%".$str."%' OR `state` LIKE '%".$str."%' OR `commodity` LIKE '%".$str."%' LIMIT 9";
 	$qry = $mysqli->query($sql);
-	$rows = $mysqli->num_rows($qry);
+	$rows = $qry->affected_rows();
 	if($rows > 0){$lst .= "===== 40,000 Industry Records Found =====<br />";}
 	//while($res = $qry->fetch_array()){
 	while($res = $qry->fetch_array()){
@@ -518,7 +518,7 @@ function qry_cntr($tbl, $data, $ky){
 	$qry = $mysqli->query($sql);
 	$res = $qry->fetch_assoc();
 	//if($resultcom = mysql_fetch_array($dosql_com)){
-	//if($mysqli->num_rows($qry)){return $mysqli->num_rows($qry);}
+	//if($mysqli->affected_rows($qry)){return $mysqli->affected_rows($qry);}
 	//else{return 0;} //$resultcom['cntr']; //Value to return.
 	return $res[0]->cntr;
 	//}
