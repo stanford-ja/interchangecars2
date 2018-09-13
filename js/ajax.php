@@ -30,9 +30,9 @@ if(isset($_GET['f'])){
 function carUsed($cn,$rr){
 	db_conn();
 	$cn = charConv($cn,"[AMP]","&"); // Require to convert [AMP] back to '&'
-	$q = mysql_query("SELECT `waybill_num` FROM `ichange_waybill` WHERE `cars` LIKE '%\"".$cn."\"%' LIMIT 1");
+	$q = mysqli_query("SELECT `waybill_num` FROM `ichange_waybill` WHERE `cars` LIKE '%\"".$cn."\"%' LIMIT 1");
 	$w = "";
-	while($r = mysql_fetch_array($q)){$w = $r['waybill_num'];}
+	while($r = mysqli_fetch_array($q)){$w = $r['waybill_num'];}
 	echo $w;
 }
 
@@ -45,9 +45,9 @@ function selTrain($fld14,$la='',$rr=0){
 	$la_ts = intval(mktime (12, 0, 0, $la_arr[1], $la_arr[2], $la_arr[0]) + 86400);
 	//echo $fld14;
 	$sql = "SELECT * FROM `ichange_trains` WHERE `train_id` = '".$fld14."' LIMIT 1";
-	$qry = mysql_query($sql);
+	$qry = mysqli_query($sql);
 	$lst = "";
-	while($res = mysql_fetch_array($qry)){
+	while($res = mysqli_fetch_array($qry)){
 		$lst .= $res['train_desc']."<br />";
 		if(strlen($res['origin'].$res['destination']) > 0){$lst .= $res['origin']." to ".$res['destination']."<br />";}
 		$lst .= $res['op_notes']."<br />";
@@ -84,9 +84,9 @@ function selTrain($fld14,$la='',$rr=0){
 			$lst .= "<div style=\"display: inline-block; padding: 3px; white-space: nowrap;\">Add extra Auto Trains on Save: <select name=\"addXtraAutos\"><option value=\"0\">No</option><option value=\"1\">Yes</option></select></div>";
 			if($rr > 0){
 				$sql_rr = "SELECT `id`,`report_mark` FROM `ichange_rr` WHERE `inactive` = 0 ORDER BY `report_mark`";
-				$qry_rr = mysql_query($sql_rr);
+				$qry_rr = mysqli_query($sql_rr);
 				$rr_opts = "";
-				while($res_rr = mysql_fetch_array($qry_rr)){
+				while($res_rr = mysqli_fetch_array($qry_rr)){
 					$sel_rr = ""; if($res_rr['id'] == $rr){ $sel_rr = " selected=\"selected\""; }
 					$rr_opts .= "<option value=\"".$res_rr['id']."\"".$sel_rr.">".$res_rr['report_mark']."</option>";
 				}
@@ -101,7 +101,7 @@ function selTrain($fld14,$la='',$rr=0){
 	}else{
 		$lst .= "<br /><a href=\"javascript:{}\" onClick=\"document.getElementById('train_disp_span').style.display = 'none';\">[ Close this box ]</a>";
 	}
-	mysql_close();
+	mysqli_close();
 	echo $lst;
 }
 
@@ -114,8 +114,8 @@ function selRoute($trid,$start,$finish,$dt=0){
         $start = charConv($start,"[AMP]","&");
         $finish = charConv($finish,"[AMP]","&");
         $sql = "SELECT `auto`,`origin`,`destination` FROM `ichange_trains` WHERE `train_id` = '".$trid."' LIMIT 1";
-        $qry = mysql_query($sql);
-        $res = mysql_fetch_array($qry);
+        $qry = mysqli_query($sql);
+        $res = mysqli_fetch_array($qry);
         if(intval($res['auto']) > 0){
                 // Number of days to complete
                 $arr = array($start => $dt, $finish => $res['auto']+$dt);
@@ -156,12 +156,12 @@ function carsAutoFind($str,$fld){
 	//$sql = "SELECT `ichange_cars`.*,COUNT(`ichange_carsused_index`.`id`) AS `cntr` FROM `ichange_cars` LEFT JOIN `ichange_carsused_index` ON `ichange_cars`.`car_num` = `ichange_carsused_index`.`car_num` WHERE (`ichange_cars`.`".$fld."` LIKE '%".$str."%' OR `ichange_cars`.`car_num` LIKE '%".$str."%' OR `ichange_cars`.`aar_type` LIKE '%".$str."%') AND `ichange_cars`.`rr` = '".$_COOKIE['rr_sess']."' ORDER BY `ichange_cars`.`car_num` LIMIT 25";
 	//$sql = "SELECT `ichange_cars`.*,COUNT(`ichange_carsused_index`.`id`) AS `cntr` FROM `ichange_carsused_index` LEFT JOIN `ichange_cars` ON `ichange_carsused_index`.`car_num` = `ichange_cars`.`car_num` WHERE (`ichange_cars`.`".$fld."` LIKE '%".$str."%' OR `ichange_cars`.`car_num` LIKE '%".$str."%' OR `ichange_cars`.`aar_type` LIKE '%".$str."%') AND `ichange_cars`.`rr` = '".$_COOKIE['rr_sess']."' ORDER BY `ichange_cars`.`car_num` LIMIT 25";
 	//$sql = "SELECT `ichange_cars`.*,COUNT(`ichange_carsused_index`.`car_num`) AS `cntr` FROM `ichange_cars`, `ichange_carsused_index` WHERE (`ichange_cars`.`".$fld."` LIKE '%".$str."%' OR `ichange_cars`.`car_num` LIKE '%".$str."%' OR `ichange_cars`.`aar_type` LIKE '%".$str."%') AND `ichange_cars`.`rr` = '".$_COOKIE['rr_sess']."' ORDER BY `ichange_cars`.`car_num` LIMIT 25";
-	$qry = mysql_query($sql);
+	$qry = mysqli_query($sql);
 	$lst = "<table style=\"padding: 1px; background-color: transparent; border: none;\">";
 	$lst .= "<tr><td class=\"td_title\">Car #</td><td class=\"td_title\">AAR</td><td class=\"td_title\">Lading</td><td class=\"td_title\">Location</td></tr>";
 	$cntr=0;
 	$cars = array();
-	while($res = mysql_fetch_array($qry)){
+	while($res = mysqli_fetch_array($qry)){
 		$cars[] = array(
 			'car_num' => $res['car_num'], 
 			'aar_type' => $res['aar_type'], 
@@ -178,7 +178,7 @@ function carsAutoFind($str,$fld){
 	}
 	if(count($cars) < 1){$lst = "<tr><td>No results found!</td></tr>";}
 	$lst .= "</table>";
-	mysql_close();
+	mysqli_close();
 	echo $lst;
 }
 
@@ -198,9 +198,9 @@ function industAutoComp($str,$tbl,$fld,$sct = NULL,$sr = NULL){
 	if($sr == 1){$sql_sr = " OR `freight_out` LIKE '%".$str."%'";}
 	if($sr == 2){$sql_sr = " OR `freight_in` LIKE '%".$str."%'";}
 	$sql = "SELECT * FROM `".$tbl."` WHERE `indust_name` LIKE '%".$str."%'".$sql_sr." LIMIT 9";
-	$qry = mysql_query($sql);
+	$qry = mysqli_query($sql);
 	$lst = "<a href=\"javascript:{}\" class=\"autocompletetxt\" onClick=\"document.getElementById('".$sct."_span').style.display = 'none';\">[ Close this box ]</a><br />";
-	while($res = mysql_fetch_array($qry)){
+	while($res = mysqli_fetch_array($qry)){
 		$rr_mark = qry("ichange_rr", $res['rr'], "id", "report_mark");
 		$recs = $res['freight_in'];
 		$sends = $res['freight_out'];
@@ -217,10 +217,10 @@ function industAutoComp($str,$tbl,$fld,$sct = NULL,$sr = NULL){
 		if(strlen($res['desc']) > 1){$lst .= "<div style=\"display: block; font-size:8pt; max-width: 600px; color: #333\">&nbsp;&nbsp;&nbsp;".$res['desc']."</div>";}
 	}
 	$sql = "SELECT * FROM `ichange_ind40k` WHERE `industry` LIKE '%".$str."%' OR `city` LIKE '%".$str."%' OR `state` LIKE '%".$str."%' OR `commodity` LIKE '%".$str."%' LIMIT 9";
-	$qry = mysql_query($sql);
-	$rows = mysql_num_rows($qry);
+	$qry = mysqli_query($sql);
+	$rows = mysqli_num_rows($qry);
 	if($rows > 0){$lst .= "===== 40,000 Industry Records Found =====<br />";}
-	while($res = mysql_fetch_array($qry)){
+	while($res = mysqli_fetch_array($qry)){
 		$lst .= "<a href=\"javascript:{}\" class=\"autocompletetxt\" style=\"text-decoration: none;\" onClick=\"document.getElementById('".$sct."').value = '".trim(strtoupper($res['industry'].",".$res['city'].",".$res['state']))."'; document.getElementById('".$fld."_span').style.display = 'none';\">".strtoupper($res['industry'].",".$res['city'].",".$res['state'])."</a><span style=\"font-size: 8pt;\"></span><br />";
 	}
 	if(strlen($lst) < 1){
@@ -228,7 +228,7 @@ function industAutoComp($str,$tbl,$fld,$sct = NULL,$sr = NULL){
 	}else{
 		$lst .= "<a href=\"javascript:{}\" class=\"autocompletetxt\" onClick=\"document.getElementById('".$sct."_span').style.display = 'none';\">[ Close this box ]</a>";
 	}
-	mysql_close();
+	mysqli_close();
 	echo $lst;
 }
 
@@ -248,10 +248,10 @@ function trainAutoComp($str,$fld,$sct = NULL,$la=0){
 	if($la == 1){ $sql .= " AND (`auto` > 0 OR `auto` LIKE '%:%')"; }
 	$sql .= " ORDER BY `train_id`";
 	//echo $sql;
-	$qry = mysql_query($sql);
+	$qry = mysqli_query($sql);
 	//echo "<pre>"; print_r($qry); echo "</pre>";
 	$lst = "<a href=\"javascript:{}\" class=\"autocompletetxt\" onClick=\"document.getElementById('".$sct."_span').style.display = 'none';\">[ Close this box ]</a><br />";
-	while($res = mysql_fetch_array($qry)){
+	while($res = mysqli_fetch_array($qry)){
 		$fnd = 0;
 		$xtra = "";
 		if(intval($res['auto']) > 0 || strlen($res['auto']) > 3){$xtra .= "&nbsp;&nbsp;&nbsp;<span style=\"color: red; font-weight: bold;\">Is an AUTO train.</span><br />";}
@@ -270,7 +270,7 @@ function trainAutoComp($str,$fld,$sct = NULL,$la=0){
 	}else{
 		$lst .= "<a href=\"javascript:{}\" class=\"autocompletetxt\" onClick=\"document.getElementById('".$sct."_span').style.display = 'none';\">[ Close this box ]</a>";
 	}
-	mysql_close();
+	mysqli_close();
 	//$sqli->close();
 	echo $lst;
 }
@@ -291,9 +291,9 @@ function autoComp($str,$tbl,$fld,$sct = NULL){
 		for($i=1;$i<count($fld_tmp);$i++){$xtra_flds .= ", `".$fld_tmp[$i]."`";}
 	}
 	$sql = "SELECT DISTINCT `".$fld."`".$xtra_flds." FROM `".$tbl."` WHERE `".$fld."` LIKE '%".$str."%' LIMIT 4";
-	$qry = mysql_query($sql);
+	$qry = mysqli_query($sql);
 	$lst = "<span style=\"float: right;\"><a href=\"javascript:{}\" class=\"autocompletetxt\" onClick=\"document.getElementById('".$sct."_span').style.display = 'none';\">[ Close this box ]</a></span>";
-	while($res = mysql_fetch_array($qry)){
+	while($res = mysqli_fetch_array($qry)){
 		//$lst .= "<a href=\"javascript:{}\" class=\"autocompletetxt\" style=\"text-decoration: none;\" onClick=\"document.getElementById('".$sct."').value = '".trim($res[$fld])."'; document.getElementById('".$fld."_span').style.display = 'none';\">".$res[$fld]."</a><br />";
 		$lst .= "<a href=\"javascript:{}\" class=\"autocompletetxt\" style=\"text-decoration: none;\" onClick=\"document.getElementById('".$sct."').value = '".trim($res[$fld])."'; document.getElementById('".$sct."_span').style.display = 'none';\">".$res[$fld]."</a><br />";
 		if(isset($fld_tmp)){
@@ -307,7 +307,7 @@ function autoComp($str,$tbl,$fld,$sct = NULL){
 	}else{
 		$lst .= "<a href=\"javascript:{}\" class=\"autocompletetxt\" onClick=\"document.getElementById('".$sct."_span').style.display = 'none';\">[ Close this box ]</a>";
 	}
-	mysql_close();
+	mysqli_close();
 	echo $lst;
 }
 
@@ -320,8 +320,8 @@ function allocTrain($wb,$tr){
 	$tr = charConv($tr,"[AMP]","&"); // Require to convert [AMP] back to '&'
 	$wb = charConv($wb,"[AMP]","&"); // Require to convert [AMP] back to '&'
 	$sql = "UPDATE `ichange_waybill` SET `train_id` = '".$tr."' WHERE `id` = '".$wb."'";
-	$qry = mysql_query($sql);
-	mysql_close();
+	$qry = mysqli_query($sql);
+	mysqli_close();
 }
 
 function allocRR($wb,$tr){
@@ -331,15 +331,15 @@ function allocRR($wb,$tr){
 	// $tr = railroad to allocate waybill to
 	db_conn();
 	$sql = "UPDATE `ichange_waybill` SET `rr_id_handling` = '".$tr."', `train_id` = '' WHERE `id` = '".$wb."'";
-	$qry = mysql_query($sql);
-	mysql_close();
+	$qry = mysqli_query($sql);
+	mysqli_close();
 }
 
 function swOrd($wb,$val){
 	db_conn();
 	$sql = "UPDATE `ichange_waybill` SET `sw_order` = '".$val."' WHERE `id` = '".$wb."'";
-	$qry = mysql_query($sql);
-	mysql_close();
+	$qry = mysqli_query($sql);
+	mysqli_close();
 }
 
 function mapDetails($s){
@@ -347,9 +347,9 @@ function mapDetails($s){
 	db_conn();
 	$s = strtoupper($s);
 	$sql = "SELECT `id`,`status`,`waybill_num`,`progress` FROM `ichange_waybill` WHERE `status` != 'CLOSED' AND `progress` LIKE '%,".$s."%'";
-	$qry = mysql_query($sql);
+	$qry = mysqli_query($sql);
 	$info = "";
-	while($r=mysql_fetch_array($qry)){
+	while($r=mysqli_fetch_array($qry)){
 			$prog = json_decode($r['progress'], true);
 			$progCntr = count($prog)-1;
 			$date = $prog[$progCntr]['date'];
@@ -368,9 +368,9 @@ function mapWBDetails($s){
 	db_conn();
 	$s = strtoupper($s);
 	$sql = "SELECT * FROM `ichange_waybill` WHERE `id` = '".$s."'";
-	$qry = mysql_query($sql);
+	$qry = mysqli_query($sql);
 	$info = "";
-	while($r=mysql_fetch_array($qry)){
+	while($r=mysqli_fetch_array($qry)){
 			$prog = json_decode($r['progress'], true);
 			$progCntr = count($prog)-1;
 			$date = $prog[$progCntr]['date'];
@@ -392,8 +392,8 @@ function glCreate($i){
 	// Convert a generate load to a waybill
 	db_conn();
 	$sql = "SELECT * FROM `ichange_generated_loads` WHERE `id` = '".$i."'";
-	$qry = mysql_query($sql);
-	while($res = mysql_fetch_array($qry)){		
+	$qry = mysqli_query($sql);
+	while($res = mysqli_fetch_array($qry)){		
 		$sqc = "INSERT INTO `ichange_waybill` SET 
 			`rr_id_from` = '".$res['railroad']."', 
 			`rr_id_handling` = '".$res['railroad']."', 
@@ -406,7 +406,7 @@ function glCreate($i){
 			`notes` = 'GENERATED FROM GOODS DELIVERED TO ".$res['orig_industry']." ON WAYBILL ".$res['waybill_num']."', 
 			`lading` = '".$res['commodity']."', 
 			`date` = '".$res['date_human']."'";
-		mysql_query($sqc);
+		mysqli_query($sqc);
 	}
 	glDel($i);
 }
@@ -415,7 +415,7 @@ function glDel($i){
 	// Delete generated load record
 	db_conn();
 	$sql = "DELETE FROM `ichange_generated_loads` WHERE `id` = '".$i."'";
-	mysql_query($sql);
+	mysqli_query($sql);
 }
 
 function add2SW($id){
@@ -426,14 +426,14 @@ function add2SW($id){
 	
 	// Get train details
 	$sql = "SELECT `train_id` FROM `ichange_trains` WHERE `id` = '".$id."'";
-	$qry = mysql_query($sql);
-	$res = mysql_fetch_assoc($qry);
+	$qry = mysqli_query($sql);
+	$res = mysqli_fetch_assoc($qry);
 	$train_id = $res['train_id'];
 	
 	// Get waybills not already on switchlist
 	$sql = "SELECT `id`, `routing`, `return_to`, `lading`, `train_id`, `waybill_num`, `indust_origin_name`, `indust_dest_name`, `status` FROM `ichange_waybill` WHERE `rr_id_handling` = '".@$_COOKIE['rr_sess']."' AND `train_id` != '".$train_id."' AND `train_id` != 'AUTO TRAIN' AND `status` != 'CLOSED'";
-	$qry = mysql_query($sql);
-	while($res = mysql_fetch_assoc($qry)){
+	$qry = mysqli_query($sql);
+	while($res = mysqli_fetch_assoc($qry)){
 		$ret .= "<div style=\"display: inline-block; border: 1px solid #ccc; border-radius: 5px; background-color: ivory; padding: 4px; margin: 2px; width: 300px; height: 93px; overflow: hidden; font-size: 9pt;\"><a href=\"javascript:{}\" onclick=\"if(confirm('Add this waybill to this switchlist?')){ window.location = '".$path[0]."switchlist/add2SW/".$res['id']."/".$id."'; }\">".$res['waybill_num']."</a> - ".$res['status'].".<br /><strong>".$res['indust_origin_name']." -> ".$res['indust_dest_name']." -> ".$res['return_to']."</strong><br />In train: <strong>".$res['train_id']."</strong><br />Lading: <strong>".$res['lading']."</strong><br />Routing: <strong>".$res['routing']."</strong></div>";
 	}
 	$ret .= "";
@@ -449,8 +449,9 @@ function db_conn(){
 	$dbpassword=$dbs['dbpassword']; //"Js120767";
 	$dbname=$dbs['dbname']; //"jstan_general";
 
-	$dbcnx = mysql_connect($dbhost, $dbusername, $dbpassword);
-	$seldb = mysql_select_db($dbname);
+	//$dbcnx = mysql_connect($dbhost, $dbusername, $dbpassword);
+	//$seldb = mysql_select_db($dbname);
+	$dbcnx = mysqli_connect($dbhost, $dbusername, $dbpassword,$dbname);
 }
 
 function db_conn_settings(){
@@ -492,9 +493,9 @@ function qry($tbl, $data, $ky, $fld){
 	// $ret = Returned value of the function.
 	db_conn();
 	$sql_com = "SELECT * FROM `".$tbl."` WHERE `".$ky."` = '".$data."' LIMIT 1";
-	$dosql_com = mysql_query($sql_com);
+	$dosql_com = mysqli_query($sql_com);
 	$ret = "";
-	while($resultcom = mysql_fetch_array($dosql_com)){			
+	while($resultcom = mysqli_fetch_array($dosql_com)){			
 		$ret = $resultcom[$fld];		
 	}
 		
@@ -509,9 +510,9 @@ function qry_cntr($tbl, $data, $ky){
 	// $ret = Returned value of the function.
 	db_conn();
 	$sql = "SELECT `id` FROM `".$tbl."` WHERE `".$ky."` = '".$data."'";
-	$qry = mysql_query($sql);
+	$qry = mysqli_query($sql);
 	//if($resultcom = mysql_fetch_array($dosql_com)){
-	if(mysql_num_rows($qry)){return mysql_num_rows($qry);}
+	if(mysqli_num_rows($qry)){return mysqli_num_rows($qry);}
 	else{return 0;} //$resultcom['cntr']; //Value to return.
 	//}
 }

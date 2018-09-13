@@ -90,10 +90,10 @@ function multiProg($c,$w,$t,$r){
 		$htm .= "<option".$sel." value=\"".$ii."\">".$ii."</option>";
 	}
 	$tr_s = "SELECT * FROM `ichange_trains` WHERE `railroad_id` = '".$r."' AND (LENGTH(`auto`) < 2 AND `auto` < 1) AND `train_id` != 'NOT ALLOCATED' ORDER BY `train_id`";
-	$tr_q = mysql_query($tr_s);
+	$tr_q = mysqli_query($tr_s);
 	//$tr_lst = "<option value=\"\">NOT ALLOCATED</option>";
 	$tr_lst = "<input type=\"hidden\" name=\"fld14[]\" id=\"fld14_".$c."\" /><input type=\"radio\" name=\"tr_tmp_".$c."\" onchange=\"document.getElementById('fld14_".$c."').value = '';rebuildDateSel('pfld2_".$c."','fld14_".$c."');\" /> NOT ALLOCATED<br />";
-	while($tr_r = mysql_fetch_array($tr_q)){
+	while($tr_r = mysqli_fetch_array($tr_q)){
 		//$tr_lst .= "<option value=\"".$tr_r['train_id']."\">(".$tr_r['train_id'].") ".substr($tr_r['train_desc'],0,15)."</option>";
 		//$tr_lst .= "<option value=\"".$tr_r['train_id']."\">".$tr_r['train_id']."</option>";
 		$tr_lst .= "<input type=\"radio\" name=\"tr_tmp_".$c."\" onchange=\"document.getElementById('fld14_".$c."').value = '".$tr_r['train_id']."';rebuildDateSel('pfld2_".$c."','fld14_".$c."');\" />(".$tr_r['train_id'].") ".$tr_r['train_desc']."<br />";
@@ -142,7 +142,7 @@ function multiProg($c,$w,$t,$r){
   	$htm .= "</div>";
    $htm .= "</div>"; // end table
 
-	@mysql_close();
+	@mysqli_close();
 	$sqli->close();
 	echo $htm;
 }
@@ -204,8 +204,8 @@ function db_conn(){
 	$dbpassword=$dbs['dbpassword']; //"Js120767";
 	$dbname=$dbs['dbname']; //"jstan_general";
 
-	$dbcnx = mysql_connect($dbhost, $dbusername, $dbpassword);
-	$seldb = mysql_select_db($dbname);
+	$dbcnx = mysqli_connect($dbhost, $dbusername, $dbpassword);
+	$seldb = mysqli_select_db($dbname);
 }
 
 function db_conn_settings(){
@@ -249,9 +249,9 @@ function qry($tbl, $data, $ky, $fld){
 	$dbs = db_conn_settings();
 	$sqli = new mysqli($dbs['dbhost'],$dbs['dbusername'],$dbs['dbpassword'],$dbs['dbname']);
 	$sql_com = "SELECT * FROM `".$tbl."` WHERE `".$ky."` = '".$data."' LIMIT 1";
-	$dosql_com = $sqli->query($sql_com); //mysql_query($sql_com);
+	$dosql_com = $sqli->query($sql_com); //mysqli_query($sql_com);
 	$ret = "";
-	while($resultcom = $dosql_com->fetch_assoc()){ //mysql_fetch_array($dosql_com)){			
+	while($resultcom = $dosql_com->fetch_assoc()){ //mysqli_fetch_array($dosql_com)){			
 		$ret = $resultcom[$fld];		
 	}
 	$sqli->close();
@@ -267,9 +267,9 @@ function qry_cntr($tbl, $data, $ky){
 	// $ret = Returned value of the function.
 	db_conn();
 	$sql = "SELECT `id` FROM `".$tbl."` WHERE `".$ky."` = '".$data."'";
-	$qry = mysql_query($sql);
-	//if($resultcom = mysql_fetch_array($dosql_com)){
-	if(mysql_num_rows($qry)){return mysql_num_rows($qry);}
+	$qry = mysqli_query($sql);
+	//if($resultcom = mysqli_fetch_array($dosql_com)){
+	if(mysqli_num_rows($qry)){return mysqli_num_rows($qry);}
 	else{return 0;} //$resultcom['cntr']; //Value to return.
 	//}
 }

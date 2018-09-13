@@ -14,14 +14,15 @@ if(strpos($LocTst,"www/Applications/") > 0){
 }
 $dbname="jstan2_general";
 
-$dbcnx = mysql_connect($dbhost, $dbusername, $dbpassword) or die(mysql_error());
-$seldb = mysql_select_db($dbname);
+//$dbcnx = mysql_connect($dbhost, $dbusername, $dbpassword) or die(mysql_error());
+//$seldb = mysql_select_db($dbname);
+$dbcnx = mysqli_connect($dbhost, $dbusername, $dbpassword,$dbname)
 
 // BUILD PARAMETER ARRAY.
 $param_s = "SELECT `param_name`,`value` FROM `ichange_parameters`";
-$param_q = @mysql_query($param_s);
+$param_q = @mysqli_query($param_s);
 $paras = array();
-while($param_r = mysql_fetch_array($param_q)){
+while($param_r = mysqli_fetch_array($param_q)){
 	$paras[$param_r['param_name']] = $param_r['value'];
 }
 ?>

@@ -37,8 +37,8 @@ $jsonArr = "";
 if(isset($_REQUEST['id'])){
 	// Initial opener
 	$sql = "SELECT `train_id`,`auto`,`destination` FROM `ichange_trains` WHERE `id` = '".$_REQUEST['id']."'";
-	$qry = mysql_query($sql);
-	$res = mysql_fetch_array($qry);
+	$qry = mysqli_query($sql);
+	$res = mysqli_fetch_array($qry);
 	$tid = $res['train_id'];
 	$auto = @json_decode($res['auto'], true);
 	@asort($auto);
@@ -75,7 +75,7 @@ $txt = "<span style=\"font-size: 9pt;\">Enter or change the location / name of t
 		<link REL="StyleSheet" HREF="../css/print.css" TYPE="text/css" MEDIA="print">
 		<link REL="StyleSheet" HREF="../css/mobile.css" TYPE="text/css" MEDIA="handheld">
 		<meta name="generator" content="Bluefish 2.2.2" >
-		<meta name="author" content="James Stanford" >
+		<meta name="author" content="James" >
 		<meta name="keywords" content="model, railroad, railway, freight, car, interchange, application, waybill, train sheet, rollingstock">
 		<meta name="description" content="The MRICF is a Model Railroad Virtual Freight and Cars Interchange Application with Waybills, Industries, Train Sheets, Rollingstock management and more">
 		<script language="javascript" type="text/javascript">

@@ -51,14 +51,14 @@ function showData($jsonArr){
 	$tbl = $arr['tbl'];
 	$fld = $arr['fld'];
 	$sql = "SELECT * FROM `".$tbl."` WHERE `".$key."` = '".$val."'";
-	$qu = mysql_query($sql);
-	$res = mysql_fetch_array($qu);
+	$qu = mysqli_query($sql);
+	$res = mysqli_fetch_array($qu);
 	$ret = "";
 	for($i=0;$i<count($fld);$i++){
 		$ret .= ucwords(str_replace("_"," ",$fld[$i])).": ".$res[$fld[$i]]."<br />";
 	}
 	//$ret .= $res['indust_name']."<br />".$res['desc']."<br />".$res['freight_in']."<br />".$res['freight_out'];
-	mysql_close();
+	mysqli_close();
 	return $ret;
 }
 
@@ -92,16 +92,16 @@ function getData($jsonArr){
 	$sql = "SELECT * FROM `".$tbl."`";
 	if(strlen($val) > 0 || $val > 0){$sql .= " WHERE `".$key."` = '".$val."'";}
 	//echo $s; exit();
-	$qu = mysql_query($sql);
+	$qu = mysqli_query($sql);
 	$arr = array();
 	//$arr[$name]['train_id'] = $sql;
-	while($res = mysql_fetch_array($qu)){
+	while($res = mysqli_fetch_array($qu)){
 		$fldVals = array();
 		for($i=0;$i<count($fld);$i++){$fldVals[$fld[$i]] = $res[$fld[$i]];}
 		//$arr[$name] = $fldVals;
 		$arr[$name][] = $fldVals;
 	}
-	mysql_close();
+	mysqli_close();
 	return $arr;
 }  
 // End PHPLiveX related functions
@@ -306,24 +306,24 @@ function rrOpts(){
 	$o = "";
 	if(isset($this->railroad_select_options)){$o = $this->railroad_select_options;}else{
 		$s = "SELECT `id`,`report_mark` FROM `ichange_rr` WHERE `inactive` = 0 ORDER BY `report_mark`";
-		$q = mysql_query($s);
-		while($r = mysql_fetch_array($q)){
+		$q = mysqli_query($s);
+		while($r = mysqli_fetch_array($q)){
 			$sel = "";
 			//if($c == $r['id']){$sel = " selected=\"selected\" ";}
 			$o .= "<option value=\"".$r['id']."\"".$sel.">".$r['report_mark']."</option>";
 		}
 		$o .= "<option value=\"\" style=\"background-color: brown; color: white;\">COMMON</option>";
 		$s = "SELECT `id`,`report_mark` FROM `ichange_rr` WHERE `common_flag` = 1 ORDER BY `report_mark`";
-		$q = mysql_query($s);
-		while($r = mysql_fetch_array($q)){
+		$q = mysqli_query($s);
+		while($r = mysqli_fetch_array($q)){
 			$sel = "";
 			//if($c == $r['id']){$sel = " selected=\"selected\" ";}
 			$o .= "<option value=\"".$r['id']."\"".$sel.">".$r['report_mark']."</option>";
 		}
 		$o .= "<option value=\"\" style=\"background-color: brown; color: white;\">INACTIVE</option>";
 		$s = "SELECT `id`,`report_mark` FROM `ichange_rr` WHERE `inactive` = 1 ORDER BY `report_mark`";
-		$q = mysql_query($s);
-		while($r = mysql_fetch_array($q)){
+		$q = mysqli_query($s);
+		while($r = mysqli_fetch_array($q)){
 			$sel = "";
 			//if($c == $r['id']){$sel = " selected=\"selected\" ";}
 			$o .= "<option value=\"".$r['id']."\"".$sel.">".$r['report_mark']."</option>";
