@@ -221,11 +221,13 @@ function industAutoComp($str,$tbl,$fld,$sct = NULL,$sr = NULL){
 	$sql = "SELECT * FROM `ichange_ind40k` WHERE `industry` LIKE '%".$str."%' OR `city` LIKE '%".$str."%' OR `state` LIKE '%".$str."%' OR `commodity` LIKE '%".$str."%' LIMIT 9";
 	$qry = $mysqli->query($sql);
 	$rows = $mysqli->affected_rows();
-	if($rows > 0){$lst .= "===== 40,000 Industry Records Found =====<br />";}
+	$lst40k = "";
 	//while($res = $qry->fetch_array()){
 	while($res = $qry->fetch_array()){
-		$lst .= "<a href=\"javascript:{}\" class=\"autocompletetxt\" style=\"text-decoration: none;\" onClick=\"document.getElementById('".$sct."').value = '".trim(strtoupper($res['industry'].",".$res['city'].",".$res['state']))."'; document.getElementById('".$fld."_span').style.display = 'none';\">".strtoupper($res['industry'].",".$res['city'].",".$res['state'])."</a><span style=\"font-size: 8pt;\"></span><br />";
+		$lst40k .= "<a href=\"javascript:{}\" class=\"autocompletetxt\" style=\"text-decoration: none;\" onClick=\"document.getElementById('".$sct."').value = '".trim(strtoupper($res['industry'].",".$res['city'].",".$res['state']))."'; document.getElementById('".$fld."_span').style.display = 'none';\">".strtoupper($res['industry'].",".$res['city'].",".$res['state'])."</a><span style=\"font-size: 8pt;\"></span><br />";
 	}
+	if(strlen($lst40k) > 0){$lst40k .= "===== 40,000 Industry Records Found =====<br />";}
+	$lst .= $lst40k;
 	if(strlen($lst) < 1){
 		$lst = "No results found!";
 	}else{
