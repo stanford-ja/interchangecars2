@@ -500,7 +500,7 @@ function qry($tbl, $data, $ky, $fld){
 	$sql_com = "SELECT * FROM `".$tbl."` WHERE `".$ky."` = '".$data."' LIMIT 1";
 	$dosql_com = $mysqli->query($sql_com);
 	$ret = "";
-	while($resultcom = mysqli_fetch_array($dosql_com)){			
+	while($resultcom = $dosql_com->fetch_array()){			
 		$ret = $resultcom[$fld];		
 	}
 		
