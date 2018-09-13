@@ -2,6 +2,7 @@
 
 date_default_timezone_set ('America/Chicago');
 /*
+error_reporting(E_ERROR); ini_set('display_errors', '1');
 echo "<h2>MRICF is currently unavailable</h2>";
 echo "<p>This is due to an automatic database engine upgrade on the 
 server where the applicaiton exists which has 
