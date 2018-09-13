@@ -24,7 +24,7 @@ class Ajax extends CI_Controller {
 		$this->db_conn();
 		$cn = $this->charConv($cn,".AMP.","&"); // Require to convert .AMP. back to '&'
 		$cn = $this->charConv($cn,".SPACE."," ");
-		//$q = mysql_query("SELECT `waybill_num` FROM `ichange_waybill` WHERE `cars` LIKE '%\"".$cn."\"%' LIMIT 1");
+		//$q = mysqli_query("SELECT `waybill_num` FROM `ichange_waybill` WHERE `cars` LIKE '%\"".$cn."\"%' LIMIT 1");
 		$q = $this->Generic_model->qry("SELECT `waybill_num` FROM `ichange_waybill` WHERE `cars` LIKE '%\"".$cn."\"%' LIMIT 1");
 		$w = "";
 		if(isset($q[0]->waybill_num)){$w = $q[0]->waybill_num;}
@@ -38,10 +38,10 @@ class Ajax extends CI_Controller {
 		$fld14 = $this->charConv($fld14,".SPACE."," ");
 		//echo $fld14;
 		$sql = "SELECT * FROM `ichange_trains` WHERE `train_id` = '".$fld14."' LIMIT 1";
-		//$qry = mysql_query($sql);
+		//$qry = mysqli_query($sql);
 		$qry = $this->Generic_model->qry($sql);
 		$lst = "";
-		//while($res = mysql_fetch_array($qry)){
+		//while($res = mysqli_fetch_array($qry)){
 		if($qry[0]){
 			$res = (array)$qry[0];
 			$lst .= $res['train_desc']."<br />";
@@ -89,9 +89,9 @@ class Ajax extends CI_Controller {
 		$finish = $this->charConv($finish,".SPACE."," ");
 		
 		$sql = "SELECT `auto`,`origin`,`destination` FROM `ichange_trains` WHERE `train_id` = '".$trid."' LIMIT 1";
-		//$qry = mysql_query($sql);
+		//$qry = mysqli_query($sql);
 		$qry = $this->Generic_model->qry($sql);
-		$res = (array)$qry[0]; //mysql_fetch_array($qry);
+		$res = (array)$qry[0]; //mysqli_fetch_array($qry);
 		if(intval($res['auto']) > 0){
 			// Number of days to complete
 			$arr = array($start => 0, $finish => $res['auto']);
@@ -127,12 +127,12 @@ class Ajax extends CI_Controller {
 		$str = $this->charConv($str,".SPACE."," ");
 		$str = strtoupper($str);
 		$sql = "SELECT * FROM `ichange_cars` WHERE (`".$fld."` LIKE '%".$str."%' OR `car_num` LIKE '%".$str."%' OR `aar_type` LIKE '%".$str."%') AND `rr` = '".$_COOKIE['rr_sess']."' ORDER BY `car_num` LIMIT 25";
-		//$qry = mysql_query($sql);
+		//$qry = mysqli_query($sql);
 		$qry = $this->Generic_model->qry($sql);
 		$lst = "<table style=\"padding: 1px; background-color: transparent; border: none;\">";
 		$lst .= "<tr><td class=\"td_title\">Car #</td><td class=\"td_title\">AAR</td><td class=\"td_title\">Lading</td><td class=\"td_title\">Location</td></tr>";
 		$cntr=0;
-		//while($res = mysql_fetch_array($qry)){
+		//while($res = mysqli_fetch_array($qry)){
 		for($i=0;$i<count($qry);$i++){
 			$res = (array)$qry[$i];
 			$lad = ""; if(strlen($res['lading']) > 1){$lad = $res['lading'];}
@@ -163,9 +163,9 @@ class Ajax extends CI_Controller {
 		if($sr == 1){$sql_sr = " OR `freight_out` LIKE '%".$str."%'";}
 		if($sr == 2){$sql_sr = " OR `freight_in` LIKE '%".$str."%'";}
 		$sql = "SELECT * FROM `".$tbl."` WHERE `indust_name` LIKE '%".$str."%'".$sql_sr." LIMIT 9";
-		$qry = $this->Generic_model->qry($sql); //mysql_query($sql);
+		$qry = $this->Generic_model->qry($sql); //mysqli_query($sql);
 		$lst = "<a href=\"javascript:{}\" class=\"autocompletetxt\" onClick=\"document.getElementById('".$sct."_span').style.display = 'none';\">[ Close this box ]</a><br />";
-		//while($res = mysql_fetch_array($qry)){
+		//while($res = mysqli_fetch_array($qry)){
 		for($i=0;$i<count($qry);$i++){
 			$res = (array)$qry[$i];
 			$rr_mark = $this->qry("ichange_rr", $res['rr'], "id", "report_mark");
@@ -184,10 +184,10 @@ class Ajax extends CI_Controller {
 			if(strlen($res['desc']) > 1){$lst .= "<div style=\"display: block; font-size:8pt; max-width: 600px; color: #333\">&nbsp;&nbsp;&nbsp;".$res['desc']."</div>";}
 		}
 		$sql = "SELECT * FROM `ichange_ind40k` WHERE `industry` LIKE '%".$str."%' OR `city` LIKE '%".$str."%' OR `state` LIKE '%".$str."%' OR `commodity` LIKE '%".$str."%' LIMIT 9";
-		$qry = $this->Generic_model->qry($sql); //mysql_query($sql);
-		$rows = count($qry); //mysql_num_rows($qry);
+		$qry = $this->Generic_model->qry($sql); //mysqli_query($sql);
+		$rows = count($qry); //mysqli_num_rows($qry);
 		if($rows > 0){$lst .= "===== 40,000 Industry Records Found =====<br />";}
-		//while($res = mysql_fetch_array($qry)){
+		//while($res = mysqli_fetch_array($qry)){
 		for($i=0;$i<count($qry);$i++){
 			$res = (array)$qry[$i];
 			$lst .= "<a href=\"javascript:{}\" class=\"autocompletetxt\" style=\"text-decoration: none;\" onClick=\"document.getElementById('".$sct."').value = '".trim(strtoupper($res['industry'].",".$res['city'].",".$res['state']))."'; document.getElementById('".$fld."_span').style.display = 'none';\">".strtoupper($res['industry'].",".$res['city'].",".$res['state'])."</a><span style=\"font-size: 8pt;\"></span><br />";
@@ -217,9 +217,9 @@ class Ajax extends CI_Controller {
 			for($i=1;$i<count($fld_tmp);$i++){$xtra_flds .= ", `".$fld_tmp[$i]."`";}
 		}
 		$sql = "SELECT DISTINCT `".$fld."`".$xtra_flds." FROM `".$tbl."` WHERE `".$fld."` LIKE '%".$str."%' LIMIT 4";
-		$qry = $this->Generic_model->qry($sql); //mysql_query($sql);
+		$qry = $this->Generic_model->qry($sql); //mysqli_query($sql);
 		$lst = "<span style=\"float: right;\"><a href=\"javascript:{}\" class=\"autocompletetxt\" onClick=\"document.getElementById('".$sct."_span').style.display = 'none';\">[ Close this box ]</a></span>";
-		//while($res = mysql_fetch_array($qry)){
+		//while($res = mysqli_fetch_array($qry)){
 		for($i=0;$i<count($qry);$i++){
 			$res = (array)$qry[$i];
 			//$lst .= "<a href=\"javascript:{}\" class=\"autocompletetxt\" style=\"text-decoration: none;\" onClick=\"document.getElementById('".$sct."').value = '".trim($res[$fld])."'; document.getElementById('".$fld."_span').style.display = 'none';\">".$res[$fld]."</a><br />";
@@ -247,7 +247,7 @@ class Ajax extends CI_Controller {
 		$tr = $this->charConv($tr,".AMP.","&"); // Require to convert .AMP. back to '&'
 		$wb = $this->charConv($wb,".AMP.","&"); // Require to convert .AMP. back to '&'
 		$sql = "UPDATE `ichange_waybill` SET `train_id` = '".$tr."' WHERE `id` = '".$wb."'";
-		$this->Generic_model->change($sql); //mysql_query($sql);
+		$this->Generic_model->change($sql); //mysqli_query($sql);
 	}
 
 	function allocRR($wb,$tr){
@@ -257,7 +257,7 @@ class Ajax extends CI_Controller {
 		// $tr = railroad to allocate waybill to
 		$this->db_conn();
 		$sql = "UPDATE `ichange_waybill` SET `rr_id_handling` = '".$tr."', `train_id` = '' WHERE `id` = '".$wb."'";
-		$this->Generic_model->change($sql); //mysql_query($sql);
+		$this->Generic_model->change($sql); //mysqli_query($sql);
 	}
 
 	function mapDetails($s){
@@ -265,9 +265,9 @@ class Ajax extends CI_Controller {
 		$this->db_conn();
 		$s = strtoupper($s);
 		$sql = "SELECT `id`,`status`,`waybill_num`,`progress` FROM `ichange_waybill` WHERE `status` != 'CLOSED' AND `progress` LIKE '%,".$s."%'";
-		$qry = $this->Generic_model->qry($sql); //mysql_query($sql);
+		$qry = $this->Generic_model->qry($sql); //mysqli_query($sql);
 		$info = "";
-		//while($r=mysql_fetch_array($qry)){
+		//while($r=mysqli_fetch_array($qry)){
 		for($i=0;$i<count($qry);$i++){
 			$r = (array)$qry[$i];
 			$prog = json_decode($r['progress'], true);
@@ -288,9 +288,9 @@ class Ajax extends CI_Controller {
 		$this->db_conn();
 		$s = strtoupper($s);
 		$sql = "SELECT * FROM `ichange_waybill` WHERE `id` = '".$s."'";
-		$qry = $this->Generic_model->qry($sql); //mysql_query($sql);
+		$qry = $this->Generic_model->qry($sql); //mysqli_query($sql);
 		$info = "";
-		//while($r=mysql_fetch_array($qry)){
+		//while($r=mysqli_fetch_array($qry)){
 		for($i=0;$i<count($qry);$i++){
 			$r = (array)$qry[$i];
 			$prog = json_decode($r['progress'], true);
@@ -346,8 +346,8 @@ class Ajax extends CI_Controller {
 			$dbname="jstan_general";
 		}
 
-		$dbcnx = mysql_connect($dbhost, $dbusername, $dbpassword);
-		$seldb = mysql_select_db($dbname);
+		$dbcnx = mysqli_connect($dbhost, $dbusername, $dbpassword);
+		$seldb = mysqli_select_db($dbname);
 		*/
 	}
 
@@ -366,9 +366,9 @@ class Ajax extends CI_Controller {
 		// $ret = Returned value of the function.
 		$this->db_conn();
 		$sql_com = "SELECT * FROM `".$tbl."` WHERE `".$ky."` = '".$data."' LIMIT 1";
-		$dosql_com = $this->Generic_model->qry($sql_com); //mysql_query($sql_com);
+		$dosql_com = $this->Generic_model->qry($sql_com); //mysqli_query($sql_com);
 		$ret = "";
-		//while($resultcom = mysql_fetch_array($dosql_com)){
+		//while($resultcom = mysqli_fetch_array($dosql_com)){
 			$res = (array)$dosql_com[0];
 			$ret = $res[$fld]; //$resultcom[$fld];		
 		//}
@@ -403,7 +403,7 @@ class Ajax extends CI_Controller {
 		$this->db_conn();
 		$cn = $this->charConv($cn,".AMP.","&"); // Require to convert .AMP. back to '&'
 		$cn = $this->charConv($cn,".SPACE."," ");
-		//$q = mysql_query("SELECT `waybill_num` FROM `ichange_waybill` WHERE `cars` LIKE '%\"".$cn."\"%' LIMIT 1");
+		//$q = mysqli_query("SELECT `waybill_num` FROM `ichange_waybill` WHERE `cars` LIKE '%\"".$cn."\"%' LIMIT 1");
 		$q = $this->Generic_model->qry("SELECT `waybill_num` FROM `ichange_waybill` WHERE `cars` LIKE '%\"".$cn."\"%' LIMIT 1");
 		$w = "";
 		if(isset($q[0]->waybill_num)){$w = $q[0]->waybill_num;}
@@ -417,10 +417,10 @@ class Ajax extends CI_Controller {
 		$fld14 = $this->charConv($fld14,".SPACE."," ");
 		//echo $fld14;
 		$sql = "SELECT * FROM `ichange_trains` WHERE `train_id` = '".$fld14."' LIMIT 1";
-		//$qry = mysql_query($sql);
+		//$qry = mysqli_query($sql);
 		$qry = $this->Generic_model->qry($sql);
 		$lst = "";
-		//while($res = mysql_fetch_array($qry)){
+		//while($res = mysqli_fetch_array($qry)){
 		if($qry[0]){
 			$res = (array)$qry[0];
 			$lst .= $res['train_desc']."<br />";
@@ -468,9 +468,9 @@ class Ajax extends CI_Controller {
 		$finish = $this->charConv($finish,".SPACE."," ");
 		
 		$sql = "SELECT `auto`,`origin`,`destination` FROM `ichange_trains` WHERE `train_id` = '".$trid."' LIMIT 1";
-		//$qry = mysql_query($sql);
+		//$qry = mysqli_query($sql);
 		$qry = $this->Generic_model->qry($sql);
-		$res = (array)$qry[0]; //mysql_fetch_array($qry);
+		$res = (array)$qry[0]; //mysqli_fetch_array($qry);
 		if(intval($res['auto']) > 0){
 			// Number of days to complete
 			$arr = array($start => 0, $finish => $res['auto']);
@@ -506,12 +506,12 @@ class Ajax extends CI_Controller {
 		$str = $this->charConv($str,".SPACE."," ");
 		$str = strtoupper($str);
 		$sql = "SELECT * FROM `ichange_cars` WHERE (`".$fld."` LIKE '%".$str."%' OR `car_num` LIKE '%".$str."%' OR `aar_type` LIKE '%".$str."%') AND `rr` = '".$_COOKIE['rr_sess']."' ORDER BY `car_num` LIMIT 25";
-		//$qry = mysql_query($sql);
+		//$qry = mysqli_query($sql);
 		$qry = $this->Generic_model->qry($sql);
 		$lst = "<table style=\"padding: 1px; background-color: transparent; border: none;\">";
 		$lst .= "<tr><td class=\"td_title\">Car #</td><td class=\"td_title\">AAR</td><td class=\"td_title\">Lading</td><td class=\"td_title\">Location</td></tr>";
 		$cntr=0;
-		//while($res = mysql_fetch_array($qry)){
+		//while($res = mysqli_fetch_array($qry)){
 		for($i=0;$i<count($qry);$i++){
 			$res = (array)$qry[$i];
 			$lad = ""; if(strlen($res['lading']) > 1){$lad = $res['lading'];}
@@ -542,9 +542,9 @@ class Ajax extends CI_Controller {
 		if($sr == 1){$sql_sr = " OR `freight_out` LIKE '%".$str."%'";}
 		if($sr == 2){$sql_sr = " OR `freight_in` LIKE '%".$str."%'";}
 		$sql = "SELECT * FROM `".$tbl."` WHERE `indust_name` LIKE '%".$str."%'".$sql_sr." LIMIT 9";
-		$qry = $this->Generic_model->qry($sql); //mysql_query($sql);
+		$qry = $this->Generic_model->qry($sql); //mysqli_query($sql);
 		$lst = "<a href=\"javascript:{}\" class=\"autocompletetxt\" onClick=\"document.getElementById('".$sct."_span').style.display = 'none';\">[ Close this box ]</a><br />";
-		//while($res = mysql_fetch_array($qry)){
+		//while($res = mysqli_fetch_array($qry)){
 		for($i=0;$i<count($qry);$i++){
 			$res = (array)$qry[$i];
 			$rr_mark = $this->qry("ichange_rr", $res['rr'], "id", "report_mark");
@@ -563,10 +563,10 @@ class Ajax extends CI_Controller {
 			if(strlen($res['desc']) > 1){$lst .= "<div style=\"display: block; font-size:8pt; max-width: 600px; color: #333\">&nbsp;&nbsp;&nbsp;".$res['desc']."</div>";}
 		}
 		$sql = "SELECT * FROM `ichange_ind40k` WHERE `industry` LIKE '%".$str."%' OR `city` LIKE '%".$str."%' OR `state` LIKE '%".$str."%' OR `commodity` LIKE '%".$str."%' LIMIT 9";
-		$qry = $this->Generic_model->qry($sql); //mysql_query($sql);
-		$rows = count($qry); //mysql_num_rows($qry);
+		$qry = $this->Generic_model->qry($sql); //mysqli_query($sql);
+		$rows = count($qry); //mysqli_num_rows($qry);
 		if($rows > 0){$lst .= "===== 40,000 Industry Records Found =====<br />";}
-		//while($res = mysql_fetch_array($qry)){
+		//while($res = mysqli_fetch_array($qry)){
 		for($i=0;$i<count($qry);$i++){
 			$res = (array)$qry[$i];
 			$lst .= "<a href=\"javascript:{}\" class=\"autocompletetxt\" style=\"text-decoration: none;\" onClick=\"document.getElementById('".$sct."').value = '".trim(strtoupper($res['industry'].",".$res['city'].",".$res['state']))."'; document.getElementById('".$fld."_span').style.display = 'none';\">".strtoupper($res['industry'].",".$res['city'].",".$res['state'])."</a><span style=\"font-size: 8pt;\"></span><br />";
@@ -596,9 +596,9 @@ class Ajax extends CI_Controller {
 			for($i=1;$i<count($fld_tmp);$i++){$xtra_flds .= ", `".$fld_tmp[$i]."`";}
 		}
 		$sql = "SELECT DISTINCT `".$fld."`".$xtra_flds." FROM `".$tbl."` WHERE `".$fld."` LIKE '%".$str."%' LIMIT 4";
-		$qry = $this->Generic_model->qry($sql); //mysql_query($sql);
+		$qry = $this->Generic_model->qry($sql); //mysqli_query($sql);
 		$lst = "<span style=\"float: right;\"><a href=\"javascript:{}\" class=\"autocompletetxt\" onClick=\"document.getElementById('".$sct."_span').style.display = 'none';\">[ Close this box ]</a></span>";
-		//while($res = mysql_fetch_array($qry)){
+		//while($res = mysqli_fetch_array($qry)){
 		for($i=0;$i<count($qry);$i++){
 			$res = (array)$qry[$i];
 			//$lst .= "<a href=\"javascript:{}\" class=\"autocompletetxt\" style=\"text-decoration: none;\" onClick=\"document.getElementById('".$sct."').value = '".trim($res[$fld])."'; document.getElementById('".$fld."_span').style.display = 'none';\">".$res[$fld]."</a><br />";
@@ -626,7 +626,7 @@ class Ajax extends CI_Controller {
 		$tr = $this->charConv($tr,".AMP.","&"); // Require to convert .AMP. back to '&'
 		$wb = $this->charConv($wb,".AMP.","&"); // Require to convert .AMP. back to '&'
 		$sql = "UPDATE `ichange_waybill` SET `train_id` = '".$tr."' WHERE `id` = '".$wb."'";
-		$this->Generic_model->change($sql); //mysql_query($sql);
+		$this->Generic_model->change($sql); //mysqli_query($sql);
 	}
 
 	function allocRR($wb,$tr){
@@ -636,7 +636,7 @@ class Ajax extends CI_Controller {
 		// $tr = railroad to allocate waybill to
 		$this->db_conn();
 		$sql = "UPDATE `ichange_waybill` SET `rr_id_handling` = '".$tr."', `train_id` = '' WHERE `id` = '".$wb."'";
-		$this->Generic_model->change($sql); //mysql_query($sql);
+		$this->Generic_model->change($sql); //mysqli_query($sql);
 	}
 
 	function mapDetails($s){
@@ -644,9 +644,9 @@ class Ajax extends CI_Controller {
 		$this->db_conn();
 		$s = strtoupper($s);
 		$sql = "SELECT `id`,`status`,`waybill_num`,`progress` FROM `ichange_waybill` WHERE `status` != 'CLOSED' AND `progress` LIKE '%,".$s."%'";
-		$qry = $this->Generic_model->qry($sql); //mysql_query($sql);
+		$qry = $this->Generic_model->qry($sql); //mysqli_query($sql);
 		$info = "";
-		//while($r=mysql_fetch_array($qry)){
+		//while($r=mysqli_fetch_array($qry)){
 		for($i=0;$i<count($qry);$i++){
 			$r = (array)$qry[$i];
 			$prog = json_decode($r['progress'], true);
@@ -667,9 +667,9 @@ class Ajax extends CI_Controller {
 		$this->db_conn();
 		$s = strtoupper($s);
 		$sql = "SELECT * FROM `ichange_waybill` WHERE `id` = '".$s."'";
-		$qry = $this->Generic_model->qry($sql); //mysql_query($sql);
+		$qry = $this->Generic_model->qry($sql); //mysqli_query($sql);
 		$info = "";
-		//while($r=mysql_fetch_array($qry)){
+		//while($r=mysqli_fetch_array($qry)){
 		for($i=0;$i<count($qry);$i++){
 			$r = (array)$qry[$i];
 			$prog = json_decode($r['progress'], true);
@@ -725,8 +725,8 @@ class Ajax extends CI_Controller {
 			$dbname="jstan_general";
 		}
 
-		$dbcnx = mysql_connect($dbhost, $dbusername, $dbpassword);
-		$seldb = mysql_select_db($dbname);
+		$dbcnx = mysqli_connect($dbhost, $dbusername, $dbpassword);
+		$seldb = mysqli_select_db($dbname);
 		*/
 	}
 
@@ -745,9 +745,9 @@ class Ajax extends CI_Controller {
 		// $ret = Returned value of the function.
 		$this->db_conn();
 		$sql_com = "SELECT * FROM `".$tbl."` WHERE `".$ky."` = '".$data."' LIMIT 1";
-		$dosql_com = $this->Generic_model->qry($sql_com); //mysql_query($sql_com);
+		$dosql_com = $this->Generic_model->qry($sql_com); //mysqli_query($sql_com);
 		$ret = "";
-		//while($resultcom = mysql_fetch_array($dosql_com)){
+		//while($resultcom = mysqli_fetch_array($dosql_com)){
 			$res = (array)$dosql_com[0];
 			$ret = $res[$fld]; //$resultcom[$fld];		
 		//}
