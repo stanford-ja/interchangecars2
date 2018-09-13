@@ -220,7 +220,7 @@ function industAutoComp($str,$tbl,$fld,$sct = NULL,$sr = NULL){
 	}
 	$sql = "SELECT * FROM `ichange_ind40k` WHERE `industry` LIKE '%".$str."%' OR `city` LIKE '%".$str."%' OR `state` LIKE '%".$str."%' OR `commodity` LIKE '%".$str."%' LIMIT 9";
 	$qry = $mysqli->query($sql);
-	$rows = $mysqli->affected_rows();
+	//$rows = $mysqli->affected_rows();
 	$lst40k = "";
 	//while($res = $qry->fetch_array()){
 	while($res = $qry->fetch_array()){
