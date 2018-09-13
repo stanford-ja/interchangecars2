@@ -1,6 +1,7 @@
 <?php
 
 date_default_timezone_set ('America/Chicago');
+/*
 echo "<h2>MRICF is currently unavailable</h2>";
 echo "<p>This is due to an automatic database engine upgrade on the 
 server where the applicaiton exists which has 
@@ -10,6 +11,7 @@ Coder will be working on fixing this as soon as possible.</p>";
 echo "</p>Thanks for your patience. A message will be posted in 
 the Virtual Ops group when the problem is fixed.</p>";
 exit();
+*/
 
 if(isset($_GET) && count($_POST) < 1){$_POST = $_GET;}
 /*
