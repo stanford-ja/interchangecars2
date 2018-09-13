@@ -514,11 +514,13 @@ function qry_cntr($tbl, $data, $ky){
 	// $ky = the name of the field to search in.
 	// $ret = Returned value of the function.
 	$mysqli = db_conn();
-	$sql = "SELECT `id` FROM `".$tbl."` WHERE `".$ky."` = '".$data."'";
+	$sql = "SELECT COUNT(`id`) AS `cntr` FROM `".$tbl."` WHERE `".$ky."` = '".$data."'";
 	$qry = $mysqli->query($sql);
+	$res = $qry->fetch_assoc();
 	//if($resultcom = mysql_fetch_array($dosql_com)){
-	if($mysqli->num_rows($qry)){return $mysqli->num_rows($qry);}
-	else{return 0;} //$resultcom['cntr']; //Value to return.
+	//if($mysqli->num_rows($qry)){return $mysqli->num_rows($qry);}
+	//else{return 0;} //$resultcom['cntr']; //Value to return.
+	return $res[0]->cntr;
 	//}
 }
 
