@@ -1,8 +1,9 @@
 <?php
 // Reads ichange_auto table and generates entries in progress table when necessary.
 // Also randomly chooses a waybill from the ichange_randomwb records, weights $probablity:1 against choosing one. 
+error_reporting(E_ALL); ini_set('display_errors', '1');
 
-	function qry($tbl, $data, $ky, $fld){
+	function qry($tbl, $data, $ky, $fld,$sqli){
 		// Suitable to return ONE field of the db table, where the field name and data to search for are provided.
 		// $tbl = the table to search in.		
 		// $data = the data string to search for.
@@ -10,9 +11,10 @@
 		// $fld = Field name to return value of.
 		// $ret = Returned value of the function.
 		$sql_com = "SELECT * FROM `".$tbl."` WHERE `".$ky."` = '".$data."' LIMIT 1";
-		$dosql_com = mysqli_query($sql_com);
+		$dosql_com = $sqli->query($sql_com);
 		$ret = "";
-		while($resultcom = mysqli_fetch_array($dosql_com)){			
+		//while($resultcom = mysqli_fetch_array($dosql_com)){
+		while($resultcom = $dosql_com->fetch_assoc()){			
 			$ret = $resultcom[$fld];				
 		}
 		
@@ -52,11 +54,12 @@
 		LEFT JOIN `ichange_waybill` ON `ichange_auto`.`waybill_num` = `ichange_waybill`.`waybill_num` 
 		WHERE `ichange_auto`.`act_date` <= '".$t_day."' ORDER BY `ichange_auto`.`description`, `ichange_auto`.`id`";
 
-	$qry = mysqli_query($sql);
+	$qry = $sqli->query($sql);
 	$render_fld = "";
 	$prev_spotted_wb = 0;
-	while($res = mysqli_fetch_array($qry)){
-
+	//while($res = mysqli_fetch_array($qry)){
+	while($res = $qry->fetch_array()){
+		$oth_flds = "";
 		$dt = $res['act_date'];
 		$wp = $res['waypoint'];
 		$ti = $res['train_id'];
@@ -93,8 +96,9 @@
 		if($desc == "SPOTTED"){
 			$train = "NOT ALLOCATED"; 
 			$more_autos = "";
-			$auto_rem_qry = mysqli_query("SELECT COUNT(waybill_num) AS cntr FROM ichange_auto WHERE waybill_num = '".$wb."' AND train_id != '".$ti."' LIMIT 1");
-			while($auto_rem_res = mysqli_fetch_array($auto_rem_qry)){
+			$auto_rem_qry = $sqli->query("SELECT COUNT(waybill_num) AS cntr FROM ichange_auto WHERE waybill_num = '".$wb."' AND train_id != '".$ti."' LIMIT 1");
+			//while($auto_rem_res = mysqli_fetch_array($auto_rem_qry)){
+			while($auto_rem_res = $auto_rem_qry->fetch_assoc()){
 				if($auto_rem_res['cntr'] > 0){ 
 					$train = "AUTO TRAIN"; 
 					$more_autos = "<div style=\"display: block; color: red; background-color: lightskyblue; padding: 5px;\">ANOTHER <strong>AUTO TRAIN</strong> IS SCHEDULED TO PICK UP THE CAR/S FOR THIS WAYBILL.</div>";
@@ -131,7 +135,7 @@
 			`train` = '".str_replace("NOT ALLOCATED","",$ti)."', 
 			`tzone` = 'America/Chicago', 
 			`added` = '".date('U')."'";
-		mysqli_query($prog_sql);
+		$sqli->query($prog_sql);
 		
 		$jprog = json_encode($prog);
 		//echo $jprog."<br />";
@@ -140,11 +144,11 @@
 		
 		// Update waybill table
 		$wb_upd = "UPDATE `ichange_waybill` SET `status` = '".$wb_stat."'".$oth_flds." WHERE `waybill_num` = '".$wb."'";
-		mysqli_query($wb_upd);
+		$sqli->query($wb_upd);
 
 		// Update trains table
 		$wb_upd = "UPDATE `ichange_trains` SET `location` = '".$wp."' WHERE `train_id` = '".str_replace("NOT ALLOCATED","",$ti)."'";
-		mysqli_query($wb_upd);
+		$sqli->query($wb_upd);
 		//echo "<pre>"; print_r($prog); echo "</pre>";
 		
 		$render_fld .= $t."\n";
@@ -222,7 +226,7 @@
 		mail($email, $subject, $mailbody, $headers);
 		//echo $email."<br />".$subject."<br />".nl2br($mailbody)."<br />".$headers;
 
-		mysqli_query("DELETE FROM `ichange_auto` WHERE `act_date` = '".$t_day."'");
+		$sqli->query("DELETE FROM `ichange_auto` WHERE `act_date` = '".$t_day."'");
 	}		
 	// End Auto Train Updater
 	
@@ -230,15 +234,16 @@
 	// Test for number of P_ORDER waybills. If more than 25, dont make any!
 	$create_po = 0;
 	$st = "SELECT COUNT(`id`) AS `cntr` FROM `ichange_waybill` WHERE `status` = 'P_ORDER'";
-	$qt = mysqli_query($st);
-	$rt = @mysqli_fetch_array($qt);
+	$qt = $sqli->query($st);
+	$rt = $qt->fetch_assoc(); //@mysqli_fetch_array($qt);
 	if(@$rt['cntr'] < 20){$create_po = 1;$render_fld .= @$rt['cntr']." PORDERS in system.\n";}
 	else{$render_fld .= "Maximum number of PORDERS in system - none created today!\n";}
 	
 	// select a random waybill num.
 	$sw = "SELECT `id` FROM `ichange_randomwb` WHERE `regularity` IS NULL OR LENGTH(`regularity`) < 1 ORDER BY `id` DESC LIMIT 1";
-	$qw = mysqli_query($sw);
-	while($rwes = mysqli_fetch_array($qw)){
+	$qw = $sqli->query($sw);
+	//while($rwes = mysqli_fetch_array($qw)){
+	while($rwes = $qw->fetch_assoc()){
 		$rws = $rwes['id'];
 	}
 	$probablity = $rws + 25;
@@ -262,11 +267,11 @@
 			$rw_chose = rand(1,$rws);
 			//echo "wb chosen: ".$rw_chose."<br />";
 			$sw = "SELECT * FROM `ichange_randomwb` WHERE `id` = '".$rw_chose."' AND (`regularity` IS NULL OR LENGTH(`regularity`) < 1)";
-			$qw = mysqli_query($sw);
-			$rw = mysqli_fetch_array($qw);
+			$qw = $sqli->query($sw);
+			$rw = $qw->fetch_assoc(); //mysqli_fetch_array($qw);
 		
 			if(isset($rw['rr_id_from'])){
-				$r_mark = qry("ichange_rr", $rw['rr_id_from'], "id", "report_mark");
+				$r_mark = qry("ichange_rr", $rw['rr_id_from'], "id", "report_mark",$sqli);
 				$mailbody = "The following Purchase has been generated by a customer:\n";
 				$nrw = "INSERT INTO `ichange_waybill` SET 
 				`date` = '".$wbdate."', 
@@ -284,7 +289,7 @@
 				`alias_aar` = '".$rw['car_aar']."', 
 				`notes` = '".$rw['notes']."'";
 				//echo $wbnum."-".$i." inserted";
-				mysqli_query($nrw);
+				$sqli->query($nrw);
 				$mailbody .= "Waybill #: ".$wbnum."-".$i."\n";
 				$mailbody .= "Origin Industry: ".$rw['indust_origin_name']."\n";
 				$mailbody .= "Destination Industry: ".$rw['indust_dest_name']."\n";
@@ -313,12 +318,13 @@
 	$wbnum = date('Ymd');
 	$wbdate = date('Y-m-d');	
 	$swr = "SELECT * FROM `ichange_randomwb` WHERE `regularity` LIKE '".date('d')."-%".date('m')."%' AND `rr_id_from` > 0 AND `rr_id_to` > 0";
-	$qwr = mysqli_query($swr);
+	$qwr = $sqli->query($swr);
 	$cntr=100;
 	$render_fld .= "\n";
-	while($resr = mysqli_fetch_array($qwr)){
+	//while($resr = mysqli_fetch_array($qwr)){
+	while($resr = $qwr->fetch_assoc()){
 		$rws = $resr['id'];
-		$r_mark = qry("ichange_rr", $resr['rr_id_from'], "id", "report_mark");
+		$r_mark = qry("ichange_rr", $resr['rr_id_from'], "id", "report_mark",$sqli);
 		$nrwr = "INSERT INTO `ichange_waybill` SET 
 			`date` = '".$wbdate."', 
 			`status` = 'WAYBILL', 
@@ -335,7 +341,7 @@
 			`alias_aar` = '".$resr['car_aar']."', 
 			`notes` = '".$resr['notes'].". *REGULAR WAYBILL - ".$resr['regularity']."*'";
 		$render_fld .= "<br />Regular Waybill ".$wbnum."-".$cntr." inserted";
-		mysqli_query($nrwr);
+		$sqli->query($nrwr);
 		$cntr++;
 	}
 	
@@ -362,11 +368,13 @@
 	
 	// START changed P_ORDER purger
 	$sql = "SELECT `waybill_num` FROM `ichange_waybill` WHERE `date` < '".$po_dt."' AND `status` = 'P_ORDER'";
-	$qry_po = mysqli_query($sql);
-	while($res_po = mysqli_fetch_array($qry_po)){
+	$qry_po = $sqli->query($sql);
+	//while($res_po = mysqli_fetch_array($qry_po)){
+	while($res_po = $qry_po->fetch_assoc()){
 		$sql = "SELECT COUNT(`id`) AS `cntr` FROM `ichange_progress` WHERE `waybill_num` = '".$res_po['waybill_num']."' LIMIT 1";
-		$qry_po2 = mysqli_query($sql);
-		while($res_po2 = mysqli_fetch_array($qry_po2)){
+		$qry_po2 = $sqli->query($sql);
+		//while($res_po2 = mysqli_fetch_array($qry_po2)){
+		while($res_po2 = $qry_po2->fetch_assoc()){
 			if($res_po2['cntr'] < 1){
 				$s[] = "DELETE FROM `ichange_waybill` WHERE `waybill_num` = '".$res_po['waybill_num']."'"; 
 			}
@@ -386,7 +394,7 @@
 	$s[] = "DELETE FROM `ichange_progress` WHERE `date` < '".$dt_prog."'";
 
 	for($i=0;$i<count($s);$i++){
-		$q = mysqli_query($s[$i]);
+		$q = $sqli->query($s[$i]);
 	}	
 	$wb_purge = "Closed waybills, progress reports (old system) and available cars entries older than ".$dt." has been purged from the database.\n";
 	$wb_purge .= "Waybills created before ".$yr." have been purged from the database.\n";
@@ -398,16 +406,17 @@
 
 	// Remove rr and associated data not used since $rr_rem_unix.
 	$rrs = "SELECT `id`,`report_mark` FROM `ichange_rr` WHERE `last_act` IS NOT NULL AND `last_act` > 0 AND `last_act` < ".$rr_rem_unix." AND `common_flag` != 1";
-	$rrq = mysqli_query($rrs) or die(mysqli_error());
+	$rrq = $sqli->query($rrs) or die(mysqli_error());
 	$rr_arr = array();
-	while($rrr = mysqli_fetch_array($rrq)){
+	//while($rrr = mysqli_fetch_array($rrq)){
+	while($rrr = $rrq->fetch_assoc()){
 		$rr_arr[] = "DELETE FROM `ichange_cars` WHERE `rr` = '".$rrr['id']."'";	
 		$rr_arr[] = "DELETE FROM `ichange_indust` WHERE `rr` = '".$rrr['id']."'";	
 		$rr_arr[] = "DELETE FROM `ichange_trains` WHERE `railroad_id` = '".$rrr['id']."'";	
 		$rr_arr[] = "DELETE FROM `ichange_rr` WHERE `id` = '".$rrr['id']."'";	
 		$wb_purge .= "Data for ".$rrr['report_mark']." has been REMOVED from the RR, Indust, Cars and Trains data tables (no activity since ".date('Y-m-d', $rr_rem_unix).").\n";
 	}
-	for($ri=0;$ri<count($rr_arr);$ri++){mysqli_query($rr_arr[$ri]);}
+	for($ri=0;$ri<count($rr_arr);$ri++){$sqli->query($rr_arr[$ri]);}
 
 	$dt_today = date('U');
 	$wb_purge .= "\n\n".$render_fld;
@@ -419,8 +428,8 @@
 
 	// Alert James to login to confirm status if last login more than 1 week ago.
 	$sql = "SELECT `last_act` FROM `ichange_rr` WHERE `admin_flag` = '1' ORDER BY `id` LIMIT 1";
-	$qry = mysqli_query($sql);
-	$res = mysqli_fetch_array($qry);
+	$qry = $sqli->query($sql);
+	$res = $qry->fetch_assoc(); //mysqli_fetch_array($qry);
 	$now = date('U');
 	$week_ago = intval($now - (60*60*24*2));
 	$cut_off = intval($now - (60*60*24*15));
@@ -440,6 +449,6 @@
 		echo "<h3>Please respond alert</h3>SUBJECT: ".$subject."<br />BODY: ".nl2br($body)."<br /><br />";;
 	}else{ echo "Last login to MRICF was ".date('Y-m-d H:i:s',$res['last_act'])." - ALL GOOD!<br /><br />"; }
 	
-	mysqli_close();
+	$sqli->close(); //mysqli_close();
 	echo "finished ".date('Y-m-d H:i:s',$dt_today)."!<br /><br />".nl2br($wb_purge);
 ?>
