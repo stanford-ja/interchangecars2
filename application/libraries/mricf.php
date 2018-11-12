@@ -306,24 +306,31 @@ function rrOpts(){
 	$o = "";
 	if(isset($this->railroad_select_options)){$o = $this->railroad_select_options;}else{
 		$s = "SELECT `id`,`report_mark` FROM `ichange_rr` WHERE `inactive` = 0 ORDER BY `report_mark`";
-		$q = mysqli_query($s);
-		while($r = mysqli_fetch_array($q)){
+		$sqli = $this->sqli_instance();
+		$q = $sqli->query($s);
+		//$q = mysqli_query($s);
+		//while($r = mysqli_fetch_array($q)){
+		while($r = $q->fetch_array()){
 			$sel = "";
 			//if($c == $r['id']){$sel = " selected=\"selected\" ";}
 			$o .= "<option value=\"".$r['id']."\"".$sel.">".$r['report_mark']."</option>";
 		}
-		$o .= "<option value=\"\" style=\"background-color: brown; color: white;\">COMMON</option>";
+		$o .= "<option value=\"\" style=\"background-color: brown; color: white;\">-- COMMON --</option>";
 		$s = "SELECT `id`,`report_mark` FROM `ichange_rr` WHERE `common_flag` = 1 ORDER BY `report_mark`";
-		$q = mysqli_query($s);
-		while($r = mysqli_fetch_array($q)){
+		$q = $sqli->query($s);
+		//$q = mysqli_query($s);
+		//while($r = mysqli_fetch_array($q)){
+		while($r = $q->fetch_array()){
 			$sel = "";
 			//if($c == $r['id']){$sel = " selected=\"selected\" ";}
 			$o .= "<option value=\"".$r['id']."\"".$sel.">".$r['report_mark']."</option>";
 		}
-		$o .= "<option value=\"\" style=\"background-color: brown; color: white;\">INACTIVE</option>";
+		$o .= "<option value=\"\" style=\"background-color: brown; color: white;\">-- INACTIVE --</option>";
 		$s = "SELECT `id`,`report_mark` FROM `ichange_rr` WHERE `inactive` = 1 ORDER BY `report_mark`";
-		$q = mysqli_query($s);
-		while($r = mysqli_fetch_array($q)){
+		$q = $sqli->query($s);
+		//$q = mysqli_query($s);
+		//while($r = mysqli_fetch_array($q)){
+		while($r = $q->fetch_array()){
 			$sel = "";
 			//if($c == $r['id']){$sel = " selected=\"selected\" ";}
 			$o .= "<option value=\"".$r['id']."\"".$sel.">".$r['report_mark']."</option>";
