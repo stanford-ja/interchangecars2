@@ -253,6 +253,7 @@ hr {color: #ccc;}
    */	
    text-align: center;
 	padding: 2px;
+	margin: 1px;
 	border: 1px solid #BC8F8F;
 	font-size: 10pt;
 	width: 40px;

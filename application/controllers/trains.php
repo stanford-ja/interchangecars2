@@ -52,8 +52,8 @@ class Trains extends CI_Controller {
 			$traindat = (array)$this->Generic_model->get_search_results($_POST['search_for'],$_POST['search_in'],"ichange_trains");
 		}else{$traindat = (array)$this->Train_model->get_all4RR_Sorted($this->arr['rr_sess']);}
 		//$this->dat = array();
-		$this->dat['fields'] 			= array('id', 'train_id', 'train_desc', 'loco_num', 'origin', 'destination', 'location' , 'railroad_id', 'tr_sheet_ord','modified');
-		$this->dat['field_names'] 		= array("ID", "Train ID", "Description", "Motive Power", "Origin", "Destination", "Location", "Railroad", "Sheet Order","Added/Modified");
+		$this->dat['fields'] 			= array('id', 'train_id', 'train_desc', 'days', 'loco_num', 'origin', 'destination', 'location' , 'railroad_id', 'tr_sheet_ord','modified');
+		$this->dat['field_names'] 		= array("ID", "Train ID", "Description", "Days", "Motive Power", "Origin", "Destination", "Location", "Railroad", "Sheet Order","Added/Modified");
 		$this->dat['options']			= array(
 				'Edit' => "trains/edit/", 
 				'Switchlist' => "switchlist/lst/"
@@ -109,10 +109,19 @@ class Trains extends CI_Controller {
 				}
 			}
 			if($aut_inf != ''){$aut_inf = "<span style=\"color: #555; font-size: 9pt;\">".$aut_inf."</span>";}
+			$days = "";
+			if($traindat[$i]->sun == 1){ $days .= "<div class=\"wb_btn\">SUN</div>"; }
+			if($traindat[$i]->mon == 1){ $days .= "<div class=\"wb_btn\">MON</div>"; }
+			if($traindat[$i]->tues == 1){ $days .= "<div class=\"wb_btn\">TUE</div>"; }
+			if($traindat[$i]->wed == 1){ $days .= "<div class=\"wb_btn\">WED</div>"; }
+			if($traindat[$i]->thu == 1){ $days .= "<div class=\"wb_btn\">THU</div>"; }
+			if($traindat[$i]->fri == 1){ $days .= "<div class=\"wb_btn\">FRI</div>"; }
+			if($traindat[$i]->sat == 1){ $days .= "<div class=\"wb_btn\">SAT</div>"; }
 
 			$this->dat['data'][$i]['id'] 						= $traindat[$i]->id;
 			$this->dat['data'][$i]['train_id']			 		= $traindat[$i]->train_id;
 			$this->dat['data'][$i]['train_desc'] 				= $traindat[$i]->train_desc.$aut_inf;
+			$this->dat['data'][$i]['days'] 				= $days;
 			$this->dat['data'][$i]['loco_num']			 		= $traindat[$i]->loco_num;
 			$this->dat['data'][$i]['origin']					= $traindat[$i]->origin;
 			$this->dat['data'][$i]['destination']				= $traindat[$i]->destination;
