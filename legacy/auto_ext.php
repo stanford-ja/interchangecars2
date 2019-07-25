@@ -23,6 +23,14 @@ error_reporting(E_ALL); ini_set('display_errors', '1');
 
 	include('db_connect7465.php');	
 	$mess = "";
+	
+	// Get ids of rairoads that are either common or active
+	$sql = "SELECT `id` FROM `ichange_rr` WHERE `inactive` = 0 OR `common_flag` = 1";
+	$qry = $sqli->query($sql);
+	$current_rrs = array();
+	while($res = $qry->fetch_assoc()){
+		$current_rrs[] = $res['id'];
+	}
 
 	// Start removal of waybill_images/ files greater than 6 months old.
 	$mths = 6;
@@ -266,7 +274,9 @@ error_reporting(E_ALL); ini_set('display_errors', '1');
 			//echo "cntr = ".$i."<br />";
 			$rw_chose = rand(1,$rws);
 			//echo "wb chosen: ".$rw_chose."<br />";
-			$sw = "SELECT * FROM `ichange_randomwb` WHERE `id` = '".$rw_chose."' AND (`regularity` IS NULL OR LENGTH(`regularity`) < 1)";
+			//$sw = "SELECT * FROM `ichange_randomwb` WHERE `id` = '".$rw_chose."' AND (`regularity` IS NULL OR LENGTH(`regularity`) < 1)"; - REAPLCED BY BELOW LINE TO STOP POs BEING CREATED FOR INACTIVE AND NON-COMMON RRs - 2019-07-25 JS
+			$sw = "SELECT * FROM `ichange_randomwb` WHERE `id` = '".$rw_chose."' AND (`regularity` IS NULL OR LENGTH(`regularity`) < 1) AND `rr_id_from` IN (".implode(",",$current_rrs).") AND `rr_id_to` IN (".implode(",",$current_rrs).")";
+			echo "sw = ".$sw."<br />";
 			$qw = $sqli->query($sw);
 			$rw = $qw->fetch_assoc(); //mysqli_fetch_array($qw);
 		
