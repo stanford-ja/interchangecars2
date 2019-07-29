@@ -31,8 +31,8 @@ class Randomwb extends CI_Controller {
 		$randpos = array();
 		$custpos = (array)$this->Randomwb_model->get_all();
 		//$this->dat = array();
-		$this->dat['fields'] 			= array('id', 'indust_origin_name', 'indust_dest_name', 'lading', 'regularity', 'rr_id_from', 'rr_id_to','modified');
-		$this->dat['field_names'] 		= array("ID", "Origin Industry", "Destination Industry", "Lading", "Regularity","From RR","To RR","Added/Modified");
+		$this->dat['fields'] 			= array('id', 'indust_origin_name', 'indust_dest_name', 'lading', 'regularity', 'rr_id_from', 'rr_id_to','create_as','modified');
+		$this->dat['field_names'] 		= array("ID", "Origin Industry", "Destination Industry", "Lading", "Regularity","From RR","To RR","Create As","Added/Modified");
 		$this->dat['options']			= array(
 				'Edit' => "randomwb/edit/"
 			); // Paths to options method, with trailling slash!
@@ -59,6 +59,7 @@ class Randomwb extends CI_Controller {
 			$this->dat['data'][$i]['rr_id_from'] 					= $rr_f_rm."&nbsp;";
 			$this->dat['data'][$i]['rr_id_to'] 					= $rr_t_rm."&nbsp;";
 			$this->dat['data'][$i]['regularity']				= $regla;
+			$this->dat['data'][$i]['create_as']				= $custpos[$i]->create_as;
 			$this->dat['data'][$i]['modified']					= "";
 			if($custpos[$i]->added > 0){$this->dat['data'][$i]['modified'] = date('Y-m-d H:i',$custpos[$i]->added);}
 			if($custpos[$i]->modified > 0){$this->dat['data'][$i]['modified'] = date('Y-m-d H:i',$custpos[$i]->modified);}
@@ -127,6 +128,12 @@ class Randomwb extends CI_Controller {
 		// Add form and field definitions specific to this controller under this line... 
 		$this->dat['hidden'] = array('tbl' => 'randomwb', 'id' => @$this->dat['data'][0]->id);
 		$this->dat['form_url'] = "../save";
+
+		$this->field_defs[] =  array(
+			'type' => "select", 'label' => 'Create As', 'name' => 'create_as', 'value' => @$this->dat['data'][0]->create_as, 
+			'other' => 'id="create_as"', 'options' => array('P_ORDER' => "Purchase Order", 'WAYBILL' => "Waybill")
+		);
+
 		$this->field_defs[] =  array(
 			'type' => "input", 'label' => 'Origin Industry', 'def' => array(
               'name'        => 'indust_origin_name',
@@ -203,7 +210,7 @@ class Randomwb extends CI_Controller {
 			'type' => "input", 'label' => 'Regularity', 'def' => array(
               'name'        => 'regularity',
               'id'          => 'regularity',
-              'value'       => @$this->dat['data'][0]->regularity,
+              'value'       => @str_replace("&#47;","/",$this->dat['data'][0]->regularity),
               'size'        => '20'
 			)
 		);
