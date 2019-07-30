@@ -20,6 +20,8 @@ class Randomwb extends CI_Controller {
 		$this->arr['script_file'] = "js/".strtolower(get_class()).".php";
 		if(isset($_COOKIE['rr_sess'])){$this->arr['rr_sess'] = $_COOKIE['rr_sess'];}
 
+		// Status array & vars for use in this controller.
+		$this->status_arr = array('' => "Default", 'P_ORDER' => "Purchase Order", 'WAYBILL' => "Waybill");
 	}
 
 	public function index(){
@@ -47,10 +49,17 @@ class Randomwb extends CI_Controller {
 			$rr_f_rm = ""; if(isset($rr_from[0]->report_mark)){$rr_f_rm = $rr_from[0]->report_mark;}
 			$rr_t_rm = ""; if(isset($rr_to[0]->report_mark)){$rr_t_rm = $rr_to[0]->report_mark;}
 			if(isset($rr_me[0]->report_mark)){
-				if($rr_f_rm == $rr_me[0]->report_mark){$rr_f_rm = "<span style=\"background-color: yellow;\">&nbsp;".$rr_f_rm."&nbsp;</span>";}
-				if($rr_t_rm == $rr_me[0]->report_mark){$rr_t_rm = "<span style=\"background-color: yellow;\">&nbsp;".$rr_t_rm."&nbsp;</span>";}
+				if($rr_f_rm == $rr_me[0]->report_mark){$rr_f_rm = "<div style=\"display: inline-block; background-color: yellow; padding: 4px; border-radius: 4px;\">&nbsp;".$rr_f_rm."&nbsp;</div>";}
+				if($rr_t_rm == $rr_me[0]->report_mark){$rr_t_rm = "<div style=\"display: inline-block; background-color: yellow; padding: 4px; border-radius: 4px;\">&nbsp;".$rr_t_rm."&nbsp;</div>";}
 			}
 			$regla = $custpos[$i]->regularity;
+			$create_as = $custpos[$i]->create_as;
+			if(strlen($create_as) < 1){
+				if(strlen($custpos[$i]->regularity) < 1){ $create_as = "P_ORDER"; }
+				else{ $create_as = "WAYBILL"; }
+			}else{
+				$create_as = "<div style=\"display: inline-block; background-color: lightskyblue; color: black; padding: 4px; border-radius: 4px;\">".$create_as."</div>";
+			}
 			if(strlen($regla) < 1){$regla = "RANDOM";}
 			$this->dat['data'][$i]['id'] 						= $custpos[$i]->id;
 			$this->dat['data'][$i]['indust_origin_name'] 	= $custpos[$i]->indust_origin_name;
@@ -59,7 +68,7 @@ class Randomwb extends CI_Controller {
 			$this->dat['data'][$i]['rr_id_from'] 					= $rr_f_rm."&nbsp;";
 			$this->dat['data'][$i]['rr_id_to'] 					= $rr_t_rm."&nbsp;";
 			$this->dat['data'][$i]['regularity']				= $regla;
-			$this->dat['data'][$i]['create_as']				= $custpos[$i]->create_as;
+			$this->dat['data'][$i]['create_as']				= $create_as;
 			$this->dat['data'][$i]['modified']					= "";
 			if($custpos[$i]->added > 0){$this->dat['data'][$i]['modified'] = date('Y-m-d H:i',$custpos[$i]->added);}
 			if($custpos[$i]->modified > 0){$this->dat['data'][$i]['modified'] = date('Y-m-d H:i',$custpos[$i]->modified);}
@@ -131,7 +140,7 @@ class Randomwb extends CI_Controller {
 
 		$this->field_defs[] =  array(
 			'type' => "select", 'label' => 'Create As', 'name' => 'create_as', 'value' => @$this->dat['data'][0]->create_as, 
-			'other' => 'id="create_as"', 'options' => array('P_ORDER' => "Purchase Order", 'WAYBILL' => "Waybill")
+			'other' => 'id="create_as"', 'options' => $this->status_arr
 		);
 
 		$this->field_defs[] =  array(
