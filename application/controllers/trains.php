@@ -46,14 +46,42 @@ class Trains extends CI_Controller {
 	}
 	
 	public function lst(){
+		// Sync waypoints, origin, destination, tr_sheet_ord
+		// 1st - create waypoints from origin, destination & tr_sheet_ord where waypoints has not been set.
+		$sql = "SELECT `id`,`origin`,`destination`,`tr_sheet_ord` FROM `ichange_trains` WHERE LENGTH(`waypoints`) < 6 AND `railroad_id` = '".$this->arr['rr_sess']."'";
+		$tmp = (array)$this->Generic_model->qry($sql);
+		for($z=0;$z<count($tmp);$z++){
+			$tmp_arr = array();
+			if(strlen($tmp[$z]->origin) > 0){ $tmp_arr[] = array('LOCATION' => $tmp[$z]->origin, 'TIME' => $tmp[$z]->tr_sheet_ord); }
+			if(strlen($tmp[$z]->destination) > 0){ $tmp_arr[] = array('LOCATION' => $tmp[$z]->destination, 'TIME' => $tmp[$z]->tr_sheet_ord); }
+			if(count($tmp_arr) > 0){
+				$wp = json_encode($tmp_arr);
+				$sqlu = "UPDATE `ichange_trains` SET `waypoints` = '".str_replace("'","",$wp)."' WHERE `id` = '".$tmp[$z]->id."'";
+				$this->Generic_model->change($sqlu);
+			}
+		}
+		// 2nd - update origin, destination, tr_sheet_ord from waypoints where waypoints has been set.
+		$sql = "SELECT `id`,`waypoints` FROM `ichange_trains` WHERE LENGTH(`waypoints`) > 5 AND `railroad_id` = '".$this->arr['rr_sess']."'";
+		$tmp = (array)$this->Generic_model->qry($sql);
+		for($z=0;$z<count($tmp);$z++){
+			$tmp2 = @json_decode($tmp[$z]->waypoints,true);
+			$orig = $tmp2[0]['LOCATION'];
+			$dest = $tmp2[(count($tmp2)-1)]['LOCATION'];
+			$tror = $tmp2[0]['TIME'];
+			if(strlen($orig.$dest) > 0){
+				$sqlu = "UPDATE `ichange_trains` SET `origin` = '".str_replace("'","",$orig)."', `destination` = '".str_replace("'","",$dest)."', `tr_sheet_ord` = '".str_replace("'","",$tror)."' WHERE `id` = '".$tmp[$z]->id."'";
+				$this->Generic_model->change($sqlu);
+			}
+		}
+	
 		$this->arr['pgTitle'] .= " - List";
 		$randpos = array();
 		if(isset($_POST['search_for'])){
 			$traindat = (array)$this->Generic_model->get_search_results($_POST['search_for'],$_POST['search_in'],"ichange_trains");
 		}else{$traindat = (array)$this->Train_model->get_all4RR_Sorted($this->arr['rr_sess']);}
 		//$this->dat = array();
-		$this->dat['fields'] 			= array('id', 'train_id', 'train_desc', 'days', 'loco_num', 'origin', 'destination', 'location' , 'railroad_id', 'tr_sheet_ord','modified');
-		$this->dat['field_names'] 		= array("ID", "Train ID", "Description", "Days", "Motive Power", "Origin", "Destination", "Location", "Railroad", "Sheet Order","Added/Modified");
+		$this->dat['fields'] 			= array('id', 'train_id', 'train_desc', 'days', 'loco_num', 'from_to', 'tr_sheet_ord', 'location' , 'railroad_id', 'waypoints','modified');
+		$this->dat['field_names'] 		= array("ID", "Train ID", "Description", "Days", "Motive Power", "From / To", "TR Sheet Order", "Location", "Railroad", 'Waypoints',"Added/Modified");
 		$this->dat['options']			= array(
 				'Edit' => "trains/edit/", 
 				'Switchlist' => "switchlist/lst/"
@@ -110,6 +138,16 @@ class Trains extends CI_Controller {
 			}
 			if($aut_inf != ''){$aut_inf = "<span style=\"color: #555; font-size: 9pt;\">".$aut_inf."</span>";}
 			$days = "";
+			
+			// Waypoints display
+			$wpdisp = "";
+			$wpoints = json_decode($traindat[$i]->waypoints,true);
+			for($w=0;$w<count($wpoints);$w++){
+				$wpdisp .= "<div class=\"wb_btn\" style=\"width: 120px; font-size: 8pt;\">".$wpoints[$w]['LOCATION'];
+				if(strlen($wpoints[$w]['TIME']) > 0){ $wpdisp .= " (".$wpoints[$w]['TIME'].")"; }
+				$wpdisp .= "</div>";
+			}
+			
 			if($traindat[$i]->sun == 1){ $days .= "<div class=\"wb_btn\">SUN</div>"; }
 			if($traindat[$i]->mon == 1){ $days .= "<div class=\"wb_btn\">MON</div>"; }
 			if($traindat[$i]->tues == 1){ $days .= "<div class=\"wb_btn\">TUE</div>"; }
@@ -123,11 +161,11 @@ class Trains extends CI_Controller {
 			$this->dat['data'][$i]['train_desc'] 				= $traindat[$i]->train_desc.$aut_inf;
 			$this->dat['data'][$i]['days'] 				= $days;
 			$this->dat['data'][$i]['loco_num']			 		= $traindat[$i]->loco_num;
-			$this->dat['data'][$i]['origin']					= $traindat[$i]->origin;
-			$this->dat['data'][$i]['destination']				= $traindat[$i]->destination;
+			$this->dat['data'][$i]['from_to']					= $traindat[$i]->origin." -> ".$traindat[$i]->destination;
+			$this->dat['data'][$i]['tr_sheet_ord']			= $traindat[$i]->tr_sheet_ord;
 			$this->dat['data'][$i]['location']				= $traindat[$i]->location;
 			$this->dat['data'][$i]['railroad_id']				= $this->mricf->qry("ichange_rr",$traindat[$i]->railroad_id,"id","report_mark");
-			$this->dat['data'][$i]['tr_sheet_ord']			= $traindat[$i]->tr_sheet_ord;
+			$this->dat['data'][$i]['waypoints']			= $wpdisp;
 			$this->dat['data'][$i]['modified']					= "";
 			if($traindat[$i]->added > 0){$this->dat['data'][$i]['modified'] = date('Y-m-d H:i',$traindat[$i]->added);}
 			if($traindat[$i]->modified > 0){$this->dat['data'][$i]['modified'] = date('Y-m-d H:i',$traindat[$i]->modified);}
@@ -322,6 +360,16 @@ class Trains extends CI_Controller {
 		$rr_opts = array();
 		$rr_tmp = (array)$this->Railroad_model->get_allActive();
 		for($i=0;$i<count($rr_tmp);$i++){$rr_opts[$rr_tmp[$i]->id] = $rr_tmp[$i]->report_mark." - ".substr($rr_tmp[$i]->rr_name,0,70);}
+		
+		$orig = @$this->dat['data'][0]->origin;
+		$dest = @$this->dat['data'][0]->destination;
+		$tror = @$this->dat['data'][0]->tr_sheet_ord;
+		$waypoints = $this->dat['data'][0]->waypoints;
+		$wayp_arr = @json_decode($waypoints,true);
+		$wpHTM = "";
+		for($wps=0;$wps<count($wayp_arr);$wps++){ 
+			$wpHTM .= "<div class=\"wb_btn\" style=\"width: auto;\">".@$wayp_arr[$wps]['LOCATION']." (".@$wayp_arr[$wps]['TIME'].")</div>"; 
+		}
 
 		$tr_opts = array('' => "Select one");
 		$tr_tmp = (array)$this->Locomotives_model->getLocos4RR($this->arr['rr_sess'],array('rr','avail_to','loco_num'),$this->my_rr_ids,1);
@@ -385,11 +433,12 @@ class Trains extends CI_Controller {
 			'other' => 'id="loco_num"', 'options' => $tr_opts
 		);
 
+		/*
 		$this->field_defs[] =  array(
 			'type' => "input", 'label' => 'Origin', 'def' => array(
               'name'        => 'origin',
               'id'          => 'origin',
-              'value'       => @$this->dat['data'][0]->origin,
+              'value'       => @$orig,
               'maxlength'   => '45',
               'size'        => '45'
 			)
@@ -399,25 +448,66 @@ class Trains extends CI_Controller {
 			'type' => "input", 'label' => 'Destination', 'def' => array(
               'name'        => 'destination',
               'id'          => 'destination',
-              'value'       => @$this->dat['data'][0]->destination,
+              'value'       => @$dest,
               'maxlength'   => '45',
               'size'        => '45'
 			)
 		);
+		*/
 
+		/*
 		$this->field_defs[] =  array(
 			'type' => "statictext", 'label' => '',
 			'value' => '<div style="background-color: antiquewhite; border: 1px solid red; padding: 5px; font-size: 9pt;">Train Sheet Order / Depart Time can be either an integer train sheet order, or a time in 24 hours format such as HHMM or HH:MM. All trains for your railroad need to have the same format for this field for them to be displayed / printed in the proper order.</div>'
 		);
+		*/
 
+		/*
 		$this->field_defs[] =  array(
 			'type' => "input", 'label' => 'Train Sheet Order / Depart Time', 'def' => array(
               'name'        => 'tr_sheet_ord',
               'id'          => 'tr_sheet_ord',
-              'value'       => @$this->dat['data'][0]->tr_sheet_ord,
+              'value'       => @$tror,
               'maxlength'   => '6',
               'size'        => '6'
 			)
+		);
+		*/
+
+		$this->field_defs[] =  array(
+			'type' => "statictext", 'label' => '',
+			'value' => '<div style="display: none;">
+				<input type="hidden" name="origin" id="origin" value="'.@$orig.'" />
+				<input type="hidden" name="destination" id="destination" value="'.@$dest.'" />
+				<input type="hidden" name="tr_sheet_ord" id="tr_sheet_ord" value="'.@$tror.'" />
+				</div>'
+		);
+
+		/*
+		$this->field_defs[] =  array(
+			'type' => "statictext", 'label' => '',
+			'value' => '<div style="background-color: antiquewhite; border: 1px solid red; padding: 5px; font-size: 9pt;">
+				<strong>Train Waypoints</strong> <a href="javascript:{}" onclick="winOpn(\''.WEB_ROOT.'/legacy/train_wps2.php?id=\'+document.form.id.value,450,450);">Manage Train Waypoints</a><br />
+				To manage the waypoints for this train click the Manage Train Waypoints link above.</div>'
+		);
+		*/
+
+		/*
+		$this->field_defs[] =  array(
+			'type' => "textarea", 'label' => 'Waypoints for Train', 'def' => array(
+              'name'        => 'waypoints',
+              'id'          => 'waypoints',
+              'value'       => @$waypoints,
+              'rows'			 => '3',
+              'cols'        => '50',
+              'style' 		=> "display: none;"
+			)
+		);
+		*/
+
+		$this->field_defs[] =  array(
+			'type' => "statictext", 'label' => 'Waypoints for Train',
+			'value' => '<textarea name="waypoints" id="waypoints" style="display: none;">'.@$waypoints.'</textarea><a href="javascript:{}" onclick="winOpn(\''.WEB_ROOT.'/legacy/train_wps2.php?id=\'+document.form.id.value,450,450);">Manage Train Waypoints</a><br /><div id="waypointHTM">'.$wpHTM.'</div>'
 		);
 
 		$this->field_defs[] =  array(

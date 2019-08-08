@@ -92,7 +92,7 @@ $txt = "<span style=\"font-size: 9pt;\">Enter or change the location / name of t
 		</script>
 	</head>
 <body<?php if($wot2do == 1){ echo " onload=\"updTrainDetails();\"";} ?>>
-<h2>Waypoints for train <?php echo $tid; ?></h2>
+<h2>Waypoints for Auto Train <?php echo $tid; ?></h2>
 <form name="" method="post" action="train_wps.php">
 <input type="hidden" name="tid" value="<?php echo $tid; ?>" />
 <input type="hidden" name="max_days" value="<?php //echo $may_day; ?>" />

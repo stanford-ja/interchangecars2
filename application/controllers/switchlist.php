@@ -61,15 +61,25 @@ class Switchlist extends CI_Controller {
 		//echo "<pre>"; print_r($trdat); echo "</pre>";
 		$this->traindat = $trdat;
 		$op_days = "";
-		if($trdat[0]->sun == 1){$op_days .= "SUN ";}
-		if($trdat[0]->mon == 1){$op_days .= "MON ";}
-		if($trdat[0]->tues == 1){$op_days .= "TUE ";}
-		if($trdat[0]->wed == 1){$op_days .= "WED ";}
-		if($trdat[0]->thu == 1){$op_days .= "THU ";}
-		if($trdat[0]->fri == 1){$op_days .= "FRI ";}
-		if($trdat[0]->sat == 1){$op_days .= "SAT ";}
+		if($trdat[0]->sun == 1){$op_days .= "<div class=\"wb_btn\">SUN</div>";}
+		if($trdat[0]->mon == 1){$op_days .= "<div class=\"wb_btn\">MON</div>";}
+		if($trdat[0]->tues == 1){$op_days .= "<div class=\"wb_btn\">TUE</div>";}
+		if($trdat[0]->wed == 1){$op_days .= "<div class=\"wb_btn\">WED</div>";}
+		if($trdat[0]->thu == 1){$op_days .= "<div class=\"wb_btn\">THU</div>";}
+		if($trdat[0]->fri == 1){$op_days .= "<div class=\"wb_btn\">FRI</div>";}
+		if($trdat[0]->sat == 1){$op_days .= "<div class=\"wb_btn\">SAT</div>";}
 		$tr_opts = "<option value=\"".$trdat[0]->train_id."\">".$trdat[0]->train_id."</option>";
 		for($trc=0;$trc<count($trsdat);$trc++){$tr_opts .= "<option value=\"".$trsdat[$trc]->train_id."\">".$trsdat[$trc]->train_id."</option>";}
+		
+		// Waypoints for train
+		$waypoints = "";
+		if(strlen($trdat[0]->waypoints) > 6){
+			$wp_arr = @json_decode($trdat[0]->waypoints,true);
+			for($wp=0;$wp<count($wp_arr);$wp++){
+				$tm = ""; if($wp_arr[$wp]['TIME'] > 0){ $tm = " (".$wp_arr[$wp]['TIME'].")"; }
+				$waypoints .= "<div class=\"wb_btn\" style=\"width: auto;\">".$wp_arr[$wp]['LOCATION'].$tm."</div>";
+			}
+		}
 
 		$lo_opts = array('' => "Select one");
 		$lo_tmp = (array)$this->Locomotives_model->getLocos4RR($this->arr['rr_sess'],array('rr','avail_to','loco_num'),$this->my_rr_ids,1);
@@ -90,7 +100,7 @@ class Switchlist extends CI_Controller {
 			<a href=\"javascript:{}\" onclick=\"document.getElementById('add2SWLst').style.display = 'none';\">[ Close ]</a>
 			</div>";
 
-		$this->trdat['field_names'] = array("Train ID / Motive Power", "Train Description", "Origin / Destination", "Operation Days", "Direction", "Operation Notes");
+		$this->trdat['field_names'] = array("Train ID / Motive Power", "Train Description", "Origin / Destination", "Waypoints", "Operation Days", "Direction", "Operation Notes");
 		$this->trdat['data'][0]['train_id'] = "<span style=\"float: right;\">
 			<a href=\"javascript:{}\" onclick=\"document.getElementById('loco_sel_div').style.display = 'block'; document.getElementById('add2SWLst').style.display = 'none';\">Change / Add Motive Power</a>&nbsp; 
 			<a href=\"javascript:{}\" onclick=\"add2SW('".$id."');\">Add Waybill to Switchlist</a>
@@ -100,7 +110,8 @@ class Switchlist extends CI_Controller {
 		//$this->trdat['data'][0]['loco_num'] = $trdat[0]->loco_num;
 		$this->trdat['data'][0]['train_desc'] = $trdat[0]->train_desc;
 		//if(strlen($trdat[0]->location) < 1){$trdat[0]->location = $trdat[0]->destination;}
-		$this->trdat['data'][0]['origin'] = "<span style=\"float: right; font-size: 13pt; font-weight: bold;\">Location: ".$trdat[0]->location."</span>".$trdat[0]->origin." - to - ".$trdat[0]->destination;
+		$this->trdat['data'][0]['origin'] = "<span style=\"float: right; font-size: 13pt; font-weight: bold;\">Location: ".$trdat[0]->location."</span><div class=\"wb_btn\" style=\"width: auto;\">".$trdat[0]->origin."</div> -> <div class=\"wb_btn\" style=\"width: auto;\">".$trdat[0]->destination."</div>";
+		$this->trdat['data'][0]['waypoints'] = $waypoints;
 		//$this->trdat['data'][0]['destination'] = $trdat[0]->destination;
 		$this->trdat['data'][0]['op_days'] = $op_days;
 		$this->trdat['data'][0]['direction'] = $trdat[0]->direction;
