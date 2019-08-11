@@ -45,7 +45,7 @@ class Train_model extends CI_Model {
 		if($a == 0){$s .= " AND `auto` = 0 AND LENGTH(`auto`) < 2";}
 		if($a == 2){$s .= " AND LENGTH(`tr_sheet_ord`) > 0";}
 		$s .= " GROUP BY ichange_trains.train_id ORDER BY tr_sheet_ord";
-		echo $s; //exit();
+		//echo $s; //exit();
 
 		$query = $this->db->query($s);
 		return $query->result();
