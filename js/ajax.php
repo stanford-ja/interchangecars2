@@ -23,6 +23,7 @@ if(isset($_GET['f'])){
 	if($_GET['f'] == "glCreate"){glCreate(@$_GET['i']);}
 	if($_GET['f'] == "glDel"){glDel(@$_GET['i']);}
 	if($_GET['f'] == "add2SW"){add2SW(@$_GET['s']);}
+	if($_GET['f'] == "addC2SW"){addC2SW(@$_GET['s']);}
 }
 // End function caller
 
@@ -443,6 +444,42 @@ function add2SW($id){
 		$ret .= "<div style=\"display: inline-block; border: 1px solid #ccc; border-radius: 5px; background-color: ivory; padding: 4px; margin: 2px; width: 300px; height: 93px; overflow: hidden; font-size: 9pt;\"><a href=\"javascript:{}\" onclick=\"if(confirm('Add this waybill to this switchlist?')){ window.location = '".$path[0]."switchlist/add2SW/".$res['id']."/".$id."'; }\">".$res['waybill_num']."</a> - ".$res['status'].".<br /><strong>".$res['indust_origin_name']." -> ".$res['indust_dest_name']." -> ".$res['return_to']."</strong><br />In train: <strong>".$res['train_id']."</strong><br />Lading: <strong>".$res['lading']."</strong><br />Routing: <strong>".$res['routing']."</strong></div>";
 	}
 	$ret .= "";
+	
+	echo $ret;
+}
+
+function addC2SW($id){
+	// Get waybills allocated to railroad logged in as that are not already in switchlist id = $id
+	$mysqli = db_conn();
+	$path = explode("js/ajax.php",$_SERVER['REQUEST_URI']);
+	$ret = "<form method=\"post\" action=\"".str_replace("http://".$_SERVER['SERVER_NAME'],"",$path[0])."switchlist/addC2SW\">";
+	$ret .= "<input type=\"hidden\" name=\"sw_id\" value=\"".$id."\" />";
+
+	/*
+	// Get train details
+	$sql = "SELECT `rr_id` FROM `ichange_trains` WHERE `id` = '".$id."'";
+	$qry = $mysqli->query($sql);
+	$res = $qry->fetch_assoc(); //mysqli_fetch_assoc($qry);
+	$train_id = $res['train_id'];
+	*/
+	
+	// Get not already on a switchlist or wybill	
+	$sql = "SELECT `ichange_cars`.*, (SELECT COUNT(`id`) AS `cntr` FROM `ichange_waybill` WHERE `cars` LIKE CONCAT('%\"',`ichange_cars`.`car_num`,'\"%')) AS `cntr` 
+		FROM `ichange_cars` 
+		LEFT JOIN `ichange_tr_cars` ON `ichange_cars`.`id` = `ichange_tr_cars`.`cars_id` 
+		WHERE `ichange_cars`.`rr` = '".@$_COOKIE['rr_sess']."' AND (`ichange_tr_cars`.`id` < 1 OR `ichange_tr_cars`.`id` IS NULL) 
+		GROUP BY `ichange_cars`.`car_num`";
+	$qry = $mysqli->query($sql);
+	while($res = $qry->fetch_assoc()){
+		if($res['cntr'] == 0){
+		$ret .= "<div style=\"display: inline-block; border: 1px solid #ccc; border-radius: 5px; background-color: ivory; padding: 4px; margin: 2px; width: 18%; min-width: 200px; height: 63px; overflow: hidden; font-size: 9pt;\">
+		<div style=\"display: inline-block; padding: 3px; float: right;\"><input type=\"checkbox\" name=\"Car2Add2SW[]\" value=\"".$res['id']."\" /></div>
+		Car Num: <strong>".$res['car_num']."</strong> (<strong>".$res['aar_type']."</strong>)
+		<br />Location: <strong>".$res['location']."</strong>
+		<br />Instructions:<br /><input type=\"text\" name=\"instructions[".$res['id']."]\" value=\"\" style=\"width: 90%; font-size: 9pt;\" maxlength=\"50\" /></div>";
+		}
+	}
+	$ret .= "<input type=\"submit\" name=\"addCar2SW\" value=\"Add Selected Cars\" /></form>";
 	
 	echo $ret;
 }

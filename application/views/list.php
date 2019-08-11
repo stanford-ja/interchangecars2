@@ -59,7 +59,21 @@ for($i=0;$i<count(@$data);$i++){
 	if($l_disp > 0){
 		echo "<div style=\"display: inline-block; overflow: hidden; padding: 3px; vertical-align: top; width: 80px;\">";
 		$opt_kys = array_keys($options);
-		for($o=0;$o<count($opt_kys);$o++){echo "<a href=\"".$options[$opt_kys[$o]].@$data[$i]['id']."\">".$opt_kys[$o]."</a><br />";}
+		for($o=0;$o<count($opt_kys);$o++){ 
+		$dat_id = @$data[$i]['id'];
+		$href_act = "href";
+		$ooko = $options[$opt_kys[$o]];
+		if(strpos("a".$ooko,"onclick:")){ 
+			$href_act = "href=\"javascript:{}\" onclick"; 
+			$ooko = str_replace("onclick:","",$ooko);
+		}
+		if(strpos("a".$ooko,"[id]") > 0){ 
+			$ooko = str_replace("[id]",$dat_id,$ooko);
+			$ooko = str_replace("[id]",$dat_id,$ooko);
+			$dat_id = ""; 
+		}
+			echo "<a ".$href_act."=\"".$ooko.$dat_id."\">".$opt_kys[$o]."</a><br />"; 
+		}
 		echo "</div>";
 	}
 	echo "</div>";

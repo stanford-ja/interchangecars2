@@ -307,14 +307,26 @@ class Trains extends CI_Controller {
 			elseif(strtoupper($tr_status[$day]) == "S"){$c_omp = "<br /><span style=\"background-color:brown; color: white\">[STARTED]</span>";}
 			elseif(strtoupper($tr_status[$day]) == "C"){$c_omp = "<br /><span style=\"background-color:gray; color: yellow\">[CREW ALLOCATED]</span>";}
 
+			// Waypoints display
+			$wpdisp = "";
+			$wpoints = json_decode($traindat[$i]->waypoints,true);
+			for($w=0;$w<count($wpoints);$w++){
+				$wpdisp .= "<div class=\"wb_btn\" style=\"width: 120px; font-size: 8pt;\">".$wpoints[$w]['LOCATION'];
+				if(strlen($wpoints[$w]['TIME']) > 0){ $wpdisp .= " (".$wpoints[$w]['TIME'].")"; }
+				$wpdisp .= "</div>";
+			}
+
 			$hl = "<div style=\"color: #444\">"; 
 			$swlnk = "";
 			$wb_alloc = "";
-			if($traindat[$i]->wb_alloc > 0){ 
+			if($traindat[$i]->wb_alloc > 0 || $traindat[$i]->tr_alloc > 0){ 
+				$wb_cntr = count(json_decode($traindat[$i]->wb_cars,TRUE)); 
+				if(strpos($traindat[$i]->wb_cars,"UNDEFINED") > 0){ $wb_cntr = $wb_cntr-1; }
 				$hl = "<div style=\"color: black; font-weight: bold; font-size: 110%;\">";
-				$wb_alloc =  $traindat[$i]->wb_alloc." (".count(json_decode($traindat[$i]->wb_cars,TRUE)).")";
-				$swlnk = "<br /><a href=\"".WEB_ROOT."/switchlist/lst/".$traindat[$i]->id."\" target=\"swlist".$traindat[$i]->id."\">Switchlist</a>";
+				$wb_alloc =  intval($traindat[$i]->wb_alloc+$traindat[$i]->tr_alloc)." (".intval(count(json_decode($traindat[$i]->wb_cars,TRUE))+$traindat[$i]->tr_alloc).")";
+				//$swlnk = "<br /><a href=\"".WEB_ROOT."/switchlist/lst/".$traindat[$i]->id."\" target=\"swlist".$traindat[$i]->id."\">Switchlist</a>";
 			}
+			$swlnk = "<br /><a href=\"".WEB_ROOT."/switchlist/lst/".$traindat[$i]->id."\" target=\"swlist".$traindat[$i]->id."\">Switchlist</a>";
 			//if(($is_auto == 0 && $tarr['auto'] == 0) || $tarr['auto'] == 1){
 				$this->dat['data'][$i]['id'] 						= $traindat[$i]->id;
 				$this->dat['data'][$i]['train_id']			 		= $hl.$traindat[$i]->train_id." (".$traindat[$i]->loco_num.") ".$c_omp.$swlnk."</div>";
@@ -322,8 +334,8 @@ class Trains extends CI_Controller {
 				$this->dat['data'][$i]['no_cars'] 				= $hl.$traindat[$i]->no_cars."</div>";
 				$this->dat['data'][$i]['wb_alloc'] 				= $hl.$traindat[$i]->tr_sheet_ord."<br />".$wb_alloc."</div>";
 				$this->dat['data'][$i]['op_notes'] 				= $hl.$traindat[$i]->op_notes."</div>";
-				$this->dat['data'][$i]['route']					= $hl.$traindat[$i]->origin." -> ".$traindat[$i]->destination." (".$traindat[$i]->direction.")</div>";
-				$this->dat['data'][$i]['destination']				= $hl.$traindat[$i]->destination."</div>";
+				$this->dat['data'][$i]['route']					= $wpdisp; //$hl.$traindat[$i]->origin." -> ".$traindat[$i]->destination." (".$traindat[$i]->direction.")</div>";
+				//$this->dat['data'][$i]['destination']				= $hl.$traindat[$i]->destination."</div>";
 				$this->dat['data'][$i]['location']				= "<input type=\"text\" name=\"location".$traindat[$i]->id."\" style=\"border: 1px solid #555; width: 150px;\" value=\"".@$traindat[$i]->location."\" onchange=\"window.location = '".$_SERVER['SCRIPT_NAME']."/trains/locationTrId/".$tarr['day']."/".$tarr['auto']."/".$traindat[$i]->id."/' + this.value;\"/>&nbsp;<input type=\"button\" value=\"Update\" />";
 				//$this->dat['data'][$i]['railroad_id']				= $this->mricf->qry("ichange_rr",$traindat[$i]->railroad_id,"id","report_mark");
 			//}

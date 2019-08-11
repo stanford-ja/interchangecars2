@@ -17,6 +17,7 @@ $f21 = str_replace("{\"AAR_REQD\":\"UNDEFINED\",\"NUM\":\"UNDEFINED\",\"AAR\":\"
 	function add2SW(id){
 		// Adding a waybill to a switchlist.
 		document.getElementById('add2SWLst').style.display = 'block';
+		document.getElementById('addC2SWLst').style.display = 'none';
 		document.getElementById('loco_sel_div').style.display = 'none';
 
 		$(document).ready(function(){
@@ -25,7 +26,19 @@ $f21 = str_replace("{\"AAR_REQD\":\"UNDEFINED\",\"NUM\":\"UNDEFINED\",\"AAR\":\"
 				document.getElementById('add2SWLst2').innerHTML = data;
 			});
 		});
-
-
 	}
-	
+
+	function addC2SW(id){
+		// Adding a car/s to a switchlist.
+		document.getElementById('addC2SWLst').style.display = 'block';
+		document.getElementById('add2SWLst').style.display = 'none';
+		document.getElementById('loco_sel_div').style.display = 'none';
+
+		$(document).ready(function(){
+			var p = "<?php echo JS_ROOT; ?>/ajax.php?f=addC2SW&s=" + id;
+			$.get(p,function(data){
+				document.getElementById('addC2SWLst2').innerHTML = data;
+			});
+		});
+	}
+

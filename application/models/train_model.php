@@ -37,7 +37,7 @@ class Train_model extends CI_Model {
 
 	function get_all4day_sorted($rr=0,$d='sun',$a=0){
 		// $rr = railroad, $d = day, $au = show auto trains (0=no, 1=yes, 2=trains with sheet order)
-		$s = "SELECT `".$this->tbl."`.*, COUNT(`ichange_waybill`.`id`) AS `wb_alloc`, `ichange_waybill`.`cars` AS `wb_cars` 
+		$s = "SELECT `".$this->tbl."`.*, COUNT(`ichange_waybill`.`id`) AS `wb_alloc`, (SELECT COUNT(`ichange_tr_cars`.`id`) FROM `ichange_tr_cars` WHERE `ichange_tr_cars`.`trains_id` = `ichange_trains`.`id`) AS `tr_alloc`, `ichange_waybill`.`cars` AS `wb_cars` 
 			FROM `".$this->tbl."` 
 			LEFT JOIN `ichange_waybill` ON `".$this->tbl."`.`train_id` = `ichange_waybill`.`train_id` 
 			WHERE `railroad_id` = '".$rr."' AND `".$d."` = 1";
@@ -45,7 +45,7 @@ class Train_model extends CI_Model {
 		if($a == 0){$s .= " AND `auto` = 0 AND LENGTH(`auto`) < 2";}
 		if($a == 2){$s .= " AND LENGTH(`tr_sheet_ord`) > 0";}
 		$s .= " GROUP BY ichange_trains.train_id ORDER BY tr_sheet_ord";
-		//echo $s; exit();
+		echo $s; //exit();
 
 		$query = $this->db->query($s);
 		return $query->result();

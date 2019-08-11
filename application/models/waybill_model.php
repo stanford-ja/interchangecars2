@@ -57,7 +57,24 @@ class Waybill_model extends CI_Model {
 
 	function get_all4Train($trid=''){
 		// $trid = train_id field where test
-		$query = $this->db->query("SELECT * FROM `ichange_waybill` WHERE `train_id` = '".$trid."' AND `status` != 'CLOSED' ORDER BY `sw_order`");
+		$sql = "(SELECT CONCAT('TR',`ichange_tr_cars`.`id`) AS `id`, '".date('Y-m-d')."' AS `date`, '0' AS `rr_id_from`, '0' AS `rr_id_to`, '0' AS `rr_id_handling`, 
+				'' AS `indust_origin_name`, '' AS `indust_dest_name`, '' AS `return_to`, '' AS `routing`, 'IN SWITCHLIST' AS `status`, 
+				'None' AS `waybill_num`, CONCAT('[{\"AAR_REQD\":\"\",\"NUM\":\"',`ichange_cars`.`car_num`,'\",\"AAR\":\"',`ichange_cars`.`aar_type`,'\",\"RR\":\"".@$_COOKIE['rr_sess']."\"}]') AS `cars`, '' AS `car_num`, '' AS `car_aar`, 
+				'N/A' AS `lading`, '' AS `alias_num`, '' AS `alias_aar`, 
+				`ichange_trains`.`train_id` AS `train_id`, '' AS `po`, `ichange_tr_cars`.`added`, `ichange_tr_cars`.`modified`, '' AS `waybill_type`, 
+				`ichange_tr_cars`.`instructions` AS `notes`, '' AS `progress`, '' AS `messages`, '' AS `avail_due_date`, '' AS `other_data`, 
+				'' AS `hide_till`, '0' AS `sw_order` 
+				FROM `ichange_tr_cars` 
+				LEFT JOIN `ichange_cars` ON `ichange_tr_cars`.`cars_id` = `ichange_cars`.`id` 
+				LEFT JOIN `ichange_trains` ON `ichange_tr_cars`.`trains_id` = `ichange_trains`.`id` 
+				WHERE `ichange_trains`.`train_id` = '".$trid."'
+			) UNION (
+				SELECT `ichange_waybill`.* 
+				FROM `ichange_waybill` 
+				WHERE `ichange_waybill`.`train_id` = '".$trid."' AND `ichange_waybill`.`status` != 'CLOSED' 
+				ORDER BY `ichange_waybill`.`sw_order`
+			)";
+		$query = $this->db->query($sql);
 		return $query->result();
 	}
 
