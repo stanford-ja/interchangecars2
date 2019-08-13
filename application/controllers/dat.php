@@ -149,18 +149,18 @@ class Dat extends CI_Controller {
 			$this->flddat['fields'][] = "<div id=\"tr_info\" style=\"display:none; background-color: yellow; padding: 6px; border: 1px solid red; font-size: 10pt; width: 50%; margin-left: 25%; text-align: left;\">
 				<strong>Trains table fields:</strong><br />
 				<ul>
-				<li>train_id - Date of waybill / purchase order (must be the first column in the file!),</li>
-				<li>train_desc - ID of railroad the shipment originates on,</li>
-				<li>no_cars - ID of railroad shipment is destined for,</li>
-				<li>sun - ID of railroad the shipment is currently on,</li>
-				<li>mon - The commodity being shipped,</li>
-				<li>tues - Originating industry,</li>
-				<li>web - Destination industry,</li>
-				<li>thu - Where to return the car to once unloaded,</li>
-				<li>fri - Route the shipment will take,</li>
-				<li>sat - Current Status (normally P_ORDER or WAYBILL),</li>
-				<li>op_notes - Date the shipment becomes available at the originating industry or when the shipment needs to be at nearest RR interchange point to destination industry,</li>
-				<li>direction - Purchase Order number (if applicable),</li>
+				<li>train_id - Train Symbol / ID</li>
+				<li>train_desc - Short description / title fo train,</li>
+				<li>no_cars - Maximum number of cars for train,</li>
+				<li>sun - If train runs on Sunday. 1 = Yes,</li>
+				<li>mon - If train runs on Monday. 1 = Yes,</li>
+				<li>tues - If train runs on Tuesday. 1 = Yes,</li>
+				<li>wed - If train runs on Wednesday. 1 = Yes,</li>
+				<li>thu - If train runs on Thursday. 1 = Yes,</li>
+				<li>fri - If train runs on Friday. 1 = Yes,</li>
+				<li>sat - If train runs on Saturday. 1 = Yes,</li>
+				<li>op_notes - Operations Notes for the train (if applicable),</li>
+				<li>direction - Timetable direction for the train,</li>
 				<li>origin - Origin of train,</li>
 				<li>destination - Destination of train,</li>
 				<li>tr_sheet_ord - Train sheet order / train departure time.</li>

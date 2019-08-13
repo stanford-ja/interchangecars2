@@ -57,6 +57,9 @@ class Waybill_model extends CI_Model {
 
 	function get_all4Train($trid=''){
 		// $trid = train_id field where test
+		// If $this->get_carsOnAllMyWaybills() has been called, will use the keys array to exclude them from the results for the ichange_tr_cars query.
+		// The $this->get_carsOnAllMyWaybills() has to be called by the controller that loads this model in order for the cars already in use on a waybill to be excluded from the un-waybilled cars.
+		$excl_cars_whr = " AND `ichange_cars`.`car_num` NOT IN ('".implode("','",$this->carsOnAllMyWBsKys)."')";
 		$sql = "(SELECT CONCAT('TR',`ichange_tr_cars`.`id`) AS `id`, '".date('Y-m-d')."' AS `date`, '0' AS `rr_id_from`, '0' AS `rr_id_to`, '0' AS `rr_id_handling`, 
 				'' AS `indust_origin_name`, '' AS `indust_dest_name`, '' AS `return_to`, '' AS `routing`, 'IN SWITCHLIST' AS `status`, 
 				'None' AS `waybill_num`, CONCAT('[{\"AAR_REQD\":\"\",\"NUM\":\"',`ichange_cars`.`car_num`,'\",\"AAR\":\"',`ichange_cars`.`aar_type`,'\",\"RR\":\"".@$_COOKIE['rr_sess']."\"}]') AS `cars`, '' AS `car_num`, '' AS `car_aar`, 
@@ -67,7 +70,7 @@ class Waybill_model extends CI_Model {
 				FROM `ichange_tr_cars` 
 				LEFT JOIN `ichange_cars` ON `ichange_tr_cars`.`cars_id` = `ichange_cars`.`id` 
 				LEFT JOIN `ichange_trains` ON `ichange_tr_cars`.`trains_id` = `ichange_trains`.`id` 
-				WHERE `ichange_trains`.`train_id` = '".$trid."'
+				WHERE `ichange_trains`.`train_id` = '".$trid."'".$excl_cars_whr."
 			) UNION (
 				SELECT `ichange_waybill`.* 
 				FROM `ichange_waybill` 
