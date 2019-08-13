@@ -144,6 +144,7 @@ class Switchlist extends CI_Controller {
 		
 		$wb_affected_ids = "";
 		if(isset($trdat[0]->train_id)){
+			$this->Waybill_model->get_carsOnAllMyWaybills($this->my_rr_ids);
 			$arrdat = (array)$this->Waybill_model->get_all4Train($trdat[0]->train_id);
 			
 			$move_to_opts = $this->mricf->rr_ichange_lst("",0,array('where' => "`id` = '".$this->arr['rr_sess']."'"));
