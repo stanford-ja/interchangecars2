@@ -71,7 +71,7 @@ class Waybill_model extends CI_Model {
 				'N/A' AS `lading`, '' AS `alias_num`, '' AS `alias_aar`, 
 				`ichange_trains`.`train_id` AS `train_id`, '' AS `po`, `ichange_tr_cars`.`added`, `ichange_tr_cars`.`modified`, '' AS `waybill_type`, 
 				`ichange_tr_cars`.`instructions` AS `notes`, '' AS `progress`, '' AS `messages`, '' AS `avail_due_date`, '' AS `other_data`, 
-				'' AS `hide_till`, '999' AS `sw_order` 
+				'' AS `hide_till`, 999 AS `sw_order` 
 				FROM `ichange_tr_cars` 
 				LEFT JOIN `ichange_cars` ON `ichange_tr_cars`.`cars_id` = `ichange_cars`.`id` 
 				LEFT JOIN `ichange_trains` ON `ichange_tr_cars`.`trains_id` = `ichange_trains`.`id` 
