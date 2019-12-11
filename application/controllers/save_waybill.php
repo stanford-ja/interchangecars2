@@ -340,10 +340,12 @@ class Save_waybill extends CI_Controller {
 			$message .= $p_tmp[$p]['date']." ".$p_tmp[$p]['time']." - ".$p_tmp[$p]['status']." - ".$p_tmp[$p]['train']." - ".$p_tmp[$p]['text']."\n";
 		}
 		$message .= "--------------------\n";
-		$message .= "MRICF V2.0 emailer";
+		$message .= "MRICF V2.1 emailer";
 		
+		$email_to_arr = array('MRICC@yahoogroups.com','MRICC@groups.io');
 		$this->email->from('mricf@stanfordhosting.net', 'MRICF');
-		$this->email->to('MRICC@yahoogroups.com','MRICC@groups.io');
+		$this->email->reply_to('mricf@stanfordhosting.net', 'MRICF');
+		$this->email->to($email_to_arr); //'MRICC@yahoogroups.com','MRICC@groups.io');
 
 		$this->email->subject($subject);
 		$this->email->message($message);
