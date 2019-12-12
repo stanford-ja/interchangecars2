@@ -663,11 +663,11 @@ class Switchlist extends CI_Controller {
 
 	function email_sw_to_grp(){
 		// Sends an email to MRICC group
-		$subject = 'Train '.$this->arr['train_id'].' has moved cars #mricf_switchlist_update';
+		$subject = 'Train '.$this->arr['train_id'].' moved cars #SwitchlistUpdate #MRICF'; //#mricf_switchlist_update';
 		$message = "Train ".$this->arr['train_id']." has moved the following cars\n\n".$this->email_txt;
 
 		$message .= "--------------------\n";
-		$message .= "MRICF V2.0 emailer";
+		$message .= "MRICF V2.1 emailer";
 		
 		$email_to_arr = array('MRICC@yahoogroups.com','MRICC@groups.io');
 		$this->email->from('mricf@stanfordhosting.net', 'MRICF');

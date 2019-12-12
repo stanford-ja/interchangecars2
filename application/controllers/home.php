@@ -837,7 +837,7 @@ class Home extends CI_Controller {
 	// Emailer method	
 	function email_wb_to_grp(){
 		// Sends an email to MRICC group
-		$subject = 'Waybills updated from MRICF Home Page #mricf_waybill_update';
+		$subject = 'Waybills updates on MRICF Home Page #WaybillUpdate #MRICF'; //#mricf_waybill_update';
 		
 		$email_to_arr = array('MRICC@yahoogroups.com','MRICC@groups.io');
 		$this->email->from('mricf@stanfordhosting.net', 'MRICF');

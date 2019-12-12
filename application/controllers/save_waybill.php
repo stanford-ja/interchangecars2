@@ -314,8 +314,9 @@ class Save_waybill extends CI_Controller {
 	
 	function email_wb_to_grp(){
 		// Sends an email to MRICC group
-		$subj = "CREATED"; if($subj = "UPDATED"){;}
-		$subject = 'Waybill '.$this->arr['fld8'].' has been '.$subj.' #mricf_waybill_update';
+		$subj = "CREATED"; 
+		$subj = "UPDATED"; //if($subj = "UPDATED"){;}
+		$subject = 'Waybill '.$this->arr['fld8'].' '.$subj.' #WaybillUpdate #MRICF'; //#mricf_waybill_update';
 		$message = "Waybill Date: ".$this->arr['fld1']."\n";
 		$message .= "Waybill: ".$this->arr['fld8']."\n";
 		$message .= "Origin Industry: ".$this->arr['fld4']."\n";

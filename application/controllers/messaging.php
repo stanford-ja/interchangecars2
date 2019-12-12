@@ -237,12 +237,12 @@ class Messaging extends CI_Controller {
 	function send_email($id){
 		// Sends email to virtual_ops group.
 
-		$subject = "MESSAGE FROM ".$this->mricf->qry("ichange_rr", $_POST['rr'], "id", "report_mark")." TO ".$this->mricf->qry("ichange_rr", $_POST['torr'], "id", "report_mark")." #mricf_messaging"; 
+		$subject = "MESSAGE FROM ".$this->mricf->qry("ichange_rr", $_POST['rr'], "id", "report_mark")." TO ".$this->mricf->qry("ichange_rr", $_POST['torr'], "id", "report_mark")." #Messaging #MRICF"; //#mricf_messaging"; 
 		$message = "SUBJECT: ".$_POST['subject']."\n";
 		$message .= "--------------------------------\n";
 		$message .= "MESSAGE:\n".$_POST['text']."\n";
 		$message .= "--------------------------------\n";
-		$message .= "Sent via MRICF V2.0 emailer";
+		$message .= "Sent via MRICF V2.1 emailer";
 
 		$email_to_arr = array('virtual_ops@yahoogroups.com','MRICC@groups.io');
 		$this->load->library('email');		
