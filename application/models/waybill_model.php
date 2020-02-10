@@ -126,7 +126,7 @@ class Waybill_model extends CI_Model {
 			LEFT JOIN `ichange_rr` AS `rrto` ON `ichange_waybill`.`rr_id_to` = `rrto`.`id` 
 			LEFT JOIN `ichange_rr` AS `rrfr` ON `ichange_waybill`.`rr_id_from` = `rrfr`.`id` 
 			LEFT JOIN `ichange_rr` AS `rral` ON `ichange_waybill`.`rr_id_handling` = `rral`.`id`
-			WHERE `rrto`.`id` IN ('".implode("','",$rr_affil)."') OR `rrfr`.`id` IN ('".implode("','",$rr_affil)."')"; // OR `rral`.`id` IN (".implode(",",$rr_affil).")";
+			WHERE (`rrto`.`id` IN ('".implode("','",$rr_affil)."') OR `rrfr`.`id` IN ('".implode("','",$rr_affil)."')) AND `ichange_waybill`.`status` != 'CLOSED'"; // OR `rral`.`id` IN (".implode(",",$rr_affil).")";
 			// WHERE (`rrto`.`owner_name` = '".$owner_name."' OR `rrfr`.`owner_name` = '".$owner_name."')";// AND `rral`.`owner_name` != '".$owner_name."'";
 			//echo $s; 
 		$tmp = $this->db->query($s);

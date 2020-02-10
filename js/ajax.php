@@ -464,7 +464,7 @@ function addC2SW($id){
 	*/
 	
 	// Get not already on a switchlist or wybill	
-	$sql = "SELECT `ichange_cars`.*, (SELECT COUNT(`id`) AS `cntr` FROM `ichange_waybill` WHERE `cars` LIKE CONCAT('%\"',`ichange_cars`.`car_num`,'\"%')) AS `cntr` 
+	$sql = "SELECT `ichange_cars`.*, (SELECT COUNT(`id`) AS `cntr` FROM `ichange_waybill` WHERE `cars` LIKE CONCAT('%\"',`ichange_cars`.`car_num`,'\"%') AND `ichange_waybill`.`status` != 'CLOSED') AS `cntr` 
 		FROM `ichange_cars` 
 		LEFT JOIN `ichange_tr_cars` ON `ichange_cars`.`id` = `ichange_tr_cars`.`cars_id` 
 		WHERE `ichange_cars`.`rr` = '".@$_COOKIE['rr_sess']."' AND (`ichange_tr_cars`.`id` < 1 OR `ichange_tr_cars`.`id` IS NULL) 
