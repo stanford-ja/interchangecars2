@@ -839,7 +839,8 @@ class Home extends CI_Controller {
 		// Sends an email to MRICC group
 		$subject = 'Waybill updates on MRICF Home Page #WaybillUpdate #MRICF'; //#mricf_waybill_update';
 		
-		$email_to_arr = array('MRICC@yahoogroups.com','MRICC@groups.io');
+		//$email_to_arr = array('MRICC@yahoogroups.com','MRICC@groups.io');
+		$email_to_arr = array('MRICC@groups.io');
 		$this->email->from('mricf@stanfordhosting.net', 'MRICF');
 		$this->email->reply_to('mricf@stanfordhosting.net', 'MRICF');
 		$this->email->to($email_to_arr); //$this->email->to('MRICC@yahoogroups.com');

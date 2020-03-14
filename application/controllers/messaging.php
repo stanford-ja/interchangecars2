@@ -244,7 +244,8 @@ class Messaging extends CI_Controller {
 		$message .= "--------------------------------\n";
 		$message .= "Sent via MRICF V2.1 emailer";
 
-		$email_to_arr = array('virtual_ops@yahoogroups.com','MRICC@groups.io');
+		//$email_to_arr = array('virtual_ops@yahoogroups.com','MRICC@groups.io');
+		$email_to_arr = array('MRICC@groups.io');
 		$this->load->library('email');		
 		$this->email->from('mricf@stanfordhosting.net', 'MRICF');
 		$this->email->to($email_to_arr); //$this->email->to('virtual_ops@yahoogroups.com');
