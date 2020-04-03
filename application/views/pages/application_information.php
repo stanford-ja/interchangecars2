@@ -11,7 +11,7 @@ Lets imagine there are two layouts. The originating layout is the Buffalo Termin
 Buffalo, NY area. The destination layout is the Dolton Industrial Park Railroad (DIRT),
 based on the area around Dolton, IL. The type of car is a standard boxcar, carrying
 crates of electrical goods. The route to get the car from the BIX to the DIRT could be BIX-
-CP-BIX. In this example the first and last railroads are real layouts, the rest of the railroads
+CP-DIRT. In this example the first and last railroads are real layouts, the rest of the railroads
 in the route (although actual prototype railroads) are only 'virtual' railroads in the sense of moving
 the car to it's destination. A waybill would be created, and communicated via the internet (eg, by this application) 
 to both railroads and any other modeller's railroads that might be 
@@ -38,10 +38,10 @@ interchange group, but when there are more than 2 modeller's railroads involved 
 confusing, and this is where the MRICF helps minimise the confusion that may result when multiple layouts are involved in the car forwarding process. 
 
 <br /><br />
-To use this application you need to become a member of the following two Yahoo! groups:
+To use this application you need to become a member of the following two groups:
 <ul>
-	<li><a href="http://groups.yahoo.com/neo/groups/virtual_ops" target="_blank">Virtual Car Forwarding & Interchange Ops 1</a></li>
-	<li><a href="http://groups.yahoo.com/neo/groups/MRICC" target="_blank"></a>Virtual Car Forwarding & Interchange Ops 2</li>
+	<li><a href="https://groups.io/g/MRICC-Virtual-Interchange-Ops1" target="_blank">Virtual Car Forwarding & Interchange Ops 1</a></li>
+	<li><a href="https://groups.io/g/MRICC" target="_blank">Virtual Car Forwarding & Interchange Ops 2</a></li>
 </ul>
 ... and then once your membership in both groups is approved, send the MRICC2 group owner an email with your railroad details so your railroad can be set up in the MRICF application.
 <br /><br />

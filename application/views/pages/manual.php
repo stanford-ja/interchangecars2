@@ -62,20 +62,24 @@ Another common problem is that certain functions wont work. This is often due to
 settings blocking that type of web request, or that the browser being used does not have any support for
 the function.<br /><br />
 If you have come across a problem with the application that seems like a program bug, please contact
-the application developer through the Virtual Ops group at <a href="http://groups.yahoo.com/group/virtual_ops" target="_blank">http://groups.yahoo.com/group/virtual_ops</a>
+the application developer through the Virtual Ops group at 
+<a href="https://groups.io/g/MRICC-Virtual-Interchange-Ops1" target="_blank">https://groups.io/g/MRICC-Virtual-Interchange-Ops1</a>
 or by direct email to <a href="mailto:james@stanfordhosting.net">james@stanfordhosting.net</a> .
 <h2>What if I don't understand how to use the MRICF even after reading this manual?</h2>
-Don't worry! The Virtual Ops group at <a href="http://groups.yahoo.com/group/virtual_ops" target="_blank">http://groups.yahoo.com/group/virtual_ops</a> is available to post
+Don't worry! The Virtual Ops group at 
+<a href="https://groups.io/g/MRICC-Virtual-Interchange-Ops1" target="_blank">https://groups.io/g/MRICC-Virtual-Interchange-Ops1</a> 
+is available to post
 questions regarding the MRICF, the general concepts of virtual interchanging, interchanging protocol,
 etc.
 <h2>What do I need to know before I use the MRICF?</h2>
 A basic understanding of how real railroads and model model railroads use waybills for the
 management of the shipment of freight is a definite advantage. Basic web surfing skills are essential.
 Apart from those two things, there is not really much else you need to know that you won't be able to
-learn through posting interchange related questions to the Virtual Ops groups at <a href="<a href="http://groups.yahoo.com/group/virtual_ops" target="_blank">">http://groups.yahoo.com/group/virtual_ops</a> .
+learn through posting interchange related questions to the Virtual Ops groups at 
+<a href="https://groups.io/g/MRICC-Virtual-Interchange-Ops1" target="_blank">https://groups.io/g/MRICC-Virtual-Interchange-Ops1</a> .
 <h2>Terms of Use</h2>
-Use of the application is governed by the MRICC Yahoo group. Before a user can log in to the
-application, they must join the MRICC Yahoo Group and send details of their railroad to Virtual Ops group. 
+Use of the application is governed by the MRICC group. Before a user can log in to the
+application, they must join the MRICC Group and send details of their railroad to Virtual Ops group. 
 The MRICF administrator will then set up the railroad and issue a password (which the user can change later).
 <h2>System Requirements</h2>
 The MRICF tested successfully in most versions of IE, Firefox, Google Chrome and Safari or equivalent browsers. 
@@ -86,7 +90,7 @@ version. Some functions will not work with IE6 or earlier browsers!
 <div id="login" style="display: none;">
 <span style="float: right; display: none;">&nbsp;<a href="javascript:{}" onclick="hideEle('login');">Hide</a>&nbsp;</span>
 <h2>Logging In</h2>
-Access to most of the MRICF features are only available to members of the MRICC2 group. You will need to provide the name of your railroad, the reporting mark, your first and last name, your email address that is used in Yahoo groups, and a preferred password. If the password you provide is considered to be insecure then the Owner may change the password to a similar password and will notify you if that was required. When the railroad has been set up in the MRICF you can then log in to the MRICF and use the many members only features.
+Access to most of the MRICF features are only available to members of the MRICC2 group. You will need to provide the name of your railroad, the reporting mark, your first and last name, your email address that is used in Groups.io groups, and a preferred password. If the password you provide is considered to be insecure then the Owner may change the password to a similar password and will notify you if that was required. When the railroad has been set up in the MRICF you can then log in to the MRICF and use the many members only features.
 <br /><br />
 To log in, click the <strong>Login</strong> link in the top right hand corner of the navigation menu on the Home page. If the Login link is not visible then it means you are already logged in.
 <br /><br />

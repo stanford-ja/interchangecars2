@@ -192,7 +192,8 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 				// -->
 
 				<div id="wb_image_div">
-				<?php
+				<?php 
+				if($id > 0){
 				$fils = get_filenames(DOC_ROOT."/waybill_images/");
 				for($i=0;$i<count($fils);$i++){
 					if(strpos("Z".$fils[$i],$id."-") > 0){ // ".WEB_ROOT."/waybill_images/".$fils[$i]."
@@ -200,6 +201,7 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 						$fil_html .= "<img src=\"".WEB_ROOT."/waybill_images/".$fils[$i]."\" style=\"height: 80px; margin: 3px;\">";
 						$fil_html .= "</a>";
 					}
+				}
 				}
 				if(isset($fil_html) && strlen($fil_html) > 0){
 					$fil_html = "<div id=\"wb_image_div\" style=\"color: #555; padding: 10px; margin: 3px; background-color: antiquewhite;\">
