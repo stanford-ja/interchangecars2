@@ -28,7 +28,7 @@ class sqli {
 
 		$LocTst = $_SERVER['DOCUMENT_ROOT'].$_SERVER['SCRIPT_NAME'];
 		// Test for path, act accordingly.
-		if(strpos($LocTst,"www/Applications/") > 0){
+		if(strpos($LocTst,"www/html/Applications/") > 0){
 			$this->h = 'localhost';
 			$this->u = 'admin';
 			$this->p = 'admin';

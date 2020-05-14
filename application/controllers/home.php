@@ -365,7 +365,9 @@ class Home extends CI_Controller {
 				$this->content['phtml'] .= $this->storedpo[$p]->commodity." x ".$this->storedpo[$p]->qty_cars." cars<br />";
 				$this->content['phtml'] .= $this->storedpo[$p]->indust_name;
 				$this->content['phtml'] .= " (".$this->storedpo[$p]->town.")";
-				$this->content['phtml'] .= " <a href=\"storedfreight/acquire/".$this->storedpo[$p]->id."\">Acquire</a>";
+				//if($this->storedpo[$p]->availability == 0 || $this->storedpo[$p]->availability == $this->arr['rr_sess']){
+					$this->content['phtml'] .= " <a href=\"storedfreight/acquire/".$this->storedpo[$p]->id."\">Acquire</a>";
+				//}
 				$this->content['phtml'] .= "<hr />";
 			}
 		}
@@ -608,7 +610,7 @@ class Home extends CI_Controller {
 					$this->wbs_all[] = $this->Waybill_model->get_allOpenHome($this->whr,"train_id`,`sw_order`,`waybill_num");
 				}
 				$this->pos_all = $this->Waybill_model->get_POrders();
-				$this->pos_sto = $this->Storedfreight_model->get_all_nonzero(); //get_all();
+				$this->pos_sto = $this->Storedfreight_model->get_all_nonzero($this->arr['rr_sess']); //get_all();
 			}
 		}
 

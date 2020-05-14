@@ -11,6 +11,7 @@
 	<li><a href="javascript:{}" onclick="document.getElementById('active_info').innerHTML = document.getElementById('indust').innerHTML;">Industries</a></li>
 	<li><a href="javascript:{}" onclick="document.getElementById('active_info').innerHTML = document.getElementById('train').innerHTML;">Trains</a></li>
 	<li><a href="javascript:{}" onclick="document.getElementById('active_info').innerHTML = document.getElementById('waybill').innerHTML;">Waybills</a></li>
+	<li><a href="javascript:{}" onclick="document.getElementById('active_info').innerHTML = document.getElementById('stored').innerHTML;">Stored Freight</a></li>
 
 	<!--
 	<li><a href="javascript:{}" onclick="showEle('login');">Logging In</a></li>
@@ -284,4 +285,25 @@ The Waybill Edit view has the following fields and data:
 ELEMENT TEMPLATES:
 Field name: <li><strong>[fld name]</strong> - [desc]</li>
 
+</div>
+
+<div id="stored" style="display: none;">
+<span style="float: right; display: none;">&nbsp;<a href="javascript:{}" onclick="hideEle('stored');">Hide</a>&nbsp;</span>
+<h2>Stored Freight</h2>
+Originally when the Stored Freight was set up it was to allow bulk ship loads of commodities (eg, grain from Australia) to be stored in a US location (eg, a port) for trickle feeding to US customers on a railroad owned by the same person as the railroad that serves the place the commodity is stored. 
+<br /><br />
+The Stored Freight commodities are stored in the location specified. Eg, in the P/Orders display on the Home page, if it says <strong>"BAGGED SUGAR x 11 cars
+ITC - B&OCT BARR YARD INTERCHANGE AND STORAGE (RIVERDALE,IL)"</strong> that means there are 11 carloads of bagged sugar currently stored at Barr Yard,IL.
+<br /><br />
+How stored freight loads get to a location is via the <strong>"Industries / Locations details"</strong> section on the <strong>Edit Waybill view</strong>. 
+When there is more than 1 car attached to a waybill, the "Industries / Locations details" section has a <strong>"Store At"</strong> selector. 
+There is also a <strong>"Store"</strong> selector on the application Home page that performs the same function. 
+Selecting a location from either of those selectors will store the car loads of the commodity at the selected location and mark the waybill as unloaded. 
+The "Store At" locations available are only those Industries that have the "Allow Bulk Storage" selector set to "Yes" for that railroad.
+<br /><br />
+The stored freight is 'owned' by the railroad that serves the location the freight is stored at, but the stored freight may be available for any other railroad to acquire if the owning railroad allows that. 
+To allow a stored freight owned by your railroad to be publically available, click the "Make Public" link for the stored freight to make public in the Stored Freight listing. 
+To make a stored freight only available to your railroad, click the "Make Private" link for the stored freight to make available only to your railroad in the Stored Freight listing. 
+<br /><br />
+To use (acquire) stored freight, click the "Acquire" link for the Stored Freight item you wish to acquire. A view will then appear with the source and commodity, and a selector for the number of cars. Select how many cars you require then click the Update button. This will create the waybill and display the created waybill. At this point in the process the number of cars acquired is subtracted from the available cars for that stored freight. You will then need to add the cars for your railroad, and any other required fields such as Destination, Routing, etc, to the waybill. Then Save Changes to the waybill. Then the waybill is actioned as normal.
 </div>

@@ -12,6 +12,7 @@ class Storedfreight extends CI_Controller {
 		
 		$this->load->model('Generic_model','',TRUE); // Database connection! TRUE means connect to db.
 		$this->load->model('Storedfreight_model','',TRUE); // Database connection! TRUE means connect to db.
+		//$this->load->model('Railroad_model','',TRUE);
 		$this->dat = array();
 
 		$this->load->library('settings');
@@ -31,10 +32,12 @@ class Storedfreight extends CI_Controller {
 		$this->Generic_model->change("DELETE FROM `ichange_indust_stored` WHERE `qty_cars` = 0");
 		$stored = (array)$this->Storedfreight_model->get_all();
 		//$this->dat = array();
-		$this->dat['fields'] 			= array('id', 'indust_name', 'qty_cars', 'commodity', 'added');
-		$this->dat['field_names'] 		= array("ID", "Stored at Industry", "Qty of Cars", "Commodity", "Added");
+		$this->dat['fields'] 			= array('id', 'indust_name', 'qty_cars', 'commodity', 'availability', 'added');
+		$this->dat['field_names'] 		= array("ID", "Stored at Industry", "Qty of Cars", "Commodity", "Availability", "Added");
 		$this->dat['options']			= array(
-				'Acquire' => "storedfreight/acquire/"
+				'Acquire' => "storedfreight/acquire/",
+				'Make Public' => "storedfreight/makepublic/",
+				'Make Private' => "storedfreight/makeprivate/"
 			); // Paths to options method, with trailling slash!
 		
 		//$rr_me = (array)$this->Railroad_model->get_single(@$this->arr['rr_sess']);
@@ -51,6 +54,7 @@ class Storedfreight extends CI_Controller {
 			$this->dat['data'][$i]['indust_name'] 	= $stored[$i]->indust_name;
 			$this->dat['data'][$i]['qty_cars'] 		= $stored[$i]->qty_cars;
 			$this->dat['data'][$i]['commodity'] 					= $stored[$i]->commodity;
+			$this->dat['data'][$i]['availability']	= ($stored[$i]->availability == $this->arr['rr_sess'] ? "This RR" : "All RRs");
 			$this->dat['data'][$i]['added'] 					= date('Y-m-d H:i', $stored[$i]->added);
 		}
 
@@ -128,7 +132,18 @@ class Storedfreight extends CI_Controller {
 		//echo $sql;
 		header("Location:".WEB_ROOT."/waybill/edit/".$wb[0]->id);
 	}
+
+	function makepublic($id=0){
+		$sql = "UPDATE `ichange_indust_stored` SET `availability` = '0' WHERE `id` = '".$id."'";
+		$this->Generic_model->change($sql);
+		header("Location:".WEB_ROOT."/storedfreight");
+	}
 	
+	function makeprivate($id=0){
+		$sql = "UPDATE `ichange_indust_stored` SET `availability` = '".$this->arr['rr_sess']."' WHERE `id` = '".$id."'";
+		$this->Generic_model->change($sql);
+		header("Location:".WEB_ROOT."/storedfreight");
+	}
 	
 	public function setFieldSpecs(){
 		// Sets specific field definitions for the controller being used.

@@ -589,7 +589,7 @@ class Waybill extends CI_Controller {
 		// Store waybill at selected industry, close waybill, add progress report.
 		$wbdat = (array)$this->Waybill_model->get_single($wb_id,"id");
 		$indat = (array)$this->Generic_model->qry("SELECT * FROM `ichange_indust` WHERE `id` = '".$indust_id."'")	;	
-		$dat = array('indust_id'=>$indust_id,'qty_cars'=>count($this->mricf->cars4RR4WB($this->arr['rr_sess'],$wb_id)),'commodity'=>$wbdat[0]->lading);
+		$dat = array('indust_id'=>$indust_id,'qty_cars'=>count($this->mricf->cars4RR4WB($this->arr['rr_sess'],$wb_id)),'commodity'=>$wbdat[0]->lading,'rr_sess'=>$this->arr['rr_sess']);
 		$this->mricf->storeFreight($dat);
 
 		$prog_sql = "INSERT INTO `ichange_progress` SET 
