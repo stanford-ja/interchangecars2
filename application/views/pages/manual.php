@@ -295,15 +295,26 @@ Originally when the Stored Freight was set up it was to allow bulk ship loads of
 The Stored Freight commodities are stored in the location specified. Eg, in the P/Orders display on the Home page, if it says <strong>"BAGGED SUGAR x 11 cars
 ITC - B&OCT BARR YARD INTERCHANGE AND STORAGE (RIVERDALE,IL)"</strong> that means there are 11 carloads of bagged sugar currently stored at Barr Yard,IL.
 <br /><br />
-How stored freight loads get to a location is via the <strong>"Industries / Locations details"</strong> section on the <strong>Edit Waybill view</strong>. 
-When there is more than 1 car attached to a waybill, the "Industries / Locations details" section has a <strong>"Store At"</strong> selector. 
-There is also a <strong>"Store"</strong> selector on the application Home page that performs the same function. 
-Selecting a location from either of those selectors will store the car loads of the commodity at the selected location and mark the waybill as unloaded. 
-The "Store At" locations available are only those Industries that have the "Allow Bulk Storage" selector set to "Yes" for that railroad.
+When there is more than 1 car attached to a waybill, the ability to store the car loads becomes available in a number of palces in the application: 
+<ul>
+<li>The <strong>"Store At"</strong> selector in the <strong>"Industries / Locations details"</strong> section on the <strong>Edit Waybill view</strong>.</li> 
+<li>The <strong>"Store"</strong> selector on the application Home page.</li>
+<li>The STORING AT options in the Switchlist Options selector.</li> 
+</ul>
+Selecting a location from any of those selectors will store the car loads of the commodity at the selected location and mark the waybill as unloaded. 
+To allow an industry to allow bulk storage, so that car loads can be stored there as storeds freight, go to the Industries listing, Edit the relevant industry, and set the <strong>"Allow Bulk Storage"</strong> selector set to "Yes". Then save / update the industry.
 <br /><br />
 The stored freight is 'owned' by the railroad that serves the location the freight is stored at, but the stored freight may be available for any other railroad to acquire if the owning railroad allows that. 
-To allow a stored freight owned by your railroad to be publically available, click the "Make Public" link for the stored freight to make public in the Stored Freight listing. 
-To make a stored freight only available to your railroad, click the "Make Private" link for the stored freight to make available only to your railroad in the Stored Freight listing. 
-<br /><br />
+In the Stored Freight listing, which is available by clicking the Stored menu item, the "Availability" column shows what a stored freight is available to.
+<ul>
+<li>This RR - means it is only available to your railroad, ie, it is Private.</li>
+<li>All RRS - means it is available to all railroads, ie, it is Public</li>
+</ul>
+The following options are available for setting the availability of the stored freight in the Stored Freight listing:
+<ul>
+<li><strong>Make Public</strong> - allows a stored freight owned by your railroad to be publically available to all railroads. Stored freight set to Public will show as "All RRs" in the Availability column in the Stored Freight listing.</li>
+<li><strong>Make Private</strong> - allows a stored freight owned by your railroad to be only available to your railroad.  Stored freight set to Private will show as "This RR" in the Availability column in the Stored Freight listing.</li>
+</ul>
+<br />
 To use (acquire) stored freight, click the "Acquire" link for the Stored Freight item you wish to acquire. A view will then appear with the source and commodity, and a selector for the number of cars. Select how many cars you require then click the Update button. This will create the waybill and display the created waybill. At this point in the process the number of cars acquired is subtracted from the available cars for that stored freight. You will then need to add the cars for your railroad, and any other required fields such as Destination, Routing, etc, to the waybill. Then Save Changes to the waybill. Then the waybill is actioned as normal.
 </div>
