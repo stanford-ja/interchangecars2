@@ -210,7 +210,7 @@ class Switchlist extends CI_Controller {
 					if(!in_array($arrdat[$i]->lading,array("","MT","EMPTY","MTY"))){ 
 						$tmp = $stodat; // = (array)$this->Generic_model->qry("SELECT `id`,`indust_name` FROM `ichange_indust` WHERE `storage` = '1' AND `rr` = '".$this->arr['rr_sess']."'");
 						for($ic=0;$ic<count($tmp);$ic++){ 
-							$this->dat['data'][$i]['waybill_num'] .= "<option value=\"STORING:".$tmp[$ic]->id.":".$cars_cntr.":".$arrdat[$i]->lading."\">Storing at ".substr($tmp[$ic]->indust_name,0,20)."...</option>\n";
+							$this->dat['data'][$i]['waybill_num'] .= "<option value=\"STORING:".$tmp[$ic]->id.":".$cars_cntr.":".$arrdat[$i]->lading.":".$this->arr['rr_sess']."\">Storing at ".substr($tmp[$ic]->indust_name,0,20)."...</option>\n";
 						} 
 					}
 					$this->dat['data'][$i]['waybill_num'] .= "</select>";
@@ -428,7 +428,7 @@ class Switchlist extends CI_Controller {
 					$txt = "LOADING AT ".$ind;
 				}
 				if(strpos("z".$this->arr['move_to_ind'][$w],"STORING") > 0){
-					$this->mricf->storeFreight($this->arr['move_to_ind'][$w].":".$this->arr['rr_sess']);
+					$this->mricf->storeFreight($this->arr['move_to_ind'][$w]);
 					$tmp_arr = explode(":",$this->arr['move_to_ind'][$w]);
 					$ind = $this->mricf->qry("ichange_indust", $tmp_arr[1], "id", "indust_name");
 					$rr = $this->mricf->qry("ichange_waybill", $this->arr['wb_id'][$w], "id", "rr_id_from");

@@ -719,7 +719,7 @@ function storeFreight($dat){
 	// Inserts freight to be stored into the ichange_indust_stored table.
 	// $dat can be in either of these two formats:
 	/*
-		STORING:[indust id]:[qty of cars]:[commodity] - COLON DELIMITED TEXT STRING
+		STORING:[indust id]:[qty of cars]:[commodity]:[railroad id] - COLON DELIMITED TEXT STRING
 		array([0]=>"STORING",[1]=>{indust_id},[2]=>{qty of cars},[3]=>{commodity}) - ZERO KEYED ARRAY
 		array('indust_id'=>{indust_id},'qty_cars'=>{qty of cars},'commodity'=>{commodity}) - ASSOC ARRAY
 	*/
@@ -732,7 +732,7 @@ function storeFreight($dat){
 			$arr['indust_id'] = $dat[1];
 			$arr['qty_cars'] = $dat[2];
 			$arr['commodity'] = $dat[3];
-			$arr['availability'] = $dat[4];
+			$arr['rr_sess'] = $dat[4];
 		}else{
 			$arr = $dat;
 		}
