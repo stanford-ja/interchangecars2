@@ -31,9 +31,9 @@ class Storedfreight_model extends CI_Model {
         return $query->result();
     }
     
-    function get_all_nonzero(){
-    	// Get all non-zero cars available records
-    	$this->whr = "`ichange_indust_stored`.`qty_cars` > 0";
+    function get_all_nonzero($rr=0){
+    	// Get all non-zero cars available records with availability = 0 (all) or the railroad id passed ($id).
+    	$this->whr = "`ichange_indust_stored`.`qty_cars` > 0 AND (`availability` = 0 OR `availability` = '".$rr."')";
     	return $this->get_all();
     }
 

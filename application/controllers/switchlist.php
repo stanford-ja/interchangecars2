@@ -428,7 +428,7 @@ class Switchlist extends CI_Controller {
 					$txt = "LOADING AT ".$ind;
 				}
 				if(strpos("z".$this->arr['move_to_ind'][$w],"STORING") > 0){
-					$this->mricf->storeFreight($this->arr['move_to_ind'][$w]) ;
+					$this->mricf->storeFreight($this->arr['move_to_ind'][$w].":".$this->arr['rr_sess']);
 					$tmp_arr = explode(":",$this->arr['move_to_ind'][$w]);
 					$ind = $this->mricf->qry("ichange_indust", $tmp_arr[1], "id", "indust_name");
 					$rr = $this->mricf->qry("ichange_waybill", $this->arr['wb_id'][$w], "id", "rr_id_from");

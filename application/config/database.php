@@ -70,7 +70,7 @@ $db['default']['stricton'] = FALSE;
 
 $LocTst = $_SERVER['DOCUMENT_ROOT'].$_SERVER['SCRIPT_NAME'];
 // Test for path, act accordingly.
-if(strpos($LocTst,"www/Applications/") > 0){
+if(strpos($LocTst,"www/html/Applications/") > 0){
 	$db['default']['hostname'] = 'localhost';
 	$db['default']['username'] = 'admin';
 	$db['default']['password'] = 'admin';

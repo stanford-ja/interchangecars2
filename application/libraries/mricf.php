@@ -732,6 +732,7 @@ function storeFreight($dat){
 			$arr['indust_id'] = $dat[1];
 			$arr['qty_cars'] = $dat[2];
 			$arr['commodity'] = $dat[3];
+			$arr['availability'] = $dat[4];
 		}else{
 			$arr = $dat;
 		}
@@ -740,7 +741,8 @@ function storeFreight($dat){
 		`added` = '".date('U')."',
 		`indust_id` = '".$arr['indust_id']."',
 		`qty_cars` = '".$arr['qty_cars']."',
-		`commodity` = '".$arr['commodity']."'";
+		`commodity` = '".$arr['commodity']."',
+		`availability` = '".$arr['rr_sess']."'";
 	$sqli = $this->sqli_instance();
 	$sqli->query($sql);
 	$sqli->close();
