@@ -84,7 +84,7 @@ class Rr extends CI_Controller {
 			$this->dat['data'][0]['id'] 					= $rrdat[$i]->id;
 			$this->dat['data'][0]['report_mark']	 	= $rrdat[$i]->report_mark;
 			$this->dat['data'][0]['rr_name'] 			= $rrdat[$i]->rr_name;
-			$this->dat['data'][0]['rr_desc'] 			= $rrdat[$i]->rr_desc;
+			$this->dat['data'][0]['rr_desc'] 			= html_entity_decode($rrdat[$i]->rr_desc);
 			$this->dat['data'][0]['owner_name'] 		= $rrdat[$i]->owner_name;
 			$this->dat['data'][0]['interchanges']		= str_replace(";","<br />",$rrdat[$i]->interchanges);
 			$this->dat['data'][0]['affiliates'] 		= $rrdat[$i]->affiliates;
