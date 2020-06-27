@@ -31,7 +31,7 @@ if(isset($_GET['f'])){
 function carUsed($cn,$rr){
 	$mysqli = db_conn();
 	$cn = charConv($cn,"[AMP]","&"); // Require to convert [AMP] back to '&'
-	$q = $mysqli->query("SELECT `waybill_num` FROM `ichange_waybill` WHERE `cars` LIKE '%\"".$cn."\"%' LIMIT 1");
+	$q = $mysqli->query("SELECT `waybill_num` FROM `ichange_waybill` WHERE `cars` LIKE '%\"".$cn."\"%' AND `status` NOT LIKE 'closed' LIMIT 1");
 	$w = "";
 	while($r = mysqli_fetch_array($q)){$w = $r['waybill_num'];}
 	echo $w;
