@@ -98,12 +98,15 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 
 					<span style="display: none;"><textarea name="fld21" id="fld21" cols="50" rows="3"><?php echo $fld21; ?></textarea>
 					</span><input type="hidden" name="fld10" id="fld10" value="<?php echo $fld10; ?>" />
+					<div id="alreadyOnWB" style="width: 90%; background-color: yellow; border: 1px solid maroon; border-radius: 4px; padding: 5px; font-size: 12pt; display: none; text-align: center;"></div>
 					<table style="margin-bottom: 5px; background-color: #F4A460;">
+					<!--
 					<tr>
 						<td colspan="7">
 							<div id="alreadyOnWB" style="width: 90%; background-color: yellow; border: 1px solid maroon; border-radius: 4px; padding: 5px; font-size: 12pt; display: none; text-align: center;"></div>
 						</td>
 					</tr>
+					// -->
 					<tr>
 					<td colspan="2">
 					<strong>Cars attached to waybill</strong>
