@@ -106,7 +106,7 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 					<td rowspan="5" style="font-weight: bold; color: maroon; font-size: 8pt; vertical-align: top;"><?php echo $sugg_car_types; ?></td>
 					
 					<td rowspan="5">
-					<div style="display: block; margin-top: 25px; float: right; width: 300px; height: 200px; vertical-align: top; background-color: yellow; padding: 3px;">
+					<div style="display: block; padding: 10px; float: right; width: 300px; height: 200px; vertical-align: top; background-color: yellow; padding: 3px;">
 					<strong><u>Car Search</u></strong><br />&nbsp;
 					<span data-balloon="Start to enter a car location or number and the results will appear as you type." data-balloon-pos="left" data-balloon-length="large">
 					Find cars at: 
