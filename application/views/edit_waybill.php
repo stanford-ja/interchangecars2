@@ -84,23 +84,25 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 			</tr>
 			<tr>
 				<td style="padding: 3px;" colspan="2">
-					<span style="display: none;"><textarea name="fld21" id="fld21" cols="50" rows="3"><?php echo $fld21; ?></textarea>
-					</span><input type="hidden" name="fld10" id="fld10" value="<?php echo $fld10; ?>" />
+					<span style="display: none;">
+						<textarea name="fld21" id="fld21" cols="50" rows="3"><?php echo $fld21; ?></textarea>
+					</span>
+					<input type="hidden" name="fld10" id="fld10" value="<?php echo $fld10; ?>" />
 					<div style="display: block; background-color: #F4A460; border: 1px solid red;"><!-- START CARS DIV // -->
 					<div id="alreadyOnWB" style="width: 98%; background-color: yellow; border: 1px solid maroon; border-radius: 4px; padding: 5px; font-size: 12pt; display: none; text-align: center;"></div>
 
 					<div style="float: right; display: block; padding: 10px; margin: 5px; width: 400px; height: 230px; vertical-align: top; background-color: yellow; padding: 3px;">
-					<strong><u>Car Search</u></strong><br />&nbsp;
-					<span data-balloon="Start to enter a car location or number and the results will appear as you type." data-balloon-pos="left" data-balloon-length="large">
-					Find cars at: 
-					<input type="text" size="20" name="mtcars" id="mtcars" onkeyup="carsAutoFind(this.value,'location');" />
-					</span>
-					<span id="mtcars_load" style="visibility: hidden;">Loading...</span>
-					<br />
-					<div id="mtcars_span" style="font-size: 9pt; max-height: 180px; overflow: auto;">&nbsp;</div>
+						<strong><u>Car Search</u></strong><br />&nbsp;
+						<span data-balloon="Start to enter a car location or number and the results will appear as you type." data-balloon-pos="left" data-balloon-length="large">
+							Find cars at: 
+							<input type="text" size="20" name="mtcars" id="mtcars" onkeyup="carsAutoFind(this.value,'location');" />
+						</span>
+						<span id="mtcars_load" style="visibility: hidden;">Loading...</span>
+						<br />
+						<div id="mtcars_span" style="font-size: 9pt; max-height: 180px; overflow: auto;">&nbsp;</div>
 					</div>
 
-
+					<!-- START CARS TABLE // -->
 					<table style="margin-bottom: 5px; border: none; background-color: transparent;">
 					<!--
 					<tr>
@@ -110,14 +112,16 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 					</tr>
 					// -->
 					<tr>
-					<td colspan="2">
-					<strong>Cars attached to waybill</strong>
-					</td>
-					<td rowspan="7" style="vertical-align: top;">
-					<span style="font-size: 9pt; font-weight: bold;">Cars on waybill</span><br />
-					<div id="carsHTM" style="font-size: 9pt; padding: 2px; border: 1px solid #777;background-color: #DEB887;min-width: 180px; max-height: 150px; overflow: auto">&nbsp;</div>
-					</td>
-					<td rowspan="5" style="font-weight: bold; color: maroon; font-size: 8pt; vertical-align: top;"><?php echo $sugg_car_types; ?></td>
+						<td colspan="2">
+							<strong>Cars attached to waybill</strong>
+						</td>
+						<td rowspan="7" style="vertical-align: top;">
+							<span style="font-size: 9pt; font-weight: bold;">Cars on waybill</span><br />
+							<div id="carsHTM" style="font-size: 9pt; padding: 2px; border: 1px solid #777;background-color: #DEB887;min-width: 180px; max-height: 150px; overflow: auto">&nbsp;</div>
+						</td>
+						<td rowspan="5" style="font-weight: bold; color: maroon; font-size: 8pt; vertical-align: top;">
+							<?php echo $sugg_car_types; ?>
+						</td>
 					
 <!--
 					<div style="float: right; display: block; padding: 10px; float: right; width: 300px; height: 200px; vertical-align: top; background-color: yellow; padding: 3px;">
@@ -132,25 +136,31 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 					</div>
 // -->					
 					</tr>
-					<tr><td>Car </td>
-					<td>
-						<div id="autocomp"><div id="field">
-						<span data-balloon="Enter the full Car Number including reporting mark." data-balloon-pos="right" data-balloon-length="xlarge">
-						<input name="fld21_car" id="fld21_car" value="" style="width: 200px;" onchange="this.value=this.value.toUpperCase(); carUsed(this.value);" />
-						</span>
-						</div></div>
-					</td>
+					<tr>
+						<td>Car </td>
+						<td>
+							<div id="autocomp">
+								<div id="field">
+									<span data-balloon="Enter the full Car Number including reporting mark." data-balloon-pos="right" data-balloon-length="xlarge">
+										<input name="fld21_car" id="fld21_car" value="" style="width: 200px;" onchange="this.value=this.value.toUpperCase(); carUsed(this.value);" />
+									</span>
+								</div>
+							</div>
+						</td>
 					</tr>
-					<tr><td>AAR </td>
-					<td>
-						<span data-balloon="Select an AAR Code for the car you wish to add." data-balloon-pos="right" data-balloon-length="large">
-						<select name="fld21_aar" id="fld21_aar" style="width: 150px; font-size: 9pt;">
-							<option value=""></option>
-							<?php echo $aar_options; ?>
-						</select>
-						</span>
-					</td></tr>
-					<tr><td>Attach to RR</td>
+					<tr>
+						<td>AAR </td>
+						<td>
+							<span data-balloon="Select an AAR Code for the car you wish to add." data-balloon-pos="right" data-balloon-length="large">
+								<select name="fld21_aar" id="fld21_aar" style="width: 150px; font-size: 9pt;">
+									<option value=""></option>
+									<?php echo $aar_options; ?>
+								</select>
+							</span>
+						</td>
+					</tr>
+					<tr>
+						<td>Attach to RR</td>
 						<td>
 							<span data-balloon="Select the railroad the entered car will be added for." data-balloon-pos="right" data-balloon-length="large">
 							<select name="fld21_rr" id="fld21_rr">
@@ -175,8 +185,12 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 							</select></span>
 							<br />
 							<span style="font-size: 8pt;">(Only cars not already allocated to a waybill are shown in the Car Selector!)</span>
-						</td></tr></table><br />
-						</div><!-- END CARS DIV // -->
+						</td>
+					</tr>
+					</table>
+					<!-- END CARS TABLE // -->
+					<br />
+					</div><!-- END CARS DIV // -->
 				</td>
 <!--
 				<td rowspan="1" style="vertical-align: top; background-color: yellow; padding: 3px;">
