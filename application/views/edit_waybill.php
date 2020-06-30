@@ -84,18 +84,6 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 			</tr>
 			<tr>
 				<td style="padding: 3px;" colspan="2">
-					
-					<div style="display: block; margin-top: 25px; float: right; width: 300px; height: 200px; vertical-align: top; background-color: yellow; padding: 3px;">
-					<strong><u>Car Search</u></strong><br />&nbsp;
-					<span data-balloon="Start to enter a car location or number and the results will appear as you type." data-balloon-pos="left" data-balloon-length="large">
-					Find cars at: 
-					<input type="text" size="20" name="mtcars" id="mtcars" onkeyup="carsAutoFind(this.value,'location');" />
-					</span>
-					<span id="mtcars_load" style="visibility: hidden;">Loading...</span>
-					<br />
-					<span id="mtcars_span" style="font-size: 9pt; max-height: 125px; overflow: auto;">&nbsp;</span>
-					</div>
-
 					<span style="display: none;"><textarea name="fld21" id="fld21" cols="50" rows="3"><?php echo $fld21; ?></textarea>
 					</span><input type="hidden" name="fld10" id="fld10" value="<?php echo $fld10; ?>" />
 					<div id="alreadyOnWB" style="width: 90%; background-color: yellow; border: 1px solid maroon; border-radius: 4px; padding: 5px; font-size: 12pt; display: none; text-align: center;"></div>
@@ -116,6 +104,20 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 					<div id="carsHTM" style="font-size: 9pt; padding: 2px; border: 1px solid #777;background-color: #DEB887;min-width: 180px; max-height: 150px; overflow: auto">&nbsp;</div>
 					</td>
 					<td rowspan="5" style="font-weight: bold; color: maroon; font-size: 8pt; vertical-align: top;"><?php echo $sugg_car_types; ?></td>
+					
+					<td>
+					<div style="display: block; margin-top: 25px; float: right; width: 300px; height: 200px; vertical-align: top; background-color: yellow; padding: 3px;">
+					<strong><u>Car Search</u></strong><br />&nbsp;
+					<span data-balloon="Start to enter a car location or number and the results will appear as you type." data-balloon-pos="left" data-balloon-length="large">
+					Find cars at: 
+					<input type="text" size="20" name="mtcars" id="mtcars" onkeyup="carsAutoFind(this.value,'location');" />
+					</span>
+					<span id="mtcars_load" style="visibility: hidden;">Loading...</span>
+					<br />
+					<span id="mtcars_span" style="font-size: 9pt; max-height: 125px; overflow: auto;">&nbsp;</span>
+					</div>
+					</td>
+					
 					</tr>
 					<tr><td>Car </td>
 					<td>
