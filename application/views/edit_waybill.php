@@ -159,8 +159,8 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 							<span style="font-size: 8pt;">(Only cars not already allocated to a waybill are shown in the Car Selector!)</span>
 						</td></tr></table><br />
 				</td>
-				<td rowspan="1" style="vertical-align: top; background-color: yellow; padding: 3px;">
 <!--
+				<td rowspan="1" style="vertical-align: top; background-color: yellow; padding: 3px;">
 					<strong><u>Car Search</u></strong><br />&nbsp;
 					<span data-balloon="Start to enter a car location or number and the results will appear as you type." data-balloon-pos="left" data-balloon-length="large">
 					Find cars at: 
@@ -169,8 +169,8 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 					<span id="mtcars_load" style="visibility: hidden;">Loading...</span>
 					<br />
 					<div id="mtcars_span" style="font-size: 9pt; max-height: 125px; overflow: auto;">&nbsp;</span>
-// -->
 				</td>
+// -->
 			</tr>
 			<tr>
 			<td colspan="2" style="background-color: peru;">&nbsp;&nbsp;Industries / Locations details</td>
