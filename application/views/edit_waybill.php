@@ -88,7 +88,7 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 					</span><input type="hidden" name="fld10" id="fld10" value="<?php echo $fld10; ?>" />
 					<div style="display: block; background-color: #F4A460; border: 1px solid red;"><!-- START CARS DIV // -->
 					<div id="alreadyOnWB" style="width: 90%; background-color: yellow; border: 1px solid maroon; border-radius: 4px; padding: 5px; font-size: 12pt; display: none; text-align: center;"></div>
-					<table style="margin-bottom: 5px; border: none;">
+					<table style="margin-bottom: 5px; border: none; background-color: transparent;">
 					<!--
 					<tr>
 						<td colspan="7">
