@@ -189,6 +189,7 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 					</tr>
 					</table>
 					<!-- END CARS TABLE // -->
+					<br />
 					</div><!-- END CARS DIV // -->
 				</td>
 <!--
