@@ -97,7 +97,7 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 					</span>
 					<span id="mtcars_load" style="visibility: hidden;">Loading...</span>
 					<br />
-					<div id="mtcars_span" style="font-size: 9pt; max-height: 125px; overflow: auto;">&nbsp;</div>
+					<div id="mtcars_span" style="font-size: 9pt; max-height: 180px; overflow: auto;">&nbsp;</div>
 					</div>
 
 
