@@ -86,8 +86,9 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 				<td style="padding: 3px;" colspan="2">
 					<span style="display: none;"><textarea name="fld21" id="fld21" cols="50" rows="3"><?php echo $fld21; ?></textarea>
 					</span><input type="hidden" name="fld10" id="fld10" value="<?php echo $fld10; ?>" />
+					<div style="display: block; background-color: #F4A460; border: 1px solid red;"><!-- START CARS DIV // -->
 					<div id="alreadyOnWB" style="width: 90%; background-color: yellow; border: 1px solid maroon; border-radius: 4px; padding: 5px; font-size: 12pt; display: none; text-align: center;"></div>
-					<table style="margin-bottom: 5px; background-color: #F4A460;">
+					<table style="margin-bottom: 5px; border: none;">
 					<!--
 					<tr>
 						<td colspan="7">
@@ -163,6 +164,7 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 							<br />
 							<span style="font-size: 8pt;">(Only cars not already allocated to a waybill are shown in the Car Selector!)</span>
 						</td></tr></table><br />
+						</div><!-- END CARS DIV // -->
 				</td>
 <!--
 				<td rowspan="1" style="vertical-align: top; background-color: yellow; padding: 3px;">
