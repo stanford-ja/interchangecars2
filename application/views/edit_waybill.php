@@ -85,7 +85,7 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 			<tr>
 				<td style="padding: 3px;" colspan="2">
 					
-					<div style="display: block; float: right; width: 300px; height: 200px; vertical-align: top; background-color: yellow; padding: 3px;">
+					<div style="display: block; margin-top: 25px; float: right; width: 300px; height: 200px; vertical-align: top; background-color: yellow; padding: 3px;">
 					<strong><u>Car Search</u></strong><br />&nbsp;
 					<span data-balloon="Start to enter a car location or number and the results will appear as you type." data-balloon-pos="left" data-balloon-length="large">
 					Find cars at: 
