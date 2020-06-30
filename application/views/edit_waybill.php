@@ -447,6 +447,8 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 				</td>
 			</tr>
 			// -->
+		</table>
+		<table border="0" width="100%" align="center" style="background-color: transparent; border: none;">						
 			<tr>
 			<td colspan="3" style="background-color: peru;">&nbsp;&nbsp;Train details</td>
 			</tr>
