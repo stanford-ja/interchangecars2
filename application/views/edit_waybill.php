@@ -89,7 +89,7 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 					<div style="display: block; background-color: #F4A460; border: 1px solid red;"><!-- START CARS DIV // -->
 					<div id="alreadyOnWB" style="width: 98%; background-color: yellow; border: 1px solid maroon; border-radius: 4px; padding: 5px; font-size: 12pt; display: none; text-align: center;"></div>
 
-					<div style="float: right; display: block; padding: 10px; margin: 5px; width: 400px; height: 250px; vertical-align: top; background-color: yellow; padding: 3px;">
+					<div style="float: right; display: block; padding: 10px; margin: 5px; width: 400px; height: 230px; vertical-align: top; background-color: yellow; padding: 3px;">
 					<strong><u>Car Search</u></strong><br />&nbsp;
 					<span data-balloon="Start to enter a car location or number and the results will appear as you type." data-balloon-pos="left" data-balloon-length="large">
 					Find cars at: 
