@@ -206,16 +206,119 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 // -->
 			</tr>
 		</table>
-		<table border="0" width="100%" align="center" style="background-color: transparent; border: none;">						
+
+		<div style="display: block;">
+			<div style="display: inline-block; background-color: peru; width: 400px;">
+				&nbsp;&nbsp;Industries / Locations details
+			</div>
+			<div style="display: inline-block; background-color: peru; width: 400px;">
+				&nbsp;&nbsp;Photos
+			</div>
+		</div>
+		<div style="display: block;">
+			<div style="display: inline-block; width: 400px;">
+
+				Lading<br />
+				<div id="autocomp">
+				<div id="field">
+				<span data-balloon="The cargo being transported on this waybill. Start typing and commodity matches will appear." data-balloon-pos="right" data-balloon-length="large">
+				<input type="text" id="fld11" name="fld11" value="<?php echo $fld11; ?>" onKeyUp="autoComp(this.value,'ichange_commod','commod_name','fld11');" />
+				</span>
+				</div>
+				</div>
+				<?php if($fld11 == "MT" || $fld11 == "MTY"){ ?>
+				<br />was&nbsp;<a href="javascript:{}" onclick="document.getElementById('fld11').value = '<?php echo trim($fld11_prev); ?>'"><?php echo $fld11_prev; ?></a>
+				<?php } ?>
+				<div id="fld11_span" style="display: none; border: 1px solid black; background-color: yellow; font-size: 9pt; padding: 5px;"></div>
+
+				<br />
+				Origin<br />
+				<a name="ind1"></a>
+				<span data-balloon="The originating industry for this waybill." data-balloon-pos="right" data-balloon-length="large">
+				<input type"text" name="fld4" id="fld4" value="<?php echo $fld4; ?>" size="50" onKeyUp="industAutoComp(this.value,'ichange_indust','fld4','fld4',1)" onfocus="showEle('orig_ind_info');" onblur="hideEle('orig_ind_info');" />
+				</span>
+				<div id="fld4_span"  style="display: none; border: 1px solid black; background-color: yellow; font-size: 9pt; padding: 5px; max-height: 100px; overflow: auto;"></div>
+				<div id="fld4_indDescDiv" style="display: none;">
+				<textarea cols="50" name="fld4_indDesc" id="fld4_indDesc" onchange="this.parent.style.display = 'block'"><?php echo $fld4_indDesc; ?></textarea>
+				</span>
+				<span style="font-size: 9pt; display: none;" id="orig_ind_info">Enter the commodity to ship, the industry name, city or state for a list of industries.<br /></span>
+
+
+				<br />
+				Destination<br />
+				<a name="ind2"></a>
+				<span data-balloon="The destination industry for this waybill." data-balloon-pos="right" data-balloon-length="large">
+				<input type"text" name="fld5" id="fld5" value="<?php echo $fld5; ?>" size="50" onKeyUp="industAutoComp(this.value,'ichange_indust','fld5','fld5',2);" onfocus="showEle('dest_ind_info');" onblur="hideEle('dest_ind_info');" />
+				</span>
+				<div id="fld5_span"  style="display: none; border: 1px solid black; background-color: yellow; font-size: 9pt; padding: 5px; max-height: 100px; overflow: auto;"></div>
+				<div id="fld5_indDescDiv" style="display: none;">
+				<textarea cols="50" name="fld5_indDesc" id="fld5_indDesc" onchange="this.parent.style.display = 'block'"><?php echo $fld5_indDesc; ?></textarea>
+				</div>
+				<span style="font-size: 9pt; display: none;" id="dest_ind_info">Enter the commodity to ship, the industry name, city or state for a list of industries.<br /></span>
+
+
+				<br />
+				Return to<br />
+				<span data-balloon="Where to return the car/s on this waybill to when they have been unloaded." data-balloon-pos="right" data-balloon-length="large">
+				<input type="text" id="fld19" name="fld19" size="40" maxsize="40" value="<?php echo $fld19; ?>" />
+				</span>
+
+
+			<?php if(!in_array($fld11,array("","MT","EMPTY","MTY")) && $fld21_cntr > 1){ ?>
+				<br />
+				Store at<br />
+				<select name="storage" onchange="if(this.value.length > 0){if(confirm('This will store the lading\nfor the number of cars indicated\nand mark this waybill as unloaded.\n\nAre you sure?')){ window.location = '<?php echo WEB_ROOT."/waybill/store/".$id."/"; ?>'+this.value;} }">
+					<option value="" selected="selected">To Bulk Store this WB, select...</option>
+					<?php for($st=0;$st<count($stodat);$st++){
+						echo "<option value=\"".$stodat[$st]->id."\">".substr($stodat[$st]->indust_name,0,35)."... (".$stodat[$st]->town.")</option>";
+					} ?>
+				</select>
+			<?php } ?>
+
+
+			</div>
+			<div style="display: inline-block; width: 400px;">
+
+
+				<div id="wb_image_div">
+				<?php 
+				if($id > 0){
+				$fils = get_filenames(DOC_ROOT."/waybill_images/");
+				for($i=0;$i<count($fils);$i++){
+					if(strpos("Z".$fils[$i],$id."-") > 0){ // ".WEB_ROOT."/waybill_images/".$fils[$i]."
+						$fil_html .= "<a href=\"javascript:{}\" onclick=\"window.open('".WEB_ROOT."/graphics/wbview/".str_replace(".jpg","",$fils[$i])."','".$i."','width=500,height=650');\">";
+						$fil_html .= "<img src=\"".WEB_ROOT."/waybill_images/".$fils[$i]."\" style=\"height: 80px; margin: 3px;\">";
+						$fil_html .= "</a>";
+					}
+				}
+				}
+				if(isset($fil_html) && strlen($fil_html) > 0){
+					$fil_html = "<div id=\"wb_image_div\" style=\"color: #555; padding: 10px; margin: 3px; background-color: antiquewhite;\">
+						".$fil_html."
+						</div>";
+					echo $fil_html;
+				}
+				?>
+				</div>
+
+
+
+			</div>
+		</div>
+
+<!--
+		<table border="0" width="100%" align="center" style="background-color: transparent; border: none;">
+// -->
+<!--
 			<tr>
 			<td colspan="2" style="background-color: peru;">&nbsp;&nbsp;Industries / Locations details</td>
 			<td style="background-color: peru">&nbsp;&nbsp;Photos</td>
 			</tr>
+// -->
+<!--
 			<tr>
 				<td>Lading</td>
-				<!-- <td style="border: 1px solid black; background-color:#bbb; padding: 3px;"><input type="text" id="fld11" name="fld11" value="<?php echo $fld11; ?>" onKeyUp="autoComp(this.value,'ichange_commod','commod_name,generates','fld11', {'target':'fld11_span'}); document.getElementById('fld11_span').style.display = 'block';" /> // -->
 				<td style="border: 1px solid black; background-color:#bbb; padding: 3px;">
-				<!-- <input type="text" id="fld11" name="fld11" value="<?php echo $fld11; ?>" onKeyUp="autoComp(this.value,'ichange_commod','commod_name,generates','fld11');" /> // -->
 				<div id="autocomp">
 				<div id="field">
 				<span data-balloon="The cargo being transported on this waybill. Start typing and commodity matches will appear." data-balloon-pos="right" data-balloon-length="large">
@@ -228,15 +331,18 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 				<?php } ?>
 				<div id="fld11_span" style="display: none; border: 1px solid black; background-color: yellow; font-size: 9pt; padding: 5px;"></div>
 				</td>
+// -->
+<!--
 				<td valign="top" rowspan="4">
-				<!-- 
+				START SECTION DISABLED
 				Map Location<br /><input type="text" id="pfld6" name="pfld6" size="16" maxsize="16" value="" />
 <br />
 				<select id="pfld6b" name="fld6b" size="4" onChange="document.getElementById('pfld6').value = this.value" style="min-width: 200px;">
 				<?php echo $map_lst; ?>
 				</select>
-				// -->
-
+				END SECTION DISABLED
+// -->
+<!--
 				<div id="wb_image_div">
 				<?php 
 				if($id > 0){
@@ -260,10 +366,11 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 
 				</td>
 			</tr>
+// -->
+<!--
 			<tr>
 				<td>Origin</td>
 				<td><a name="ind1"></a>
-					<!-- <input type"text" name="fld4" id="fld4" value="<?php echo $fld4; ?>" size="50" onKeyUp="industAutoComp(this.value,'ichange_indust','fld4','fld4',1, {'target':'fld4_span'}); document.getElementById('fld4_span').style.display = 'block';" onfocus="showEle('orig_ind_info');" onblur="hideEle('orig_ind_info');" /> // -->
 					<span data-balloon="The originating industry for this waybill." data-balloon-pos="right" data-balloon-length="large">
 					<input type"text" name="fld4" id="fld4" value="<?php echo $fld4; ?>" size="50" onKeyUp="industAutoComp(this.value,'ichange_indust','fld4','fld4',1)" onfocus="showEle('orig_ind_info');" onblur="hideEle('orig_ind_info');" />
 					</span>
@@ -274,10 +381,11 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 					<span style="font-size: 9pt; display: none;" id="orig_ind_info">Enter the commodity to ship, the industry name, city or state for a list of industries.<br /></span>
 				</td>
 			</tr>
+// -->
+<!--
 			<tr>
 				<td>Destination</td>
 				<td><a name="ind2"></a>
-					<!-- <input type"text" name="fld5" id="fld5" value="<?php echo $fld5; ?>" size="50" onKeyUp="industAutoComp(this.value,'ichange_indust','fld5','fld5',2, {'target':'fld5_span'}); document.getElementById('fld5_span').style.display = 'block';" onfocus="showEle('dest_ind_info');" onblur="hideEle('dest_ind_info');" /> // -->
 					<span data-balloon="The destination industry for this waybill." data-balloon-pos="right" data-balloon-length="large">
 					<input type"text" name="fld5" id="fld5" value="<?php echo $fld5; ?>" size="50" onKeyUp="industAutoComp(this.value,'ichange_indust','fld5','fld5',2);" onfocus="showEle('dest_ind_info');" onblur="hideEle('dest_ind_info');" />
 					</span>
@@ -288,6 +396,8 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 					<span style="font-size: 9pt; display: none;" id="dest_ind_info">Enter the commodity to ship, the industry name, city or state for a list of industries.<br /></span>
 				</td>
 			</tr>
+// -->
+<!--
 			<tr>
 				<td>Return to</td>
 				<td>
@@ -298,6 +408,8 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 				<td>
 				</td>
 			</tr>
+// -->
+<!--
 			<?php if(!in_array($fld11,array("","MT","EMPTY","MTY")) && $fld21_cntr > 1){ ?>
 			<tr>
 				<td>Store at</td>
@@ -311,7 +423,10 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 				</td>
 			</tr>
 			<?php } ?>
+// -->
+<!--
 		</table>
+// -->
 		<table border="0" width="100%" align="center" style="background-color: transparent; border: none;">						
 			<tr>
 			<td colspan="3" style="background-color: peru;">&nbsp;&nbsp;Railroad Operation details</td>
