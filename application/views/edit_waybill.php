@@ -235,12 +235,12 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 				Origin<br />
 				<a name="ind1"></a>
 				<span data-balloon="The originating industry for this waybill." data-balloon-pos="right" data-balloon-length="large">
-				<input type"text" name="fld4" id="fld4" value="<?php echo $fld4; ?>" size="50" onKeyUp="industAutoComp(this.value,'ichange_indust','fld4','fld4',1)" onfocus="showEle('orig_ind_info');" onblur="hideEle('orig_ind_info');" />
+					<input type"text" name="fld4" id="fld4" value="<?php echo $fld4; ?>" size="50" onKeyUp="industAutoComp(this.value,'ichange_indust','fld4','fld4',1)" onfocus="showEle('orig_ind_info');" onblur="hideEle('orig_ind_info');" />
 				</span>
-				<div id="fld4_span"  style="display: none; border: 1px solid black; background-color: yellow; font-size: 9pt; padding: 5px; max-height: 100px; overflow: auto;"></div>
+				<div id="fld4_span" style="display: none; border: 1px solid black; background-color: yellow; font-size: 9pt; padding: 5px; max-height: 100px; overflow: auto;"></div>
 				<div id="fld4_indDescDiv" style="display: none;">
-				<textarea cols="50" name="fld4_indDesc" id="fld4_indDesc" onchange="this.parent.style.display = 'block'"><?php echo $fld4_indDesc; ?></textarea>
-				</span>
+					<textarea cols="50" name="fld4_indDesc" id="fld4_indDesc" onchange="this.parent.style.display = 'block'"><?php echo $fld4_indDesc; ?></textarea>
+				</div>
 				<span style="font-size: 9pt; display: none;" id="orig_ind_info">Enter the commodity to ship, the industry name, city or state for a list of industries.<br /></span>
 
 
@@ -248,11 +248,11 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 				Destination<br />
 				<a name="ind2"></a>
 				<span data-balloon="The destination industry for this waybill." data-balloon-pos="right" data-balloon-length="large">
-				<input type"text" name="fld5" id="fld5" value="<?php echo $fld5; ?>" size="50" onKeyUp="industAutoComp(this.value,'ichange_indust','fld5','fld5',2);" onfocus="showEle('dest_ind_info');" onblur="hideEle('dest_ind_info');" />
+					<input type"text" name="fld5" id="fld5" value="<?php echo $fld5; ?>" size="50" onKeyUp="industAutoComp(this.value,'ichange_indust','fld5','fld5',2);" onfocus="showEle('dest_ind_info');" onblur="hideEle('dest_ind_info');" />
 				</span>
 				<div id="fld5_span"  style="display: none; border: 1px solid black; background-color: yellow; font-size: 9pt; padding: 5px; max-height: 100px; overflow: auto;"></div>
 				<div id="fld5_indDescDiv" style="display: none;">
-				<textarea cols="50" name="fld5_indDesc" id="fld5_indDesc" onchange="this.parent.style.display = 'block'"><?php echo $fld5_indDesc; ?></textarea>
+					<textarea cols="50" name="fld5_indDesc" id="fld5_indDesc" onchange="this.parent.style.display = 'block'"><?php echo $fld5_indDesc; ?></textarea>
 				</div>
 				<span style="font-size: 9pt; display: none;" id="dest_ind_info">Enter the commodity to ship, the industry name, city or state for a list of industries.<br /></span>
 
@@ -260,7 +260,7 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 				<br />
 				Return to<br />
 				<span data-balloon="Where to return the car/s on this waybill to when they have been unloaded." data-balloon-pos="right" data-balloon-length="large">
-				<input type="text" id="fld19" name="fld19" size="40" maxsize="40" value="<?php echo $fld19; ?>" />
+					<input type="text" id="fld19" name="fld19" size="40" maxsize="40" value="<?php echo $fld19; ?>" />
 				</span>
 
 
