@@ -218,6 +218,7 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 		<div style="display: block;">
 			<div style="display: inline-block; width: 400px;">
 
+				<div style="display: inline-block; padding: 3px;">
 				Lading<br />
 				<div id="autocomp">
 				<div id="field">
@@ -230,8 +231,9 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 				<br />was&nbsp;<a href="javascript:{}" onclick="document.getElementById('fld11').value = '<?php echo trim($fld11_prev); ?>'"><?php echo $fld11_prev; ?></a>
 				<?php } ?>
 				<div id="fld11_span" style="display: none; border: 1px solid black; background-color: yellow; font-size: 9pt; padding: 5px;"></div>
+				</div>
 
-				<br />
+				<div style="display: inline-block; padding: 3px;">
 				Origin<br />
 				<a name="ind1"></a>
 				<span data-balloon="The originating industry for this waybill." data-balloon-pos="right" data-balloon-length="large">
@@ -242,9 +244,9 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 					<textarea cols="50" name="fld4_indDesc" id="fld4_indDesc" onchange="this.parent.style.display = 'block'"><?php echo $fld4_indDesc; ?></textarea>
 				</div>
 				<span style="font-size: 9pt; display: none;" id="orig_ind_info">Enter the commodity to ship, the industry name, city or state for a list of industries.<br /></span>
+				</div>
 
-
-				<br />
+				<div style="display: inline-block; padding: 3px;">
 				Destination<br />
 				<a name="ind2"></a>
 				<span data-balloon="The destination industry for this waybill." data-balloon-pos="right" data-balloon-length="large">
@@ -255,17 +257,18 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 					<textarea cols="50" name="fld5_indDesc" id="fld5_indDesc" onchange="this.parent.style.display = 'block'"><?php echo $fld5_indDesc; ?></textarea>
 				</div>
 				<span style="font-size: 9pt; display: none;" id="dest_ind_info">Enter the commodity to ship, the industry name, city or state for a list of industries.<br /></span>
+				</div>
 
-
-				<br />
+				<div style="display: inline-block; padding: 3px;">
 				Return to<br />
 				<span data-balloon="Where to return the car/s on this waybill to when they have been unloaded." data-balloon-pos="right" data-balloon-length="large">
 					<input type="text" id="fld19" name="fld19" size="40" maxsize="40" value="<?php echo $fld19; ?>" />
 				</span>
+				</div>
 
 
 			<?php if(!in_array($fld11,array("","MT","EMPTY","MTY")) && $fld21_cntr > 1){ ?>
-				<br />
+				<div style="display: inline-block; padding: 3px;">
 				Store at<br />
 				<select name="storage" onchange="if(this.value.length > 0){if(confirm('This will store the lading\nfor the number of cars indicated\nand mark this waybill as unloaded.\n\nAre you sure?')){ window.location = '<?php echo WEB_ROOT."/waybill/store/".$id."/"; ?>'+this.value;} }">
 					<option value="" selected="selected">To Bulk Store this WB, select...</option>
@@ -273,14 +276,13 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 						echo "<option value=\"".$stodat[$st]->id."\">".substr($stodat[$st]->indust_name,0,35)."... (".$stodat[$st]->town.")</option>";
 					} ?>
 				</select>
+				</div>
 			<?php } ?>
-
 
 			</div>
 			<div style="display: inline-block; width: 400px;">
 
-
-				<div id="wb_image_div">
+				<!-- <div id="wb_image_div"> // -->
 				<?php 
 				if($id > 0){
 				$fils = get_filenames(DOC_ROOT."/waybill_images/");
@@ -299,9 +301,7 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 					echo $fil_html;
 				}
 				?>
-				</div>
-
-
+				<!-- </div> // -->
 
 			</div>
 		</div>
