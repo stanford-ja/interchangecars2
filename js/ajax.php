@@ -56,8 +56,10 @@ function selTrain($fld14,$la='',$rr=0){
 		$wps = json_decode($res['auto'], true);
 		$wps_kys = @array_keys($wps);
 		$opts = "<option value=\"".$res['origin']."\">".$res['origin']." (origin)</option>";
-		for($o=0;$o<count($wps_kys);$o++){
-			$opts .= "<option value=\"".$wps_kys[$o]."\">".$wps_kys[$o]." (".$wps[$wps_kys[$o]]." days)</option>";
+		if(is_array($wps_kys)){
+			for($o=0;$o<count($wps_kys);$o++){
+				$opts .= "<option value=\"".$wps_kys[$o]."\">".$wps_kys[$o]." (".$wps[$wps_kys[$o]]." days)</option>";
+			}
 		}
 		//if(intval($res['auto']) > 0 || strlen($res['auto']) > 4){
 		if(strlen($res['auto']) > 4){
@@ -507,7 +509,7 @@ function db_conn_settings(){
 
 	// TESTING
 	$LocTst = $_SERVER['DOCUMENT_ROOT'].$_SERVER['SCRIPT_NAME'];
-	if(strpos($LocTst,"www/Applications/") > 0){
+	if(strpos($LocTst,"www/html/Applications/") > 0){
 		$dbhost="localhost";
 		$dbusername="admin";
 		$dbpassword="admin";
@@ -559,7 +561,9 @@ function qry_cntr($tbl, $data, $ky){
 	//if($resultcom = mysql_fetch_array($dosql_com)){
 	//if($mysqli->affected_rows($qry)){return $mysqli->affected_rows($qry);}
 	//else{return 0;} //$resultcom['cntr']; //Value to return.
-	return $res[0]->cntr;
+	$ret = 0;
+	if(isset($res[0]->cntr)){ $ret = $res[0]->cntr; }
+	return $ret; //$res[0]->cntr;
 	//}
 }
 

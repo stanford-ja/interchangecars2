@@ -40,7 +40,8 @@ class sqli {
 	}
 	
 	//function sqli($host="db72d.pair.com",$user="jstan_6_w",$pass="Js120767"){
-	function sqli($host="db150c.pair.com",$user="jstan2_2_w",$pass="Js120767"){
+	//function sqli($host="db150c.pair.com",$user="jstan2_2_w",$pass="Js120767"){
+	function __construct($host="db150c.pair.com",$user="jstan2_2_w",$pass="Js120767"){
 		//$this->errors();
 		$this->setHost($host,$user,$pass);
 		if(class_exists('mysqli')){$this->mysqli = new mysqli($this->h,$this->u,$this->p); $this->engine = 0;}
