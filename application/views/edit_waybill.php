@@ -48,15 +48,25 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 			<?php } ?>		
 			<span style="font-size: 10pt;">
 					<?php if($fld11 != "MT" && $fld11 != "MTY"){ ?>
-					<a href="../../waybill/swap/<?php echo $id; ?>">Swap origin / destination, mark Lading as MT</a>&nbsp;&nbsp;&nbsp;
+					<div class="wbLinkElement">
+						<a href="../../waybill/swap/<?php echo $id; ?>">Swap origin / destination, mark Lading as MT</a>
+					</div>
 					<?php } ?>
-					<a href="#progfrm">Progress</a>&nbsp;&nbsp;&nbsp;
-					<a href="<?php echo WEB_ROOT; ?>/messaging/lst/<?php echo $id; ?>">Messages</a>&nbsp;
+					<div class="wbLinkElement">
+						<a href="#progfrm">Progress</a>
+					</div>
+					<div class="wbLinkElement">
+						<a href="<?php echo WEB_ROOT; ?>/messaging/lst/<?php echo $id; ?>">Messages</a>
+					</div>
 					<?php if($id > 0){ ?>
 						<!-- <a href="javascript:{}" onclick="window.open('<?php echo WEB_ROOT; ?>/graphics/waybill/<?php echo $id; ?>','WB<?php echo $id; ?>','width=500, height=700');">Upload Image</a>&nbsp; // -->
-						<a href="#imagesDiv">Upload Image</a>&nbsp;
+					<div class="wbLinkElement">
+						<a href="#imagesDiv">Upload Image</a>
+					</div>
 					<?php } ?>
-					<a href="<?php echo WEB_ROOT; ?>/waybill/tranship/<?php echo $id; ?>" style=\"color: yellow;\">Tranship</a>&nbsp;
+					<div class="wbLinkElement">
+						<a href="<?php echo WEB_ROOT; ?>/waybill/tranship/<?php echo $id; ?>" style=\"color: yellow;\">Tranship</a>&nbsp;
+					</div>
 					<!-- <a href="<?php echo WEB_ROOT; ?>/edit.php?type=WAYBILL&id=20120517115321&action=EDIT" style=\"color: yellow;\">Orig. Waybill</a>&nbsp; // -->
 				</span>
 
@@ -73,63 +83,132 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 						echo "</strong>";
 					} ?>
 					<br />
-              	<span style="white-space: nowrap">
+              	<div style="display: inline-block; padding: 4px;">
 					Date&nbsp;<input type="hidden" name="fld1" id="fld1" value="<?php echo $fld1; ?>" /><?php echo $fld1; ?>&nbsp;&nbsp;&nbsp;
-              	Waybill Type&nbsp;
-              	<select id="fld16" name="fld16" /><option selected="selected" value="<?php echo $fld16; ?>"><?php echo @$fld16; ?></option><option value="">STANDARD</option><option value="INTERNAL">INTERNAL</option></select>
-&nbsp;&nbsp;&nbsp;&nbsp;
-              	Purchase Order #&nbsp;<span class="small_txt">(if applicable)</span>&nbsp;
-              	<input type="text" id="fld15" name="fld15" size="15" maxsize="15" value="<?php echo $fld15; ?>" />
-              	</span>
+				</div>
+				<div style="display: inline-block; padding: 4px;">
+	              	Waybill Type&nbsp;
+					<select id="fld16" name="fld16" /><option selected="selected" value="<?php echo $fld16; ?>"><?php echo @$fld16; ?></option><option value="">STANDARD</option><option value="INTERNAL">INTERNAL</option></select>
+					&nbsp;&nbsp;&nbsp;&nbsp;
+				</div>
+				<div style="display: inline-block; padding: 4px;">
+	              	Purchase Order #&nbsp;<span class="small_txt">(if applicable)</span>&nbsp;
+					<input type="text" id="fld15" name="fld15" size="15" maxsize="15" value="<?php echo $fld15; ?>" />
+              	</div>
              </td>
          </div>
 
-		<table border="0" width="100%" align="center" style="background-color: transparent; border: none;">						
+		<!-- <table border="0" width="100%" align="center" style="background-color: transparent; border: none;">						
 		<tr>
-			<td colspan="3"><div class="wbElementHeading">&nbsp;&nbsp;Cars details</div></td>
-			</tr>
-			<tr>
-				<td style="padding: 3px;" colspan="2">
-					<span style="display: none;">
-						<textarea name="fld21" id="fld21" cols="50" rows="3"><?php echo $fld21; ?></textarea>
+			<td colspan="3">
+				<div class="wbElementHeading">&nbsp;&nbsp;Cars details</div>
+			</td>
+		</tr>
+		<tr>
+			<td style="padding: 3px;" colspan="2">
+		// -->
+			<div class="wbElement">
+				<div class="wbElementHeading">&nbsp;&nbsp;Cars Details</div>
+				<span style="display: none;">
+					<textarea name="fld21" id="fld21" cols="50" rows="3"><?php echo $fld21; ?></textarea>
+				</span>
+				<input type="hidden" name="fld10" id="fld10" value="<?php echo $fld10; ?>" />
+				<div style="display: block; background-color: NavajoWhite; border-radius: 5px;">
+				<div id="alreadyOnWB" style="width: 98%; background-color: yellow; border: 1px solid maroon; border-radius: 4px; padding: 5px; margin: 2px; font-size: 12pt; display: none; text-align: center;"></div>
+
+				<div style="float: right; display: block; padding: 10px; margin: 5px; width: 400px; max-width: 85%; height: 220px; vertical-align: top; background-color: gold; border: 1px solid #ccc; border-radius: 5px;">
+					<strong><u>Car Search</u></strong><br />&nbsp;
+					<span data-balloon="Start to enter a car location or number and the results will appear as you type." data-balloon-pos="left" data-balloon-length="large">
+						Find cars at: 
+						<input type="text" size="20" name="mtcars" id="mtcars" onkeyup="carsAutoFind(this.value,'location');" />
 					</span>
-					<input type="hidden" name="fld10" id="fld10" value="<?php echo $fld10; ?>" />
-					<div style="display: block; background-color: #F4A460; border: 1px solid red;"><!-- START CARS DIV // -->
-					<div id="alreadyOnWB" style="width: 98%; background-color: yellow; border: 1px solid maroon; border-radius: 4px; padding: 5px; font-size: 12pt; display: none; text-align: center;"></div>
+					<span id="mtcars_load" style="visibility: hidden;">Loading...</span>
+					<br />
+					<div id="mtcars_span" style="font-size: 9pt; max-height: 160px; overflow: auto;">&nbsp;</div>
+				</div>
 
-					<div style="float: right; display: block; padding: 10px; margin: 5px; width: 400px; height: 230px; vertical-align: top; background-color: yellow; padding: 3px;">
-						<strong><u>Car Search</u></strong><br />&nbsp;
-						<span data-balloon="Start to enter a car location or number and the results will appear as you type." data-balloon-pos="left" data-balloon-length="large">
-							Find cars at: 
-							<input type="text" size="20" name="mtcars" id="mtcars" onkeyup="carsAutoFind(this.value,'location');" />
-						</span>
-						<span id="mtcars_load" style="visibility: hidden;">Loading...</span>
+				<div style="display: inline-block; padding: 8px; float: left;">
+					<div style="display: inline-block;">
+						<strong>Cars attached to waybill</strong><br />
+						<div style="display: inline-block; width: 100px; margin: 2px;">Car</div>
+						<div style="display: inline-block; width: 250px; margin: 2px;">
+							<div id="autocomp">
+								<div id="field">
+									<span data-balloon="Enter the full Car Number including reporting mark." data-balloon-pos="right" data-balloon-length="xlarge">
+										<input name="fld21_car" id="fld21_car" value="" style="width: 200px; background-color: white;" onchange="this.value=this.value.toUpperCase(); carUsed(this.value);" />
+									</span>
+								</div>
+							</div>
+						</div>
 						<br />
-						<div id="mtcars_span" style="font-size: 9pt; max-height: 180px; overflow: auto;">&nbsp;</div>
-					</div>
 
-					<!-- START CARS TABLE // -->
-					<table style="margin-bottom: 5px; border: none; background-color: transparent;">
-					<!--
-					<tr>
-						<td colspan="7">
-							<div id="alreadyOnWB" style="width: 90%; background-color: yellow; border: 1px solid maroon; border-radius: 4px; padding: 5px; font-size: 12pt; display: none; text-align: center;"></div>
-						</td>
-					</tr>
-					// -->
-					<tr>
-						<td colspan="2">
-							<strong>Cars attached to waybill</strong>
-						</td>
-						<td rowspan="7" style="vertical-align: top;">
-							<span style="font-size: 9pt; font-weight: bold;">Cars on waybill</span><br />
-							<div id="carsHTM" style="font-size: 9pt; padding: 2px; border: 1px solid #777;background-color: #DEB887;min-width: 180px; max-height: 150px; overflow: auto">&nbsp;</div>
-						</td>
-						<td rowspan="5" style="font-weight: bold; color: maroon; font-size: 8pt; vertical-align: top;">
-							<?php echo $sugg_car_types; ?>
-						</td>
-					
+						<div style="display: inline-block; width: 100px; margin: 2px;">AAR </div>
+						<div style="display: inline-block; width: 250px; margin: 2px;">
+							<span data-balloon="Select an AAR Code for the car you wish to add." data-balloon-pos="right" data-balloon-length="large">
+								<select name="fld21_aar" id="fld21_aar" style="width: 150px; font-size: 9pt; background-color: white;">
+									<option value=""></option>
+									<?php echo $aar_options; ?>
+								</select>
+							</span>
+						</div>
+						<br />
+
+						<div style="display: inline-block; width: 100px; margin: 2px;">Attach to RR</div>
+						<div style="display: inline-block; width: 250px; margin: 2px;">
+							<span data-balloon="Select the railroad the entered car will be added for." data-balloon-pos="right" data-balloon-length="large">
+								<select name="fld21_rr" id="fld21_rr" style="background-color: white;">
+								<?php for($i=0;$i<count($affil);$i++){echo "<option value=\"".$affil[$i]."\">".$allRR[$affil[$i]]->report_mark."</option>";} ?>
+								</select>
+							</span>
+							&nbsp;<input type="button" value="Add" onclick="addCar();" />
+							<br />
+						</div>
+						<br />
+						
+						<div style="display: inline-block; width: 450px; margin: 2px;">
+							<span id="fld9drop">
+								Car Select&nbsp;&nbsp;
+								<span data-balloon="Select a car from the list, then click the Add Car button to add it to the car list for this waybill." data-balloon-pos="right" data-balloon-length="large"> 
+									<select id="fld9sel" name="fld9sel" style="width: 320px; background-color: white;" onChange="var expSt = explodeStr('\,',document.getElementById('fld9sel').value); option0 = new Option(expSt[1],expSt[1]); document.form1.fld21_car.value = expSt[0]; document.form1.fld21_aar.options[0] = option0; document.form1.fld21_aar.options[0].selected = true;">
+									<option value="">--Select Car Number or enter in Field above--</option>
+								<?php $last_aar = ""; for($c=0;$c<count($cars_options);$c++){
+									$this_aar = substr($cars_options[$c]['aar_type'],0,1);
+									if($last_aar != $this_aar){echo "<option style=\"background-color: brown; color: white; font-weight: bold;\">AAR Type: ".$this_aar."</option>";}
+									$opt_val = $cars_options[$c]['car_num'].",".$cars_options[$c]['aar_type'].",".$cars_options[$c]['rr'];
+									echo "<option value=\"".$opt_val."\">".$opt_val." - ".substr($cars_options[$c]['desc'],0,25)."</option>";
+									$last_aar = substr($cars_options[$c]['aar_type'],0,1);
+								} ?>
+									</select>
+								</span>
+								<br />
+								<span style="font-size: 8pt;">(Only cars not already allocated to a waybill are shown in the Car Selector!)</span>
+							</span>
+						</div>
+					</div>
+				</div>
+
+				<div style="display: inline-block; padding: 8px; height: 240px;">
+					<span style="font-size: 9pt; font-weight: bold;">Cars on waybill</span><br />
+					<div id="carsHTM" style="font-size: 9pt; padding: 6px; border: 1px solid #777; border-radius: 5px; background-color: #DEB887;min-width: 250px; max-height: 150px; overflow: auto">&nbsp;</div>
+				</div>
+
+
+
+				<!-- START CARS TABLE // -->
 <!--
+				<table style="margin-bottom: 5px; border: none; background-color: transparent;">
+				<tr>
+					<td colspan="2">
+						<strong>Cars attached to waybill</strong>
+					</td>
+					<td rowspan="7" style="vertical-align: top;">
+						<span style="font-size: 9pt; font-weight: bold;">Cars on waybill</span><br />
+						<div id="carsHTM" style="font-size: 9pt; padding: 2px; border: 1px solid #777;background-color: #DEB887;min-width: 180px; max-height: 150px; overflow: auto">&nbsp;</div>
+					</td>
+					<td rowspan="5" style="font-weight: bold; color: maroon; font-size: 8pt; vertical-align: top;">
+						<?php echo $sugg_car_types; ?>
+					</td>
+				
 					<div style="float: right; display: block; padding: 10px; float: right; width: 300px; height: 200px; vertical-align: top; background-color: yellow; padding: 3px;">
 					<strong><u>Car Search</u></strong><br />&nbsp;
 					<span data-balloon="Start to enter a car location or number and the results will appear as you type." data-balloon-pos="left" data-balloon-length="large">
@@ -140,7 +219,6 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 					<br />
 					<span id="mtcars_span" style="font-size: 9pt; max-height: 125px; overflow: auto;">&nbsp;</span>
 					</div>
-// -->					
 					</tr>
 					<tr>
 						<td>Car </td>
@@ -194,10 +272,13 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 						</td>
 					</tr>
 					</table>
+// -->					
 					<!-- END CARS TABLE // -->
 					<br />
 					</div><!-- END CARS DIV // -->
+<!--
 				</td>
+// -->
 <!--
 				<td rowspan="1" style="vertical-align: top; background-color: yellow; padding: 3px;">
 					<strong><u>Car Search</u></strong><br />&nbsp;
@@ -210,8 +291,11 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 					<div id="mtcars_span" style="font-size: 9pt; max-height: 125px; overflow: auto;">&nbsp;</span>
 				</td>
 // -->
+			</div>
+<!--		
 			</tr>
 		</table>
+// -->
 
 <!--
 		<div style="display: block;">

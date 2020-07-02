@@ -209,7 +209,7 @@
 		}
 		div.wbElementHeading {
 			display: block; 
-			background-color: peru; 
+			background-color: BurlyWood; 
 			font-size: 12pt; 
 			margin-bottom: 5px; 
 			padding: 5px; 
@@ -217,6 +217,19 @@
 			box-shadow: #333 1px 1px 3px; /* eg: box-shadow: #6dd6f7 0px 0px 10px */
 			-moz-box-shadow: #333 1px 1px 3px;
 			-webkit-box-shadow: #333 1px 1px 3px; 
+		}
+		div.wbLinkElement {
+			display: inline-block;
+			background-color: brown;
+			border-radius: 4px;
+			padding: 7px;
+			margin: 3px;
+		}
+		div.wbLinkElement a, div.wbLinkElement a:hover, div.wbLinkElement a:visited {
+			background-color: transparent;
+			color: yellow;
+			text-decoration: none;
+			font-size: 11pt;
 		}
 	<?php } ?>
 	</style>
