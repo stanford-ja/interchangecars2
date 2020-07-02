@@ -399,7 +399,7 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 					<div id="autocomp">
 					<div id="field">
 					<span data-balloon="The route the car/s on the waybill will take to get from Origin to Destination (and back). This should include the reporting marks of ALL railroads that will handle this waybill, NOT just the Origin and Destination railroads." data-balloon-pos="right" data-balloon-length="xlarge">
-					<input type="text" id="fld6" size="25" name="fld6" value="<?php echo $fld6; ?>" />
+					<input type="text" id="fld6" style="width: 250px;" name="fld6" value="<?php echo $fld6; ?>" />
 					</span>
 					</div>
 					</div>
