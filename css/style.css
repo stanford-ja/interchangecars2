@@ -53,7 +53,7 @@ hr {color: #ccc;}
 }
 
 .td_menu {
-	background-color: antiquewhite;
+	background-color: ivory;
 	/*
 	border-radius-bottomright: .8em;
    -moz-border-radius-bottomright: .8em;	
@@ -63,11 +63,12 @@ hr {color: #ccc;}
    text-align: center;
 	padding: 5px;
 	border: 1px solid #BC8F8F;
-	font-size: 13pt;
-	width: 130px;
+	font-size: 11pt;
+	width: 110px;
     border-radius: 5px;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
+    margin:2px;
 }
 .td_menu a { text-decoration: none; }
 

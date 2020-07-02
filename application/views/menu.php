@@ -94,7 +94,7 @@
 						<?php } ?>
 				
 						<?php if($rr_sess > 0){ ?>			
-						<select name="rss_sel" onchange="window.location = '<?php echo WEB_ROOT; ?>/rss/' + this.value" style="font-size: 12pt; padding: 7px;">
+						<select name="rss_sel" onchange="window.location = '<?php echo WEB_ROOT; ?>/rss/' + this.value" style="font-size: 10pt; padding: 4px; border: 1px solid #ccc; border-radius: 4px; background-color: ivory;">
 							<option selected="selected">RSS</option>
 							<option value="waybills">Waybills</option>
 							<option value="porders">P/Orders</option>
