@@ -517,13 +517,13 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 					<span data-balloon="The symbol of train the waybill is currently in or allocated to. To search for a train, enter either the location to be served, part or all of the train symbol, origin, or destination, or an auto train waypoint, then click the Find button." data-balloon-pos="right" data-balloon-length="xlarge">
                 <input type="text" size="35" name="fld14[]" id="fld14" value="<?php echo $fld14; ?>" onchange="this.value = this.value.toUpperCase();selTrain(this.value);rebuildDateSel('pfld2_0','fld14');" />&nbsp;<input type="button" name="fndTrn" value="Find" onclick="trainAutoComp(document.getElementById('fld14').value,'fld14','train_autocomp');" />
                 </span>
-                <div id="train_autocomp_span" style="display: none; border: 1px solid #777; background-color: yellow; font-size: 9pt; padding: 5px; margin: 1px; max-height: 150px; overflow: auto;">
+                <div id="train_autocomp_span" style="display: none; border: 1px solid #777; border-radius: 5px; background-color: yellow; font-size: 9pt; padding: 5px; margin: 1px; max-height: 150px; overflow: auto;">
                 </div>
-            	 <div id="train_disp_span" style="display: none; border: 1px solid #777; background-color: yellow; font-size: 9pt; padding: 5px; margin: 1px;">
+            	 <div id="train_disp_span" style="display: none; border: 1px solid #777; border-radius: 5px; background-color: yellow; font-size: 9pt; padding: 5px; margin: 1px;">
               		<input type="hidden" id="entry_waypoint" name="entry_waypoint" value="" />
 						<input type="hidden" id="exit_waypoint" name="entry_waypoint" value="" />
                 </div>
-            	 <div id="train_disp_span2" style="display: none; border: 1px solid #777; background-color: #ADFF2F; font-size: 9pt; padding: 5px; margin: 1px;">
+            	 <div id="train_disp_span2" style="display: none; border: 1px solid #777; border-radius: 5px; background-color: #ADFF2F; font-size: 9pt; padding: 5px; margin: 1px;">
                 </div>
                 <textarea name="route_json" id="route_json" style="display: none;"></textarea>
                 <div style="font-size: 10pt; max-width: 600px; display: none" id="trains_info">
