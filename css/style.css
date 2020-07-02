@@ -68,7 +68,8 @@ hr {color: #ccc;}
     border-radius: 5px;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
-    margin:2px;
+    margin:1px;
+    margin-right: 3px;
 }
 .td_menu a { text-decoration: none; }
 
