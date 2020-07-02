@@ -408,7 +408,7 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 				} ?>
 
 			<?php if(count($rr_ics) > 0){ ?>
-				<div style="display: inline-block; padding: 3px;">
+				<br /><div style="display: inline-block; padding: 3px;">
 				Interchanges<br />
 				<?php
 				$rr_ics_k = array_keys($rr_ics);
