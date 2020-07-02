@@ -38,9 +38,11 @@ class Cars_model extends CI_Model {
     		$r2 = (array)$q2->result();
     		for($qi=0;$qi<count($r2);$qi++){
     			$qc = @json_decode($r2[$qi]->cars, TRUE);
-    			for($ci=0;$ci<count($qc);$ci++){
-    				if(@strpos("a".$car_sql_arr,$qc[$ci]['NUM']) < 1 && $qc[$ci]['NUM'] != "UNDEFINED"){$car_sql_arr .= ",'".$qc[$ci]['NUM']."'";}
-    			}
+                        if(is_array($qc)){
+                                for($ci=0;$ci<count($qc);$ci++){
+                                        if(@strpos("a".$car_sql_arr,$qc[$ci]['NUM']) < 1 && $qc[$ci]['NUM'] != "UNDEFINED"){$car_sql_arr .= ",'".$qc[$ci]['NUM']."'";}
+                                }
+                        }
     		}
     	}
   		$sql = "SELECT * FROM `".$this->tbl."` 	WHERE (`rr` = '".$id."' OR `rr` = '0' OR LENGTH(`rr`) = 0) AND `car_num` NOT IN (''".$car_sql_arr.") ".$olist;

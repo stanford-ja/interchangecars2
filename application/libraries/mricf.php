@@ -395,7 +395,7 @@ function trainOpts($opts=array(),$trainsArr=array()){ //$rr=0,$auto="N",$trainsA
 				$td = $trainsArr[$kys[$i]]['train_desc'];
 				if(strlen($td) > 25){$td = substr($td,0,25);}
 				$opt_styl = "";
-				if(intval($trainsArr[$kys[$i]]['auto']) > 0 || count($wps) > 0){$opt_styl = " style=\"background-color: gainsboro; color: #555;\""; $td .= " [AUTO]";}
+				if(intval($trainsArr[$kys[$i]]['auto']) > 0 || @count($wps) > 0){$opt_styl = " style=\"background-color: gainsboro; color: #555;\""; $td .= " [AUTO]";}
 				if($rr == $trainsArr[$kys[$i]]['railroad_id']){$tOpts_rr .= "<option ".$opt_styl."value=\"".$trainsArr[$kys[$i]]['train_id']."\">".$td." (".$trainsArr[$kys[$i]]['train_id'].")</option>";}
 				else{$tOpts_oth .= "<option ".$opt_styl."value=\"".$trainsArr[$kys[$i]]['train_id']."\">".$td." (".$trainsArr[$kys[$i]]['train_id'].")</option>";}
 			}

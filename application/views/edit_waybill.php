@@ -52,15 +52,19 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 					<?php } ?>
 					<a href="#progfrm">Progress</a>&nbsp;&nbsp;&nbsp;
 					<a href="<?php echo WEB_ROOT; ?>/messaging/lst/<?php echo $id; ?>">Messages</a>&nbsp;
-					<?php if($id > 0){ ?><a href="javascript:{}" onclick="window.open('<?php echo WEB_ROOT; ?>/graphics/waybill/<?php echo $id; ?>','WB<?php echo $id; ?>','width=500, height=700');">Upload Image</a>&nbsp;<?php } ?>
+					<?php if($id > 0){ ?>
+						<!-- <a href="javascript:{}" onclick="window.open('<?php echo WEB_ROOT; ?>/graphics/waybill/<?php echo $id; ?>','WB<?php echo $id; ?>','width=500, height=700');">Upload Image</a>&nbsp; // -->
+						<a href="#imagesDiv">Upload Image</a>&nbsp;
+					<?php } ?>
 					<a href="<?php echo WEB_ROOT; ?>/waybill/tranship/<?php echo $id; ?>" style=\"color: yellow;\">Tranship</a>&nbsp;
 					<!-- <a href="<?php echo WEB_ROOT; ?>/edit.php?type=WAYBILL&id=20120517115321&action=EDIT" style=\"color: yellow;\">Orig. Waybill</a>&nbsp; // -->
 				</span>
 
 				</td>
 			</tr>
-			<tr>
-				<td colspan="3" style="background-color: #A0522D; color: yellow; padding: 5px;">
+		</table>
+
+		<div class="wbElement" style="background-color: LemonChiffon;">
 					Waybill Number&nbsp;<input type="hidden" name="fld8" id="fld8" value="<?php echo $fld8; ?>" /><?php echo $fld8; ?>&nbsp;
 					<!-- <strong> WAYBILLS:&nbsp;<a href="edit.php?type=WAYBILL&id=20120517115321T11&action=EDIT">20120517115321T11</a></strong> // -->
 					<?php if(strlen($twbs) > 0){
@@ -78,9 +82,11 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
               	<input type="text" id="fld15" name="fld15" size="15" maxsize="15" value="<?php echo $fld15; ?>" />
               	</span>
              </td>
-         </tr>
-			<tr>
-			<td colspan="3" style="background-color: peru;">&nbsp;&nbsp;Cars details</td>
+         </div>
+
+		<table border="0" width="100%" align="center" style="background-color: transparent; border: none;">						
+		<tr>
+			<td colspan="3"><div class="wbElementHeading">&nbsp;&nbsp;Cars details</div></td>
 			</tr>
 			<tr>
 				<td style="padding: 3px;" colspan="2">
@@ -207,6 +213,7 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 			</tr>
 		</table>
 
+<!--
 		<div style="display: block;">
 			<div style="display: inline-block; background-color: peru; width: 400px;">
 				&nbsp;&nbsp;Industries / Locations details
@@ -215,10 +222,44 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 				&nbsp;&nbsp;Photos
 			</div>
 		</div>
-		<div style="display: block;">
-			<div style="display: inline-block; width: 400px;">
+// -->
+		<div style="display: block; vertical-align: top;">
+			<div class="wbElement">
+				<a name="imagesDiv"></a>
+				<div class="wbElementHeading">
+					&nbsp;&nbsp;Photos
+				</div>
 
-				<div style="display: inline-block; padding: 3px;">
+				<!-- <div id="wb_image_div"> // -->
+				<?php 
+				if($id > 0){
+					$fils = get_filenames(DOC_ROOT."/waybill_images/");
+					for($i=0;$i<count($fils);$i++){
+						if(strpos("Z".$fils[$i],$id."-") > 0){ // ".WEB_ROOT."/waybill_images/".$fils[$i]."
+							if(!isset($fil_html)){ $fil_html = ""; }
+							$fil_html .= "<a href=\"javascript:{}\" onclick=\"window.open('".WEB_ROOT."/graphics/wbview/".str_replace(".jpg","",$fils[$i])."','".$i."','width=500,height=650');\">";
+							$fil_html .= "<img src=\"".WEB_ROOT."/waybill_images/".$fils[$i]."\" style=\"height: 80px; margin: 3px;\">";
+							$fil_html .= "</a>";
+						}
+					}
+				}
+				if(isset($fil_html) && strlen($fil_html) > 0){
+					$fil_html = "<div id=\"wb_image_div\" style=\"color: #555; padding: 10px; margin: 3px; background-color: antiquewhite;\">
+						".$fil_html."
+						</div>";
+					echo $fil_html;
+				}
+				?>
+				<!-- </div> // -->
+				<br /><br />
+				<?php if($id > 0){ ?><a name="uplImg" href="javascript:{}" onclick="window.open('<?php echo WEB_ROOT; ?>/graphics/waybill/<?php echo $id; ?>','WB<?php echo $id; ?>','width=500, height=700');">Upload Image</a>&nbsp;<?php } ?>
+			</div>
+
+			<div class="wbElement">
+				<div class="wbElementHeading">
+					&nbsp;&nbsp;Industries / Locations details
+				</div>
+				<div style="display: inline-block; padding: 3px; border: 1px solid black; background-color:#bbb; border-radius: 3px;">
 				Lading<br />
 				<div id="autocomp">
 				<div id="field">
@@ -236,27 +277,27 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 				<div style="display: inline-block; padding: 3px;">
 				Origin<br />
 				<a name="ind1"></a>
-				<span data-balloon="The originating industry for this waybill." data-balloon-pos="right" data-balloon-length="large">
+				<span data-balloon="The originating industry for this waybill. Enter the commodity to ship, the industry name, city or state for a list of industries." data-balloon-pos="right" data-balloon-length="large">
 					<input type"text" name="fld4" id="fld4" value="<?php echo $fld4; ?>" onKeyUp="industAutoComp(this.value,'ichange_indust','fld4','fld4',1)" onfocus="showEle('orig_ind_info');" onblur="hideEle('orig_ind_info');" style="width: 310px;" />
 				</span>
 				<div id="fld4_span" style="display: none; border: 1px solid black; background-color: yellow; font-size: 9pt; padding: 5px; max-height: 100px; overflow: auto;"></div>
 				<div id="fld4_indDescDiv" style="display: none;">
 					<textarea name="fld4_indDesc" id="fld4_indDesc" onchange="this.parent.style.display = 'block'" style="width: 310px;"><?php echo $fld4_indDesc; ?></textarea>
 				</div>
-				<span style="font-size: 9pt; display: none;" id="orig_ind_info">Enter the commodity to ship, the industry name, city or state for a list of industries.<br /></span>
+				<span style="font-size: 9pt; display: none;" id="orig_ind_info"><!-- Enter the commodity to ship, the industry name, city or state for a list of industries.<br /> // --></span>
 				</div>
 
 				<div style="display: inline-block; padding: 3px;">
 				Destination<br />
 				<a name="ind2"></a>
-				<span data-balloon="The destination industry for this waybill." data-balloon-pos="right" data-balloon-length="large">
+				<span data-balloon="The destination industry for this waybill. Enter the commodity to ship, the industry name, city or state for a list of industries." data-balloon-pos="right" data-balloon-length="large">
 					<input type"text" name="fld5" id="fld5" value="<?php echo $fld5; ?>" onKeyUp="industAutoComp(this.value,'ichange_indust','fld5','fld5',2);" onfocus="showEle('dest_ind_info');" onblur="hideEle('dest_ind_info');" style="width: 310px;" />
 				</span>
 				<div id="fld5_span"  style="display: none; border: 1px solid black; background-color: yellow; font-size: 9pt; padding: 5px; max-height: 100px; overflow: auto;"></div>
 				<div id="fld5_indDescDiv" style="display: none;">
 					<textarea name="fld5_indDesc" id="fld5_indDesc" onchange="this.parent.style.display = 'block'" style="width: 310px;"><?php echo $fld5_indDesc; ?></textarea>
 				</div>
-				<span style="font-size: 9pt; display: none;" id="dest_ind_info">Enter the commodity to ship, the industry name, city or state for a list of industries.<br /></span>
+				<span style="font-size: 9pt; display: none;" id="dest_ind_info"><!-- Enter the commodity to ship, the industry name, city or state for a list of industries.<br /> // --></span>
 				</div>
 
 				<div style="display: inline-block; padding: 3px;">
@@ -270,7 +311,7 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 			<?php if(!in_array($fld11,array("","MT","EMPTY","MTY")) && $fld21_cntr > 1){ ?>
 				<div style="display: inline-block; padding: 3px;">
 				Store at<br />
-				<select name="storage" onchange="if(this.value.length > 0){if(confirm('This will store the lading\nfor the number of cars indicated\nand mark this waybill as unloaded.\n\nAre you sure?')){ window.location = '<?php echo WEB_ROOT."/waybill/store/".$id."/"; ?>'+this.value;} }">
+				<select name="storage" onchange="if(this.value.length > 0){if(confirm('This will store the lading\nfor the number of cars indicated\nand mark this waybill as unloaded.\n\nAre you sure?')){ window.location = '<?php echo WEB_ROOT."/waybill/store/".$id."/"; ?>'+this.value;} }" style="font-size: 9pt;">
 					<option value="" selected="selected">To Bulk Store this WB, select...</option>
 					<?php for($st=0;$st<count($stodat);$st++){
 						echo "<option value=\"".$stodat[$st]->id."\">".substr($stodat[$st]->indust_name,0,35)."... (".$stodat[$st]->town.")</option>";
@@ -280,29 +321,137 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 			<?php } ?>
 
 			</div>
-			<div style="display: inline-block; width: 400px;">
 
-				<!-- <div id="wb_image_div"> // -->
-				<?php 
-				if($id > 0){
-				$fils = get_filenames(DOC_ROOT."/waybill_images/");
-				for($i=0;$i<count($fils);$i++){
-					if(strpos("Z".$fils[$i],$id."-") > 0){ // ".WEB_ROOT."/waybill_images/".$fils[$i]."
-						$fil_html .= "<a href=\"javascript:{}\" onclick=\"window.open('".WEB_ROOT."/graphics/wbview/".str_replace(".jpg","",$fils[$i])."','".$i."','width=500,height=650');\">";
-						$fil_html .= "<img src=\"".WEB_ROOT."/waybill_images/".$fils[$i]."\" style=\"height: 80px; margin: 3px;\">";
-						$fil_html .= "</a>";
-					}
-				}
-				}
-				if(isset($fil_html) && strlen($fil_html) > 0){
-					$fil_html = "<div id=\"wb_image_div\" style=\"color: #555; padding: 10px; margin: 3px; background-color: antiquewhite;\">
-						".$fil_html."
-						</div>";
-					echo $fil_html;
+			<div class="wbElement">
+				<div class="wbElementHeading">
+					&nbsp;&nbsp;&nbsp;&nbsp;Railroad Operation details
+				</div>
+
+				<div style="display: inline-block; padding: 3px; float: right;">
+				Notes<br />
+				<span data-balloon="Any notes pertinent to the movement of cars on this waybill. Can include information that does not appear anywhere else on the waybill, but will help handling railroads expedite this waybill." data-balloon-pos="left" data-balloon-length="large">
+				<textarea name="fld17" id="fld17" cols="50" rows="4"><?php echo $fld17; ?></textarea>
+				</span><br />
+				</div>
+
+				<div style="display: inline-block; padding: 3px;">
+				From<br />
+					<span data-balloon="The railroad that serves the Originating Industry" data-balloon-pos="right" data-balloon-length="large">
+					<select id="fld2" name="fld2">
+					<?php for($r=0;$r<count($rr_kys);$r++){
+						$sel = ""; if($rr_options[$rr_kys[$r]]->id == $fld2){$sel = "selected=\"selected\" ";}
+						if($rr_options[$rr_kys[$r]]->common_flag != @$rr_options[$rr_kys[$r-1]]->common_flag && $r > 0){
+							echo "<option value=\"\" style=\"background-color: brown; color: white;\">-- COMMON --</option>";
+						}else	if($rr_options[$rr_kys[$r]]->inactive != @$rr_options[$rr_kys[$r-1]]->inactive && $r > 0){
+							echo "<option value=\"\" style=\"background-color: brown; color: white;\">-- INACTIVE --</option>";
+						}
+						echo "<option ".$sel."value=\"".$rr_options[$rr_kys[$r]]->id."\">".$rr_options[$rr_kys[$r]]->rr_name." (".$rr_options[$rr_kys[$r]]->report_mark.")</option>\n";
+					} 
+					?>
+					</select>
+					</span>
+				</div>
+
+				<div style="display: inline-block; padding: 3px;">
+				To<br />
+					<span data-balloon="The railroad that serves the Destination Industry." data-balloon-pos="right" data-balloon-length="large">
+					<select id="fld3" name="fld3">
+					<?php for($r=0;$r<count($rr_kys);$r++){
+						$sel = ""; if($rr_options[$rr_kys[$r]]->id == $fld3){$sel = "selected=\"selected\" ";}
+						if($rr_options[$rr_kys[$r]]->common_flag != @$rr_options[$rr_kys[$r-1]]->common_flag && $r > 0){
+							echo "<option value=\"\" style=\"background-color: brown; color: white;\">-- COMMON --</option>";
+						}else	if($rr_options[$rr_kys[$r]]->inactive != @$rr_options[$rr_kys[$r-1]]->inactive && $r > 0){
+							echo "<option value=\"\" style=\"background-color: brown; color: white;\">-- INACTIVE --</option>";
+						}
+						echo "<option ".$sel."value=\"".$rr_options[$rr_kys[$r]]->id."\">".$rr_options[$rr_kys[$r]]->rr_name." (".$rr_options[$rr_kys[$r]]->report_mark.")</option>\n";
+					} 
+					?>
+					</select>
+					</span>
+				</div>
+
+				<div style="display: inline-block; padding: 3px;">
+				Assigned to<br />
+					<span data-balloon="The railroad this waybill is currently assigned to. Normally this would be either the From or To railroad, or a railroad indicated in the Routing field, or an intermediate railroad that helps connect them." data-balloon-pos="right" data-balloon-length="large">
+					<select id="fld18" name="fld18">
+					<?php for($r=0;$r<count($rr_kys);$r++){
+						$sel = ""; if($rr_options[$rr_kys[$r]]->id == $fld18){$sel = "selected=\"selected\" ";}
+						if($rr_options[$rr_kys[$r]]->common_flag != @$rr_options[$rr_kys[$r-1]]->common_flag && $r > 0){
+							echo "<option value=\"\" style=\"background-color: brown; color: white;\">-- COMMON --</option>";
+						}else	if($rr_options[$rr_kys[$r]]->inactive != @$rr_options[$rr_kys[$r-1]]->inactive && $r > 0){
+							echo "<option value=\"\" style=\"background-color: brown; color: white;\">-- INACTIVE --</option>";
+						}
+						echo "<option ".$sel."value=\"".$rr_options[$rr_kys[$r]]->id."\">".$rr_options[$rr_kys[$r]]->rr_name." (".$rr_options[$rr_kys[$r]]->report_mark.")</option>\n";
+					} 
+					?>
+					</select>
+					</span>
+				<?php if(count($route_rr_arr) > 0){
+					echo "<div style=\"background-color: yellow; border: 1px solid red; margin: 2px; padding: 5px;\">The following railroads should have the waybill assigned to them when they need to action this waybill: ";
+					for($rri=0;$rri<count($route_rr_arr);$rri++){echo "<span style=\"background-color: red; color: white;\">".$route_rr_arr[$rri]."</span>&nbsp;";}
+					echo "</div>";
 				}
 				?>
-				<!-- </div> // -->
+				</div>
 
+				<div style="display: inline-block; padding: 3px;">
+				Routing<br />
+					<div id="autocomp">
+					<div id="field">
+					<span data-balloon="The route the car/s on the waybill will take to get from Origin to Destination (and back). This should include the reporting marks of ALL railroads that will handle this waybill, NOT just the Origin and Destination railroads." data-balloon-pos="right" data-balloon-length="xlarge">
+					<input type="text" id="fld6" size="25" name="fld6" value="<?php echo $fld6; ?>" />
+					</span>
+					</div>
+					</div>
+				</div>
+
+			<?php if(count($rr_ics) > 0){ ?>
+				<div style="display: inline-block; padding: 3px;">
+				Interchanges<br />
+				<?php
+				$rr_ics_k = array_keys($rr_ics);
+				$icl = "";
+				for($ric=0;$ric<count($rr_ics_k);$ric++){
+					//echo "<a href=\"#".$rr_ics_k[$ric]."\">".$rr_ics_k[$ric]."</a>&nbsp;";
+					$icl .= "<div style=\"display: inline-block; border: 1px solid maroon; padding: 3px; background-color: transparent; font-size: 9pt; vertical-align: top; background-color: #ddd;\"><div style=\"max-height: 70px; overflow: auto;\"><strong>".$rr_ics_k[$ric]."</strong><br />".$rr_ics[$rr_ics_k[$ric]]['ics']."</div></div>";
+				} 
+				echo $icl;
+				?>
+				</div>
+			<?php } ?>
+			</div>
+
+			<div class="wbElement">
+				<div class="wbElementHeading">
+					&nbsp;&nbsp;Train details
+				</div>
+
+				<span style="font-size: 10pt; color: maroon">To change the train this waybill is allocated to enter the train symbol (Train ID), words in the Train Description, Origin, Destination, or an Auto Waypoint in the <strong>In / Allocated To</strong> field below then click the <strong>Find</strong> button to see a list of matching trains.</span><br />
+				<span style="white-space: nowrap;">In / Allocated To</span><br /><br />
+					<span data-balloon="The symbol of train the waybill is currently in or allocated to. To search for a train, enter either the location to be served, part or all of the train symbol, origin, or destination, or an auto train waypoint, then click the Find button." data-balloon-pos="right" data-balloon-length="xlarge">
+                <input type="text" size="35" name="fld14[]" id="fld14" value="<?php echo $fld14; ?>" onchange="this.value = this.value.toUpperCase();selTrain(this.value);rebuildDateSel('pfld2_0','fld14');" />&nbsp;<input type="button" name="fndTrn" value="Find" onclick="trainAutoComp(document.getElementById('fld14').value,'fld14','train_autocomp');" />
+                </span>
+                <div id="train_autocomp_span" style="display: none; border: 1px solid #777; background-color: yellow; font-size: 9pt; padding: 5px; margin: 1px; max-height: 150px; overflow: auto;">
+                </div>
+            	 <div id="train_disp_span" style="display: none; border: 1px solid #777; background-color: yellow; font-size: 9pt; padding: 5px; margin: 1px;">
+              		<input type="hidden" id="entry_waypoint" name="entry_waypoint" value="" />
+						<input type="hidden" id="exit_waypoint" name="entry_waypoint" value="" />
+                </div>
+            	 <div id="train_disp_span2" style="display: none; border: 1px solid #777; background-color: #ADFF2F; font-size: 9pt; padding: 5px; margin: 1px;">
+                </div>
+                <textarea name="route_json" id="route_json" style="display: none;"></textarea>
+                <div style="font-size: 10pt; max-width: 600px; display: none" id="trains_info">
+					<span style="float: right;">&nbsp;&nbsp;<a href="javascript:{}" onclick="document.getElementById('trains_info').style.display = 'none';">[X]</a></span>
+					Automatic Trains are trains that will automatically deliver the car/s on a waybill to the Exit Location, 
+					or the Destination for the train if no Exit Location is indicated. 
+					To set a train as Automatic, enter a number greater than zero in the <strong>Days For Auto Train</strong> 
+					field in the <strong>Trains Management</strong> application. 
+					Automatic Trains are listed in color in the drop down list above!
+				</div>
+				<br />					
+				<a href="javascript:{}" onclick="document.getElementById('trains_info').style.display = 'block';">Help</a> | 
+				<!-- <a href="edit2.php?type=TRAINS&action=NEW" target="_blank">Manage Trains</a>. // -->
+ 
 			</div>
 		</div>
 
@@ -427,6 +576,7 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 <!--
 		</table>
 // -->
+<!--
 		<table border="0" width="100%" align="center" style="background-color: transparent; border: none;">						
 			<tr>
 			<td colspan="3" style="background-color: peru;">&nbsp;&nbsp;Railroad Operation details</td>
@@ -454,7 +604,6 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 				<textarea name="fld17" id="fld17" cols="50" rows="4"><?php echo $fld17; ?></textarea>
 				</span><br />
 				</td>
-
 			</tr>
 			<tr>
 				<td>To</td>
@@ -502,12 +651,7 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 			</tr>
 			<tr>
 				<td>Routing</td>
-				<!-- <td><input type="text" id="fld6" size="25" name="fld6" value="<?php echo $fld6; ?>" onKeyUp="autoComp(this.value,'ichange_waybill','routing','fld6', {'target':'fld6_span'}); document.getElementById('fld6_span').style.display = 'block';" /> // -->
 				<td>
-					<!--
-					<input type="text" id="fld6" size="25" name="fld6" value="<?php echo $fld6; ?>" onKeyUp="autoComp(this.value,'ichange_waybill','routing','fld6');" />
-					<div id="fld6_span" style="display: none; border: 1px solid black; background-color: yellow; font-size: 9pt; padding: 5px;"></div>
-					// -->
 					<div id="autocomp">
 					<div id="field">
 					<span data-balloon="The route the car/s on the waybill will take to get from Origin to Destination (and back). This should include the reporting marks of ALL railroads that will handle this waybill, NOT just the Origin and Destination railroads." data-balloon-pos="right" data-balloon-length="xlarge">
@@ -537,32 +681,9 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 				</td>
 			</tr>
 			<?php } ?>
-			<!-- 
-			<tr>
-				<td>Status</td>
-				<td>
-					<select id="fld7" name="fld7[]" onchange="updateOnStatChg(); hideEle('auto_ul_lab'); if(this.value == 'UNLOADING'){showEle('auto_ul_lab');}">
-					<select id="fld7" name="fld7[]" onchange="updateOnStatChg(this,document.getElementById('pfld3_0'),document.getElementById('pfld6_0'),document.getElementById('auto_ul_lab')); hideEle('auto_ul_lab'); if(this.value == 'UNLOADING'){showEle('auto_ul_lab');}">
-							<?php echo $fld7; ?>
-					</select>
-					<div id="auto_ul_lab" style="display: none;">Auto Unload In&nbsp;
-						<select name="unload_days[]" id="unload_days">
-							<option value="0" selected="selected">Manual Unload</option>
-							<option value="1">1 day</option>
-							<option value="2">2 days</option>
-							<option value="3">3 days</option>
-							<option value="4">4 days</option>
-							<option value="5">5 days</option>
-							<option value="6">6 days</option>
-							<option value="7">7 days</option>
-							<option value="8">8 days</option>
-							<option value="9">9 days</option>
-						</select>
-					</div>
-				</td>
-			</tr>
-			// -->
 		</table>
+// -->
+<!--
 		<table border="0" width="100%" align="center" style="background-color: transparent; border: none;">						
 			<tr>
 			<td colspan="3" style="background-color: peru;">&nbsp;&nbsp;Train details</td>
@@ -597,11 +718,11 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 					</div>
 					<br />					
 					<a href="javascript:{}" onclick="document.getElementById('trains_info').style.display = 'block';">Help</a> | 
-					<!-- <a href="edit2.php?type=TRAINS&action=NEW" target="_blank">Manage Trains</a>. // -->
  
 				</td>
 			</tr>
 		</table>
+// -->
 		<?php 
 		$in_future=0;
 		if($last_prog_date.$last_prog_time > date('YmdHi')){ 
