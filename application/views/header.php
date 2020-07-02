@@ -191,6 +191,34 @@
 		echo "}\n";	
 		//echo "</style>";
 	} ?>
+
+	<?php if(strpos($_SERVER['REQUEST_URI'],"waybill/edit") > 1){ ?>
+		div.wbElement {
+			display: inline-block; 
+			width: 97%; 
+			padding: 10px;
+			margin: 2px;
+			margin-bottom: 4px;
+			background-color: cornsilk;
+			border: 1px solid #ddd;
+			border-radius: 6px;
+			padding: 6px;
+			box-shadow: #aaa 0px 0px 7px; /* eg: box-shadow: #6dd6f7 0px 0px 10px */
+			-moz-box-shadow: #aaa 0px 0px 7px;
+			-webkit-box-shadow: #aaa 0px 0px 7px; 
+		}
+		div.wbElementHeading {
+			display: block; 
+			background-color: peru; 
+			font-size: 12pt; 
+			margin-bottom: 5px; 
+			padding: 5px; 
+			border-radius: 5px;
+			box-shadow: #333 1px 1px 3px; /* eg: box-shadow: #6dd6f7 0px 0px 10px */
+			-moz-box-shadow: #333 1px 1px 3px;
+			-webkit-box-shadow: #333 1px 1px 3px; 
+		}
+	<?php } ?>
 	</style>
 	</head>
 	<body>
