@@ -244,7 +244,7 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 					}
 				}
 				if(isset($fil_html) && strlen($fil_html) > 0){
-					$fil_html = "<div id=\"wb_image_div\" style=\"color: #555; padding: 10px; margin: 3px; background-color: antiquewhite;\">
+					$fil_html = "<div id=\"wb_image_div\" style=\"color: #555; padding: 10px; margin: 3px;\">
 						".$fil_html."
 						</div>";
 					echo $fil_html;
