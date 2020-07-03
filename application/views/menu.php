@@ -46,7 +46,7 @@
 			<div class="tbl1" style="width: 100%;"> <!-- START OF tbl1 MENU TABLE // -->
 			<?php if($rr_sess != 9999){ /* START LOGIN FOR EXISTING MEMBER */ ?>
 			<div style="display: table-row;">
-				<div style="display: table-cell; width: 230px; padding: 10px;" class="td_menu_title">
+				<div style="display: table-cell; width: 100px; padding: 10px;" class="td_menu_title">
 					<?php echo @$phtml.@$rhtml.@$thtml.@$shtml.@$mhtml; /* - TEST OF DROPDOWN FOR RAILROADS AS MOBILE-FRIENDLY RE-DESIGN */ ?>
 					<?php if(isset($next_trains) && count($next_trains) > 0){ ?>
 					<a href="javascript:{}" onclick="document.getElementById('next_trains_contain').style.display = 'block';">Next Trains</a>
