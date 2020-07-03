@@ -261,7 +261,15 @@ class Waybill extends CI_Controller {
   	   	$rr_data = $this->Generic_model->qry("SELECT `id`,`interchanges`,`show_allocto_only` FROM `ichange_rr` WHERE `report_mark` = '".$fld6_tmp[$i6]."'");
   	   	if(isset($rr_data[0]->id)){
   	   		if($rr_data[0]->show_allocto_only == 1){if(!in_array($fld6_tmp[$i6],$this->dat['route_rr_arr'])){$this->dat['route_rr_arr'][] = $fld6_tmp[$i6];}}
-  	   		if(strlen($rr_data[0]->interchanges) > 0){$this->dat['rr_ics'][$fld6_tmp[$i6]] = array('ics' => str_replace(";","<br />",$rr_data[0]->interchanges));}
+  	   		if(strlen($rr_data[0]->interchanges) > 0){
+				$ics_tmp_arr = explode(";",$rr_data[0]->interchanges);
+				$ics_tmp = "";
+				for($ita=0;$ita<count($ics_tmp_arr);$ita++){
+					$ics_tmp .= "<a href=\"javascript:{}\" onclick=\"document.getElementById('pfld3_0').value = '".str_replace("'","",$ics_tmp_arr[$ita])."'\">".$ics_tmp_arr[$ita]."</a><br />";
+				}
+				//$ics_tmp = str_replace(";","<br />",$rr_data[0]->interchanges);
+				$this->dat['rr_ics'][$fld6_tmp[$i6]] = array('ics' => $ics_tmp);
+			}
   	   	}
   	   	
   	   }
