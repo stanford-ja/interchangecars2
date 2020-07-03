@@ -265,7 +265,7 @@ class Waybill extends CI_Controller {
 				$ics_tmp_arr = explode(";",$rr_data[0]->interchanges);
 				$ics_tmp = "";
 				for($ita=0;$ita<count($ics_tmp_arr);$ita++){
-					$ics_tmp .= "<a href=\"javascript:{}\" onclick=\"document.getElementById('pfld3_0').value = 'Located at ".str_replace("'","",$ics_tmp_arr[$ita])."'\" style=\"text-decoration: none; color: black;\">".$ics_tmp_arr[$ita]."</a><br />";
+					$ics_tmp .= "<a href=\"javascript:{}\" onclick=\"document.getElementById('pfld3_0').value = 'Located at ".$fld6_tmp[$i6]." interchange at <strong>".str_replace("'","",$ics_tmp_arr[$ita])."</strong>'\" style=\"text-decoration: none; color: black;\">".$ics_tmp_arr[$ita]."</a><br />";
 				}
 				//$ics_tmp = str_replace(";","<br />",$rr_data[0]->interchanges);
 				$this->dat['rr_ics'][$fld6_tmp[$i6]] = array('ics' => $ics_tmp);
