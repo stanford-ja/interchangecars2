@@ -501,7 +501,7 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 				$icl = "";
 				for($ric=0;$ric<count($rr_ics_k);$ric++){
 					//echo "<a href=\"#".$rr_ics_k[$ric]."\">".$rr_ics_k[$ric]."</a>&nbsp;";
-					$icl .= "<div style=\"display: inline-block; height: 75px; border: 1px solid maroon; border-radius: 3px; padding: 3px; margin: 2px; background-color: transparent; font-size: 9pt; vertical-align: top; background-color: #ddd;\"><div style=\"height: 70px; overflow: auto;\"><strong>".$rr_ics_k[$ric]."</strong><br />".$rr_ics[$rr_ics_k[$ric]]['ics']."</div></div>";
+					$icl .= "<div style=\"display: inline-block; height: 75px; width: 150px; border: 1px solid maroon; border-radius: 3px; padding: 3px; margin: 2px; background-color: transparent; font-size: 9pt; vertical-align: top; background-color: #ddd;\"><div style=\"height: 70px; overflow: auto;\"><strong>".$rr_ics_k[$ric]."</strong><br />".$rr_ics[$rr_ics_k[$ric]]['ics']."</div></div>";
 				} 
 				echo $icl;
 				?>
