@@ -762,8 +762,10 @@ function cars4RR4WB($rr=0,$wb=0){
 		$cars = json_decode($r['cars'],true);
 	}
 	$cars_rr = array();
+	if(isset($cars) && is_array($cars)){
 	for($i=0;$i<count($cars);$i++){
 		if($cars[$i]['RR'] == $rr){ $cars_rr[] = $cars[$i]; }
+	}
 	}
 	$sqli->close();
 	return $cars_rr;
