@@ -341,7 +341,7 @@ class Home extends CI_Controller {
 	function porders_build(){
 		// Builds html for purchase orders.
 		$this->content['phtml'] = "<!-- <div class=\"box1\" style=\"left: ".$this->horiz_loc."px\"> // -->"; // 120px
-		$this->content['phtml'] .= "<br /><a href=\"#\" id=\"po_expand\" title=\"Click this link to view available purchase orders\"><strong>P/Orders</strong></a><br />";
+		$this->content['phtml'] .= "<a href=\"#\" id=\"po_expand\" title=\"Click this link to view available purchase orders\"><strong>P/Orders</strong></a><br />";
 		$this->content['phtml'] .= "<div id=\"pos\" style=\"display: none; position: fixed; left: 10px; top: 25px; z-index:99; max-height: 300px; overflow: auto;\"><a href=\"#\" id=\"po_shrink\">Shrink</a><br />";
 		$this->content['phtml'] .= "<strong>Purchase Orders</strong></a><br />";
 		if(count($this->porders) > 0){
