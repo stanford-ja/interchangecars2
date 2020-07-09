@@ -40,9 +40,11 @@ class functions {
 	}
 
 	function get_rows($fldNam, $table){
-		$sql = "SELECT DISTINCT `".$fldNam."` FROM `".$table."`";
+		$sql = "SELECT DISTINCT `".$fldNam."` AS `wot` FROM `".$table."` ORDER BY `".$fldNam."` DESC";
 		$dosql = $this->sqli->query($sql); //mysql_query($sql);
-		$stuff = $dosql->num_rows; //mysql_num_rows($dosql);
+		$res = $dosql->fetch_assoc();
+		//$stuff = $dosql->num_rows; //mysql_num_rows($dosql);
+		$stuff = $res['wot'];
 		return $stuff;
 	
 	}
@@ -88,7 +90,7 @@ $func->sqli = $sqli;
 		<a href="charts.php?chart=4">Trains x RR</a><br />
 		<!-- <a href="charts.php?chart=5">Most Used Cars</a><br /> // -->
 	</div>
-   <div id="container">
+   <div id="container" style="width: 730px;">
       <div id="header">
       <div id="header_left"></div>
       <div id="header_main">MRICF Charts</div>
@@ -112,14 +114,16 @@ $func->sqli = $sqli;
 			if($chart_typ == 0){
 				while($cntr < $maxRows){
 					$cntr=$cntr+1;
-					$t = $func->myTruncate2($data1[$cntr], 5);
-					if(strlen($t) > 0){
+					if(isset($data1[$cntr])){
+					    $t = $func->myTruncate2($data1[$cntr], 5);
+					    if(strlen($t) > 0){
 						if($func->sel_fld("rr_id_from","ichange_waybill",$data1[$cntr]) > 0){ $data[$t] = $func->sel_fld("rr_id_from","ichange_waybill",$data1[$cntr]); }
+					    }
 					}
 				}
-				$no_tds = 4; // Number of TDs to display in the Legend part of the Chart.
+				$no_tds = 5; // Number of TDs to display in the Legend part of the Chart.
             $mc = new maxChart($data);
-            $mc->displayChart('Waybills Produced x Originating RR',1,500,150);
+            $mc->displayChart('Waybills Produced x Originating RR',1,700,150);
             echo "<br/><br/>";
             
             //echo "<table style=\"text-align: left;\">".$legend."<tr>";
@@ -136,15 +140,17 @@ $func->sqli = $sqli;
  
 			if($chart_typ == 1){
 				while($cntr < $maxRows){
-					$cntr=$cntr+1;
+				    $cntr=$cntr+1;
+				    if(isset($data1[$cntr])){
 					$t = $func->myTruncate2($data1[$cntr], 5);
 					if(strlen($t) > 0){
 						if($func->sel_fld("rr_id_to","ichange_waybill",$data1[$cntr]) > 0){ $data[$t] = $func->sel_fld("rr_id_to","ichange_waybill",$data1[$cntr]); }
 					}
+				    }
 				}
-				$no_tds = 4; // Number of TDs to display in the Legend part of the Chart.
+				$no_tds = 5; // Number of TDs to display in the Legend part of the Chart.
             $mc = new maxChart($data);
-            $mc->displayChart('Waybills Produced x Destination RR',1,500,150);
+            $mc->displayChart('Waybills Produced x Destination RR',1,700,150);
             echo "<br/><br/>";
             
             //echo "<table style=\"text-align: left;\">".$legend."<tr>";
@@ -161,15 +167,17 @@ $func->sqli = $sqli;
            
 			if($chart_typ == 2){
 				while($cntr < $maxRows){
-					$cntr=$cntr+1;
+				    $cntr=$cntr+1;
+				    if(isset($data1[$cntr])){
 					$t = $func->myTruncate2($data1[$cntr], 5);
 					if(strlen($t) > 0){
 						if($func->sel_fld("rr","ichange_indust",$data1[$cntr]) > 0){ $data[$t] = $func->sel_fld("rr","ichange_indust",$data1[$cntr]); }
 					}
+				    }
 				}
-				$no_tds = 4; // Number of TDs to display in the Legend part of the Chart.
+				$no_tds = 5; // Number of TDs to display in the Legend part of the Chart.
             $mc = new maxChart($data);
-            $mc->displayChart('Industries x RR',1,500,150);
+            $mc->displayChart('Industries x RR',1,700,150);
             echo "<br/><br/>";
             
             //echo "<table style=\"text-align: left;\">".$legend."<tr>";
@@ -186,15 +194,17 @@ $func->sqli = $sqli;
 
 			if($chart_typ == 3){
 				while($cntr < $maxRows){
-					$cntr=$cntr+1;
+				    $cntr=$cntr+1;
+				    if(isset($data1[$cntr])){
 					$t = $func->myTruncate2($data1[$cntr], 5);
 					if(strlen($t) > 0){
 						if($func->sel_fld("rr","ichange_cars",$data1[$cntr]) > 0){ $data[$t] = $func->sel_fld("rr","ichange_cars",$data1[$cntr]); }
 					}
+				    }
 				}
-				$no_tds = 4; // Number of TDs to display in the Legend part of the Chart.
+				$no_tds = 5; // Number of TDs to display in the Legend part of the Chart.
             $mc = new maxChart($data);
-            $mc->displayChart('Car Pool x RR',1,500,150);
+            $mc->displayChart('Car Pool x RR',1,700,150);
             echo "<br/><br/>";
             
             //echo "<table style=\"text-align: left;\">".$legend."<tr>";
@@ -211,15 +221,17 @@ $func->sqli = $sqli;
 
 			if($chart_typ == 4){
 				while($cntr < $maxRows){
-					$cntr=$cntr+1;
+				    $cntr=$cntr+1;
+				    if(isset($data1[$cntr])){
 					$t = $func->myTruncate2($data1[$cntr], 5);
 					if(strlen($t) > 0){
 						if($func->sel_fld("railroad_id","ichange_trains",$data1[$cntr]) > 0){ $data[$t] = $func->sel_fld("railroad_id","ichange_trains",$data1[$cntr]); }
 					}
+				    }
 				}
-				$no_tds = 4; // Number of TDs to display in the Legend part of the Chart.
+				$no_tds = 5; // Number of TDs to display in the Legend part of the Chart.
             $mc = new maxChart($data);
-            $mc->displayChart('Trains x RR',1,500,150);
+            $mc->displayChart('Trains x RR',1,700,150);
             echo "<br/><br/>";
             
             //echo "<table style=\"text-align: left;\">".$legend."<tr>";
@@ -242,9 +254,9 @@ $func->sqli = $sqli;
 						if($func->sel_fld("car_num","ichange_carsused_index",$data1[$cntr]) > 0){ $data[$t] = $func->sel_fld("car_num","ichange_carsused_index",$data1[$cntr]); }
 					}
 				}
-				$no_tds = 4; // Number of TDs to display in the Legend part of the Chart.
+				$no_tds = 5; // Number of TDs to display in the Legend part of the Chart.
             $mc = new maxChart($data);
-            $mc->displayChart('Most Used Cars',1,500,150);
+            $mc->displayChart('Most Used Cars',1,700,150);
             echo "<br/><br/>";
             
             //echo "<table style=\"text-align: left;\">".$legend."<tr>";
