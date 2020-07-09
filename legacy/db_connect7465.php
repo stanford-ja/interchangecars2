@@ -7,7 +7,7 @@ $dbpassword="Js120767"; //"1C4nDo3s5tuff"; //"Js120767";
 
 // TESTING
 $LocTst = $_SERVER['DOCUMENT_ROOT'].$_SERVER['SCRIPT_NAME'];
-if(strpos($LocTst,"www/Applications/") > 0){
+if(strpos($LocTst,"www/html/Applications/") > 0){
 	$dbhost="localhost";
 	$dbusername="admin";
 	$dbpassword="admin";

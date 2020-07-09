@@ -263,7 +263,8 @@
 			</fb:like><br />
 		<?php } ?>
 		<?php if(strpos("a".@$myRR[0]->social,"twitter") > 0){ ?>
-			<a href="https://twitter.com/share" class="twitter-share-button" data-url="<?php echo WEB_ROOT; ?>/index.php/home" data-text="MRICF Interchange Cars Application V2.0" style="padding: none; margin: 0px; width: 100px; display: inline;">Tweet</a>
+			<!--<a href="https://twitter.com/share" class="twitter-share-button" data-url="<?php echo WEB_ROOT; ?>/index.php/home" data-text="MRICF Interchange Cars Application V2.0" style="padding: none; margin: 0px; width: 100px; display: inline;">Tweet</a> // -->
+			<a href="https://twitter.com/intent/tweet?text=MRICF Model Rail Interchange Cars Forwarding V2.0&url=<?php echo str_replace(array(":","/"),array("%3A","%2F"),WEB_ROOT."/home"); ?>" target="tweeet4me" style="display: inline-block; padding: 4px; border-radius: 4px; background-color: CornflowerBlue; color: white; margin-right: 6px; text-decoration: none;">Tweet</a>
 		<?php } ?>
 			<script>
 			/*
