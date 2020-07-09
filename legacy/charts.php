@@ -112,12 +112,16 @@ $func->sqli = $sqli;
 			}
 			
 			if($chart_typ == 0){
+			    $legend_rr = array();
 				while($cntr < $maxRows){
 					$cntr=$cntr+1;
 					if(isset($data1[$cntr])){
 					    $t = $func->myTruncate2($data1[$cntr], 5);
 					    if(strlen($t) > 0){
-						if($func->sel_fld("rr_id_from","ichange_waybill",$data1[$cntr]) > 0){ $data[$t] = $func->sel_fld("rr_id_from","ichange_waybill",$data1[$cntr]); }
+						if($func->sel_fld("rr_id_from","ichange_waybill",$data1[$cntr]) > 0){ 
+						    $data[$t] = $func->sel_fld("rr_id_from","ichange_waybill",$data1[$cntr]); 
+						    $legend_rr[] = $cntr." : ".$qfunc->qry("ichange_rr", $cntr, "id", "report_mark");
+						}
 					    }
 					}
 				}
@@ -125,53 +129,65 @@ $func->sqli = $sqli;
             $mc = new maxChart($data);
             $mc->displayChart('Waybills Produced x Originating RR',1,700,150);
             echo "<br/><br/>";
-            
+
+/*            
             //echo "<table style=\"text-align: left;\">".$legend."<tr>";
             echo "<div style=\"text-align: left;\">".$legend."</div>";
             for($cntr=1;$cntr<=$maxRows;$cntr++){
-					$td_cs = "background-color: lightgrey;"; 	//if(floatval($cntr/2) == intval($cntr/2)){ 	$td_cs = "background-color: moccasin;"; }
-					//if(strlen(qry("ichange_rr", $cntr, "id", "report_mark")) > 0){ echo "<td style=\" padding-right:10px; font-size: 10pt; ".$td_cs."\">".$cntr." : ".qry("ichange_rr", $cntr, "id", "report_mark")."</td>"; }
-					if(strlen($qfunc->qry("ichange_rr", $cntr, "id", "report_mark")) > 0){ echo "<div style=\"display: inline-block; margin: 4px; width: 110px; padding-right:10px; font-size: 10pt; ".$td_cs."\">".$cntr." : ".$qfunc->qry("ichange_rr", $cntr, "id", "report_mark")."</div>"; }
-					if(floatval($cntr/4) == intval($cntr/4)){
-						//echo "</tr><tr>";
-					}
+		$td_cs = "background-color: lightgrey;"; 	//if(floatval($cntr/2) == intval($cntr/2)){ 	$td_cs = "background-color: moccasin;"; }
+		//if(strlen(qry("ichange_rr", $cntr, "id", "report_mark")) > 0){ echo "<td style=\" padding-right:10px; font-size: 10pt; ".$td_cs."\">".$cntr." : ".qry("ichange_rr", $cntr, "id", "report_mark")."</td>"; }
+		if(strlen($qfunc->qry("ichange_rr", $cntr, "id", "report_mark")) > 0){ echo "<div style=\"display: inline-block; margin: 4px; width: 110px; padding-right:10px; font-size: 10pt; ".$td_cs."\">".$cntr." : ".$qfunc->qry("ichange_rr", $cntr, "id", "report_mark")."</div>"; }
+		if(floatval($cntr/4) == intval($cntr/4)){
+		    //echo "</tr><tr>";
+		}
             }
+*/
 			}
  
-			if($chart_typ == 1){
-				while($cntr < $maxRows){
-				    $cntr=$cntr+1;
-				    if(isset($data1[$cntr])){
-					$t = $func->myTruncate2($data1[$cntr], 5);
-					if(strlen($t) > 0){
-						if($func->sel_fld("rr_id_to","ichange_waybill",$data1[$cntr]) > 0){ $data[$t] = $func->sel_fld("rr_id_to","ichange_waybill",$data1[$cntr]); }
-					}
-				    }
-				}
-				$no_tds = 5; // Number of TDs to display in the Legend part of the Chart.
-            $mc = new maxChart($data);
-            $mc->displayChart('Waybills Produced x Destination RR',1,700,150);
-            echo "<br/><br/>";
-            
-            //echo "<table style=\"text-align: left;\">".$legend."<tr>";
-            echo "<div style=\"text-align: left;\">".$legend."</div>";
-            for($cntr=1;$cntr<=$maxRows;$cntr++){
-					$td_cs = "background-color: lightgrey;"; 	//if(floatval($cntr/2) == intval($cntr/2)){ 	$td_cs = "background-color: moccasin;"; }
-					//if(strlen(qry("ichange_rr", $cntr, "id", "report_mark")) > 0){ echo "<td style=\" padding-right:10px; font-size: 10pt; ".$td_cs."\">".$cntr." : ".qry("ichange_rr", $cntr, "id", "report_mark")."</td>"; }
-					if(strlen($qfunc->qry("ichange_rr", $cntr, "id", "report_mark")) > 0){ echo "<div style=\"display: inline-block; margin: 4px; width: 110px; padding-right:10px; font-size: 10pt; ".$td_cs."\">".$cntr." : ".$qfunc->qry("ichange_rr", $cntr, "id", "report_mark")."</div>"; }
-					if(floatval($cntr/4) == intval($cntr/4)){
-						//echo "</tr><tr>";
-					}
-            }
+	    if($chart_typ == 1){
+		$legend_rr = array();
+		while($cntr < $maxRows){
+		    $cntr=$cntr+1;
+		    if(isset($data1[$cntr])){
+			$t = $func->myTruncate2($data1[$cntr], 5);
+			if(strlen($t) > 0){
+			    if($func->sel_fld("rr_id_to","ichange_waybill",$data1[$cntr]) > 0){ 
+				$data[$t] = $func->sel_fld("rr_id_to","ichange_waybill",$data1[$cntr]); 
+				$legend_rr[] = $cntr." : ".$qfunc->qry("ichange_rr", $cntr, "id", "report_mark");
+			    }
 			}
+		    }
+		}
+		$no_tds = 5; // Number of TDs to display in the Legend part of the Chart.
+		$mc = new maxChart($data);
+		$mc->displayChart('Waybills Produced x Destination RR',1,700,150);
+		echo "<br/><br/>";
+            
+		/*
+		//echo "<table style=\"text-align: left;\">".$legend."<tr>";
+		echo "<div style=\"text-align: left;\">".$legend."</div>";
+		for($cntr=1;$cntr<=$maxRows;$cntr++){
+		    $td_cs = "background-color: lightgrey;"; 	//if(floatval($cntr/2) == intval($cntr/2)){ 	$td_cs = "background-color: moccasin;"; }
+		    //if(strlen(qry("ichange_rr", $cntr, "id", "report_mark")) > 0){ echo "<td style=\" padding-right:10px; font-size: 10pt; ".$td_cs."\">".$cntr." : ".qry("ichange_rr", $cntr, "id", "report_mark")."</td>"; }
+		    if(isset($data1[$cntr]) && strlen($qfunc->qry("ichange_rr", $cntr, "id", "report_mark")) > 0){ echo "<div style=\"display: inline-block; margin: 4px; width: 110px; padding-right:10px; font-size: 10pt; ".$td_cs."\">".$cntr." : ".$qfunc->qry("ichange_rr", $cntr, "id", "report_mark")."</div>"; }
+		    if(floatval($cntr/4) == intval($cntr/4)){
+			//echo "</tr><tr>";
+		    }
+		}
+		*/
+	    }
            
 			if($chart_typ == 2){
+			    $legend_rr = array();
 				while($cntr < $maxRows){
 				    $cntr=$cntr+1;
 				    if(isset($data1[$cntr])){
 					$t = $func->myTruncate2($data1[$cntr], 5);
 					if(strlen($t) > 0){
-						if($func->sel_fld("rr","ichange_indust",$data1[$cntr]) > 0){ $data[$t] = $func->sel_fld("rr","ichange_indust",$data1[$cntr]); }
+						if($func->sel_fld("rr","ichange_indust",$data1[$cntr]) > 0){ 
+						    $data[$t] = $func->sel_fld("rr","ichange_indust",$data1[$cntr]); 
+						    $legend_rr[] = $cntr." : ".$qfunc->qry("ichange_rr", $cntr, "id", "report_mark");
+						}
 					}
 				    }
 				}
@@ -179,7 +195,8 @@ $func->sqli = $sqli;
             $mc = new maxChart($data);
             $mc->displayChart('Industries x RR',1,700,150);
             echo "<br/><br/>";
-            
+
+/*            
             //echo "<table style=\"text-align: left;\">".$legend."<tr>";
             echo "<div style=\"text-align: left;\">".$legend."</div>";
             for($cntr=1;$cntr<=$maxRows;$cntr++){
@@ -190,15 +207,19 @@ $func->sqli = $sqli;
 						//echo "</tr><tr>";
 					}
             }
-			}
-
+*/
+	}
 			if($chart_typ == 3){
+			    $legend_rr = array();
 				while($cntr < $maxRows){
 				    $cntr=$cntr+1;
 				    if(isset($data1[$cntr])){
 					$t = $func->myTruncate2($data1[$cntr], 5);
 					if(strlen($t) > 0){
-						if($func->sel_fld("rr","ichange_cars",$data1[$cntr]) > 0){ $data[$t] = $func->sel_fld("rr","ichange_cars",$data1[$cntr]); }
+						if($func->sel_fld("rr","ichange_cars",$data1[$cntr]) > 0){ 
+						    $data[$t] = $func->sel_fld("rr","ichange_cars",$data1[$cntr]); 
+						    $legend_rr[] = $cntr." : ".$qfunc->qry("ichange_rr", $cntr, "id", "report_mark");
+						}
 					}
 				    }
 				}
@@ -206,7 +227,8 @@ $func->sqli = $sqli;
             $mc = new maxChart($data);
             $mc->displayChart('Car Pool x RR',1,700,150);
             echo "<br/><br/>";
-            
+
+/*            
             //echo "<table style=\"text-align: left;\">".$legend."<tr>";
             echo "<div style=\"text-align: left;\">".$legend."</div>";
             for($cntr=1;$cntr<=$maxRows;$cntr++){
@@ -217,15 +239,20 @@ $func->sqli = $sqli;
 						//echo "</tr><tr>";
 					}
             }
+*/
 			}
 
 			if($chart_typ == 4){
+			    $legend_rr = array();
 				while($cntr < $maxRows){
 				    $cntr=$cntr+1;
 				    if(isset($data1[$cntr])){
 					$t = $func->myTruncate2($data1[$cntr], 5);
 					if(strlen($t) > 0){
-						if($func->sel_fld("railroad_id","ichange_trains",$data1[$cntr]) > 0){ $data[$t] = $func->sel_fld("railroad_id","ichange_trains",$data1[$cntr]); }
+						if($func->sel_fld("railroad_id","ichange_trains",$data1[$cntr]) > 0){ 
+						    $data[$t] = $func->sel_fld("railroad_id","ichange_trains",$data1[$cntr]); 
+						    $legend_rr[] = $cntr." : ".$qfunc->qry("ichange_rr", $cntr, "id", "report_mark");
+						}
 					}
 				    }
 				}
@@ -234,6 +261,7 @@ $func->sqli = $sqli;
             $mc->displayChart('Trains x RR',1,700,150);
             echo "<br/><br/>";
             
+/*
             //echo "<table style=\"text-align: left;\">".$legend."<tr>";
             echo "<div style=\"text-align: left;\">".$legend."</div>";
             for($cntr=1;$cntr<=$maxRows;$cntr++){
@@ -244,14 +272,19 @@ $func->sqli = $sqli;
 						//echo "</tr><tr>";
 					}
             }
+*/
 			}
 
 			if($chart_typ == 5){
+			    $legend_rr = array();
 				while($cntr < $maxRows){
 					$cntr=$cntr+1;
 					$t = $func->myTruncate2($data1[$cntr], 5);
 					if(strlen($t) > 0){
-						if($func->sel_fld("car_num","ichange_carsused_index",$data1[$cntr]) > 0){ $data[$t] = $func->sel_fld("car_num","ichange_carsused_index",$data1[$cntr]); }
+						if($func->sel_fld("car_num","ichange_carsused_index",$data1[$cntr]) > 0){ 
+						    $data[$t] = $func->sel_fld("car_num","ichange_carsused_index",$data1[$cntr]); 
+						    $legend_rr[] = $cntr." : ".$qfunc->qry("ichange_rr", $cntr, "id", "report_mark");
+						}
 					}
 				}
 				$no_tds = 5; // Number of TDs to display in the Legend part of the Chart.
@@ -259,6 +292,7 @@ $func->sqli = $sqli;
             $mc->displayChart('Most Used Cars',1,700,150);
             echo "<br/><br/>";
             
+/*
             //echo "<table style=\"text-align: left;\">".$legend."<tr>";
             echo "<div style=\"text-align: left;\">".$legend."</div>";
             for($cntr=1;$cntr<=$maxRows;$cntr++){
@@ -269,7 +303,14 @@ $func->sqli = $sqli;
 						//echo "</tr><tr>";
 					}
             }
+*/
 			}
+
+            echo "<div style=\"text-align: left;\">".$legend."</div>";
+		for($le=0;$le<count($legend_rr);$le++){
+		    $td_cs = "background-color: lightgrey;"; 	//if(floatval($cntr/2) == intval($cntr/2)){ 	$td_cs = "background-color: moccasin;"; }
+		    echo "<div style=\"display: inline-block; margin: 4px; width: 110px; padding-right:10px; font-size: 10pt; ".$td_cs."\">".$legend_rr[$le]."</div>";
+		}
          ?>
          
       </div>
