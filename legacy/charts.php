@@ -41,7 +41,7 @@ class functions {
 
 	function get_rows($fldNam, $table){
 		//$sql = "SELECT DISTINCT `".$fldNam."` FROM `".$table."`";
-		$sql = "SELECT COUNT(`".$fldNam."`) AS `cntr` FROM `".$table."`";
+		$sql = "SELECT MAX(`".$fldNam."`) AS `cntr` FROM `".$table."`";
 		$dosql = $this->sqli->query($sql); //mysql_query($sql);
 		$res = $dosql->fetch_assoc();
 		//$stuff = $dosql->num_rows; //mysql_num_rows($dosql);
@@ -283,7 +283,9 @@ $func->sqli = $sqli;
 	    $td_cs = "background-color: lightgrey; padding: 5px; border-radius: 6px;"; //	if(floatval($cntr/2) == intval($cntr/2)){ 	$td_cs = "background-color: moccasin;"; }
             for($cntr=1;$cntr<=$maxRows;$cntr++){
 		//if(strlen(qry("ichange_rr", $cntr, "id", "report_mark")) > 0){ echo "<td style=\" padding-right:10px; font-size: 10pt; ".$td_cs."\">".$cntr." : ".qry("ichange_rr", $cntr, "id", "report_mark")."</td>"; }
-		if(in_array($cntr,array_keys($data)) && strlen($qfunc->qry("ichange_rr", $cntr, "id", "report_mark")) > 0){ echo "<div style=\"display: inline-block; margin: 4px; width: 110px; padding-right:10px; font-size: 10pt; ".$td_cs."\">".$cntr." : ".$qfunc->qry("ichange_rr", $cntr, "id", "report_mark")."</div>"; }
+		if(in_array($cntr,array_keys($data)) && strlen($qfunc->qry("ichange_rr", $cntr, "id", "report_mark")) > 0){ 
+		    echo "<div style=\"display: inline-block; margin: 4px; width: 110px; padding-right:10px; font-size: 10pt; ".$td_cs."\">".$cntr." : ".$qfunc->qry("ichange_rr", $cntr, "id", "report_mark")."</div>"; 
+		}
 		if(floatval($cntr/5) == intval($cntr/5)){
 		    //echo "</tr><tr>";
 		}
