@@ -6,7 +6,7 @@ include('query_functions.php');
 
 $chart_typ = 0;
 if(isset($_GET['chart'])){$chart_typ = $_GET['chart'];}
-$legend = "<tr><td>Legend:</td></tr>";
+$legend = "Legend: "; //"<tr><td>Legend:</td></tr>";
 
 class functions {
 	function __construct(){
@@ -77,18 +77,19 @@ $func->sqli = $sqli;
 <html>
 <head>
    <title>Charts</title>
-	<link REL="StyleSheet" HREF="style.css" TYPE="text/css" MEDIA="screen">
+    <link REL="StyleSheet" HREF="../css/style.css" TYPE="text/css" MEDIA="screen">
    <link href="maxChartStyle/style.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
     <div id="links" style="width: 100%; text-align: center; padding: 10px;">
 	<h2>MRICF Charts and Statistics</h2>
-	<a href="#" onClick="window.close();">Close</a><br />
-	<a href="charts.php">Waybills x Originating RR</a> | 
-	<a href="charts.php?chart=1">Waybills x Destination RR</a><br />
-	<a href="charts.php?chart=2">Industries x RR</a> | 
-	<a href="charts.php?chart=3">Car Pool x RR</a> | 
-	<a href="charts.php?chart=4">Trains x RR</a><br />
+	<div class="td_menu" style="display: inline-block;"><a href="#" onClick="window.close();">Close</a></div><br />
+	<div class="td_menu" style="display: inline-block; width: 200px;"><a href="charts.php">Waybills x Originating RR</a></div> 
+	<div class="td_menu" style="display: inline-block; width: 200px;"><a href="charts.php?chart=1">Waybills x Destination RR</a></div>
+	<div class="td_menu" style="display: inline-block;"><a href="charts.php?chart=2">Industries x RR</a></div>
+	<div class="td_menu" style="display: inline-block;"><a href="charts.php?chart=3">Car Pool x RR</a></div>
+	<div class="td_menu" style="display: inline-block;"><a href="charts.php?chart=4">Trains x RR</a></div>
+	<br />
 	<!-- <a href="charts.php?chart=5">Most Used Cars</a><br /> // -->
     </div>
 <!--
