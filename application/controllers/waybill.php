@@ -257,9 +257,14 @@ class Waybill extends CI_Controller {
   	   $fld6_tmp = explode("-",str_replace(" ","",str_replace("/","-",$this->dat['fld6'])));
   	   $this->dat['route_rr_arr'] = array(); // Array of Report Marks
   	   $this->dat['rr_ics'] = array(); // Array of Interchanges
+  	   $this->dat['rr_maps'] = array();
   	   for($i6=0;$i6<count($fld6_tmp);$i6++){
   	   	$rr_data = $this->Generic_model->qry("SELECT `id`,`interchanges`,`show_allocto_only` FROM `ichange_rr` WHERE `report_mark` = '".$fld6_tmp[$i6]."'");
   	   	if(isset($rr_data[0]->id)){
+			if(!in_array($fld6_tmp[$i6],array_keys($this->dat['rr_maps']))){
+				$tmp = $this->mricf->rrMap($rr_data[0]->id);
+				if(isset($tmp[0]) && strlen($tmp[0]) > 0){ $this->dat['rr_maps'][$fld6_tmp[$i6]] = $tmp[0]; }
+			}
   	   		if($rr_data[0]->show_allocto_only == 1){if(!in_array($fld6_tmp[$i6],$this->dat['route_rr_arr'])){$this->dat['route_rr_arr'][] = $fld6_tmp[$i6];}}
   	   		if(strlen($rr_data[0]->interchanges) > 0){
 				$ics_tmp_arr = explode(";",$rr_data[0]->interchanges);

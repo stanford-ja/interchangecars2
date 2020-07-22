@@ -39,7 +39,7 @@
 			<input type="submit" name="submit" value="Upload" />
 		</div>
 	</div>
-<?php /* START CAR UPLOAD FORM */ }else{ /* START IMG UPLOAD FORM */ ?>
+<?php /* END CAR UPLOAD FORM */ }elseif(isset($car_form)){ /* START IMG UPLOAD FORM */ ?>
 	<input type="hidden" name="id" value="<?php echo $id; ?>" />
 	<input type="hidden" name="type" value="<?php echo $type; ?>" />
 	<div style="display: block; padding: 2px;">
@@ -66,5 +66,22 @@
 			<input type="submit" name="submit" value="Upload" />
 		</div>
 	</div>
-<?php /* END IMG UPLOAD FORM */ } ?>
+<?php /* END IMG UPLOAD FORM */ }else{ /* START MAP UPLOAD FORM */ ?>
+	<div style="display: block; padding: 2px;">
+		<div style="display: inline-block; width: 50px; padding: 0px;">
+		File
+		</div>
+		<div style="display: inline-block; padding: 0px;">
+			<?php echo form_upload('user_file'); ?>
+		</div>
+	</div>
+	<div style="display: block; padding: 2px;">
+		<div style="display: inline-block; width: 50px; padding: 0px;">
+			&nbsp;
+		</div>
+		<div style="display: inline-block; padding: 0px;">
+			<input type="submit" name="submit" value="Upload" />
+		</div>
+	</div>
+<?php /* END MAP UPLOAD FORM */ } ?>
 </form>

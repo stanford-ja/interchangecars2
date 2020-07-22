@@ -16,7 +16,7 @@
 */
 
 $LocTst = $_SERVER['DOCUMENT_ROOT'].$_SERVER['SCRIPT_NAME'];
-if(strpos($LocTst,"www/Applications/") > 0){
+if(strpos($LocTst,"www/html/Applications/") > 0){
 	$config['base_url']	= 'http://'.$_SERVER['SERVER_NAME'].'/Applications/interchangecars2/';
 }else{
 	//$config['base_url']	= 'http://www.stanfordhosting.net/interchangecars2/';

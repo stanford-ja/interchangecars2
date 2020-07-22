@@ -4,4 +4,7 @@ car_images/*.*
 uploaded_files/*.*
 waybill_images/*.jpg
 indust_images/*.jpg
+map_files/*.jpg
+map_files/*.png
+map_files/*.pdf
 *.sql

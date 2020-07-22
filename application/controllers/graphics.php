@@ -302,5 +302,69 @@ class Graphics extends CI_Controller {
 		$this->load->view('footer');
 	}
 
+	public function rrMap(){
+		$id=$this->arr['rr_sess'];
+		$filename = $this->mricf->rrMap($id);
+
+		$content2['html'] = "<h2>Railroad Map</h2>";
+		for($m=0;$m<count($filename);$m++){
+			if(isset($filename[$m]) && strlen($filename[$m]) > 0){
+				if(strpos($filename[$m],".pdf") > 0){
+					$content2['html'] .= "The railroad map is in a PDF file. <a href=\"".WEB_ROOT.$filename[$m]."\" target=\"mapPdf".date('U')."\">Click to view PDF</a>";
+				}else{
+					$content2['html'] .= "<img src=\"".WEB_ROOT.$filename[$m]."\" style=\"width: 500px;\" />";
+				}
+			}
+		}
+		//$content['html'] .= "<br />Uploaded by ".$rr[0]->report_mark;
+
+		$content['map_form'] = 1; // Used to test in graphics view which elements to display
+		$content['form'] = form_open_multipart("../graphics/rrMapUpload");
+		$content['referrer'] = ""; //$refer;
+		//$content['img_name'] = $filename[0];
+		//$content['description'] = $im[0]->description;
+
+		// Load views
+		$this->load->view('header', $this->arr);
+		//$this->load->view('menu', $this->arr);
+		$this->load->view('html', $content2);
+		$this->load->view("graphic",$content);
+		$this->load->view('footer');
+	}
+	
+	public function rrMapUpload(){
+		//echo "<pre>"; print_r($_FILES); echo "</pre>"; exit();
+		$id=$this->arr['rr_sess'];
+
+		$fntmp = $this->mricf->rrMap($id);
+		for($m=0;$m<count($fntmp);$m++){
+			unlink(DOC_ROOT.$fntmp[$m]);
+		}
+
+		$tmp = explode(".",$_FILES['user_file']['name']);
+		$ext = strtolower($tmp[intval(count($tmp)-1)]);
+		$this->filePath = DOC_ROOT.'/map_files/';
+		$this->webPath = str_replace(DOC_ROOT,WEB_ROOT,$this->filePath);
+		$this->uconfig['upload_path'] = $this->filePath;
+		$this->uconfig['file_name'] = $id.".".$ext;
+		if(strpos(strtolower(),".") > 0){ ; }
+		$this->uconfig['allowed_types'] = 'png|jpg|pdf';
+		$this->uconfig['overwrite'] = true;
+		$this->uconfig['max_size']	= '300';
+		$this->uconfig['max_width'] = '1200';
+		$this->uconfig['max_height'] = '1200';
+
+		$this->upload->initialize($this->uconfig);
+
+		if(!$this->upload->do_upload("user_file")){
+			echo "There was a problem uploading the file!<br /><a href=\"".WEB_ROOT."/graphics/car/".$p['id']."\">Try Again!</a><br />";
+			echo $this->upload->display_errors()."<br />";
+			//echo "<pre>"; print_r($config); "</pre>";
+			//echo "<pre>"; print_r($this->upload->data()); echo "</pre>";
+			exit();
+		}
+
+		header("Location:".WEB_ROOT."/graphics/rrMap");
+	}
+
 }
-?>

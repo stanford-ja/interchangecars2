@@ -511,6 +511,31 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 				?>
 				</div>
 			<?php } ?>
+			<?php if(count($rr_maps) > 0){ ?>
+				<br /><div style="display: inline-block; padding: 3px;">
+				Railroad System Maps<br />
+				<?php
+				$rr_map_k = array_keys($rr_maps);
+				//echo "<pre>"; print_r($rr_maps); echo "</pre>"; exit();
+				$midl = "";
+				for($mid=0;$mid<count($rr_map_k);$mid++){
+					//echo "<a href=\"#".$rr_ics_k[$ric]."\">".$rr_ics_k[$ric]."</a>&nbsp;";
+					$midl .= "<div style=\"display: inline-block; height: 100px; width: 100px; border: 1px solid maroon; border-radius: 3px; padding: 3px; margin: 2px; background-color: transparent; font-size: 9pt; vertical-align: top; background-color: #ddd; text-align: center;\">
+							<strong>".$rr_map_k[$mid]."</strong><br />";
+					if(strpos($rr_maps[$rr_map_k[$mid]],".pdf") > 0){
+						$midl .= "The railroad map is in a PDF file.<br /> 
+							<a href=\"javascript:{}\" onclick=\"window.open('".WEB_ROOT.$rr_maps[$rr_map_k[$mid]]."','','width=500,height=500');\">Click to view PDF</a>";
+					}else{
+						$midl .= "<a href=\"javascript:{}\" onclick=\"window.open('".WEB_ROOT.$rr_maps[$rr_map_k[$mid]]."','','width=500,height=500');\">
+							<img src=\"".WEB_ROOT.$rr_maps[$rr_map_k[$mid]]."\" style=\"width: 90px; height: 80px;\" />
+							</a>";
+					}
+					$midl .= "</div>";
+				} 
+				echo $midl;
+				?>
+				</div>
+			<?php } ?>
 			</div>
 
 			<div class="wbElement">
