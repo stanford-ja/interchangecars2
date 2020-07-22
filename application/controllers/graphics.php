@@ -255,7 +255,7 @@ class Graphics extends CI_Controller {
 			$content['html'] .= "</a>";
 			$content['html'] .= "<br />Uploaded by ".$rr[0]->report_mark;
 			if($tmp[1] == $this->arr['rr_sess']){ 
-				$content['html'] .= "<br /><a href=\"".WEB_ROOT."/graphics/desc/".$tmp[0]."/graphics.viewall\">Edit</a> "; 
+				$content['html'] .= "<br /><a href=\"".WEB_ROOT."/graphics/desc/".$tmp[0]."/graphics.wbviewall\">Edit</a> "; 
 				$content['html'] .= "<a href=\"javascript:{}\" onclick=\"if(confirm('Are you sure you want to delete\\nthis image?')){ window.location = '".WEB_ROOT."/graphics/wbdel/".$tmp[0]."'; }\">Delete</a>"; 
 			}
 			if(isset($wb[0]->waybill_num) && strlen($wb[0]->waybill_num) > 0){ $content['html'] .= "<br /><a href=\"".WEB_ROOT."/waybill/view/".$tmp[0]."\">View WB ".$wb[0]->waybill_num."</a>"; }
@@ -272,7 +272,7 @@ class Graphics extends CI_Controller {
 	
 	public function wbdel($fil='',$where2=''){
 		// Delete a waybill image. $fil is the WAYBILL ID. The rr_sess variable is used to complete the filename to delete
-		if(strlen($where2) < 1){ $where2 = "graphics.viewall"; }
+		if(strlen($where2) < 1){ $where2 = "graphics.wbviewall"; }
 		unlink(DOC_ROOT."/waybill_images/".$fil."-".$this->arr['rr_sess'].".jpg");
 		$this->Generic_model->change("DELETE FROM `ichange_wb_img` WHERE `img_name` = '".$fil."-".$this->arr['rr_sess'].".jpg'");
 		header("Location:".WEB_ROOT."/".str_replace(".","/",$where2));
