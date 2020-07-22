@@ -307,13 +307,12 @@ class Graphics extends CI_Controller {
 		$filename = $this->mricf->rrMap($id);
 
 		$content2['html'] = "<h2>Railroad Map</h2>";
-		for($m=0;$m<count($filename);$m++){
-			if(isset($filename[$m]) && strlen($filename[$m]) > 0){
-				if(strpos($filename[$m],".pdf") > 0){
-					$content2['html'] .= "The railroad map is in a PDF file. <a href=\"".WEB_ROOT.$filename[$m]."\" target=\"mapPdf".date('U')."\">Click to view PDF</a>";
-				}else{
-					$content2['html'] .= "<img src=\"".WEB_ROOT.$filename[$m]."\" style=\"width: 500px;\" />";
-				}
+		$m=0;
+		if(isset($filename[$m]) && strlen($filename[$m]) > 0){
+			if(strpos($filename[$m],".pdf") > 0){
+				$content2['html'] .= "The railroad map is in a PDF file. <a href=\"".WEB_ROOT.$filename[$m]."\" target=\"mapPdf".date('U')."\">Click to view PDF</a>";
+			}else{
+				$content2['html'] .= "<img src=\"".WEB_ROOT.$filename[$m]."\" style=\"width: 500px;\" />";
 			}
 		}
 		//$content['html'] .= "<br />Uploaded by ".$rr[0]->report_mark;
@@ -333,7 +332,6 @@ class Graphics extends CI_Controller {
 	}
 	
 	public function rrMapUpload(){
-		//echo "<pre>"; print_r($_FILES); echo "</pre>"; exit();
 		$id=$this->arr['rr_sess'];
 
 		$fntmp = $this->mricf->rrMap($id);

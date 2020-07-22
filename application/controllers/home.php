@@ -387,13 +387,29 @@ class Home extends CI_Controller {
   		for($i=1;$i<=$max_id;$i++){
   			if(isset($this->arr['allRR'][$i])){
   				if($this->arr['allRR'][$i]->inactive != 1){
+					$mapfil = $this->mricf->rrMap($this->arr['allRR'][$i]->id);
   					$rhtml = "";
 	  				$rhtml .= "<span style=\"float: right; font-size: 13pt; font-weight: bold; background-color: #ddd;\">&nbsp;id: ".@$this->arr['allRR'][$i]->id."&nbsp;</span>";
-					if(@$this->arr['allRR'][$i]->id == $this->arr['rr_sess'] && $this->arr['rr_sess'] > 0){$rhtml .= "&nbsp;&nbsp;<a href=\"rr/edit/".$this->arr['allRR'][$i]->id."\">Edit</a>";}
+					if(@$this->arr['allRR'][$i]->id == $this->arr['rr_sess'] && $this->arr['rr_sess'] > 0){
+						$rhtml .= "&nbsp;&nbsp;<a href=\"rr/edit/".$this->arr['allRR'][$i]->id."\">Edit</a>";
+						$rhtml .= "&nbsp;&nbsp;<a href=\"javascript:{}\" onclick=\"window.open('graphics/rrMap','','width=600,height=600');\">Upload Map</a>";
+					}
 					$rhtml .= "&nbsp;&nbsp;<a href=\"rr/view/".$this->arr['allRR'][$i]->id."\">View</a>";
 					$rhtml .= "<br />".@$this->arr['allRR'][$i]->report_mark." - ";
 					$rhtml .= @$this->arr['allRR'][$i]->rr_name."<br />";
 					$rhtml .= @$this->arr['allRR'][$i]->owner_name;
+					if(strlen($mapfil[0]) > 0){
+							$rhtml .= "<br />";
+						if(strpos($mapfil[0],".pdf") > 0){
+							$rhtml .= "<a href=\"javascript:{}\" onclick=\"window.open('".WEB_ROOT.$mapfil[0]."','','width=500,height=500');\">PDF System Map</a>";
+						}else{
+							$rhtml .= "<div style=\"display: inline-block; padding: 4px;\">
+								<a href=\"javascript:{}\" onclick=\"window.open('".WEB_ROOT.$mapfil[0]."','','width=500,height=500');\">
+								<img src=\"".WEB_ROOT.$mapfil[0]."\" style=\"width: 90px; height: 80px;\" />
+								</a></div>";
+						}
+						$rhtml .= "<br />";
+					}
 					if(@$this->arr['allRR'][$i]->last_act > 0){$rhtml .= "&nbsp;&nbsp;(".date('Y-m-d',@$this->arr['allRR'][$i]->last_act).")";}
 					if(@$this->arr['allRR'][$i]->common_flag == 1){$rhtml .= "<br />&nbsp;&nbsp;<strong>(COMMON RR)</strong>";}
 					//$this->content['rhtml'] .= "<hr />";
