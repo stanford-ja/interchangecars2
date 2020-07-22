@@ -804,5 +804,19 @@ function getNxtTrains($i=3,$full=0){
 	return $nxt_trains;
 }
 
+// Returns array of map file names of railroad's system map (if it exists in map_files/ directory) for values in $id array
+function rrMap($id=0){
+	$mapfile = array();
+	$filtypes = array("jpg","pdf","png");
+	if(!is_array($id)){ $id = array($id); }
+	for($i=0;$i<count($id);$i++){
+		for($j=0;$j<count($filtypes);$j++){
+			if(file_exists(DOC_ROOT."/map_files/".$id[$i].".".$filtypes[$j])){
+				$mapfile[] = "/map_files/".$id[$i].".".$filtypes[$j];
+			}
+		}
+	}
+	return $mapfile;
 }
-?>
+
+}
