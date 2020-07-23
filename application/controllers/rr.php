@@ -76,7 +76,7 @@ class Rr extends CI_Controller {
 		$this->arr['pgTitle'] .= " - View";
 		$randpos = array();
 		$rrdat = (array)$this->Railroad_model->get_single($id);
-		$this->dat['field_names'] = array('ID',"Report Mark", "RR Name", "Description", "Owner Name", "Interchanges", "Affiliates", "Website", "Social Networks","Timezone");
+		$this->dat['field_names'] = array('ID',"Report Mark", "RR Name", "RR System Map", "Description", "Owner Name", "Interchanges", "Affiliates", "Website", "Social Networks","Timezone");
 		//$this->dat = array();
 		$this->dat['options']			= array(
 				'Edit' => "aar/edit/"
@@ -85,10 +85,12 @@ class Rr extends CI_Controller {
 				'New' => "aar/edit/0"
 			); // Paths for other links!
 		
-		for($i=0;$i<count($rrdat);$i++){
+		//for($i=0;$i<count($rrdat);$i++){
+		$i=0;
 			$this->dat['data'][0]['id'] 					= $rrdat[$i]->id;
 			$this->dat['data'][0]['report_mark']	 	= $rrdat[$i]->report_mark;
 			$this->dat['data'][0]['rr_name'] 			= $rrdat[$i]->rr_name;
+			$this->dat['data'][0]['rr_system_map'] = "";
 			$this->dat['data'][0]['rr_desc'] 			= html_entity_decode($rrdat[$i]->rr_desc);
 			$this->dat['data'][0]['owner_name'] 		= $rrdat[$i]->owner_name;
 			$this->dat['data'][0]['interchanges']		= str_replace(";","<br />",$rrdat[$i]->interchanges);
@@ -101,26 +103,26 @@ class Rr extends CI_Controller {
 
 			$tmp = $this->mricf->rrMap($rrdat[$i]->id);
 			if(isset($tmp[0]) && strlen($tmp[0]) > 0){
-				$this->dat['data'][$i]['rr_name'] .= "<div style=\"float: right; display: inline-block; margin: 3px; padding: 12px; background-color: ivory; border: 1px solid #999; border-radius: 10px;\">
-					<h3>RR System Map</h3>";
+				//$this->dat['data'][0]['rr_system_map'] .= "<div style=\"float: right; display: inline-block; margin: 3px; padding: 12px; background-color: ivory; border: 1px solid #999; border-radius: 10px;\">
+				//	<h3>RR System Map</h3>";
 
 
 
 					if(strpos($tmp[0],".pdf") > 0){
-						$this->dat['data'][$i]['rr_name'] .= "RR's System Map is in a PDF file.<br /> 
+						$this->dat['data'][0]['rr_system_map'] .= "RR's System Map is in a PDF file.<br /> 
 							<a href=\"javascript:{}\" onclick=\"window.open('".WEB_ROOT.$tmp[0]."','','width=500,height=500');\">Click to view PDF</a>";
 					}else{
-						$this->dat['data'][$i]['rr_name'] .= "<a href=\"javascript:{}\" onclick=\"window.open('".WEB_ROOT.$tmp[0]."','','width=500,height=500');\">
-							<img src=\"".WEB_ROOT.$tmp[0]."\" style=\"max-width: 300px; max-height: 300px;\" />
+						$this->dat['data'][0]['rr_system_map'] .= "<a href=\"javascript:{}\" onclick=\"window.open('".WEB_ROOT.$tmp[0]."','','width=500,height=500');\">
+							<img src=\"".WEB_ROOT.$tmp[0]."\" style=\"max-width: 1200px; max-height: 1200px;\" />
 							</a>";
 					}
 
-				$this->dat['data'][$i]['rr_name'] .= "</div>";
+				//$this->dat['data'][0]['rr_name'] .= "</div>";
 
 
 			}
 
-		}
+		//}
 
 		// Load views
 		$this->load->view('header', $this->arr);
