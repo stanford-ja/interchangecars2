@@ -306,7 +306,7 @@ class Home extends CI_Controller {
 			<div id=\"container2\" class=\"js-masonry\" data-masonry-options='{ \"columnWidth\": 325, \"itemSelector\": \".item2\" }'>";
 		for($w=0;$w<count($tmp);$w++){
 			$prog_all = json_decode($tmp[$w]->progress, true);
-			$last_prog = count($prog_all) - 1; 
+			$last_prog = @count($prog_all) - 1; 
 			$fld1_1 = @$prog_all[$last_prog]['date']; //"Server Date/Time: ".$prog_all[$last_prog]['date'];
 			$fld1_2 = @$prog_all[$last_prog]['text'];
 			$fld1_3 = @$prog_all[$last_prog]['map_location'];
@@ -387,9 +387,11 @@ class Home extends CI_Controller {
   		for($i=1;$i<=$max_id;$i++){
   			if(isset($this->arr['allRR'][$i])){
   				if($this->arr['allRR'][$i]->inactive != 1){
+					$wbcnt = $this->Generic_model->qry("SELECT COUNT(`id`) AS `cntr` FROM `ichange_waybill` WHERE `rr_id_handling` = '".$this->arr['allRR'][$i]->id."'");
 					$mapfil = $this->mricf->rrMap($this->arr['allRR'][$i]->id);
   					$rhtml = "";
-	  				$rhtml .= "<span style=\"float: right; font-size: 13pt; font-weight: bold; background-color: #ddd;\">&nbsp;id: ".@$this->arr['allRR'][$i]->id."&nbsp;</span>";
+	  				$rhtml .= "<div style=\"display: inline-block; float: right; background-color: #ddd; padding: 4px; margin: 1px; border: 1px solid #777; border-radius: 4px; font-weight: bold;\">&nbsp;id: ".@$this->arr['allRR'][$i]->id."&nbsp;</div>";
+	  				$rhtml .= "<div style=\"display: inline-block; float: right; background-color: yellow; padding: 4px; margin: 1px; border: 1px solid #777; border-radius: 4px;\">WBs: ".$wbcnt[0]->cntr."</div>";
 					if(@$this->arr['allRR'][$i]->id == $this->arr['rr_sess'] && $this->arr['rr_sess'] > 0){
 						$rhtml .= "&nbsp;&nbsp;<a href=\"rr/edit/".$this->arr['allRR'][$i]->id."\">Edit</a>";
 						$rhtml .= "&nbsp;&nbsp;<a href=\"javascript:{}\" onclick=\"window.open('graphics/rrMap','','width=600,height=600');\">Upload Map</a>";
@@ -398,7 +400,7 @@ class Home extends CI_Controller {
 					$rhtml .= "<br />".@$this->arr['allRR'][$i]->report_mark." - ";
 					$rhtml .= @$this->arr['allRR'][$i]->rr_name."<br />";
 					$rhtml .= @$this->arr['allRR'][$i]->owner_name;
-					if(strlen($mapfil[0]) > 0){
+					if(isset($mapfil[0]) && strlen($mapfil[0]) > 0){
 							$rhtml .= "<br />";
 						if(strpos($mapfil[0],".pdf") > 0){
 							$rhtml .= "<a href=\"javascript:{}\" onclick=\"window.open('".WEB_ROOT.$mapfil[0]."','','width=500,height=500');\">PDF System Map</a>";

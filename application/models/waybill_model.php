@@ -137,6 +137,7 @@ class Waybill_model extends CI_Model {
 		for($i=0;$i<count($tmp);$i++){
 			$tmp2 = @json_decode($tmp[$i]->cars,TRUE);
 			//echo "<pre>"; print_r($tmp2); echo "</pre>";
+			if(is_array($tmp2)){
 			for($ii=0;$ii<count($tmp2);$ii++){
 				if(strlen($tmp2[$ii]['NUM']) > 0 && $tmp2[$ii]['NUM'] != "UNDEFINED" && !in_array($tmp2[$ii]['NUM'],$this->carsOnAllMyWBsKys)){
 					$tmp2[$ii]['NUM'] = str_replace(" ","",$tmp2[$ii]['NUM']);
@@ -147,6 +148,7 @@ class Waybill_model extends CI_Model {
 						$this->carsOnAllMyWBs[] = $tmp2[$ii]; 
 					}
 				}
+			}
 			}
 		}		
 	}
