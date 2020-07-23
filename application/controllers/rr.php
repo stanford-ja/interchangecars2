@@ -101,7 +101,7 @@ class Rr extends CI_Controller {
 
 			$tmp = $this->mricf->rrMap($rrdat[$i]->id);
 			if(isset($tmp[0]) && strlen($tmp[0]) > 0){
-				$this->dat['data'][$i]['rr_name'] .= "<div style=\"float: right; display: inline-block; padding: 12px; background-color: ivory; border: 1px solid #999; border-radius: 10px;\">
+				$this->dat['data'][$i]['rr_name'] .= "<div style=\"float: right; display: inline-block; margin: 3px; padding: 12px; background-color: ivory; border: 1px solid #999; border-radius: 10px;\">
 					<h3>RR System Map</h3>";
 
 
