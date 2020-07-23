@@ -111,7 +111,7 @@ class Rr extends CI_Controller {
 							<a href=\"javascript:{}\" onclick=\"window.open('".WEB_ROOT.$tmp[0]."','','width=500,height=500');\">Click to view PDF</a>";
 					}else{
 						$this->dat['data'][$i]['rr_name'] .= "<a href=\"javascript:{}\" onclick=\"window.open('".WEB_ROOT.$tmp[0]."','','width=500,height=500');\">
-							<img src=\"".WEB_ROOT.$tmp[0]."\" style=\"max-width: 700px; max-height: 700px;\" />
+							<img src=\"".WEB_ROOT.$tmp[0]."\" style=\"width: 700px; height: 700px;\" />
 							</a>";
 					}
 
