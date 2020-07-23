@@ -254,7 +254,7 @@ class Waybill extends CI_Controller {
   	   $this->dat['last_prog_date_ux'] = mktime(12,0,0,$this->dat['last_prog_date_arr'][1],$this->dat['last_prog_date_arr'][2],$this->dat['last_prog_date_arr'][0]);
   	   $this->dat['last_prog_time'] = str_replace(":","",$prog_data2['time']);
 
-  	   $fld6_tmp = explode("-",str_replace(" ","",str_replace("/","-",$this->dat['fld6'])));
+  	   $fld6_tmp = explode("-",str_replace(" ","",str_replace(array("/","(",")"),"-",$this->dat['fld6'])));
   	   $this->dat['route_rr_arr'] = array(); // Array of Report Marks
   	   $this->dat['rr_ics'] = array(); // Array of Interchanges
   	   $this->dat['rr_maps'] = array();
