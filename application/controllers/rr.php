@@ -55,6 +55,11 @@ class Rr extends CI_Controller {
 			$this->dat['data'][$i]['modified'] = "";
 			if($rrdat[$i]->added > 0){$this->dat['data'][$i]['modified'] = date('Y-m-d H:i',$rrdat[$i]->added);}
 			if($rrdat[$i]->modified > 0){$this->dat['data'][$i]['modified'] = date('Y-m-d H:i',$rrdat[$i]->modified);}
+
+			$tmp = $this->mricf->rrMap($rrdat[$i]->id);
+			if(isset($tmp[0]) && strlen($tmp[0]) > 0){
+				$this->dat['data'][$i]['rr_name'] .= "<br /><a href=\"javascript:{}\" onclick=\"window.open('".WEB_ROOT.$tmp[0]."','','width=500,height=500');\">System Map</a>";
+			}
 		}
 
 		//$this->rr_opts_build(10); // $this->mricf->rrOpts()
@@ -93,6 +98,28 @@ class Rr extends CI_Controller {
 			$this->dat['data'][0]['website'] 			= auto_link($rrdat[$i]->website, 'url', TRUE);
 			$this->dat['data'][0]['social'] 			= auto_link(str_replace(";","<br />",$rrdat[$i]->social), 'url', TRUE);
 			$this->dat['data'][0]['tzone'] 			= $rrdat[$i]->tzone;
+
+			$tmp = $this->mricf->rrMap($rrdat[$i]->id);
+			if(isset($tmp[0]) && strlen($tmp[0]) > 0){
+				$this->dat['data'][$i]['rr_name'] .= "<div style=\"float: right; display: inline-block; padding: 12px; background-color: ivory; border: 1px solid #999; border-radius: 10px;\">
+					<h3>RR System Map</h3>";
+
+
+
+					if(strpos($tmp[0],".pdf") > 0){
+						$this->dat['data'][$i]['rr_name'] .= "RR's System Map is in a PDF file.<br /> 
+							<a href=\"javascript:{}\" onclick=\"window.open('".WEB_ROOT.$tmp[0]."','','width=500,height=500');\">Click to view PDF</a>";
+					}else{
+						$this->dat['data'][$i]['rr_name'] .= "<a href=\"javascript:{}\" onclick=\"window.open('".WEB_ROOT.$tmp[0]."','','width=500,height=500');\">
+							<img src=\"".WEB_ROOT.$tmp[0]."\" style=\"max-width: 1200px; max-height: 1200px;\" />
+							</a>";
+					}
+
+				$this->dat['data'][$i]['rr_name'] .= "</div>";
+
+
+			}
+
 		}
 
 		// Load views
