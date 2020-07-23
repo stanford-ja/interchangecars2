@@ -37,9 +37,14 @@ define('FOPEN_WRITE_CREATE_STRICT',				'xb');
 define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 
 $doc_path = "/apps";
-if($_SERVER['SERVER_NAME'] == "localhost" || strpos("a".$_SERVER['SERVER_NAME'],"10.0.0.") > 0){$doc_path = "/Applications";}
+$idp = "";
+if($_SERVER['SERVER_NAME'] == "localhost" || strpos("a".$_SERVER['SERVER_NAME'],"10.0.0.") > 0){
+	$doc_path = "/Applications";
+	$idp = "/index.php";
+}
 define('DOC_ROOT', $_SERVER['DOCUMENT_ROOT'].$doc_path."/interchangecars2");
 define('WEB_ROOT', 'http://'.$_SERVER['SERVER_NAME'].$doc_path."/interchangecars2");
+define('INDEX_PAGE', $idp);
 
 /* USED IF YOU USE A THEME */
 /*

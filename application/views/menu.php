@@ -60,36 +60,36 @@
 				<div style="display: table-cell; padding: 10px; font-size: 13pt;" class="td_menu_title">
 					<div style="display: block;">
 
-						<div class="td_menu" style="display: inline-block;"><span style="float: right;" data-balloon="Go to Home page" data-balloon-pos="right" data-balloon-length="large">[?]</span> <?php echo anchor(WEB_ROOT."/home", "Home"); ?></div>
-						<div class="td_menu" style="display: inline-block;"><span style="float: right;" data-balloon="Create a new waybill / purchase order." data-balloon-pos="right" data-balloon-length="large">[?]</span> <?php echo anchor(WEB_ROOT."/".$wb_lnk, "New WB"); ?></div>
-						<div class="td_menu" style="display: inline-block;"><span style="float: right;" data-balloon="Customer P/Orders List." data-balloon-pos="right" data-balloon-length="large">[?]</span> <?php echo anchor(WEB_ROOT."/".$rwb_lnk, "Cust. POs"); ?></div>
-						<div class="td_menu" style="display: inline-block;"><span style="float: right;" data-balloon="Manage your Cars Pool." data-balloon-pos="right" data-balloon-length="large">[?]</span> <?php echo anchor(WEB_ROOT."/".$ca_lnk, "Cars Pool"); ?></div>
-						<div class="td_menu" style="display: inline-block;"><span style="float: right;" data-balloon="Manage your Motive Power." data-balloon-pos="right" data-balloon-length="large">[?]</span> <?php echo anchor(WEB_ROOT."/".$mv_lnk, "Locos"); ?></div>
-						<div class="td_menu" style="display: inline-block;"><span style="float: right;" data-balloon="Manage AAR Car Types Codes." data-balloon-pos="right" data-balloon-length="large">[?]</span> <?php echo anchor(WEB_ROOT."/aar", "AAR Codes"); ?></div>
-						<div class="td_menu" style="display: inline-block;"><span style="float: right;" data-balloon="Manage your Industries." data-balloon-pos="right" data-balloon-length="large">[?]</span> <?php echo anchor(WEB_ROOT."/".$in_lnk, "Industries"); ?></div>
-						<div class="td_menu" style="display: inline-block;"><span style="float: right;" data-balloon="Manage Commodities." data-balloon-pos="right" data-balloon-length="large">[?]</span> <?php echo anchor(WEB_ROOT."/commod", "Commodities"); ?></div>
-						<div class="td_menu" style="display: inline-block;"><span style="float: right;" data-balloon="Manage your Trains." data-balloon-pos="left" data-balloon-length="large">[?]</span> <?php echo anchor(WEB_ROOT."/".$tr_lnk, "Trains"); ?></div>
-						<div class="td_menu" style="display: inline-block;"><span style="float: right;" data-balloon="Manage Locations." data-balloon-pos="left" data-balloon-length="large">[?]</span> <?php echo anchor(WEB_ROOT."/locations", "Locations"); ?></div>
-						<div class="td_menu" style="display: inline-block;"><span style="float: right;" data-balloon="Industry, Motive Power, Car Pool and Train allocations for your Affiliates." data-balloon-pos="left" data-balloon-length="xlarge">[?]</span> <?php echo anchor(WEB_ROOT."/affiliates/mv", "Affiliates"); ?></span></div>
-						<div class="td_menu" style="display: inline-block;"><span style="float: right;" data-balloon="Information about the MRICF." data-balloon-pos="right" data-balloon-length="large">[?]</span> <?php echo anchor(WEB_ROOT."/about", "About"); ?></div>
-						<div class="td_menu" style="display: inline-block;"><span style="float: right;" data-balloon="The rather clunky old Maps. A new series of maps is being designed using OpenStreetMap. Stay tuned!" data-balloon-pos="right" data-balloon-length="large">[?]</span> <?php echo anchor(WEB_ROOT."/index.php/map/usa", "Map"); ?></div>
-						<div class="td_menu" style="display: inline-block;"><span style="float: right;" data-balloon="Help and Information Pages." data-balloon-pos="right" data-balloon-length="large">[?]</span> <?php echo anchor(WEB_ROOT."/pages", "Pages"); ?></div>
+						<div class="td_menu" style="display: inline-block;"><span style="float: right;" data-balloon="Go to Home page" data-balloon-pos="right" data-balloon-length="large">[?]</span> <?php echo anchor(WEB_ROOT.INDEX_PAGE."/home", "Home"); ?></div>
+						<div class="td_menu" style="display: inline-block;"><span style="float: right;" data-balloon="Create a new waybill / purchase order." data-balloon-pos="right" data-balloon-length="large">[?]</span> <?php echo anchor(WEB_ROOT.INDEX_PAGE."/".$wb_lnk, "New WB"); ?></div>
+						<div class="td_menu" style="display: inline-block;"><span style="float: right;" data-balloon="Customer P/Orders List." data-balloon-pos="right" data-balloon-length="large">[?]</span> <?php echo anchor(WEB_ROOT.INDEX_PAGE."/".$rwb_lnk, "Cust. POs"); ?></div>
+						<div class="td_menu" style="display: inline-block;"><span style="float: right;" data-balloon="Manage your Cars Pool." data-balloon-pos="right" data-balloon-length="large">[?]</span> <?php echo anchor(WEB_ROOT.INDEX_PAGE."/".$ca_lnk, "Cars Pool"); ?></div>
+						<div class="td_menu" style="display: inline-block;"><span style="float: right;" data-balloon="Manage your Motive Power." data-balloon-pos="right" data-balloon-length="large">[?]</span> <?php echo anchor(WEB_ROOT.INDEX_PAGE."/".$mv_lnk, "Locos"); ?></div>
+						<div class="td_menu" style="display: inline-block;"><span style="float: right;" data-balloon="Manage AAR Car Types Codes." data-balloon-pos="right" data-balloon-length="large">[?]</span> <?php echo anchor(WEB_ROOT.INDEX_PAGE."/aar", "AAR Codes"); ?></div>
+						<div class="td_menu" style="display: inline-block;"><span style="float: right;" data-balloon="Manage your Industries." data-balloon-pos="right" data-balloon-length="large">[?]</span> <?php echo anchor(WEB_ROOT.INDEX_PAGE."/".$in_lnk, "Industries"); ?></div>
+						<div class="td_menu" style="display: inline-block;"><span style="float: right;" data-balloon="Manage Commodities." data-balloon-pos="right" data-balloon-length="large">[?]</span> <?php echo anchor(WEB_ROOT.INDEX_PAGE."/commod", "Commodities"); ?></div>
+						<div class="td_menu" style="display: inline-block;"><span style="float: right;" data-balloon="Manage your Trains." data-balloon-pos="left" data-balloon-length="large">[?]</span> <?php echo anchor(WEB_ROOT.INDEX_PAGE."/".$tr_lnk, "Trains"); ?></div>
+						<div class="td_menu" style="display: inline-block;"><span style="float: right;" data-balloon="Manage Locations." data-balloon-pos="left" data-balloon-length="large">[?]</span> <?php echo anchor(WEB_ROOT.INDEX_PAGE."/locations", "Locations"); ?></div>
+						<div class="td_menu" style="display: inline-block;"><span style="float: right;" data-balloon="Industry, Motive Power, Car Pool and Train allocations for your Affiliates." data-balloon-pos="left" data-balloon-length="xlarge">[?]</span> <?php echo anchor(WEB_ROOT.INDEX_PAGE."/affiliates/mv", "Affiliates"); ?></span></div>
+						<div class="td_menu" style="display: inline-block;"><span style="float: right;" data-balloon="Information about the MRICF." data-balloon-pos="right" data-balloon-length="large">[?]</span> <?php echo anchor(WEB_ROOT.INDEX_PAGE."/about", "About"); ?></div>
+						<div class="td_menu" style="display: inline-block;"><span style="float: right;" data-balloon="The rather clunky old Maps. A new series of maps is being designed using OpenStreetMap. Stay tuned!" data-balloon-pos="right" data-balloon-length="large">[?]</span> <?php echo anchor(WEB_ROOT.INDEX_PAGE."/map/usa", "Map"); ?></div>
+						<div class="td_menu" style="display: inline-block;"><span style="float: right;" data-balloon="Help and Information Pages." data-balloon-pos="right" data-balloon-length="large">[?]</span> <?php echo anchor(WEB_ROOT.INDEX_PAGE."/pages", "Pages"); ?></div>
 						<div class="td_menu" style="display: inline-block;"><!-- <a href="javascript:{}" onclick="window.open = ('<?php echo WEB_ROOT."/legacy/charts.php"; ?>', 'Charts', 'width=600px, height=600px, resizable');">Charts</a> // --><a href="<?php echo WEB_ROOT."/legacy/charts.php"; ?>" target="Charts">Charts</a></div> 
-						<div class="td_menu" style="display: inline-block;"><span style="float: right;" data-balloon="Upload a CSV file to update your railroads data." data-balloon-pos="right" data-balloon-length="large">[?]</span> <?php echo anchor(WEB_ROOT."/dat/csv_file", "Upload"); ?></div>
-						<div class="td_menu" style="display: inline-block;"><span style="float: right;" data-balloon="View Waybill Images." data-balloon-pos="right" data-balloon-length="large">[?]</span> <?php echo anchor(WEB_ROOT."/graphics/wbviewall", "WB Images"); ?></div>
-						<div class="td_menu" style="display: inline-block;"><span style="float: right;" data-balloon="View Railroads List." data-balloon-pos="right" data-balloon-length="large">[?]</span> <?php echo anchor(WEB_ROOT."/rr", "Railroads"); ?></div>
-						<div class="td_menu" style="display: inline-block;"><span style="float: right;" data-balloon="View the Currently Stored Freight List." data-balloon-pos="right" data-balloon-length="large">[?]</span> <?php echo anchor(WEB_ROOT."/storedfreight", "Stored"); ?></div>
+						<div class="td_menu" style="display: inline-block;"><span style="float: right;" data-balloon="Upload a CSV file to update your railroads data." data-balloon-pos="right" data-balloon-length="large">[?]</span> <?php echo anchor(WEB_ROOT.INDEX_PAGE."/dat/csv_file", "Upload"); ?></div>
+						<div class="td_menu" style="display: inline-block;"><span style="float: right;" data-balloon="View Waybill Images." data-balloon-pos="right" data-balloon-length="large">[?]</span> <?php echo anchor(WEB_ROOT.INDEX_PAGE."/graphics/wbviewall", "WB Images"); ?></div>
+						<div class="td_menu" style="display: inline-block;"><span style="float: right;" data-balloon="View Railroads List." data-balloon-pos="right" data-balloon-length="large">[?]</span> <?php echo anchor(WEB_ROOT.INDEX_PAGE."/rr", "Railroads"); ?></div>
+						<div class="td_menu" style="display: inline-block;"><span style="float: right;" data-balloon="View the Currently Stored Freight List." data-balloon-pos="right" data-balloon-length="large">[?]</span> <?php echo anchor(WEB_ROOT.INDEX_PAGE."/storedfreight", "Stored"); ?></div>
 		
 						<?php if($rr_sess > 0){ ?>			
-						<div class="td_menu" style="display: inline-block;"><?php echo anchor(WEB_ROOT."/rr/edit/0", "Create RR"); ?></div>
+						<div class="td_menu" style="display: inline-block;"><?php echo anchor(WEB_ROOT.INDEX_PAGE."/rr/edit/0", "Create RR"); ?></div>
 						<?php } ?>
-						<div class="td_menu" style="display: inline-block;"><?php echo anchor(WEB_ROOT."/ind40k", "OpSig 40k"); ?></div>
+						<div class="td_menu" style="display: inline-block;"><?php echo anchor(WEB_ROOT.INDEX_PAGE."/ind40k", "OpSig 40k"); ?></div>
 
 						<?php if(strpos($_SERVER['REQUEST_URI'],"/home") > 0){ ?>
 						<?php if($rr_sess > 0){ ?>
-							<div class="td_menu" style="display: inline-block; background-color: red;"><?php echo anchor(WEB_ROOT."/login/logout", "Logout", 'style="color: white;"'); ?></div>
+							<div class="td_menu" style="display: inline-block; background-color: red;"><?php echo anchor(WEB_ROOT.INDEX_PAGE."/login/logout", "Logout", 'style="color: white;"'); ?></div>
 						<?php	}else{ ?>
-							<div class="td_menu" style="display: inline-block; background-color: red;"><?php echo anchor(WEB_ROOT."/index.php/login", "Login", 'style="color: white;"'); ?></div>				
+							<div class="td_menu" style="display: inline-block; background-color: red;"><?php echo anchor(WEB_ROOT.INDEX_PAGE."/login", "Login", 'style="color: white;"'); ?></div>				
 						<?php } ?>
 						<?php } ?>
 				
@@ -115,7 +115,7 @@
 			</div>
 			<div style="display: table-row;">
 				<div style="display: table-cell;" class="td_menu">
-					<?php echo anchor(WEB_ROOT."/rr/edit/0", "Create RR", 'title="Create a new RR" '); ?>
+					<?php echo anchor(WEB_ROOT.INDEX_PAGE."/rr/edit/0", "Create RR", 'title="Create a new RR" '); ?>
 					<!-- 
 					<a href="edit.php?type=RR&action=NEW" onMouseOver="document.getElementById('new_rr_info').style.display='block'" onmouseout="document.getElementById('new_rr_info').style.display='none'">
 					Create RR
@@ -186,7 +186,7 @@
 			</div></div>
 			</div>
 			<?php if(isset($_COOKIE['_mricfadmin']) && isset($this->Generic_model)){
-				$rr_adm_lst = "<select name=\"adm_lst\" onchange=\"window.location = '".WEB_ROOT."/index.php/login/switch_to/' + this.value;\"><option selected=\"selected\" value=\"0\">Select</option>";
+				$rr_adm_lst = "<select name=\"adm_lst\" onchange=\"window.location = '".WEB_ROOT.INDEX_PAGE."/login/switch_to/' + this.value;\"><option selected=\"selected\" value=\"0\">Select</option>";
 				$q_rr_adm = $this->Generic_model->qry("SELECT `id`,`report_mark` FROM `ichange_rr` ORDER BY `report_mark`");
 				//while($r_rr_adm = mysqli_fetch_array($q_rr_adm)){
 				for($rrid=0;$rrid<count($q_rr_adm);$rrid++){
