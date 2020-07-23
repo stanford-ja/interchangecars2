@@ -107,11 +107,13 @@ class Rr extends CI_Controller {
 				//	<h3>RR System Map</h3>";
 				if(strpos($tmp[0],".pdf") > 0){
 					$this->dat['data'][0]['rr_system_map'] .= "RR's System Map is in a PDF file.<br /> 
-						<a href=\"javascript:{}\" onclick=\"window.open('".WEB_ROOT.$tmp[0]."','','width=500,height=500');\">Click to view PDF</a>";
+						<a href=\"javascript:{}\" onclick=\"window.open('".WEB_ROOT.$tmp[0]."','','width=500,height=500');\">Click to view PDF</a><br />
+						(If PDF appears in a size adjustable window, resize the window to view the PDF at the desired size)";
 				}else{
 					$this->dat['data'][0]['rr_system_map'] .= "<a href=\"javascript:{}\" onclick=\"window.open('".WEB_ROOT.$tmp[0]."','','width=500,height=500');\">
 						<img src=\"".WEB_ROOT.$tmp[0]."\" style=\"max-width: 500px; max-height: 500px;\" />
-						</a>";
+						</a><br />
+						(Click above system map to view map in a size adjustable window)";
 				}
 				//$this->dat['data'][0]['rr_name'] .= "</div>";
 			}
