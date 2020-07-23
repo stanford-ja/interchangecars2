@@ -105,21 +105,15 @@ class Rr extends CI_Controller {
 			if(isset($tmp[0]) && strlen($tmp[0]) > 0){
 				//$this->dat['data'][0]['rr_system_map'] .= "<div style=\"float: right; display: inline-block; margin: 3px; padding: 12px; background-color: ivory; border: 1px solid #999; border-radius: 10px;\">
 				//	<h3>RR System Map</h3>";
-
-
-
-					if(strpos($tmp[0],".pdf") > 0){
-						$this->dat['data'][0]['rr_system_map'] .= "RR's System Map is in a PDF file.<br /> 
-							<a href=\"javascript:{}\" onclick=\"window.open('".WEB_ROOT.$tmp[0]."','','width=500,height=500');\">Click to view PDF</a>";
-					}else{
-						$this->dat['data'][0]['rr_system_map'] .= "<a href=\"javascript:{}\" onclick=\"window.open('".WEB_ROOT.$tmp[0]."','','width=500,height=500');\">
-							<img src=\"".WEB_ROOT.$tmp[0]."\" style=\"max-width: 1200px; max-height: 1200px;\" />
-							</a>";
-					}
-
+				if(strpos($tmp[0],".pdf") > 0){
+					$this->dat['data'][0]['rr_system_map'] .= "RR's System Map is in a PDF file.<br /> 
+						<a href=\"javascript:{}\" onclick=\"window.open('".WEB_ROOT.$tmp[0]."','','width=500,height=500');\">Click to view PDF</a>";
+				}else{
+					$this->dat['data'][0]['rr_system_map'] .= "<a href=\"javascript:{}\" onclick=\"window.open('".WEB_ROOT.$tmp[0]."','','width=500,height=500');\">
+						<img src=\"".WEB_ROOT.$tmp[0]."\" style=\"max-width: 500px; max-height: 500px;\" />
+						</a>";
+				}
 				//$this->dat['data'][0]['rr_name'] .= "</div>";
-
-
 			}
 
 		//}
