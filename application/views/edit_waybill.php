@@ -513,7 +513,7 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 			<?php } ?>
 			<?php if(count($rr_maps) > 0){ ?>
 				<br /><div style="display: inline-block; padding: 3px;">
-				Railroad System Maps<br />
+				RR System Maps<br />
 				<?php
 				$rr_map_k = array_keys($rr_maps);
 				//echo "<pre>"; print_r($rr_maps); echo "</pre>"; exit();
