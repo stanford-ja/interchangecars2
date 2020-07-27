@@ -403,7 +403,7 @@ class Home extends CI_Controller {
 						$rhtml .= "<a href=\"javascript:{}\" onclick=\"window.open('graphics/rrMap','','width=600,height=600');\">Upload Map</a>";
 						$rhtml .= " <a href=\"rr/edit/".$this->arr['allRR'][$i]->id."\">Edit</a>";
 					}
-					$rhtml .= "&nbsp;&nbsp;<a href=\"rr/view/".$this->arr['allRR'][$i]->id."\">View</a>";
+					$rhtml .= " <a href=\"rr/view/".$this->arr['allRR'][$i]->id."\">View</a>";
 					$rhtml .= "<br />".@$this->arr['allRR'][$i]->report_mark." - ";
 					$rhtml .= @$this->arr['allRR'][$i]->rr_name."<br />";
 					$rhtml .= @$this->arr['allRR'][$i]->owner_name;
@@ -435,7 +435,7 @@ class Home extends CI_Controller {
 					}
 					if($my_rrs > 0){
 						if($my_rrs == 1){$rhtml = "<div style=\"display: inline-block; float: right; background-color: ivory; padding: 4px; margin: 1px; font-weight: bold; border-radius: 4px; border: 1px solid #888;\">{My Railroad}</div>".$rhtml;}
-						if($my_rrs == 2){$rhtml = "<div style=\"display: inline-block; float: right; background-color: ivory; padding: 4px; margin: 1px; font-weight: bold; border-radius: 4px; border: 1px solid #888;\">{Affiliate}</div><a href=\"login/switch_to/".@$i."\">Switch to</a></span>".$rhtml;}
+						if($my_rrs == 2){$rhtml = "<div style=\"display: inline-block; float: right; background-color: ivory; padding: 4px; margin: 1px; font-weight: bold; border-radius: 4px; border: 1px solid #888;\">{Affiliate}</div><a href=\"login/switch_to/".@$i."\">Switch to</a>".$rhtml;}
 						$my_rhtml .= "<div style=\"".$styl."; padding: 3px;\">".$rhtml."</div><hr />";
 					}
 					else{$this->content['rhtml'] .= $rhtml."<hr />";}
