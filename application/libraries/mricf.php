@@ -775,16 +775,18 @@ function getNxtTrains($i=3,$full=0){
 	// Gets the next $i trains, according to the switchlist.
 	// $full = 1 means include full array, not just the 
 	if(!isset($this->CI->Train_model)){ $this->CI->load->model("Train_model",'',TRUE); }
+	$rr_sess = $this->CI->arr['rr_sess'];
+	if(isset($this->rr_sess)){ $rr_sess = $this->rr_sess; unset($this->rr_sess); }
 	$nxt_trains = array();
 	$day_arr = array("sun","mon","tues","wed","thu","fri","sat");
 	for($d=0;$d<count($day_arr);$d++){
-		if($this->CI->Train_model->getNonCompletedCountXDay($day_arr[$d],$this->CI->arr['rr_sess']) > 0){
+		if($this->CI->Train_model->getNonCompletedCountXDay($day_arr[$d],$rr_sess) > 0){
 			$nxt_day = $day_arr[0];
 			if(isset($day_arr[intval($d+1)])){ $nxt_day = $day_arr[intval($d+1)]; }
 			$sqli = $this->sqli_instance();
 			$sql = "SELECT `train_id`, `train_desc` 
 				FROM `ichange_trains` 
-				WHERE `railroad_id` = '".$this->CI->arr['rr_sess']."' 
+				WHERE `railroad_id` = '".$rr_sess."' 
 					AND `complete` NOT LIKE '%\"".$day_arr[$d]."\":\"Y\"%'
 					AND `".$day_arr[$d]."` = '1' 
 					AND (LENGTH(`auto`) < 2 AND `auto` < 1) 

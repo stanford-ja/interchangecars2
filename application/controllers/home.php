@@ -387,14 +387,21 @@ class Home extends CI_Controller {
   		for($i=1;$i<=$max_id;$i++){
   			if(isset($this->arr['allRR'][$i])){
   				if($this->arr['allRR'][$i]->inactive != 1){
+					$this->mricf->rr_sess = $this->arr['allRR'][$i]->id;
+	  				$ost = count($this->mricf->getNxtTrains(99));
 					$wbcnt = $this->Generic_model->qry("SELECT COUNT(`id`) AS `cntr` FROM `ichange_waybill` WHERE `rr_id_handling` = '".$this->arr['allRR'][$i]->id."'");
 					$mapfil = $this->mricf->rrMap($this->arr['allRR'][$i]->id);
   					$rhtml = "";
 	  				$rhtml .= "<div style=\"display: inline-block; float: right; background-color: #ddd; padding: 4px; margin: 1px; border: 1px solid #777; border-radius: 4px; font-weight: bold;\">&nbsp;id: ".@$this->arr['allRR'][$i]->id."&nbsp;</div>";
-	  				$rhtml .= "<div style=\"display: inline-block; float: right; background-color: yellow; padding: 4px; margin: 1px; border: 1px solid #777; border-radius: 4px;\">WBs: ".$wbcnt[0]->cntr."</div>";
+	  				if($wbcnt[0]->cntr > 0){
+						$rhtml .= "<div style=\"display: inline-block; float: right; background-color: yellow; padding: 4px; margin: 1px; border: 1px solid #777; border-radius: 4px;\">WBs: ".$wbcnt[0]->cntr."</div>";
+					}
+	  				if($ost > 0){
+						$rhtml .= "<div style=\"display: inline-block; float: right; background-color: Chartreuse; padding: 4px; margin: 1px; border: 1px solid #777; border-radius: 4px;\">Trains To Do: ".$ost."</div>";
+					}
 					if(@$this->arr['allRR'][$i]->id == $this->arr['rr_sess'] && $this->arr['rr_sess'] > 0){
-						$rhtml .= "&nbsp;&nbsp;<a href=\"rr/edit/".$this->arr['allRR'][$i]->id."\">Edit</a>";
-						$rhtml .= "&nbsp;&nbsp;<a href=\"javascript:{}\" onclick=\"window.open('graphics/rrMap','','width=600,height=600');\">Upload Map</a>";
+						$rhtml .= "<a href=\"javascript:{}\" onclick=\"window.open('graphics/rrMap','','width=600,height=600');\">Upload Map</a>";
+						$rhtml .= " <a href=\"rr/edit/".$this->arr['allRR'][$i]->id."\">Edit</a>";
 					}
 					$rhtml .= "&nbsp;&nbsp;<a href=\"rr/view/".$this->arr['allRR'][$i]->id."\">View</a>";
 					$rhtml .= "<br />".@$this->arr['allRR'][$i]->report_mark." - ";
@@ -427,8 +434,8 @@ class Home extends CI_Controller {
 						elseif(strtoupper($this->arr['allRR'][$i]->owner_name) == @strtoupper($this->arr['allRR'][$this->arr['rr_sess']]->owner_name)){$my_rrs = 2; $styl = "background-color: #F5DEB3;";}
 					}
 					if($my_rrs > 0){
-						if($my_rrs == 1){$rhtml = "<span style=\"float: left; font-weight: bold;\">&nbsp;{My Railroad}&nbsp;</span>".$rhtml;}
-						if($my_rrs == 2){$rhtml = "<span style=\"float: left; font-weight: bold;\">&nbsp;{Affiliate}&nbsp;<a href=\"login/switch_to/".@$i."\">Switch to</a></span>".$rhtml;}
+						if($my_rrs == 1){$rhtml = "<div style=\"display: inline-block; float: right; background-color: ivory; padding: 4px; margin: 1px; font-weight: bold; border-radius: 4px; border: 1px solid #888;\">{My Railroad}</div>".$rhtml;}
+						if($my_rrs == 2){$rhtml = "<div style=\"display: inline-block; float: right; background-color: ivory; padding: 4px; margin: 1px; font-weight: bold; border-radius: 4px; border: 1px solid #888;\">{Affiliate}</div><a href=\"login/switch_to/".@$i."\">Switch to</a></span>".$rhtml;}
 						$my_rhtml .= "<div style=\"".$styl."; padding: 3px;\">".$rhtml."</div><hr />";
 					}
 					else{$this->content['rhtml'] .= $rhtml."<hr />";}
