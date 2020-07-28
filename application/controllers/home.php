@@ -389,6 +389,7 @@ class Home extends CI_Controller {
   				if($this->arr['allRR'][$i]->inactive != 1){
 					$this->mricf->rr_sess = $this->arr['allRR'][$i]->id;
 	  				$ost = count($this->mricf->getNxtTrains(99));
+	  				$curr_day = $this->mricf->getCurrentDay($this->arr['allRR'][$i]->id);
 					$wbcnt = $this->Generic_model->qry("SELECT COUNT(`id`) AS `cntr` FROM `ichange_waybill` WHERE `rr_id_handling` = '".$this->arr['allRR'][$i]->id."'");
 					$mapfil = $this->mricf->rrMap($this->arr['allRR'][$i]->id);
   					$rhtml = "";
@@ -398,6 +399,9 @@ class Home extends CI_Controller {
 					}
 	  				if($ost > 0){
 						$rhtml .= "<div style=\"display: inline-block; float: right; background-color: Chartreuse; padding: 4px; margin: 1px; border: 1px solid #777; border-radius: 4px;\">Trains To Do: ".$ost."</div>";
+					}
+					if($curr_day != "None"){
+						$rhtml .= "<div style=\"display: inline-block; float: right; background-color: orange; padding: 4px; margin: 1px; border: 1px solid #777; border-radius: 4px;\">S/List Day: ".strtoupper($curr_day)."</div>";
 					}
 					if(@$this->arr['allRR'][$i]->id == $this->arr['rr_sess'] && $this->arr['rr_sess'] > 0){
 						$rhtml .= "<a href=\"javascript:{}\" onclick=\"window.open('graphics/rrMap','','width=600,height=600');\">Upload Map</a>";

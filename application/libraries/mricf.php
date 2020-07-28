@@ -806,6 +806,20 @@ function getNxtTrains($i=3,$full=0){
 	return $nxt_trains;
 }
 
+function getCurrentDay($rr_sess=0){
+	// Gets current day for $rr_sess specified
+	$nxt_trains = array();
+	$day_arr = array("sun","mon","tues","wed","thu","fri","sat");
+	$curr_day = "None";
+	for($d=0;$d<count($day_arr);$d++){
+		if($this->CI->Train_model->getNonCompletedCountXDay($day_arr[$d],$rr_sess) > 0){
+			$curr_day = $day_arr[$d];
+			$d = count($day_arr)+1;
+		}
+	}
+	return $curr_day;
+}
+
 // Returns array of map file names of railroad's system map (if it exists in map_files/ directory) for values in $id array
 function rrMap($id=0){
 	$mapfile = array();
