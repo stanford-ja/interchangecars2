@@ -330,10 +330,10 @@ class Waybill extends CI_Controller {
 		for($r=0;$r<count($rr_ics);$r++){
 			if(strlen($rr_ics[$r]->interchanges) > 0){
 				$ic_rr = explode(";",$rr_ics[$r]->interchanges);
-				$ic_locs .= "<option value=\"\" style=\"background-color: maroon; color: white;\">".$rr_ics[$r]->report_mark." I/Changes</option>";
+				$ic_locs .= "<option value=\"\" style=\"background-color: maroon; color: white;\">[** ".$rr_ics[$r]->report_mark." I/Changes **]</option>";
 				for($i=0;$i<count($ic_rr);$i++){
 					if(strlen($ic_rr[$i]) > 2){
-						$ic_locs .= "<option value=\"AT ".strtoupper($ic_rr[$i])."\">AT ".strtoupper($ic_rr[$i])."</option>";
+						$ic_locs .= "<option value=\"AT ".strtoupper($ic_rr[$i])."\">&nbsp;>>&nbsp;&nbsp;AT ".strtoupper($ic_rr[$i])."</option>";
 					}
 				}
 			}

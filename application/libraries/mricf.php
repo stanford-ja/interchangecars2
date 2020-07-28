@@ -226,12 +226,12 @@ function rr_ichange_lst($curr_stat,$retArr=0,$opts=array()){
 		if($curr_stat == "RETURNING" || strpos($curr_stat,"ETURNING") > 0){$wot = "(RETURNING) ";}
 		if(strlen($interchanges) > 0){
 			$ic_lst = explode(";",$interchanges);
-			if($retArr == 0){$lst .= "<option style=\"font-weight: bold; color: white; background-color: maroon;\" value=\"\">-- ".$report_mark." I/changes --</option>\n";}
+			if($retArr == 0){$lst .= "<option style=\"font-weight: bold; color: white; background-color: maroon;\" value=\"\">[** ".$report_mark." I/changes **]</option>\n";}
 			for($i=0;$i<$max_ic;$i++){
 				if(isset($ic_lst[$i])){
 					$ic_val = $wot."AT ".trim($ic_lst[$i]);
 					if(strlen($ic_val) > 40){$ic_val = substr($ic_val, 0, 40);}
-					if($retArr == 0){$lst .= "<option value=\"".$ic_val."\">At ".ucwords($ic_lst[$i])."</option>\n";}
+					if($retArr == 0){$lst .= "<option value=\"".$ic_val."\">&nbsp;>>&nbsp;&nbsp;At ".ucwords($ic_lst[$i])."</option>\n";}
 					else{$lst[] = $ic_val;}
 				}
 			}
