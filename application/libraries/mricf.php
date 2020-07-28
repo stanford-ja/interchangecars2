@@ -226,12 +226,12 @@ function rr_ichange_lst($curr_stat,$retArr=0,$opts=array()){
 		if($curr_stat == "RETURNING" || strpos($curr_stat,"ETURNING") > 0){$wot = "(RETURNING) ";}
 		if(strlen($interchanges) > 0){
 			$ic_lst = explode(";",$interchanges);
-			if($retArr == 0){$lst .= "<option style=\"font-weight: bold; color: white; background-color: maroon;\" value=\"\">-- ".$report_mark." I/changes --</option>\n";}
+			if($retArr == 0){$lst .= "<option style=\"font-weight: bold; color: white; background-color: maroon;\" value=\"\">[** ".$report_mark." I/changes **]</option>\n";}
 			for($i=0;$i<$max_ic;$i++){
 				if(isset($ic_lst[$i])){
 					$ic_val = $wot."AT ".trim($ic_lst[$i]);
 					if(strlen($ic_val) > 40){$ic_val = substr($ic_val, 0, 40);}
-					if($retArr == 0){$lst .= "<option value=\"".$ic_val."\">At ".ucwords($ic_lst[$i])."</option>\n";}
+					if($retArr == 0){$lst .= "<option value=\"".$ic_val."\">&nbsp;>>&nbsp;&nbsp;At ".ucwords($ic_lst[$i])."</option>\n";}
 					else{$lst[] = $ic_val;}
 				}
 			}
@@ -804,6 +804,20 @@ function getNxtTrains($i=3,$full=0){
 		}
 	}
 	return $nxt_trains;
+}
+
+function getCurrentDay($rr_sess=0){
+	// Gets current day for $rr_sess specified
+	$nxt_trains = array();
+	$day_arr = array("sun","mon","tues","wed","thu","fri","sat");
+	$curr_day = "None";
+	for($d=0;$d<count($day_arr);$d++){
+		if($this->CI->Train_model->getNonCompletedCountXDay($day_arr[$d],$rr_sess) > 0){
+			$curr_day = $day_arr[$d];
+			$d = count($day_arr)+1;
+		}
+	}
+	return $curr_day;
 }
 
 // Returns array of map file names of railroad's system map (if it exists in map_files/ directory) for values in $id array
