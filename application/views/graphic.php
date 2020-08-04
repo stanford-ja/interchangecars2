@@ -2,7 +2,8 @@
 // Graphic upload view, all types
 ?>
 <?php echo $form; ?>
-<?php if(strlen($referrer) > 0){ echo "<input type=\"hidden\" name=\"referrer\" value=\"".$referrer."\" />"; } ?>
+<?php if(isset($referrer) && strlen($referrer) > 0){ echo "<input type=\"hidden\" name=\"referrer\" value=\"".$referrer."\" />"; } ?>
+<?php if(isset($id)){ echo "<input type=\"hidden\" name=\"id\" value=\"".$id."\" />"; } ?>
 <?php if(isset($desc_form)){ /* START DESCRIPTION FORM */ ?>
 	<input type="hidden" name="img_name" value="<?php echo $img_name; ?>" />
 	<?php if(file_exists(DOC_ROOT."/waybill_images/".$img_name)){ ?>
