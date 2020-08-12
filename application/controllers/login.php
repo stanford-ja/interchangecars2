@@ -2,6 +2,7 @@
 class Login extends CI_Controller {
 
 	var $rr_sess = 0;
+	var $fluxbb_users = "ichange_fluxbb_users"; // FluxBB users table.
 	
 	function __construct(){
 		// Auto ran method.
@@ -62,6 +63,7 @@ class Login extends CI_Controller {
 			if(@$this->arr['allRR'][$_POST['rr_selected']]->admin_flag == 1){$this->input->set_cookie('_mricfadmin',1,86500);}
 			$this->last_act_update($_POST['rr_selected']);
 			$this->session->set_flashdata('loginSuccess', '1');
+			$this->doForumUpdate();
 			header('Location:'.WEB_ROOT.'/index.php/home');
 		}else{header('Location:'.WEB_ROOT.'/index.php/login');}
 	}
@@ -104,6 +106,34 @@ class Login extends CI_Controller {
 
 	function last_act_update($id=0){
 		$this->Generic_model->change("UPDATE `ichange_rr` SET `last_act` = '".date('U')."' WHERE `id` = '".$id."'");		
+	}
+	
+	// Updates or adds record for report_mark to fluxbb users table so when a user logs into MRICF the FluxBB password is the same as MRICF.
+	function doForumUpdate(){
+		if(isset($this->arr['allRR'][$_POST['rr_selected']]->report_mark)){
+			$sql = "SELECT COUNT(`id`) AS `cntr` FROM `".$this->fluxbb_users."` WHERE `username` = '".$this->arr['allRR'][$_POST['rr_selected']]->report_mark."'";
+			$res = (array)$this->Generic_model->qry($sql);
+			if($res[0]->cntr > 0){
+				$sql = "UPDATE `".$this->fluxbb_users."` SET 
+					`password` = '".$this->arr['allRR'][$_POST['rr_selected']]->pw."',
+					`title` = '".$this->arr['allRR'][$_POST['rr_selected']]->rr_name."',
+					`realname` = '".$this->arr['allRR'][$_POST['rr_selected']]->owner_name."' 
+					WHERE `username` = '".$this->arr['allRR'][$_POST['rr_selected']]->report_mark."'";
+			}else{
+				$sql = "INSERT INTO `".$this->fluxbb_users."` SET 
+					`username` = '".$this->arr['allRR'][$_POST['rr_selected']]->report_mark."', 
+					`password` = '".$this->arr['allRR'][$_POST['rr_selected']]->pw."',
+					`title` = '".$this->arr['allRR'][$_POST['rr_selected']]->rr_name."',
+					`realname` = '".$this->arr['allRR'][$_POST['rr_selected']]->owner_name."', 
+					`email_setting` = 1,
+					`language` = 'English',
+					`style` = 'Air',
+					`registered` = '".date('U')."',
+					`group_id` = 4,
+					`registration_ip` = '".$_SERVER['REMOTE_ADDR']."'";
+			}
+			$this->Generic_model->change($sql);
+		}
 	}
 }
 ?>
