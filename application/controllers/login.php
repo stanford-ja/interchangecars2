@@ -117,7 +117,7 @@ class Login extends CI_Controller {
 				$sql = "UPDATE `".$this->fluxbb_users."` SET 
 					`password` = '".$this->arr['allRR'][$_POST['rr_selected']]->pw."',
 					`title` = '".$this->arr['allRR'][$_POST['rr_selected']]->rr_name."',
-					`realname` = '".$this->arr['allRR'][$_POST['rr_selected']]->owner_name."', 
+					`realname` = '".$this->arr['allRR'][$_POST['rr_selected']]->owner_name."' 
 					WHERE `username` = '".$this->arr['allRR'][$_POST['rr_selected']]->report_mark."'";
 			}else{
 				$sql = "INSERT INTO `".$this->fluxbb_users."` SET 
