@@ -7,4 +7,5 @@ indust_images/*.jpg
 map_files/*.jpg
 map_files/*.png
 map_files/*.pdf
+forum/cache/cache_*.php
 *.sql
