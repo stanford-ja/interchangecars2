@@ -63,7 +63,7 @@ class Login extends CI_Controller {
 			if(@$this->arr['allRR'][$_POST['rr_selected']]->admin_flag == 1){$this->input->set_cookie('_mricfadmin',1,86500);}
 			$this->last_act_update($_POST['rr_selected']);
 			$this->session->set_flashdata('loginSuccess', '1');
-			$this->doForumUpdate();
+			$this->doForumUpdate($_POST['rr_selected']);
 			header('Location:'.WEB_ROOT.'/index.php/home');
 		}else{header('Location:'.WEB_ROOT.'/index.php/login');}
 	}
@@ -84,6 +84,7 @@ class Login extends CI_Controller {
 			$this->input->set_cookie('rr_sess',$id,86500); 
 			$this->input->set_cookie('_tz',$this->arr['allRR'][$id]->tzone,86500);
 			$this->last_act_update($id);
+			$this->doForumUpdate($id);
 			header("Location:../../home");
 			exit();			
 		}else{
@@ -109,22 +110,22 @@ class Login extends CI_Controller {
 	}
 	
 	// Updates or adds record for report_mark to fluxbb users table so when a user logs into MRICF the FluxBB password is the same as MRICF.
-	function doForumUpdate(){
-		if(isset($this->arr['allRR'][$_POST['rr_selected']]->report_mark)){
-			$sql = "SELECT COUNT(`id`) AS `cntr` FROM `".$this->fluxbb_users."` WHERE `username` = '".$this->arr['allRR'][$_POST['rr_selected']]->report_mark."'";
+	function doForumUpdate($id=0){
+		if(isset($this->arr['allRR'][$id]->report_mark)){
+			$sql = "SELECT COUNT(`id`) AS `cntr` FROM `".$this->fluxbb_users."` WHERE `username` = '".$this->arr['allRR'][$id]->report_mark."'";
 			$res = (array)$this->Generic_model->qry($sql);
 			if($res[0]->cntr > 0){
 				$sql = "UPDATE `".$this->fluxbb_users."` SET 
-					`password` = '".$this->arr['allRR'][$_POST['rr_selected']]->pw."',
-					`title` = '".$this->arr['allRR'][$_POST['rr_selected']]->rr_name."',
-					`realname` = '".$this->arr['allRR'][$_POST['rr_selected']]->owner_name."' 
-					WHERE `username` = '".$this->arr['allRR'][$_POST['rr_selected']]->report_mark."'";
+					`password` = '".$this->arr['allRR'][$id]->pw."',
+					`title` = '".$this->arr['allRR'][$id]->rr_name."',
+					`realname` = '".$this->arr['allRR'][$id]->owner_name."' 
+					WHERE `username` = '".$this->arr['allRR'][$id]->report_mark."'";
 			}else{
 				$sql = "INSERT INTO `".$this->fluxbb_users."` SET 
-					`username` = '".$this->arr['allRR'][$_POST['rr_selected']]->report_mark."', 
-					`password` = '".$this->arr['allRR'][$_POST['rr_selected']]->pw."',
-					`title` = '".$this->arr['allRR'][$_POST['rr_selected']]->rr_name."',
-					`realname` = '".$this->arr['allRR'][$_POST['rr_selected']]->owner_name."', 
+					`username` = '".$this->arr['allRR'][$id]->report_mark."', 
+					`password` = '".$this->arr['allRR'][$id]->pw."',
+					`title` = '".$this->arr['allRR'][$id]->rr_name."',
+					`realname` = '".$this->arr['allRR'][$id]->owner_name."', 
 					`email_setting` = 1,
 					`language` = 'English',
 					`style` = 'Air',
