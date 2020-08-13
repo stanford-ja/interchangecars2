@@ -97,13 +97,7 @@ class Waybill_model extends CI_Model {
 		// $rr = railroad id to get messages for 
 		// If $id=0 and $rr=0, get all messages.
 		// $no_ack - 0 = get all, 1 = only get un-Acknowledged
-		/* REPLACED JSON with TABLE - 2017-05
-		$sql = "SELECT `id`,`waybill_num`,`messages` FROM `ichange_waybill` WHERE ";
-		if($id > 0){$sql .= "`id` = '".$id."'";}
-		elseif($rr > 0){$sql .= "`messages` LIKE '%\"torr\":\"".$rr."\"%' AND `status` != 'CLOSED'";}
-		else{$sql .= "`status` != 'CLOSED' AND LENGTH(`messages`) > 5";}
-		$sql .= " ORDER BY `date` DESC";
-		*/
+		/* REPLACED BY BELOW TO USE fluxbb INSTEAD - 2020-08-12
 		$sql = "SELECT ichange_messages.*,ichange_waybill.id AS wb_id, ichange_waybill.waybill_num 
 			FROM `ichange_messages` 
 			LEFT JOIN ichange_waybill ON ichange_messages.waybill_id = ichange_waybill.id 
@@ -113,6 +107,22 @@ class Waybill_model extends CI_Model {
 		else{$sql .= "ichange_waybill.status != 'CLOSED'";}
 		if($no_ack == 1){ $sql .= " AND ichange_messages.ack != 1"; }
 		$sql .= " ORDER BY ichange_messages.datetime DESC";
+		*/
+		//$sql = "SELECT `waybill_num` FROM `ichange_waybill` WHERE `id` = '".$id."'";
+		//$query = $this->db->query($sql);
+		//$res = (array)$query->result();
+		//$wbnum = $res[0]->waybill_num;
+		$sql = "SELECT '".$id."' AS `wb_id`, ichange_fluxbb_posts.*, ichange_fluxbb_topics.id AS `tid`, ichange_fluxbb_topics.subject, ichange_waybill.waybill_num 
+			FROM `ichange_fluxbb_topics` 
+			LEFT JOIN ichange_waybill ON ichange_fluxbb_topics.subject LIKE CONCAT('%',ichange_waybill.waybill_num,'%') 
+			LEFT JOIN ichange_fluxbb_posts ON ichange_fluxbb_topics.id = ichange_fluxbb_posts.topic_id 
+			WHERE ";
+		if($id > 0){$sql .= "ichange_waybill.id = '".$id."'";}
+		//elseif($rr > 0){$sql .= "torr = '".$rr."' AND ichange_waybill.status != 'CLOSED'";}
+		else{$sql .= "ichange_waybill.status != 'CLOSED'";}
+		//if($no_ack == 1){ $sql .= " AND ichange_messages.ack != 1"; }
+		if($no_ack > 0){ $sql .= " AND ichange_fluxbb_posts.posted > ".$no_ack; }
+		$sql .= " ORDER BY ichange_fluxbb_posts.posted DESC";
 		$query = $this->db->query($sql);
 		return $query->result();
 	}

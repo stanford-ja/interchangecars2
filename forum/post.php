@@ -5,6 +5,16 @@
  * based on code by Rickard Andersson copyright (C) 2002-2008 PunBB
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
+// Added by J. Stanford to create session from variable sent by MRICF
+$waybill = "";
+if(isset($_POST['req_subject'])){
+	//setcookie("req_subject", $_POST['req_subject'], intval(date('U')+86400)); //, string $path [, string $domain [, bool $secure = false [, bool $httponly = false ]]]]]] )
+}
+if(isset($_COOKIE['req_subject'])){ 
+	$_POST['req_subject'] = $_COOKIE['req_subject']; 
+	setcookie("req_subject", $waybill, intval(date('U')-86400)); //, string $path [, string $domain [, bool $secure = false [, bool $httponly = false ]]]]]] )
+}
+// End added
 
 define('PUN_ROOT', dirname(__FILE__).'/');
 require PUN_ROOT.'include/common.php';
@@ -655,7 +665,22 @@ if ($pun_user['is_guest'])
 }
 
 if ($fid): ?>
-						<label class="required"><strong><?php echo $lang_common['Subject'] ?> <span><?php echo $lang_common['Required'] ?></span></strong><br /><input class="longinput" type="text" name="req_subject" value="<?php if (isset($_POST['req_subject'])) echo pun_htmlspecialchars($_POST['req_subject']); ?>" size="80" maxlength="70" tabindex="<?php echo $cur_index++ ?>" /><br /></label>
+					<?php if($fid == 2){ /* START ADDED TO ALLOW SELECTION OF WAYBILL */ ?>
+						<label><strong>Waybills for Your Railroad</strong> - Select one to have this post appear as a message for the selected waybill.</label>
+						<select onchange="document.getElementById('req_subject').value = 'Waybill:'+this.value+' ';">
+							<option value="">-- Select a Waybill --</option>
+							<?php 
+							$sql = "SELECT * FROM `ichange_waybill` WHERE (`rr_id_to` = '".$_COOKIE['rr_sess']."' OR `rr_id_from` = '".$_COOKIE['rr_sess']."' OR `rr_id_handling` = '".$_COOKIE['rr_sess']."') AND `status` != 'CLOSED'";
+							$tmp0 = $db->query($sql) or error('Unable to fetch config.', __FILE__, __LINE__, $db->error());
+							while($tmp1 = $tmp0->fetch_assoc()){
+								echo "\n<option value=\"".$tmp1['waybill_num']."\">".$tmp1['waybill_num']." -- ".substr($tmp1['indust_origin_name'],0,25)." to ".substr($tmp1['indust_dest_name'],0,25)."</option>";
+							} ?>
+						</select>
+					<?php /* END ADDED TO ALLOW SELECTION OF WAYBILL */ } ?>
+
+						<label class="required"><strong><?php echo $lang_common['Subject'] ?> <span><?php echo $lang_common['Required'] ?></span></strong><br />
+						<input class="longinput" type="text" name="req_subject" id="req_subject" value="<?php if (isset($_POST['req_subject'])){ echo pun_htmlspecialchars($_POST['req_subject']); } ?>" size="80" maxlength="70" tabindex="<?php echo $cur_index++ ?>" />
+						<br /></label>
 <?php endif; ?>						<label class="required"><strong><?php echo $lang_common['Message'] ?> <span><?php echo $lang_common['Required'] ?></span></strong><br />
 						<textarea name="req_message" rows="20" cols="95" tabindex="<?php echo $cur_index++ ?>"><?php echo isset($_POST['req_message']) ? pun_htmlspecialchars($orig_message) : (isset($quote) ? $quote : ''); ?></textarea><br /></label>
 						<ul class="bblinks">

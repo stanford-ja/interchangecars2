@@ -56,7 +56,8 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 						<a href="#progfrm">Progress</a>
 					</div>
 					<div class="wbLinkElement">
-						<a href="<?php echo WEB_ROOT; ?>/messaging/lst/<?php echo $id; ?>">Messages</a>
+						<!-- <a href="<?php echo WEB_ROOT; ?>/messaging/lst/<?php echo $id; ?>">Messages</a> REPLACED BY BELOW 2020-08-13 // -->
+						<a href="<?php echo WEB_ROOT; ?>/forum/search.php?action=search&keywords=<?php echo $fld8; ?>&show_as=topics&search=Submit">Messages</a>
 					</div>
 					<?php if($id > 0){ ?>
 						<!-- <a href="javascript:{}" onclick="window.open('<?php echo WEB_ROOT; ?>/graphics/waybill/<?php echo $id; ?>','WB<?php echo $id; ?>','width=500, height=700');">Upload Image</a>&nbsp; // -->
@@ -318,6 +319,7 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 				<!-- <div id="wb_image_div"> // -->
 				<?php 
 				//if($id > 0){
+				/*
 					$fils = get_filenames(DOC_ROOT."/waybill_images/");
 					for($i=0;$i<count($fils);$i++){
 						if(strpos("Z".$fils[$i],$id."-") > 0){ // ".WEB_ROOT."/waybill_images/".$fils[$i]."
@@ -327,17 +329,16 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 							$fil_html .= "</a>";
 						}
 					}
+					*/
 				//}
-				if(isset($fil_html) && strlen($fil_html) > 0){
-					$fil_html = "<div id=\"wb_image_div\" style=\"color: #555; padding: 10px; margin: 3px;\">
-						".$fil_html."
-						</div>";
+				//if(isset($fil_html) && strlen($fil_html) > 0){
+					//$fil_html = "<div id=\"wb_image_div\" style=\"color: #555; padding: 10px; margin: 3px;\">".$fil_html."</div>";
+					$fil_html = "<div id=\"wb_image_div\" style=\"color: #555; padding: 10px; margin: 3px;\"></div>";
 					echo $fil_html;
-				}
+				//}
 				?>
 				<!-- </div> // -->
-				<br /><br />
-				<a name="uplImg" href="javascript:{}" onclick="window.open('<?php echo WEB_ROOT; ?>/graphics/waybill/<?php echo $id; ?>','WB<?php echo $id; ?>','width=500, height=700');">Upload Image</a>&nbsp;
+				<a name="uplImg" href="javascript:{}" onclick="window.open('<?php echo WEB_ROOT.INDEX_PAGE; ?>/graphics/waybill/<?php echo $id; ?>','WB<?php echo $id; ?>','width=500, height=700');">Upload Image</a>&nbsp;
 			</div>
 			<?php } ?>
 

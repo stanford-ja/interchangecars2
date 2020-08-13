@@ -316,7 +316,7 @@ background-color: yellow;
 .error {font-size: 15pt; color: red; font-weight: bold;}
 
 .wb_lnk_mess {
-	float: right; width: 250px; max-height: 82px; overflow: auto; padding: 3px;font-size: 9pt;
+	/*float: right; width: 250px; */ display: block; max-height: 122px; overflow: auto; padding: 3px;font-size: 9pt;
 }
 
 /* home page classes */

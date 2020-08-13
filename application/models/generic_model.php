@@ -16,6 +16,7 @@ class Generic_model extends CI_Model {
 		$query = $this->db->query($s);
 		//return $query->result();
 		//return $query->result();
+		return $this->db->insert_id();
 	}
 
 	function get_search_results($id=0,$fld='',$tbl=''){
