@@ -371,8 +371,10 @@ function trainOpts($opts=array(),$trainsArr=array()){ //$rr=0,$auto="N",$trainsA
 	// $opts['rr'] = railroad
 	// $opts['auto'] = show auto trains? (Y/N)
 	// $opts['onlyrr'] = if set, then show only trains for $opts['rr'].]
+	// $opts['value_fld'] = field to use for the value= attribute in the option tag
 	if(isset($this->train_select_options)){$tOpts = $this->train_select_options;}else{
 		if(count($trainsArr) < 1){$trainsArr = $this->trainsArray(array('sort' => "train_desc"));}
+		if(!isset($opts['value_fld'])){ $opts['value_fld'] = "train_id"; }
 		$rr = 0; if(isset($opts['rr'])){$rr = $opts['rr'];}
 		$auto = "N"; if(isset($opts['auto'])){$auto = $opts['auto'];}
 		$onlyrr = 0; if(isset($opts['onlyrr'])){$onlyrr = 1;}
@@ -392,12 +394,12 @@ function trainOpts($opts=array(),$trainsArr=array()){ //$rr=0,$auto="N",$trainsA
 			if($auto != "Y" && (count($wps) > 0 || intval($trainsArr[$kys[$i]]['auto']) > 0)){$show = 0;}
 			if($onlyrr == 1 && $trainsArr[$kys[$i]]['railroad_id'] != $rr && $trainsArr[$kys[$i]]['train_id'] != "NOT ALLOCATED"){$show = 0;}
 			if($show > 0){
-				$td = $trainsArr[$kys[$i]]['train_desc'];
+				$td = str_replace("&","",$trainsArr[$kys[$i]]['train_desc']);
 				if(strlen($td) > 25){$td = substr($td,0,25);}
 				$opt_styl = "";
-				if(intval($trainsArr[$kys[$i]]['auto']) > 0 || @count($wps) > 0){$opt_styl = " style=\"background-color: gainsboro; color: #555;\""; $td .= " [AUTO]";}
-				if($rr == $trainsArr[$kys[$i]]['railroad_id']){$tOpts_rr .= "<option ".$opt_styl."value=\"".$trainsArr[$kys[$i]]['train_id']."\">".$td." (".$trainsArr[$kys[$i]]['train_id'].")</option>";}
-				else{$tOpts_oth .= "<option ".$opt_styl."value=\"".$trainsArr[$kys[$i]]['train_id']."\">".$td." (".$trainsArr[$kys[$i]]['train_id'].")</option>";}
+				//if(intval($trainsArr[$kys[$i]]['auto']) > 0 || @count($wps) > 0){$opt_styl = " style=\"background-color: gainsboro; color: #555;\""; $td .= " [AUTO]";}
+				if($rr == $trainsArr[$kys[$i]]['railroad_id']){$tOpts_rr .= "<option".$opt_styl." value=\"".$trainsArr[$kys[$i]][$opts['value_fld']]."\">".$td." (".$trainsArr[$kys[$i]]['train_id'].")</option>";}
+				else{$tOpts_oth .= "<option".$opt_styl." value=\"".$trainsArr[$kys[$i]][$opts['value_fld']]."\">".$td." (".$trainsArr[$kys[$i]]['train_id'].")</option>";}
 			}
 		}
 		$tOpts = "";

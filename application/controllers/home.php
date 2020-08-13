@@ -39,6 +39,7 @@ class Home extends CI_Controller {
 		// Railroad array set up
 		$this->load->model('Railroad_model','',TRUE); // Database connection! TRUE means connect to db.
 		$this->arr['myRR'] = $this->Railroad_model->get_single($this->arr['rr_sess']);
+		$this->input->set_cookie('rr_mark',$this->arr['myRR'][0]->report_mark,86500);
 
 		$rrArrTmp = $this->mricf->rrFullArr();
 		$rrArrTmp_kys = array_keys($rrArrTmp);
@@ -80,12 +81,6 @@ class Home extends CI_Controller {
 		$this->carsOnAllMyWBs = $this->Waybill_model->carsOnAllMyWBs;
 		//$this->carsOnAllMyWBsKys = $this->Waybill_model->carsOnAllMyWBsKys;
 		
-		// ONLY NEEDED TO CREATE messages TABLE AND DATA! ONCE DONE, CAN BE REMOVED. 2017-05-21
-		$tbls = (array)$this->Generic_model->qry("SHOW TABLES WHERE Tables_in_jstan2_general LIKE 'ichange_messages'");
-		if(count($tbls) == 0){ 
-			header("Location:messaging");
-			exit(); 
-		}
 	}
 
 	public function index(){
@@ -210,8 +205,9 @@ class Home extends CI_Controller {
 			*/
 			$this->content['html'] .= "</div></div>";
 			$this->content['html'] .= "<div style=\"display: block;\" class=\"".$td_cla."\">";
-			$this->wb_images($tmp);
-			$this->wb_lnk_mess($tmp); // Links for each waybill displayed
+			$this->wb_links($tmp);
+			//$this->wb_images($tmp);
+			//$this->wb_lnk_mess($tmp); // Links for each waybill displayed
 
 			if(in_array("routing",$elements)){$this->content['html'] .= "<span class=\"routing\">Routing: ".$this->waybills[$tmp]->routing."</span><br />";}
 			if($this->arr['rr_sess'] > 0){
@@ -229,6 +225,8 @@ class Home extends CI_Controller {
 				$this->wb_cars_display(); // Cars displayed for Waybill - text & image/s
 			}
 			if(strlen($this->waybills[$tmp]->notes) > 2 && in_array("notes",$elements)){$this->content['html'] .= "<div class=\"notes\">".$this->waybills[$tmp]->notes."</div>";}
+			$this->wb_images($tmp);
+			$this->wb_lnk_mess($tmp); // Links for each waybill displayed
 			$this->content['html'] .= "</div>\n";
 			$this->content['html'] .= "</div>";
 		} // End FOR loop??
@@ -260,8 +258,9 @@ class Home extends CI_Controller {
 	
 			//$wb_lst = "";
 			$this->content['html'] .= $div_start;
-			$this->wb_images($tmp);
-			$this->wb_lnk_mess($tmp); // Links for each waybill displayed
+			$this->wb_links($tmp);
+			//$this->wb_images($tmp);
+			//$this->wb_lnk_mess($tmp); // Links for each waybill displayed
 			if(in_array("waybill_num",$elements)){$this->content['html'] .= "<a href=\"waybill/edit/".$this->waybills[$tmp]->id."\">".$this->waybills[$tmp]->waybill_num."</a> <span style=\"background-color: yellow; font-weight: bold;\">".$this->waybills[$tmp]->waybill_type."</span>&nbsp;".$this->waybills[$tmp]->date."&nbsp;<br />\n";}
 			if(in_array("indust_origin_name",$elements)){$this->content['html'] .= "<span class=\"tiny_txt\">From: </span><br />".$this->waybills[$tmp]->indust_origin_name."&nbsp;<br />\n";}
 			if(in_array("indust_dest_name",$elements)){$this->content['html'] .= "<span class=\"tiny_txt\">To: </span><br />".$this->waybills[$tmp]->indust_dest_name."&nbsp;<br />\n";}
@@ -282,6 +281,8 @@ class Home extends CI_Controller {
 				$this->wb_cars_display(); // Cars displayed for Waybill - text & image/s
 			}
 			if(strlen($this->waybills[$tmp]->notes) > 2 && in_array("notes",$elements)){$this->content['html'] .= "<div class=\"notes\">".$this->waybills[$tmp]->notes."</div>";}
+			$this->wb_images($tmp);
+			$this->wb_lnk_mess($tmp); // Links for each waybill displayed
 			$this->content['html'] .= "</div>";
 		} // End FOR loop??
 		$this->content['html'] .= "</div>"; // End of container div
@@ -542,32 +543,26 @@ class Home extends CI_Controller {
 		// Builds html for messages listing.
 		$tmp = "";
 		$cntr=0;
-		for($ri=0;$ri<count($this->my_rr_ids);$ri++){
-			$wbdat = (array)$this->Waybill_model->get_messages(0,$this->my_rr_ids[$ri],1);
+		//for($ri=0;$ri<count($this->my_rr_ids);$ri++){
+			//$wbdat = (array)$this->Waybill_model->get_messages(0,$this->my_rr_ids[$ri],1); - REPLACED BY BELOW - 2020-08-13
+			$wbdat = (array)$this->Waybill_model->get_messages(0,0,intval(date('U')-(60*60*31)));
 			for($i=0;$i<count($wbdat);$i++){
 				$mess = $wbdat[$i]; //]@json_decode($wbdat[$i]->messages);
-				/*
-				for($m=0;$m<count($mess);$m++){
-					if(isset($mess[$m]->datetime)){
-						if($mess[$m]->torr == $this->my_rr_ids[$ri]){
-						$m = (array)$mess[$m];
-						$tmp .= "<a href=\"messaging/lst/".$wbdat[$i]->wb_id."\">".$wbdat[$i]->waybill_num."</a> - ".$this->wb_message_details($m);
-						$tmp .= "<hr />";
-						$cntr++;
-						}
-					}
-				}
-				*/
-				if(isset($mess->datetime)){
+				//if(isset($mess->datetime)){
+				if(isset($mess->posted)){
+					/* REPLACED BY BELOW - 2020-08-13
 					if($mess->torr == $this->my_rr_ids[$ri]){
 					$m = (array)$mess;
 					$tmp .= "<a href=\"messaging/lst/".$wbdat[$i]->wb_id."\">".$wbdat[$i]->waybill_num."</a> - ".$this->wb_message_details($m);
 					$tmp .= "<hr />";
 					$cntr++;
 					}
+					*/
+					$tmp .= $mess->waybill_num." - ".$this->wb_message_details((array)$mess);
+					$cntr++;
 				}
 			}
-		}
+		//}
 		if($cntr > 0){
 			$this->content['mhtml'] = ""; //"<div class=\"box1\" style=\"left: ".$this->horiz_loc."px; background-color: yellow; max-width: 270px;\">"; // 655px
 			$this->content['mhtml'] .= "&nbsp;<a href=\"#\" id=\"me_expand\" title=\"Click this link to show the Messages list\"><strong>Messages (".$cntr.")</strong></a><br />";
@@ -605,6 +600,7 @@ class Home extends CI_Controller {
 	
 	public function view(){
 		// Load views
+		if(isset($this->content['html_fluxbb_forms'])){ $this->content['html'] .= $this->content['html_fluxbb_forms']; }
 		$this->load->view('header', $this->arr);
 		$this->load->view('menu', $this->arr);
 		$this->load->view('home', $this->content);
@@ -669,36 +665,44 @@ class Home extends CI_Controller {
 	// Home Display methods
 	function wb_link_view($id){
 		//$this->content['html'] .= "<input type=\"button\" id=\"view_wb_btn\" title=\"Click this button to view the waybill\" value=\"View WB\" onclick=\"window.location = '".WEB_ROOT."/waybill/view/".$id."'\" />&nbsp;"; //"<a href=\"waybill/view/".$id."\">View WB</a> ";
-		$this->content['html'] .= "<div class=\"wb_btn\"><a href=\"javascript:{}\" onclick=\"window.location = '".WEB_ROOT."/waybill/view/".$id."'\">View WB</a></div>";
+		$this->content['html'] .= "\n<div class=\"wb_btn\"><a href=\"javascript:{}\" onclick=\"window.location = '".WEB_ROOT.INDEX_PAGE."/waybill/view/".$id."'\">View WB</a></div>";
 	}
 
 	function wb_link_edit($id){
 		//$this->content['html'] .= "<input type=\"button\" id=\"edit_wb_btn\" title=\"Click this button to edit the waybill\" value=\"Edit WB\" onclick=\"window.location = '".WEB_ROOT."/waybill/edit/".$id."'\" />&nbsp;"; //"<a href=\"waybill/edit/".$id."\">Edit WB</a> ";
-		$this->content['html'] .= "<div class=\"wb_btn\"><a href=\"javascript:{}\" onclick=\"window.location = '".WEB_ROOT."/waybill/edit/".$id."'\">Edit WB</a></div>";
+		$this->content['html'] .= "\n<div class=\"wb_btn\"><a href=\"javascript:{}\" onclick=\"window.location = '".WEB_ROOT.INDEX_PAGE."/waybill/edit/".$id."'\">Edit WB</a></div>";
 	}
 	
 	function wb_link_messaging($id){
+		// $id WAS id, NOW waybill_num - 2020-08-12
 		//$this->content['html'] .= "<input type=\"button\" value=\"Email / Messages\" onclick=\"window.location = '".WEB_ROOT."/messaging/lst/".$id."'\" />&nbsp;"; //"<a href=\"messaging/lst/".$id."\">Email / Messages</a> ";
-		$this->content['html'] .= "<div class=\"wb_btn\"><a href=\"javascript:{}\" onclick=\"window.location = '".WEB_ROOT."/messaging/lst/".$id."'\">Email / Msgs</a></div>";
+		//$this->content['html'] .= "<div class=\"wb_btn\"><a href=\"javascript:{}\" onclick=\"window.location = '".WEB_ROOT."/messaging/lst/".$id."'\">Email / Msgs</a></div>";
+		//$this->content['html'] .= "\n<div class=\"wb_btn\"><a href=\"".WEB_ROOT."/forum/viewforum.php?id=2\">Msgs</a></div>";
+		$this->content['html'] .= "\n<form method=\"post\" id=\"fluxbb".$id."\" action=\"".str_replace("http://".$_SERVER['SERVER_NAME'],"",WEB_ROOT)."/forum/post.php?fid=2\">
+			<input type=\"hidden\" name=\"req_subject\" value=\"Waybill:".$id."\" />
+			</form>
+			<div class=\"wb_btn\">
+			<a href=\"javascript:{}\" onclick=\"document.getElementById('fluxbb".$id."').submit();\">New Msg</a>
+			</div>";
 	}
 
 	function wb_link_image($id){
 		//$this->content['html'] .= "<input type=\"button\" value=\"Email / Messages\" onclick=\"window.location = '".WEB_ROOT."/messaging/lst/".$id."'\" />&nbsp;"; //"<a href=\"messaging/lst/".$id."\">Email / Messages</a> ";
-		$this->content['html'] .= "<div class=\"wb_btn\"><a href=\"javascript:{}\" onclick=\"window.open('".WEB_ROOT."/graphics/waybill/".$id."','".$id."','width=500,height=700');\">Upload Img</a></div>";
+		$this->content['html'] .= "<div class=\"wb_btn\"><a href=\"javascript:{}\" onclick=\"window.open('".WEB_ROOT.INDEX_PAGE."/graphics/waybill/".$id."','".$id."','width=500,height=700');\">Upload Img</a></div>";
 	}
 	
 	function wb_cars_in_use(){
 		$cars_in_use = "";
 		if(count($this->carsOnAllMyWBs) > 0){
-			$cars_in_use .= "<div style=\"display: block; border: 1px solid peru; background-color: lightgreen; padding: 5px;\">
+			$cars_in_use .= "\n<div style=\"display: block; border: 1px solid peru; background-color: lightgreen; padding: 5px;\">
 				<strong>Cars in Use Summary:</strong><br />";
 			for($i=0;$i<count($this->carsOnAllMyWBs);$i++){
-				$cars_in_use .= "<div style=\"display: inline-block; padding: 3px; border: 1px solid white; margin: 2px; background-color: #ccc; font-size: 9pt;\">".$this->carsOnAllMyWBs[$i]['NUM']."&nbsp;(".$this->carsOnAllMyWBs[$i]['AAR'].")";
+				$cars_in_use .= "\n<div style=\"display: inline-block; padding: 3px; border: 1px solid white; margin: 2px; background-color: #ccc; font-size: 9pt;\">".$this->carsOnAllMyWBs[$i]['NUM']."&nbsp;(".$this->carsOnAllMyWBs[$i]['AAR'].")";
 				if(strlen($this->carsOnAllMyWBs[$i]['REP_MK']) > 0){ $cars_in_use .= "&nbsp;on&nbsp;".$this->carsOnAllMyWBs[$i]['REP_MK']; }
 				if(strlen($this->carsOnAllMyWBs[$i]['TR_ID']) > 0){ $cars_in_use .= "&nbsp;/&nbsp;".$this->carsOnAllMyWBs[$i]['TR_ID']; }
-				$cars_in_use .= "</div>";
+				$cars_in_use .= "\n</div>";
 			}
-			$cars_in_use .= "</div>";
+			$cars_in_use .= "\n</div>";
 		}
 		return $cars_in_use;
 	}
@@ -707,6 +711,7 @@ class Home extends CI_Controller {
 		//$mess = @json_decode($this->waybills[$me]->messages, TRUE);
 		$msgs = "";
 		$cntr = 0;
+		$tid = 0;
 		//for($ri=0;$ri<count($this->my_rr_ids);$ri++){
 			$mess = (array)$this->Waybill_model->get_messages($this->waybills[$me]->id,0);
 			if(count($mess) > 0){
@@ -717,13 +722,30 @@ class Home extends CI_Controller {
 				//$this->content['html'] .= $this->wb_message_details($mess[count($mess)-1])."<hr />";
 				//for($wi=0;$wi<count($mess)-1;$wi++){
 				for($wi=0;$wi<count($mess);$wi++){
+					$tid = $mess[$wi]->tid;
 					$mess[$wi] = (array)$mess[$wi];
-					$msgs .= $this->wb_message_details($mess[$wi])."<hr />";
+					$msgs .= $this->wb_message_details($mess[$wi]); //."<hr />";
 					$cntr++;
 				}
 			}
 		//}
-		if($cntr > 0){ $this->content['html'] .= "<br />".$cntr." messages:<br />".$msgs; }
+		if(!isset($this->content['html_fluxbb_forms'])){ $this->content['html_fluxbb_forms'] = ""; }
+		$this->content['html'] .= "\n<div class=\"wb_btn\">
+			<a href=\"javascript:{}\" onclick=\"document.getElementById('fluxbb".$this->waybills[$me]->id."').submit();\">New Msg</a>
+			</div>";
+		$this->content['html'] .= "\n<div class=\"wb_btn\">
+			<a href=\"".WEB_ROOT."/forum/\">View Forum</a>
+			</div>";
+		$this->content['html_fluxbb_forms'] .= "<form style=\"display: none;\" method=\"post\" id=\"fluxbb".$this->waybills[$me]->id."\" action=\"".str_replace("http://".$_SERVER['SERVER_NAME'],"",WEB_ROOT)."/forum/post.php?fid=2\">
+			<input type=\"hidden\" name=\"req_subject\" value=\"Waybill:".$this->waybills[$me]->waybill_num."\" />
+			</form>";
+		if($cntr > 0){ 
+			if($tid > 0){ 
+				//$this->content['html'] .= "\n<div class=\"wb_btn\"><a href=\"".WEB_ROOT."/forum/viewtopic.php?pid=".$tid."\">View Topic</a></div>";
+			}
+			$this->content['html'] .= "<br />".$cntr." messages:<br />".$msgs; 
+		}else{
+		}
 	}
 	
 	function wb_images($me){
@@ -745,26 +767,47 @@ class Home extends CI_Controller {
 	}
 	
 	function wb_message_details($mess_arr){
+		/* REPLACED BY BELOW TO USE fluxbb INSTEAD - 2020-08-12.
 		$m = $mess_arr['datetime']."<br />From: ".$this->mricf->qry("ichange_rr", $mess_arr['rr'], "id", "report_mark").", To: ".$this->mricf->qry("ichange_rr", $mess_arr['torr'], "id", "report_mark")."&nbsp;<br /><strong>".$mess_arr['text']."</strong>"; //.anchor("../messaging/lst/".$wbdat[$i]->id,"View");
 		if($mess_arr['ack'] < 1){ $m .= "<div style=\"background-yellow; padding: 5px; text-align: center;\">Not acknowledged</div>"; }
+		*/
+		$m = "<div style=\"margin: 2px; padding: 4px; border: 1px solid silver; border-radius: 4px; background-color: ivory;\">".
+			date('Y-m-d H:i:s',$mess_arr['posted'])."<br />
+			<div class=\"wb_btn\" style=\"float: right;\"><a href=\"".WEB_ROOT."/forum/viewtopic.php?id=".$mess_arr['tid']."\">View Topic</a></div>
+			From: ".$mess_arr['poster']."&nbsp;<br />
+			Subject: ".$mess_arr['subject']."<br />
+			<strong>".$mess_arr['message']."</strong>
+			</div>";
+		//if($mess_arr['ack'] < 1){ $m .= "<div style=\"background-yellow; padding: 5px; text-align: center;\">Not acknowledged</div>"; }
 		return $m;
 	}
 
 	function wb_link_map($id){
 		//$this->content['html'] .= "<input type=\"button\" value=\"View Map\" onclick=\"window.location = '".WEB_ROOT."/map/view/".$id."'\" />"; //"<a href=\"map/view/".$id."\">View Map</a><br />";
-		$this->content['html'] .= "<div class=\"wb_btn\"><a href=\"javascript:{}\" onclick=\"window.location = '".WEB_ROOT."/map/view/".$id."'\">View Map</a></div><br />";	
+		$this->content['html'] .= "<div class=\"wb_btn\"><a href=\"javascript:{}\" onclick=\"window.location = '".WEB_ROOT."/map/view/".$id."'\">View Map</a></div>";	
 	}
-	
-	function wb_lnk_mess($tmp){
-		$this->content['html'] .= "<div class=\"wb_lnk_mess\">";
+
+	function wb_links($tmp){
+		$this->content['html'] .= "<div class=\"wb_lnk_mess\" style=\"float: right;\">";
 		$this->wb_link_view($this->waybills[$tmp]->id);
 		if(isset($_COOKIE['rr_sess']) && @$icr == 0){ 
 			$this->wb_link_edit($this->waybills[$tmp]->id);
-			$this->wb_link_messaging($this->waybills[$tmp]->id);
+			//$this->wb_link_messaging($this->waybills[$tmp]->waybill_num); // $this->waybills[$tmp]->id = 2020-08-12
 			$this->wb_link_image($this->waybills[$tmp]->id);
+			$this->wb_link_map($this->waybills[$tmp]->id);
 		}
-		$this->wb_link_map($this->waybills[$tmp]->id);
-		$this->wb_messages($tmp);
+		//$this->wb_link_map($this->waybills[$tmp]->id);
+		//$this->wb_messages($tmp);
+		$this->content['html'] .= "</div>";
+	}
+
+	function wb_lnk_mess($tmp){
+		$this->content['html'] .= "<div class=\"wb_lnk_mess\">";
+		if(isset($_COOKIE['rr_sess']) && @$icr == 0){ 
+			$this->wb_messages($tmp);
+		}
+		//$this->wb_link_map($this->waybills[$tmp]->id);
+		//$this->wb_messages($tmp);
 		$this->content['html'] .= "</div>";
 	}
 	
@@ -821,7 +864,7 @@ class Home extends CI_Controller {
 		}
 		$str = "";
 		$str .= "<span class=\"rr_tr\">Currently on / allocated to: ";
-		$str .= "<select name=\"rr_sel[]\ style=\"font-size: 8pt; height: 22px;\" onchange=\"home_update('allocRR',this.value,".$this->waybills[$tmp]->id.");\"><option value=\"".@$this->waybills[$tmp]->rr_id_handling."\">".@$this->arr['allRR'][$this->waybills[$tmp]->rr_id_handling]->report_mark."</option>".$this->railroad_opts_lst."</select>";
+		$str .= "<select name=\"rr_sel[]\" style=\"font-size: 8pt; height: 22px;\" onchange=\"home_update('allocRR',this.value,".$this->waybills[$tmp]->id.");\"><option value=\"".@$this->waybills[$tmp]->rr_id_handling."\">".@$this->arr['allRR'][$this->waybills[$tmp]->rr_id_handling]->report_mark."</option>".$this->railroad_opts_lst."</select>";
 		$str .= "&nbsp;&nbsp;SW Order: <select name=\"sw_order[]\" onchange=\"home_update('swOrd',this.value,".$this->waybills[$tmp]->id.");\">".$sw_ord."</select>"; 
 		$str .= "<br />";
 		$str .= form_hidden("wb_id[]",$this->waybills[$tmp]->id);

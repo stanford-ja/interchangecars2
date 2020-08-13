@@ -12,9 +12,9 @@
 header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");
+// <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<!-- <!DOCTYPE html> // -->
+<!DOCTYPE html>
 <html xmlns:fb="http://ogp.me/ns/fb#" itemscope itemtype="http://schema.org/Article">
 	<head>
 		<title><?php echo $pgTitle; ?></title>
@@ -267,25 +267,11 @@ header("Pragma: no-cache");
 			</fb:like><br />
 		<?php } ?>
 		<?php if(strpos("a".@$myRR[0]->social,"twitter") > 0){ ?>
-			<!--<a href="https://twitter.com/share" class="twitter-share-button" data-url="<?php echo WEB_ROOT; ?>/index.php/home" data-text="MRICF Interchange Cars Application V2.0" style="padding: none; margin: 0px; width: 100px; display: inline;">Tweet</a> // -->
 			<a href="https://twitter.com/intent/tweet?text=MRICF Model Rail Interchange Cars Forwarding V2.0&url=<?php echo str_replace(array(":","/"),array("%3A","%2F"),WEB_ROOT."/home"); ?>" target="tweeet4me" style="display: inline-block; padding: 4px; border-radius: 4px; background-color: CornflowerBlue; color: white; margin-right: 6px; text-decoration: none;">Tweet</a>
 		<?php } ?>
-			<script>
-			/*
-			$(document).ready(function(){
-			!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
-			});
-			*/
-			</script>
 		</span>
-		<!-- 
-		<span style="float: right;">
-		<g:plusone size="small" annotation="inline" width="100" href="<?php echo WEB_ROOT; ?>/index.php/home"></g:plusone>
-		</span>
-		// -->
 		<?php } ?>
 	<?php if(isset($pgTitle)){ ?>
-</span>
 	<h2 style="text-align: right;">
 	<span class="small_txt" style="float:left; font-weight: bold; text-align: left;">
 		<?php if(isset($_COOKIE['_tz'])){ ?>

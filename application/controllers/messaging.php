@@ -7,6 +7,7 @@ class Messaging extends CI_Controller {
 	function __construct(){
 		// Auto ran method.
 		parent::__construct(); // Necessary in all __construct methods in CodeIgniter!!
+		header("Location:".WEB_ROOT."/forum/"); // Messaging now done via forum! 2020-08-13
 		$this->load->helper('url');
 		$this->load->helper('form');
 		$this->load->library('mricf');
