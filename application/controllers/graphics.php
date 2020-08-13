@@ -93,6 +93,8 @@ class Graphics extends CI_Controller {
 		//$content3['html'] .= @$this->uconfig['max_width']."px X ".@$this->uconfig['max_height']."px,";
 		$content3['html'] .= "Allowed File Type: ".$this->uconfig['allowed_types']."<br />Max Description Length: 80 characters.<br />";
 		$content3['html'] .= "One image per railroad per waybill is allowed. If you upload a new image and one already exists for your railroad it will replace the previous one. If the replacement image does not display after the upload, <a href=\"javascript:{}\" onclick=\"window.location.reload();\">Click Here</a>.<br />";
+
+		/*
 		$fils = get_filenames($this->filePath);
 		//echo "<pre>"; print_r($fils); echo "</pre>";
 		for($i=0;$i<count($fils);$i++){
@@ -102,6 +104,18 @@ class Graphics extends CI_Controller {
 				$content3['html'] .= "</a>";
 			}
 		}
+		*/
+		
+		// Get image from db table
+		$sql = "SELECT `image` FROM `ichange_wb_img` WHERE `img_name` LIKE '".$id."-%'";
+		$dat = (array)$this->Generic_model->qry($sql);
+		for($d=0;$d<count($dat);$d++){
+			$content3['html'] .= "<img src=\"".$dat[$d]->image."\" style=\"height: 100px; margin: 3px;\">";
+			$content3['html'] .= "<br />";			
+			$content3['html'] .= "<a href=\"javascript:{}\" onclick=\"window.open('".$dat[$d]->image."','".$d."','width=500,height=500');\">View Full Size</a><b />";
+			$content3['html'] .= "<br />";			
+		}
+		
 		$content3['html'] .= "</div>";
 
 		// Load views
@@ -118,7 +132,9 @@ class Graphics extends CI_Controller {
 		$p = $_POST;
 		if(strlen($p['description']) > 80){ $p['description'] = substr($p['description'],0,80); }
 		$p['rr_sess'] = $this->arr['rr_sess'];
-		$this->uconfig['file_name'] = $p['id']."-".$p['rr_sess'].".jpg";
+		$this->uconfig['file_name'] = $p['id']."-".$p['rr_sess'].".jpg"; // - REPLACED 2020-08-13
+		$image_base64 = base64_encode(file_get_contents($_FILES['user_file']['tmp_name']) );
+		$image = 'data:'.$_FILES['user_file']['type'].';base64,'.$image_base64;
 
 		//$this->load->library('upload', $config);
 		$this->upload->initialize($this->uconfig);
@@ -129,18 +145,27 @@ class Graphics extends CI_Controller {
 			//echo "<pre>"; print_r($config); "</pre>";
 			//echo "<pre>"; print_r($this->upload->data()); echo "</pre>";
 			//exit();
-		}else	{
+		}else{
 			//$imagick = new \Imagick(realpath(DOC_ROOT."/waybill_images/".$this->uconfig['file_name']));
 			//$imagick->resizeImage($width, $height, $filterType, $blur, $bestFit);
 			//$imagick->resizeImage( 200, 200,  $imagick::FILTER_LANCZOS, 1, TRUE);
 			$ex = "convert ".DOC_ROOT."/waybill_images/".$this->uconfig['file_name']." -resize 500 ".DOC_ROOT."/waybill_images/".$this->uconfig['file_name'];
 			//echo $ex; exit();
-			shell_exec($ex);
+			//shell_exec($ex); REPLACED BY BELOW - 2020-08-13
+			unlink(DOC_ROOT."/waybill_images/".$this->uconfig['file_name']);
+			/* REPLACED WITH BELOW = 2020-08-13
 			$this->Generic_model->change("DELETE FROM `ichange_wb_img` WHERE `img_name` = '".$this->uconfig['file_name']."'");
 			if(strlen($p['description']) > 0){
 				$this->Generic_model->change("INSERT INTO `ichange_wb_img` SET `added` = '".date('U')."', `img_name` = '".$this->uconfig['file_name']."', `description` = '".str_replace("'","",$p['description'])."'");
-			}
-			header("Location:".WEB_ROOT."/graphics/waybill/".$p['id']);
+			} */
+			$this->Generic_model->change("DELETE FROM `ichange_wb_img` WHERE `img_name` = '".$this->uconfig['file_name']."'");
+			$sql = "INSERT INTO `ichange_wb_img` SET 
+				`added` = '".date('U')."', 
+				`img_name` = '".$this->uconfig['file_name']."', 
+				`description` = '".str_replace("'","",$p['description'])."', 
+				`image` = '".$image."'";
+			$this->Generic_model->change($sql);
+			header("Location:".WEB_ROOT.INDEX_PAGE."/graphics/waybill/".$p['id']);
 			//$data = array('upload_data' => $this->upload->data());
 			//$this->load->view('upload_success', $data);
 		}
@@ -155,7 +180,8 @@ class Graphics extends CI_Controller {
 		$content['desc_form'] = 1; // Used to test in graphics view which elements to display
 		$content['form'] = form_open_multipart("../graphics/descSave");
 		$content['referrer'] = $refer;
-		$content['img_name'] = $img;
+		$content['img_name'] = $img; //$img; - CHANGED - 2020-08-13
+		$content['image'] = $im[0]->image; //$img; - CHANGED - 2020-08-13
 		$content['description'] = $im[0]->description;
 		$content2['html'] = "<h2>Change Image Description</h2>";
 
@@ -170,12 +196,15 @@ class Graphics extends CI_Controller {
 		// SAve method for 'description for a photo' form
 		$p = $_POST;
 		// Process data
+		/* REPLACED WITH BELOW - 2020-08-13
 		$this->Generic_model->change("DELETE FROM `ichange_wb_img` WHERE `img_name` = '".$p['img_name']."'");
 		$sql = "INSERT INTO `ichange_wb_img` SET `description` = '".str_replace("'","",$p['description'])."', `img_name` = '".$p['img_name']."', `added` = '".date('U')."'";
+		*/
+		$sql = "UPDATE `ichange_wb_img` SET `description` = '".str_replace("'","",$p['description'])."', `added` = '".date('U')."' WHERE `img_name` = '".$p['img_name']."'";
 		$this->Generic_model->change($sql);
 		
 		// Redirest or display message
-		if(isset($p['referrer'])){ header("Location:".WEB_ROOT."/".str_replace(".","/",$p['referrer'])); }else{ 
+		if(isset($p['referrer'])){ header("Location:".WEB_ROOT.INDEX_PAGE."/".str_replace(".","/",$p['referrer'])); }else{ 
 			$content['html'] = "Image description updated, you can now close this window.";
 			$this->load->view('header', $this->arr);
 			$this->load->view("html",$content);
@@ -238,11 +267,12 @@ class Graphics extends CI_Controller {
 	public function wbviewall(){
 		// Display all waybill images as thumbnails
 		
-		$fils = get_filenames($this->filePath);
-		rsort($fils);
+		$fils = (array)$this->Generic_model->qry("SELECT `img_name` FROM `ichange_wb_img` WHERE LENGTH(`image`) > 0 ORDER BY `img_name`"); //get_filenames($this->filePath); - REPLACED - 2020-08-13
+		//rsort($fils);
 		//echo "<pre>"; print_r($fils); echo "</pre>";
 		$content['html'] = "<h2>All Waybill Images</h2>Click an image to view it larger in a pop-up window.<br /><br />";
 		for($i=0;$i<count($fils);$i++){
+			$fils[$i] = $fils[$i]->img_name;
 			$tmp = explode("-",str_replace(".jpg","",$fils[$i]));
 			//echo "<pre>"; print_r($tmp); echo "</pre>";
 			$wb = (array)$this->Generic_model->qry("SELECT * FROM `ichange_waybill` WHERE `id` = '".$tmp[0]."'");
@@ -250,15 +280,20 @@ class Graphics extends CI_Controller {
 			$im = (array)$this->Generic_model->qry("SELECT * FROM `ichange_wb_img` WHERE `img_name` = '".$fils[$i]."'");
 			//echo "<pre>"; print_r($wb); echo "</pre>";
 			$content['html'] .= "<div style=\"display: inline-block; padding: 5px; text-align: center; vertical-align: top; height: auto; max-width: 200px;\">";
+			/* REPLACED BY BELOW - 2020-08-13
 			$content['html'] .= "<a href=\"javascript:{}\" onclick=\"window.open('".WEB_ROOT."/graphics/wbview/".str_replace(".jpg","",$fils[$i])."','".$i."','width=600,height=650');\">";
 			$content['html'] .= "<img src=\"".$this->webPath.$fils[$i]."\" style=\"height: 100px; margin: 3px;\">";
+			*/
+			$content['html'] .= "<a href=\"javascript:{}\" onclick=\"window.open('".WEB_ROOT.INDEX_PAGE."/graphics/wbview/".str_replace(".jpg","",$fils[$i])."','".$i."','width=600,height=650');\">";
+			$content['html'] .= "<img src=\"".$im[0]->image."\" style=\"height: 100px; margin: 3px;\">";
 			$content['html'] .= "</a>";
-			$content['html'] .= "<br />Uploaded by ".$rr[0]->report_mark;
+			$content['html'] .= "<br /><span style=\"font-size: 8pt;\">File Name: ".$im[0]->img_name."</span>";
+			$content['html'] .= "<br />Uploaded by ".@$rr[0]->report_mark;
 			if($tmp[1] == $this->arr['rr_sess']){ 
-				$content['html'] .= "<br /><a href=\"".WEB_ROOT."/graphics/desc/".$tmp[0]."/graphics.wbviewall\">Edit</a> "; 
-				$content['html'] .= "<a href=\"javascript:{}\" onclick=\"if(confirm('Are you sure you want to delete\\nthis image?')){ window.location = '".WEB_ROOT."/graphics/wbdel/".$tmp[0]."'; }\">Delete</a>"; 
+				$content['html'] .= "<br /><a href=\"".WEB_ROOT.INDEX_PAGE."/graphics/desc/".$tmp[0]."/graphics.wbviewall\">Edit</a> "; 
+				$content['html'] .= "<a href=\"javascript:{}\" onclick=\"if(confirm('Are you sure you want to delete\\nthis image?')){ window.location = '".WEB_ROOT.INDEX_PAGE."/graphics/wbdel/".$tmp[0]."'; }\">Delete</a>"; 
 			}
-			if(isset($wb[0]->waybill_num) && strlen($wb[0]->waybill_num) > 0){ $content['html'] .= "<br /><a href=\"".WEB_ROOT."/waybill/view/".$tmp[0]."\">View WB ".$wb[0]->waybill_num."</a>"; }
+			if(isset($wb[0]->waybill_num) && strlen($wb[0]->waybill_num) > 0){ $content['html'] .= "<br /><a href=\"".WEB_ROOT.INDEX_PAGE."/waybill/view/".$tmp[0]."\">View WB ".$wb[0]->waybill_num."</a>"; }
 			if(isset($im[0]->description) && strlen($im[0]->description) > 0){ $content['html'] .= "<br /><span style=\"font-size: 9pt;\">".$im[0]->description."</span>"; }
 			$content['html'] .= "</div>";
 		}
@@ -290,7 +325,8 @@ class Graphics extends CI_Controller {
 		$im = (array)$this->Generic_model->qry("SELECT * FROM `ichange_wb_img` WHERE `img_name` = '".$img."'");
 
 		$content['html'] = "<h2>View Waybill Image</h2>";
-		$content['html'] .= "<img src=\"".$this->webPath.$img."\" style=\"width: 500px;\" />";
+		//$content['html'] .= "<img src=\"".$this->webPath.$img."\" style=\"width: 500px;\" />";
+		$content['html'] .= "<img src=\"".$im[0]->image."\" style=\"width: 500px;\" />";
 		$content['html'] .= "<br />Uploaded by ".$rr[0]->report_mark;
 		if(isset($wb[0]->waybill_num) && strlen($wb[0]->waybill_num) > 0){ $content['html'] .= "<br />WB ".$wb[0]->waybill_num; }
 		if(isset($im[0]->description) && strlen($im[0]->description) > 0){ $content['html'] .= "<br /><span style=\"font-size: 9pt;\">".$im[0]->description."</span>"; }

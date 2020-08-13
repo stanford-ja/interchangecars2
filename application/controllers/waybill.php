@@ -180,6 +180,7 @@ class Waybill extends CI_Controller {
 				
 		// Create data variables for waybill form fields
 		$this->dat['id'] = $id;
+		$this->arr['id'] = $id;
 		//$this->arr['id'] = $id;
 		$this->dat['fld1'] = $wb_date;
 		$this->dat['fld2'] = @$this->dat['data'][0]->rr_id_from;

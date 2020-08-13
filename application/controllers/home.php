@@ -88,7 +88,11 @@ class Home extends CI_Controller {
 		//$this->load->model('Waybill_model','',TRUE);
 		
 		// Get list of waybill images
-		$this->fils = get_filenames(DOC_ROOT."/waybill_images/");
+		// $this->fils = get_filenames(DOC_ROOT."/waybill_images/"); - REPLACED BY BELOW - 2020-08-13
+		$this->fils = array();
+		$tmp1 = "SELECT `img_name` FROM `ichange_wb_img`";
+		$tmp2 = (array)$this->Generic_model->qry($tmp1);
+		for($t=0;$t<count($tmp2);$t++){ $this->fils[] = $tmp2[$t]->img_name; }
 
 		// Generate Afil WB list (if applicable)
 		//$this->my_rr_ids = $this->mricf->affil_ids($this->arr['rr_sess'],$this->arr['allRR']); - MOVED INTO __construct() METHOD 2018-01-14 
@@ -753,8 +757,11 @@ class Home extends CI_Controller {
 		for($i=0;$i<count($this->fils);$i++){
 			if(strpos("Z".$this->fils[$i],$this->waybills[$me]->id."-") > 0){
 				$tmp = explode("-",str_replace(".jpg","",$this->fils[$i]));
-				$fil_html .= "<a href=\"javascript:{}\" onclick=\"window.open('".WEB_ROOT."/graphics/wbview/".str_replace(".jpg","",$this->fils[$i])."','".$i."','width=600,height=650');\">";
-				$fil_html .= "<img src=\"".WEB_ROOT."/waybill_images/".$this->fils[$i]."\" title=\"Uploaded by ".$this->arr['allRR'][$tmp[1]]->report_mark."\" alt=\"\" style=\"width: 100px; margin: 3px;\">";
+				$sql = "SELECT `image` FROM `ichange_wb_img` WHERE `img_name` = '".$this->fils[$i]."'";
+				$tmp2 = (array)$this->Generic_model->qry($sql);
+				$fil_html .= "<a href=\"javascript:{}\" onclick=\"window.open('".WEB_ROOT.INDEX_PAGE."/graphics/wbview/".str_replace(".jpg","",$this->fils[$i])."','".$i."','width=600,height=650');\">";
+				//$fil_html .= "<img src=\"".WEB_ROOT."/waybill_images/".$this->fils[$i]."\" title=\"Uploaded by ".$this->arr['allRR'][$tmp[1]]->report_mark."\" alt=\"\" style=\"width: 100px; margin: 3px;\">";
+				$fil_html .= "<img src=\"".$tmp2[0]->image."\" title=\"Uploaded by ".$this->arr['allRR'][$tmp[1]]->report_mark."\" alt=\"\" style=\"width: 100px; margin: 3px;\">";
 				$fil_html .= "</a>";
 			}
 		}

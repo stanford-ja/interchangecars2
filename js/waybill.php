@@ -457,11 +457,11 @@ $f21 = str_replace("{\"AAR_REQD\":\"UNDEFINED\",\"NUM\":\"UNDEFINED\",\"AAR\":\"
 			<?php } ?>
 		});
 	}
-
-	setInterval(function() {
+	
+	function wbImages(){
 			<?php if($rr_sess > 0){ ?>
 			if(document.getElementById('wb_image_div')){
-			var p = "<?php echo WEB_ROOT; ?>/ajax/wbImages/<?php echo @$id; ?>";
+			var p = "<?php echo WEB_ROOT.INDEX_PAGE; ?>/ajaxfun/wbImages/<?php echo @$id; ?>";
 			$.get(p,function(data){		
 				fnd = data;
 				if(fnd.length > 0){
@@ -470,4 +470,16 @@ $f21 = str_replace("{\"AAR_REQD\":\"UNDEFINED\",\"NUM\":\"UNDEFINED\",\"AAR\":\"
 			});
 			}
 			<?php } ?>		
-	}, 90000); // divide value by 1000 to work out seconds 
+	}
+
+	//setInterval(function() {
+	//	wbImages();
+	//}, 90000); // divide value by 1000 to work out seconds 
+
+	$(document).ready(function(){
+		wbImages();
+	});
+	
+	window.onfocus = function(){
+		wbImages();
+	};

@@ -1,19 +1,24 @@
 <?php
 // Graphic upload view, all types
+/* <img src="<?php echo $image; ?>" style="width: 300px;" /><br /><br />
+ * WAS
+ * 	<img src="<?php echo WEB_ROOT."/waybill_images/".$img_name; ?>" style="width: 300px;" /><br /><br />
+ * BEFORE 2020-08-13
+ */
 ?>
 <?php echo $form; ?>
 <?php if(isset($referrer) && strlen($referrer) > 0){ echo "<input type=\"hidden\" name=\"referrer\" value=\"".$referrer."\" />"; } ?>
 <?php if(isset($id)){ echo "<input type=\"hidden\" name=\"id\" value=\"".$id."\" />"; } ?>
 <?php if(isset($desc_form)){ /* START DESCRIPTION FORM */ ?>
 	<input type="hidden" name="img_name" value="<?php echo $img_name; ?>" />
-	<?php if(file_exists(DOC_ROOT."/waybill_images/".$img_name)){ ?>
-	<img src="<?php echo WEB_ROOT."/waybill_images/".$img_name; ?>" style="width: 300px;" /><br /><br />
+	<?php /*if(file_exists(DOC_ROOT."/waybill_images/".$img_name)){*/ ?>
+	<img src="<?php echo $image; ?>" style="width: 300px;" /><br /><br />
 	<div style="display: inline-block; padding: 0px;">
 		Enter Image Description Below:<br />
 		<input type="text" name="description" value="<?php echo @$description; ?>" size="30" maxlength="80" onkeyup="document.getElementById('desc_len').innerHTML = 'Lengh: '+this.value.length;" /> <span id="desc_len"></span><br />
 		<input type="submit" name="submit" value="Submit" />
 	</div>		
-	<?php }else{ echo "No photo exists for the selecteds railroad / waybill combination!</form></html>"; exit(); } ?>
+	<?php /*}else{ echo "No photo exists for the selecteds railroad / waybill combination!</form></html>"; exit(); }*/ ?>
 <?php /* END DESCRIPTION FORM */ }elseif(isset($car_form)){ /* START CAR UPLOAD FORM */ ?>
 	<input type="hidden" name="car" value="<?php echo $car; ?>" />
 	<input type="hidden" name="car_num" value="<?php echo $car_num; ?>" />
