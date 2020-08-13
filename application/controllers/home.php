@@ -686,7 +686,7 @@ class Home extends CI_Controller {
 			<input type=\"hidden\" name=\"req_subject\" value=\"Waybill:".$id."\" />
 			</form>
 			<div class=\"wb_btn\">
-			<a href=\"javascript:{}\" onclick=\"document.getElementById('fluxbb".$id."').submit();\">New Msg</a>
+			<a href=\"javascript:{}\" onclick=\"document.getElementById('fluxbb".$id."').submit();\">New Topic</a>
 			</div>";
 	}
 
@@ -735,7 +735,7 @@ class Home extends CI_Controller {
 		//}
 		if(!isset($this->content['html_fluxbb_forms'])){ $this->content['html_fluxbb_forms'] = ""; }
 		$this->content['html'] .= "\n<div class=\"wb_btn\">
-			<a href=\"javascript:{}\" onclick=\"document.getElementById('fluxbb".$this->waybills[$me]->id."').submit();\">New Msg</a>
+			<a href=\"javascript:{}\" onclick=\"document.getElementById('fluxbb".$this->waybills[$me]->id."').submit();\">New Topic</a>
 			</div>";
 		$this->content['html'] .= "\n<div class=\"wb_btn\">
 			<a href=\"".WEB_ROOT."/forum/\">View Forum</a>
@@ -780,7 +780,8 @@ class Home extends CI_Controller {
 		*/
 		$m = "<div style=\"margin: 2px; padding: 4px; border: 1px solid silver; border-radius: 4px; background-color: ivory;\">".
 			date('Y-m-d H:i:s',$mess_arr['posted'])."<br />
-			<div class=\"wb_btn\" style=\"float: right;\"><a href=\"".WEB_ROOT."/forum/viewtopic.php?id=".$mess_arr['tid']."\">View Topic</a></div>
+			<div class=\"wb_btn\" style=\"float: right; margin: 2px;\"><a href=\"".WEB_ROOT."/forum/viewtopic.php?id=".$mess_arr['tid']."\">View Topic</a></div> 
+			<div class=\"wb_btn\" style=\"float: right; margin: 2px;\"><a href=\"".WEB_ROOT."/forum/post.php?tid=".$mess_arr['tid']."\">Reply</a></div>
 			From: ".$mess_arr['poster']."&nbsp;<br />
 			Subject: ".$mess_arr['subject']."<br />
 			<strong>".$mess_arr['message']."</strong>
