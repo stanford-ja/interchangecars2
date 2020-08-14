@@ -778,14 +778,14 @@ class Home extends CI_Controller {
 		$m = $mess_arr['datetime']."<br />From: ".$this->mricf->qry("ichange_rr", $mess_arr['rr'], "id", "report_mark").", To: ".$this->mricf->qry("ichange_rr", $mess_arr['torr'], "id", "report_mark")."&nbsp;<br /><strong>".$mess_arr['text']."</strong>"; //.anchor("../messaging/lst/".$wbdat[$i]->id,"View");
 		if($mess_arr['ack'] < 1){ $m .= "<div style=\"background-yellow; padding: 5px; text-align: center;\">Not acknowledged</div>"; }
 		*/
+		if(!isset($this->BBCode)){ $this->load->helper("bbcode_helper"); }
 		$m = "<div style=\"margin: 2px; padding: 4px; border: 1px solid silver; border-radius: 4px; background-color: ivory;\">".
 			date('Y-m-d H:i:s',$mess_arr['posted'])."<br />
 			<div class=\"wb_btn\" style=\"float: right; margin: 2px;\"><a href=\"".WEB_ROOT."/forum/viewtopic.php?id=".$mess_arr['tid']."\">View Topic</a></div> 
 			<div class=\"wb_btn\" style=\"float: right; margin: 2px;\"><a href=\"".WEB_ROOT."/forum/post.php?tid=".$mess_arr['tid']."\">Reply</a></div>
 			From: ".$mess_arr['poster']."&nbsp;<br />
-			Subject: ".$mess_arr['subject']."<br />
-			<strong>".$mess_arr['message']."</strong>
-			</div>";
+			Subject: ".$mess_arr['subject']."<hr style=\"border: 1px dotted #ccc;\" />
+			".$this->BBCode->bbcode_to_html($mess_arr['message'])."</div>";
 		//if($mess_arr['ack'] < 1){ $m .= "<div style=\"background-yellow; padding: 5px; text-align: center;\">Not acknowledged</div>"; }
 		return $m;
 	}

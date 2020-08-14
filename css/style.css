@@ -418,3 +418,13 @@ background-color: yellow;
 .optionHeading {
 	background-color: brown; color: white;
 }
+
+blockquote {
+	border: 1px solid #888;
+	border-left: 4px solid maroon;
+	background-color: #ddd;
+	padding: 5px;
+	border-radius: 5px;
+}
+
+.wb_lnk_mess img { max-width: 75%; }
