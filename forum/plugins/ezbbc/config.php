@@ -6,7 +6,7 @@ $ezbbc_config = array (
   'style_folder' => 'Default',
   'smilies_set' => 'ezbbc_smilies',
   'h_id' => 'no_h_id',
-  'video' => 'no_video',
+  'video' => 'video',
   'img_upload' => 'no_img_upload',
   'img_folder' => 'img',
   'max_img_width' => 300,
@@ -45,7 +45,7 @@ $ezbbc_config = array (
   'signature_toolbar' => 'signature_toolbar',
   'smiliesbar_position' => 'sb_over_tb',
   'bars_position' => 'bars_left',
-  'syntax_highlight' => 'no_syntax_highlight',
+  'syntax_highlight' => 'syntax_highlight',
 );
 
 ?>
