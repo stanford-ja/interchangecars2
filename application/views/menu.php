@@ -81,6 +81,7 @@
 						<div class="td_menu" style="display: inline-block;"><span style="float: right;" data-balloon="View the Currently Stored Freight List." data-balloon-pos="right" data-balloon-length="large">[?]</span> <?php echo anchor(WEB_ROOT.INDEX_PAGE."/storedfreight", "Stored"); ?></div>
 		
 						<?php if($rr_sess > 0){ ?>			
+						<div class="td_menu" style="display: inline-block;"><span style="float: right;" data-balloon="View and post MRICF Forums and Messaging topics." data-balloon-pos="right" data-balloon-length="large">[?]</span> <?php echo anchor(WEB_ROOT."/forum/", "Forum"); ?></div>
 						<div class="td_menu" style="display: inline-block;"><?php echo anchor(WEB_ROOT.INDEX_PAGE."/rr/edit/0", "Create RR"); ?></div>
 						<?php } ?>
 						<div class="td_menu" style="display: inline-block;"><?php echo anchor(WEB_ROOT.INDEX_PAGE."/ind40k", "OpSig 40k"); ?></div>
@@ -180,6 +181,29 @@
 			<?php } ?>
 			</div> <!-- END OF tbl1 MENU TABLE // -->
 	</div> <!-- START OF mainMenu MENU DIV // -->
+				<?php if($rr_sess > 0){
+					$latestts = intval(date('U')-(86400*21));
+					$topic_ids = array();
+					$forrecent = "";
+					$frmsql = "SELECT `ichange_fluxbb_posts`.*, `ichange_fluxbb_topics`.`subject` 
+						FROM `ichange_fluxbb_posts` 
+						LEFT JOIN `ichange_fluxbb_topics` ON `ichange_fluxbb_posts`.`topic_id` = `ichange_fluxbb_topics`.`id` 
+						WHERE `ichange_fluxbb_posts`.`posted` > ".intval(date('U')-(86400*21))." 
+						ORDER BY `ichange_fluxbb_posts`.`posted` DESC";
+					$frmqry = $this->Generic_model->qry($frmsql);
+					for($frmid=0;$frmid<count($frmqry);$frmid++){
+						if(!in_array($frmqry[$frmid]->topic_id,$topic_ids)){
+							$forrecent .= "<div style=\"display: inline-block; padding: 4px; margin: 1px; background-color: ivory; border: 1px solid #888; border-radius: 4px; max-width: 380px; height: 40px; overflow: hidden;\">
+								<span style=\"float: right;\">&nbsp;<a href=\"".WEB_ROOT."/forum/viewtopic.php?id=".$frmqry[$frmid]->topic_id."\" target=\"forumTopicView\">View</a></span><div style=\"display: inline-block; max-width: 320px; max-height: 17px; overflow: hidden;\"><strong>".substr($frmqry[$frmid]->subject,0,60)."</strong></div><br /> 
+								".date('Y-m-d H:i',$frmqry[$frmid]->posted)." - <span style=\" max-width: 320px;\">".$this->BBCode->bbcode_to_html($frmqry[$frmid]->message)."</span> (".$frmqry[$frmid]->poster.")</div>";
+							$topic_ids[] = $frmqry[$frmid]->topic_id;
+						}
+					}
+					if(strlen($forrecent) > 0){
+						echo "<div style=\"display: block; text-align: top; background-color: antiquewhite; border: 1px solid #888; padding: 4px; border-radius: 4px; margin-top: 2px;\">Recent Forum Posts:<br />".$forrecent."</div>";
+					}
+				}
+				?>
 			
 			<div style="display: table; width: 100%; margin-bottom: 3px;" class="tbl1">
 			<div style="display: table-row;"><div style="display:table-cell; width: 100%;">
