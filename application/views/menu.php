@@ -181,7 +181,7 @@
 			<?php } ?>
 			</div> <!-- END OF tbl1 MENU TABLE // -->
 	</div> <!-- START OF mainMenu MENU DIV // -->
-				<?php if($rr_sess > 0 && isset($this->Generic_model)){
+				<?php if($rr_sess > 0 && strpos($_SERVER['PHP_SELF'],"/home") > 0){
 					$latestts = intval(date('U')-(86400*21));
 					$topic_ids = array();
 					$forrecent = "";
