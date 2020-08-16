@@ -232,7 +232,7 @@
 							$forrecent .= "<div class=\"forumpost\">
 								<span style=\"float: right;\">&nbsp;<a href=\"".WEB_ROOT."/forum/viewtopic.php?id=".$frmqry[$frmid]->topic_id."\" target=\"forumTopicView\">View</a></span>
 								<strong>".substr($frmqry[$frmid]->subject,0,60)."</strong><br /> 
-								In ".$frmqry[$frmid]->forum_name." by ".$frmqry[$frmid]->poster."<br />
+								<span style=\"color: #777;\">In ".$frmqry[$frmid]->forum_name." by ".$frmqry[$frmid]->poster."</span><br />
 								".date('Y-m-d H:i',$frmqry[$frmid]->posted)." - ".$this->BBCode->bbcode_to_html($frmqry[$frmid]->message)."</div>";
 							$topic_ids[] = $frmqry[$frmid]->topic_id;
 						}
