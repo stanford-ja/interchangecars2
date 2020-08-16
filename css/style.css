@@ -341,7 +341,7 @@ background-color: yellow;
 }
 
 .item {
-	/* MULTIPLE COLUMN DISPLAY USING MASONRY */
+	/* MULTIPLE COLUMN DISPLAY FOR WAYBILLS USING MASONRY */
 	width: 630px;
 	margin: 4px; padding: 4px;
 	border: 1px solid brown;
@@ -353,7 +353,7 @@ background-color: yellow;
 }
 
 .item2 {
-	/* MULTIPLE COLUMN DISPLAY USING MASONRY */
+	/* MULTIPLE COLUMN DISPLAY FOR WAYBILLS USING MASONRY */
 	width: 300px;
 	margin: 4px; padding: 4px;
 	border: 1px solid brown;
@@ -362,6 +362,24 @@ background-color: yellow;
 	box-shadow: brown 0px 0px 5px;
 	-moz-box-shadow: brown 0px 0px 5px;
 	-webkit-box-shadow: brown 0px 0px 5px;
+}
+
+div.forumposts {
+	background-color: antiquewhite; 
+	border: 1px solid #888; padding: 4px; 
+	border-radius: 4px; margin-top: 2px;
+	overflow: auto;
+	max-height: 250px;
+}
+
+.forumpost {
+	/* MULTIPLE COLUMN DISPLAY FOR FORUM POSTS USING MASONRY */
+	width: 300px;
+	max-height: 150px; overflow: hidden;
+	padding: 4px; margin: 1px; 
+	background-color: ivory; border: 1px solid #888; 
+	border-radius: 4px; 
+	/*max-width: 380px; height: 60px; overflow: hidden;*/
 }
 
 /* JQuery AutoComplete related fields */

@@ -181,29 +181,6 @@
 			<?php } ?>
 			</div> <!-- END OF tbl1 MENU TABLE // -->
 	</div> <!-- START OF mainMenu MENU DIV // -->
-				<?php if($rr_sess > 0 && strpos($_SERVER['PHP_SELF'],"/home") > 0){
-					$latestts = intval(date('U')-(86400*21));
-					$topic_ids = array();
-					$forrecent = "";
-					$frmsql = "SELECT `ichange_fluxbb_posts`.*, `ichange_fluxbb_topics`.`subject` 
-						FROM `ichange_fluxbb_posts` 
-						LEFT JOIN `ichange_fluxbb_topics` ON `ichange_fluxbb_posts`.`topic_id` = `ichange_fluxbb_topics`.`id` 
-						WHERE `ichange_fluxbb_posts`.`posted` > ".intval(date('U')-(86400*21))." 
-						ORDER BY `ichange_fluxbb_posts`.`posted` DESC";
-					$frmqry = $this->Generic_model->qry($frmsql);
-					for($frmid=0;$frmid<count($frmqry);$frmid++){
-						if(!in_array($frmqry[$frmid]->topic_id,$topic_ids)){
-							$forrecent .= "<div style=\"display: inline-block; padding: 4px; margin: 1px; background-color: ivory; border: 1px solid #888; border-radius: 4px; max-width: 380px; height: 40px; overflow: hidden;\">
-								<span style=\"float: right;\">&nbsp;<a href=\"".WEB_ROOT."/forum/viewtopic.php?id=".$frmqry[$frmid]->topic_id."\" target=\"forumTopicView\">View</a></span><div style=\"display: inline-block; max-width: 320px; max-height: 17px; overflow: hidden;\"><strong>".substr($frmqry[$frmid]->subject,0,60)."</strong></div><br /> 
-								".date('Y-m-d H:i',$frmqry[$frmid]->posted)." - <span style=\" max-width: 320px;\">".$this->BBCode->bbcode_to_html($frmqry[$frmid]->message)."</span> (".$frmqry[$frmid]->poster.")</div>";
-							$topic_ids[] = $frmqry[$frmid]->topic_id;
-						}
-					}
-					if(strlen($forrecent) > 0){
-						echo "<div style=\"display: block; text-align: top; background-color: antiquewhite; border: 1px solid #888; padding: 4px; border-radius: 4px; margin-top: 2px;\">Recent Forum Posts:<br />".$forrecent."</div>";
-					}
-				}
-				?>
 			
 			<div style="display: table; width: 100%; margin-bottom: 3px;" class="tbl1">
 			<div style="display: table-row;"><div style="display:table-cell; width: 100%;">
@@ -238,3 +215,31 @@
 				Then, once you have created the new railroad, log out and then log in as that railroad to add industries, trains, waybills, etc.
 				<?php } ?> 
 			</div>
+
+				<?php if($rr_sess > 0 && strpos($_SERVER['PHP_SELF'],"/home") > 0){
+					$latestts = intval(date('U')-(86400*21));
+					$topic_ids = array();
+					$forrecent = "";
+					$frmsql = "SELECT `ichange_fluxbb_posts`.*, `ichange_fluxbb_topics`.`subject`, `ichange_fluxbb_forums`.`forum_name` 
+						FROM `ichange_fluxbb_posts` 
+						LEFT JOIN `ichange_fluxbb_topics` ON `ichange_fluxbb_posts`.`topic_id` = `ichange_fluxbb_topics`.`id` 
+						LEFT JOIN `ichange_fluxbb_forums` ON `ichange_fluxbb_topics`.`forum_id` = `ichange_fluxbb_forums`.`id` 
+						WHERE `ichange_fluxbb_posts`.`posted` > ".intval(date('U')-(86400*21))." 
+						ORDER BY `ichange_fluxbb_posts`.`posted` DESC";
+					$frmqry = $this->Generic_model->qry($frmsql);
+					for($frmid=0;$frmid<count($frmqry);$frmid++){
+						if(!in_array($frmqry[$frmid]->topic_id,$topic_ids)){
+							$forrecent .= "<div class=\"forumpost\">
+								<span style=\"float: right;\">&nbsp;<a href=\"".WEB_ROOT."/forum/viewtopic.php?id=".$frmqry[$frmid]->topic_id."\" target=\"forumTopicView\">View</a></span>
+								<strong>".substr($frmqry[$frmid]->subject,0,60)."</strong><br /> 
+								In ".$frmqry[$frmid]->forum_name." by ".$frmqry[$frmid]->poster."<br />
+								".date('Y-m-d H:i',$frmqry[$frmid]->posted)." - ".$this->BBCode->bbcode_to_html($frmqry[$frmid]->message)."</div>";
+							$topic_ids[] = $frmqry[$frmid]->topic_id;
+						}
+					}
+					if(strlen($forrecent) > 0){
+						//echo "<div style=\"display: block; text-align: top; background-color: antiquewhite; border: 1px solid #888; padding: 4px; border-radius: 4px; margin-top: 2px;\">Recent Forum Posts:<br />".$forrecent."</div>";
+						echo "<div class=\"forumposts js-masonry\" data-masonry-options='{ \"itemSelector\": \".forumpost\" }'>".$forrecent."</div>";
+					}
+				}
+				?>

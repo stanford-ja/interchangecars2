@@ -132,7 +132,7 @@ header("Pragma: no-cache");
 		});
 		<?php // START ACTIONS TO DO ON SUCCESSFULL LOGIN
 		if($msCntr > 0){
-			echo "pushMessage('You have ".$msCntr." message/s that require acknowledgement for your railroad/s.','Messages','".WEB_ROOT."/images/directory-icon.png'); ";
+			//echo "pushMessage('You have ".$msCntr." message/s that require acknowledgement for your railroad/s.','Messages','".WEB_ROOT."/images/directory-icon.png'); ";
 		}
 		if($poCntr > 0){
 			echo "pushMessage('You have ".$poCntr." Purchase Order/s that require your attention.','Purchase Order requested','".WEB_ROOT."/images/notepad-icon.png'); ";
