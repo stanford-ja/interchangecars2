@@ -382,6 +382,8 @@ div.forumposts {
 	/*max-width: 380px; height: 60px; overflow: hidden;*/
 }
 
+.forumpost img { display: none; }
+
 /* JQuery AutoComplete related fields */
 .autocomplete-suggestions { border: 1px solid #999; background-color: #FFEBCD; cursor: default; overflow: auto; }
 .autocomplete-suggestion { padding: 3px 5px; font-size: 10pt; white-space: nowrap; overflow: hidden; }
