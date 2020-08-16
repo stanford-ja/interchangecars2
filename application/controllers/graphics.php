@@ -133,8 +133,8 @@ class Graphics extends CI_Controller {
 		if(isset($p['description']) && strlen($p['description']) > 80){ $p['description'] = substr($p['description'],0,80); }
 		$p['rr_sess'] = $this->arr['rr_sess'];
 		$this->uconfig['file_name'] = $p['id']."-".$p['rr_sess'].".jpg"; // - REPLACED 2020-08-13
-		$image_base64 = base64_encode(file_get_contents($_FILES['user_file']['tmp_name']) );
-		$image = 'data:'.$_FILES['user_file']['type'].';base64,'.$image_base64;
+		//$image_base64 = base64_encode(file_get_contents($_FILES['user_file']['tmp_name']) );
+		//$image = 'data:'.$_FILES['user_file']['type'].';base64,'.$image_base64;
 		//$img_thumb = 'data:'.$_FILES['user_file']['type'].';base64,'.$this->createThumbnail($_FILES['user_file']['tmp_name'],"");
 
 		//$this->load->library('upload', $config);
@@ -150,6 +150,13 @@ class Graphics extends CI_Controller {
 			//$imagick = new \Imagick(realpath(DOC_ROOT."/waybill_images/".$this->uconfig['file_name']));
 			//$imagick->resizeImage($width, $height, $filterType, $blur, $bestFit);
 			//$imagick->resizeImage( 200, 200,  $imagick::FILTER_LANCZOS, 1, TRUE);
+
+			$ex = "convert ".DOC_ROOT."/waybill_images/".$this->uconfig['file_name']." -resize 500 ".DOC_ROOT."/waybill_images/".$this->uconfig['file_name'];
+			//echo $ex; exit();
+			shell_exec($ex);
+			$image_base64 = base64_encode(file_get_contents($_FILES['user_file']['tmp_name']) );
+			$image = 'data:jpeg;base64,'.$image_base64;
+
 			$ex = "convert ".DOC_ROOT."/waybill_images/".$this->uconfig['file_name']." -resize 120 ".DOC_ROOT."/waybill_images/".$this->uconfig['file_name'];
 			//echo $ex; exit();
 			shell_exec($ex);
