@@ -231,16 +231,15 @@
 						if(!in_array($frmqry[$frmid]->topic_id,$topic_ids)){
 							$forrecent .= "<div class=\"forumpost\">
 								<span style=\"float: right;\">&nbsp;<a href=\"".WEB_ROOT."/forum/viewtopic.php?id=".$frmqry[$frmid]->topic_id."\" target=\"forumTopicView\">View</a></span>
-<<<<							<span style=\"color: #777;\">In ".$frmqry[$frmid]->forum_name." by ".$frmqry[$frmid]->poster."</span><br />
-====							<strong>".$frmqry[$frmid]->subject."</strong><br /> 
-								In ".$frmqry[$frmid]->forum_name." by ".$frmqry[$frmid]->poster."<br />
->>>>							".date('Y-m-d H:i',$frmqry[$frmid]->posted)." - ".$this->BBCode->bbcode_to_html($frmqry[$frmid]->message)."</div>";
+								<span style=\"color: #777;\">In ".$frmqry[$frmid]->forum_name." by ".$frmqry[$frmid]->poster."</span><br />
+								<strong>".$frmqry[$frmid]->subject."</strong><br /> 
+								".date('Y-m-d H:i',$frmqry[$frmid]->posted)." - ".$this->BBCode->bbcode_to_html($frmqry[$frmid]->message)."</div>";
 							$topic_ids[] = $frmqry[$frmid]->topic_id;
 						}
 					}
 					if(strlen($forrecent) > 0){
 						//echo "<div style=\"display: block; text-align: top; background-color: antiquewhite; border: 1px solid #888; padding: 4px; border-radius: 4px; margin-top: 2px;\">Recent Forum Posts:<br />".$forrecent."</div>";
-						echo "<div class=\"forumposts js-masonry\" data-masonry-options='{ \"itemSelector\": \".forumpost\" }'>".$forrecent."</div>";
+						echo "<div class=\"forumposts js-masonry\" data-masonry-options='{ \"itemSelector\": \".forumpost\" }'><div class=\"forumpost\" style=\"background-color: maroon; color: white;\">Latest Forum Posts</div>".$forrecent."</div>";
 					}
 				}
 				?>
