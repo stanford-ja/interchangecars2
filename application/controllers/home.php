@@ -757,7 +757,7 @@ class Home extends CI_Controller {
 		for($i=0;$i<count($this->fils);$i++){
 			if(strpos("Z".$this->fils[$i],$this->waybills[$me]->id."-") > 0){
 				$tmp = explode("-",str_replace(".jpg","",$this->fils[$i]));
-				$sql = "SELECT `image` FROM `ichange_wb_img` WHERE `img_name` = '".$this->fils[$i]."'";
+				$sql = "SELECT IF(LENGTH(`img_thumb`) > 0,`img_thumb`,`image`) as `image` FROM `ichange_wb_img` WHERE `img_name` = '".$this->fils[$i]."'";
 				$tmp2 = (array)$this->Generic_model->qry($sql);
 				$fil_html .= "<a href=\"javascript:{}\" onclick=\"window.open('".WEB_ROOT.INDEX_PAGE."/graphics/wbview/".str_replace(".jpg","",$this->fils[$i])."','".$i."','width=600,height=650');\">";
 				//$fil_html .= "<img src=\"".WEB_ROOT."/waybill_images/".$this->fils[$i]."\" title=\"Uploaded by ".$this->arr['allRR'][$tmp[1]]->report_mark."\" alt=\"\" style=\"width: 100px; margin: 3px;\">";

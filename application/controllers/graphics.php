@@ -130,11 +130,12 @@ class Graphics extends CI_Controller {
 	public function waybillUpload(){
 		// Saves uploaded file selected in waybill() method.
 		$p = $_POST;
-		if(strlen($p['description']) > 80){ $p['description'] = substr($p['description'],0,80); }
+		if(isset($p['description']) && strlen($p['description']) > 80){ $p['description'] = substr($p['description'],0,80); }
 		$p['rr_sess'] = $this->arr['rr_sess'];
 		$this->uconfig['file_name'] = $p['id']."-".$p['rr_sess'].".jpg"; // - REPLACED 2020-08-13
 		$image_base64 = base64_encode(file_get_contents($_FILES['user_file']['tmp_name']) );
 		$image = 'data:'.$_FILES['user_file']['type'].';base64,'.$image_base64;
+		//$img_thumb = 'data:'.$_FILES['user_file']['type'].';base64,'.$this->createThumbnail($_FILES['user_file']['tmp_name'],"");
 
 		//$this->load->library('upload', $config);
 		$this->upload->initialize($this->uconfig);
@@ -149,7 +150,9 @@ class Graphics extends CI_Controller {
 			//$imagick = new \Imagick(realpath(DOC_ROOT."/waybill_images/".$this->uconfig['file_name']));
 			//$imagick->resizeImage($width, $height, $filterType, $blur, $bestFit);
 			//$imagick->resizeImage( 200, 200,  $imagick::FILTER_LANCZOS, 1, TRUE);
-			$ex = "convert ".DOC_ROOT."/waybill_images/".$this->uconfig['file_name']." -resize 500 ".DOC_ROOT."/waybill_images/".$this->uconfig['file_name'];
+			$ex = "convert ".DOC_ROOT."/waybill_images/".$this->uconfig['file_name']." -resize 120 ".DOC_ROOT."/waybill_images/".$this->uconfig['file_name'];
+			$image_base64 = base64_encode(file_get_contents(DOC_ROOT."/waybill_images/".$this->uconfig['file_name']) );
+			$img_thumb = 'data:jpeg;base64,'.$image_base64;
 			//echo $ex; exit();
 			//shell_exec($ex); REPLACED BY BELOW - 2020-08-13
 			unlink(DOC_ROOT."/waybill_images/".$this->uconfig['file_name']);
@@ -162,8 +165,9 @@ class Graphics extends CI_Controller {
 			$sql = "INSERT INTO `ichange_wb_img` SET 
 				`added` = '".date('U')."', 
 				`img_name` = '".$this->uconfig['file_name']."', 
-				`description` = '".str_replace("'","",$p['description'])."', 
-				`image` = '".$image."'";
+				`description` = '".str_replace("'","",@$p['description'])."', 
+				`image` = '".$image."', 
+				`img_thumb` = '".$img_thumb."'";
 			$this->Generic_model->change($sql);
 			header("Location:".WEB_ROOT.INDEX_PAGE."/graphics/waybill/".$p['id']);
 			//$data = array('upload_data' => $this->upload->data());
@@ -399,6 +403,27 @@ class Graphics extends CI_Controller {
 		}
 
 		header("Location:".WEB_ROOT."/graphics/rrMap");
+	}
+	
+	function createThumbnail($url, $filename, $width = 150, $height = true) {
+	//function createThumbnail($base64, $width = 120, $height = true) {
+		// download and create gd image
+		$image = ImageCreateFromString(file_get_contents($url));
+		//$image = ImageCreateFromString($base64);
+
+		// calculate resized ratio
+		// Note: if $height is set to TRUE then we automatically calculate the height based on the ratio
+		$height = $height === true ? (ImageSY($image) * $width / ImageSX($image)) : $height;
+
+		// create image 
+		$output = ImageCreateTrueColor($width, $height);
+		ImageCopyResampled($output, $image, 0, 0, 0, 0, $width, $height, ImageSX($image), ImageSY($image));
+
+		// save image
+		ImageJPEG($output, $filename, 95); 
+
+		// return resized image
+		return $output; // if you need to use it
 	}
 
 }
