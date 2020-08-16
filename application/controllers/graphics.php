@@ -154,7 +154,7 @@ class Graphics extends CI_Controller {
 			$ex = "convert ".DOC_ROOT."/waybill_images/".$this->uconfig['file_name']." -resize 500 ".DOC_ROOT."/waybill_images/".$this->uconfig['file_name'];
 			//echo $ex; exit();
 			shell_exec($ex);
-			$image_base64 = base64_encode(file_get_contents($_FILES['user_file']['tmp_name']) );
+			$image_base64 = base64_encode(file_get_contents(DOC_ROOT."/waybill_images/".$this->uconfig['file_name']) );
 			$image = 'data:jpeg;base64,'.$image_base64;
 
 			$ex = "convert ".DOC_ROOT."/waybill_images/".$this->uconfig['file_name']." -resize 120 ".DOC_ROOT."/waybill_images/".$this->uconfig['file_name'];
