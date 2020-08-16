@@ -8,4 +8,5 @@ map_files/*.jpg
 map_files/*.png
 map_files/*.pdf
 forum/cache/cache_*.php
+forum/img/avatars/*.jpg
 *.sql
