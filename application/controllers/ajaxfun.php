@@ -48,7 +48,8 @@ class Ajaxfun extends CI_Controller {
 			$rr = (array)$this->Generic_model->qry("SELECT `report_mark` FROM `ichange_rr` WHERE `id` = '".$tmp[1]."'");
 			$im = $fils[$i];
 			$content .= "<div style=\"display: inline-block; padding: 5px; text-align: center; vertical-align: top; height: auto; max-width: 200px;\">";
-			$content .= "<a href=\"javascript:{}\" onclick=\"window.open('".$im->image."','".$i."','width=600,height=650');\">";
+			//$content .= "<a href=\"javascript:{}\" onclick=\"window.open('".$im->image."','".$i."','width=600,height=650');\">";
+			$content .= "<a href=\"javascript:{}\" onclick=\"window.open('".WEB_ROOT.INDEX_PAGE."/graphics/wbview/".str_replace(".jpg","",$im->img_name)."','".$i."','width=600,height=650');\">";
 			$content .= "<img src=\"".$im->image_thumb."\" style=\"height: 100px; margin: 3px;\">";
 			$content .= "</a>";
 			$content .= "<br /><span style=\"font-size: 8pt;\">File Name: ".$im->img_name."</span>";
