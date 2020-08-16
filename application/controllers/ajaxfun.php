@@ -38,7 +38,7 @@ class Ajaxfun extends CI_Controller {
 			echo $fil_html;
 		}else{ echo ""; }
 		*/
-		$fils = (array)$this->Generic_model->qry("SELECT * FROM `ichange_wb_img` WHERE LENGTH(`image`) > 0 AND `img_name` LIKE '".$id."-%' ORDER BY `img_name`"); //get_filenames($this->filePath); - REPLACED - 2020-08-13
+		$fils = (array)$this->Generic_model->qry("SELECT *,IF(LENGTH(`img_thumb`) > 0,`img_thumb`,`image`) AS `image_thumb` FROM `ichange_wb_img` WHERE LENGTH(`image`) > 0 AND `img_name` LIKE '".$id."-%' ORDER BY `img_name`"); //get_filenames($this->filePath); - REPLACED - 2020-08-13
 		//echo "<pre>"; print_r($fils); echo "</pre>";
 		$content = "";
 		for($i=0;$i<count($fils);$i++){
@@ -49,7 +49,7 @@ class Ajaxfun extends CI_Controller {
 			$im = $fils[$i];
 			$content .= "<div style=\"display: inline-block; padding: 5px; text-align: center; vertical-align: top; height: auto; max-width: 200px;\">";
 			$content .= "<a href=\"javascript:{}\" onclick=\"window.open('".$im->image."','".$i."','width=600,height=650');\">";
-			$content .= "<img src=\"".$im->image."\" style=\"height: 100px; margin: 3px;\">";
+			$content .= "<img src=\"".$im->image_thumb."\" style=\"height: 100px; margin: 3px;\">";
 			$content .= "</a>";
 			$content .= "<br /><span style=\"font-size: 8pt;\">File Name: ".$im->img_name."</span>";
 			$content .= "<br />".@$rr[0]->report_mark;

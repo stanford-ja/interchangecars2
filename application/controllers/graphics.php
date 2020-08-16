@@ -288,7 +288,7 @@ class Graphics extends CI_Controller {
 			//echo "<pre>"; print_r($tmp); echo "</pre>";
 			$wb = (array)$this->Generic_model->qry("SELECT * FROM `ichange_waybill` WHERE `id` = '".$tmp[0]."'");
 			$rr = (array)$this->Generic_model->qry("SELECT `report_mark` FROM `ichange_rr` WHERE `id` = '".$tmp[1]."'");
-			$im = (array)$this->Generic_model->qry("SELECT * FROM `ichange_wb_img` WHERE `img_name` = '".$fils[$i]."'");
+			$im = (array)$this->Generic_model->qry("SELECT *,IF(LENGTH(`img_thumb`) > 0,`img_thumb`,`image`) AS `image_thumb` FROM `ichange_wb_img` WHERE `img_name` = '".$fils[$i]."'");
 			//echo "<pre>"; print_r($wb); echo "</pre>";
 			$content['html'] .= "<div style=\"display: inline-block; padding: 5px; text-align: center; vertical-align: top; height: auto; max-width: 200px;\">";
 			/* REPLACED BY BELOW - 2020-08-13
@@ -296,7 +296,7 @@ class Graphics extends CI_Controller {
 			$content['html'] .= "<img src=\"".$this->webPath.$fils[$i]."\" style=\"height: 100px; margin: 3px;\">";
 			*/
 			$content['html'] .= "<a href=\"javascript:{}\" onclick=\"window.open('".WEB_ROOT.INDEX_PAGE."/graphics/wbview/".str_replace(".jpg","",$fils[$i])."','".$i."','width=600,height=650');\">";
-			$content['html'] .= "<img src=\"".$im[0]->image."\" style=\"height: 100px; margin: 3px;\">";
+			$content['html'] .= "<img src=\"".$im[0]->image_thumb."\" style=\"height: 100px; margin: 3px;\">";
 			$content['html'] .= "</a>";
 			$content['html'] .= "<br /><span style=\"font-size: 8pt;\">File Name: ".$im[0]->img_name."</span>";
 			$content['html'] .= "<br />Uploaded by ".@$rr[0]->report_mark;
