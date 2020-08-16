@@ -151,10 +151,10 @@ class Graphics extends CI_Controller {
 			//$imagick->resizeImage($width, $height, $filterType, $blur, $bestFit);
 			//$imagick->resizeImage( 200, 200,  $imagick::FILTER_LANCZOS, 1, TRUE);
 			$ex = "convert ".DOC_ROOT."/waybill_images/".$this->uconfig['file_name']." -resize 120 ".DOC_ROOT."/waybill_images/".$this->uconfig['file_name'];
+			//echo $ex; exit();
+			shell_exec($ex);
 			$image_base64 = base64_encode(file_get_contents(DOC_ROOT."/waybill_images/".$this->uconfig['file_name']) );
 			$img_thumb = 'data:jpeg;base64,'.$image_base64;
-			//echo $ex; exit();
-			//shell_exec($ex); REPLACED BY BELOW - 2020-08-13
 			unlink(DOC_ROOT."/waybill_images/".$this->uconfig['file_name']);
 			/* REPLACED WITH BELOW = 2020-08-13
 			$this->Generic_model->change("DELETE FROM `ichange_wb_img` WHERE `img_name` = '".$this->uconfig['file_name']."'");
