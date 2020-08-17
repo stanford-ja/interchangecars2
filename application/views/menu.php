@@ -229,8 +229,12 @@
 					$frmqry = $this->Generic_model->qry($frmsql);
 					for($frmid=0;$frmid<count($frmqry);$frmid++){
 						if(!in_array($frmqry[$frmid]->topic_id,$topic_ids)){
-							$forrecent .= "<div class=\"forumpost\">
-								<span style=\"float: right;\">&nbsp;<a href=\"".WEB_ROOT."/forum/viewtopic.php?id=".$frmqry[$frmid]->topic_id."\" target=\"forumTopicView\">View</a></span>
+							$avatar = "";
+							if(file_exists(DOC_ROOT."/forum/img/avatars/".$frmqry[$frmid]->poster_id.".jpg")){ $avatar = WEB_ROOT."/forum/img/avatars/".$frmqry[$frmid]->poster_id.".jpg"; }
+							if(file_exists(DOC_ROOT."/forum/img/avatars/".$frmqry[$frmid]->poster_id.".png")){ $avatar = WEB_ROOT."/forum/img/avatars/".$frmqry[$frmid]->poster_id.".png"; }
+							if(file_exists(DOC_ROOT."/forum/img/avatars/".$frmqry[$frmid]->poster_id.".gif")){ $avatar = WEB_ROOT."/forum/img/avatars/".$frmqry[$frmid]->poster_id.".gif"; }
+							if(strlen($avatar) > 0){ $avatar = "<img class=\"avatar\" src=\"".$avatar."\" />"; }
+							$forrecent .= "<div class=\"forumpost\">".$avatar."<span style=\"float: right;\">&nbsp;<a href=\"".WEB_ROOT."/forum/viewtopic.php?id=".$frmqry[$frmid]->topic_id."\" target=\"forumTopicView\">View</a></span>
 								<span style=\"color: #777;\">In ".$frmqry[$frmid]->forum_name." by ".$frmqry[$frmid]->poster."</span><br />
 								<strong>".$frmqry[$frmid]->subject."</strong><br /> 
 								".date('Y-m-d H:i',$frmqry[$frmid]->posted)." - ".$this->BBCode->bbcode_to_html($frmqry[$frmid]->message)."</div>";

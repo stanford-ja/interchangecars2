@@ -384,6 +384,7 @@ div.forumposts {
 }
 
 .forumpost img { display: none; }
+.forumpost img.avatar { float: left; display: inline-block; width: 25px; padding: 3px; }
 
 /* JQuery AutoComplete related fields */
 .autocomplete-suggestions { border: 1px solid #999; background-color: #FFEBCD; cursor: default; overflow: auto; }
