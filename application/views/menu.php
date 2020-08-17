@@ -217,14 +217,14 @@
 			</div>
 
 				<?php if($rr_sess > 0 && strpos($_SERVER['PHP_SELF'],"/home") > 0){
-					$latestts = intval(date('U')-(86400*21));
+					$latestts = intval(date('U')-(86400*10));
 					$topic_ids = array();
 					$forrecent = "";
 					$frmsql = "SELECT `ichange_fluxbb_posts`.*, `ichange_fluxbb_topics`.`subject`, `ichange_fluxbb_forums`.`forum_name` 
 						FROM `ichange_fluxbb_posts` 
 						LEFT JOIN `ichange_fluxbb_topics` ON `ichange_fluxbb_posts`.`topic_id` = `ichange_fluxbb_topics`.`id` 
 						LEFT JOIN `ichange_fluxbb_forums` ON `ichange_fluxbb_topics`.`forum_id` = `ichange_fluxbb_forums`.`id` 
-						WHERE `ichange_fluxbb_posts`.`posted` > ".intval(date('U')-(86400*21))." 
+						WHERE `ichange_fluxbb_posts`.`posted` > ".$latestts." 
 						ORDER BY `ichange_fluxbb_posts`.`posted` DESC";
 					$frmqry = $this->Generic_model->qry($frmsql);
 					for($frmid=0;$frmid<count($frmqry);$frmid++){
