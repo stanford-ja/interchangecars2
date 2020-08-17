@@ -243,7 +243,7 @@
 					}
 					if(strlen($forrecent) > 0){
 						//echo "<div style=\"display: block; text-align: top; background-color: antiquewhite; border: 1px solid #888; padding: 4px; border-radius: 4px; margin-top: 2px;\">Recent Forum Posts:<br />".$forrecent."</div>";
-						echo "<div class=\"forumpost\" style=\"background-color: maroon; color: white;\">Latest Forum Posts</div>
+						echo "<div class=\"forumpost\" style=\"background-color: maroon; color: white;\">Forum Posts since ".date('Y-m-d',$latestts)."</div>
 							<div class=\"forumposts js-masonry\" data-masonry-options='{ \"itemSelector\": \".forumpost\" }'>".$forrecent."</div>";
 					}
 				}
