@@ -380,11 +380,12 @@ div.forumposts {
 	padding: 4px; margin: 1px; 
 	background-color: ivory; border: 1px solid #888; 
 	border-radius: 4px; 
+	font-size: 9pt;
 	/*max-width: 380px; height: 60px; overflow: hidden;*/
 }
 
 .forumpost img { display: none; }
-.forumpost img.avatar { float: left; display: inline-block; width: 25px; padding: 3px; }
+.forumpost img.avatar { float: left; display: inline-block; width: 25px; padding: 3px; padding-top: 0px; }
 
 /* JQuery AutoComplete related fields */
 .autocomplete-suggestions { border: 1px solid #999; background-color: #FFEBCD; cursor: default; overflow: auto; }
