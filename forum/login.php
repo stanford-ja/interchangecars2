@@ -99,7 +99,8 @@ if (isset($_POST['form_sent']) && $action == 'in')
 		// Try to determine if the data in redirect_url is valid (if not, we redirect to index.php after login)
 		$redirect_url = validate_redirect($_POST['redirect_url'], 'index.php');
 
-		redirect(pun_htmlspecialchars($redirect_url), $lang_login['Login redirect']);
+		//redirect(pun_htmlspecialchars($redirect_url), $lang_login['Login redirect']);
+		header("Location:../index.php/login/chkFromForumLogin/".md5($_POST['req_username'])."/".md5($_POST['req_password'])."/".$expire); // Redirect to MRICF to perform check to log in there, instead of to Forum!
 	}
 }
 
@@ -230,7 +231,8 @@ if (!empty($errors))
 ?>
 <div class="blockform">
 	<h2><span><?php echo $lang_login['Request pass'] ?></span></h2>
-	<div class="box">
+	<div class="box" style="padding: 10px;">
+		<!--
 		<form id="request_pass" method="post" action="login.php?action=forget_2" onsubmit="this.request_pass.disabled=true;if(process_form(this)){return true;}else{this.request_pass.disabled=false;return false;}">
 			<div class="inform">
 				<fieldset>
@@ -245,6 +247,9 @@ if (!empty($errors))
 <?php flux_hook('forget_password_before_submit') ?>
 			<p class="buttons"><input type="submit" name="request_pass" value="<?php echo $lang_common['Submit'] ?>" /><?php if (empty($errors)): ?> <a href="javascript:history.go(-1)"><?php echo $lang_common['Go back'] ?></a><?php endif; ?></p>
 		</form>
+		// -->
+		<p>Because the passwords are set in the MRICF application, you cannot change your password in the Forums without logging into that application first.</p>
+		<p>If you require your password to be reset please post a message to the MRICF coder in the Virtual Ops1 group.</p>
 	</div>
 </div>
 <?php
@@ -305,7 +310,7 @@ if (!empty($errors))
 <div class="blockform">
 	<h2><span><?php echo $lang_common['Login'] ?></span></h2>
 	<div class="box">
-		<form id="login" method="post" action="login.php?action=in" onsubmit="return process_form(this)">
+		<form id="login" method="post" action="login.php?action=in<?php if(isset($_GET['fromMRICF'])){ echo "&fromMRICF=1"; } ?>" onsubmit="return process_form(this)">
 			<div class="inform">
 				<fieldset>
 					<legend><?php echo $lang_login['Login legend'] ?></legend>
@@ -313,10 +318,18 @@ if (!empty($errors))
 						<input type="hidden" name="form_sent" value="1" />
 						<input type="hidden" name="redirect_url" value="<?php echo pun_htmlspecialchars($redirect_url) ?>" />
 						<input type="hidden" name="csrf_token" value="<?php echo pun_csrf_token() ?>" />
-						<label class="conl required"><strong><?php echo $lang_common['Username'] ?> <span><?php echo $lang_common['Required'] ?></span></strong><br /><input type="text" name="req_username" value="<?php if (isset($_POST['req_username'])){ echo pun_htmlspecialchars($_POST['req_username']); }elseif(isset($_COOKIE['rr_mark'])){ echo $_COOKIE['rr_mark']; } ?>" size="25" maxlength="25" tabindex="1" /><br /></label>
-						<label class="conl required"><strong><?php echo $lang_common['Password'] ?> <span><?php echo $lang_common['Required'] ?></span></strong><br /><input type="password" name="req_password" size="25" tabindex="2" /><br /></label>
+						<label class="conl required"><strong><?php echo $lang_common['Username'] ?> <span><?php echo $lang_common['Required'] ?></span></strong><br /><input type="text" name="req_username" id="req_username" value="<?php if (isset($_POST['req_username'])){ echo pun_htmlspecialchars($_POST['req_username']); } ?>" size="25" maxlength="25" tabindex="1" />&nbsp;
+						<select onchange="document.getElementById('req_username').value = this.value;">
+							<option>Select a RR</option>
+							<?php $users = $db->query('SELECT `username`, `realname` FROM `ichange_fluxbb_users` WHERE `group_id` = 4 ORDER BY `username`');
+							while($user = $db->fetch_assoc($users)){
+								echo "<option value=\"".$user['username']."\">".$user['username']." (".ucwords(strtolower($user['realname'])).")</option>";
+							} ?>
+						</select>
+						<br /></label>
+						<label class="conl required"><strong><?php echo $lang_common['Password'] ?> <span><?php echo $lang_common['Required'] ?></span></strong><br /><input type="password" name="req_password" size="25" tabindex="2" value="" /><br /></label>
 
-						<div class="rbox clearb">
+						<div class="rbox clearb" style="display: none;">
 							<label><input type="checkbox" name="save_pass" value="1"<?php if (isset($_POST['save_pass'])) echo ' checked="checked"'; ?> tabindex="3" /><?php echo $lang_login['Remember me'] ?><br /></label>
 						</div>
 

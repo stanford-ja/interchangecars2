@@ -104,6 +104,7 @@ if (!defined('PUN_ALLOW_INDEX'))
 <title><?php echo generate_page_title($page_title, $p) ?></title>
 <?php require PUN_ROOT.'plugins/ezbbc/ezbbc_head.php'; ?>
 <link rel="stylesheet" type="text/css" href="style/<?php echo $pun_user['style'].'.css' ?>" />
+<link rel="stylesheet" type="text/css" href="../css/style.css" />
 <?php
 
 if (defined('PUN_ADMIN_CONSOLE'))
@@ -331,3 +332,7 @@ ob_start();
 
 
 define('PUN_HEADER', 1);
+
+if(isset($_GET['MRICFLF'])){ /* ADDED TO DETECT PROBLEM LOGGING INTO MRICF */ ?>
+<div style="display: block; background-color: yellow; border: 1px solid red; border-radius: 7px; margin: 2px; padding: 15px; font-size: 14pt;">Attempt to log into MRICF using Forum credentials failed!<br />You can still use the forum.</div>
+<?php } ?>

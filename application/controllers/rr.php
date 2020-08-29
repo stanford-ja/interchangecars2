@@ -73,10 +73,12 @@ class Rr extends CI_Controller {
 	}
 	
 	public function view($id=0){
+		$this->load->model('Forum_model','',TRUE);
 		$this->arr['pgTitle'] .= " - View";
 		$randpos = array();
-		$rrdat = (array)$this->Railroad_model->get_single($id);
-		$this->dat['field_names'] = array('ID',"Report Mark", "RR Name", "RR System Map", "Description", "Owner Name", "Interchanges", "Affiliates", "Website", "Social Networks","Timezone");
+		$rrdat = (array)$this->Railroad_model->get_single($id);		
+		
+		$this->dat['field_names'] = array('ID',"Report Mark", "RR Name", "RR System Map", "Description", "Recent Forum Posts / Waybill Messages", "Owner Name", "Interchanges", "Affiliates", "Website", "Social Networks","Timezone");
 		//$this->dat = array();
 		$this->dat['options']			= array(
 				'Edit' => "aar/edit/"
@@ -87,13 +89,25 @@ class Rr extends CI_Controller {
 		
 		//for($i=0;$i<count($rrdat);$i++){
 		$i=0;
+
+		$fordat = (array)$this->Forum_model->get_recent_for_rr($rrdat[$i]->report_mark);
+		$forump = "";
+		for($f=0;$f<count($fordat);$f++){
+			$forump .= "<div class=\"forumpost2\">
+				<strong><a href=\"".WEB_ROOT."/forum/viewtopic.php?id=".$fordat[$f]->topic_id."\">".$fordat[$f]->subject."</a></strong><br />
+				Posted in <strong>".$fordat[$f]->forum_name."</strong> on ".date('Y-m-d H:i',$fordat[$f]->posted)."<br /><br />
+				".$fordat[$f]->message."
+				</div>";
+		}
+
 			$this->dat['data'][0]['id'] 					= $rrdat[$i]->id;
 			$this->dat['data'][0]['report_mark']	 	= $rrdat[$i]->report_mark;
 			$this->dat['data'][0]['rr_name'] 			= $rrdat[$i]->rr_name;
 			$this->dat['data'][0]['rr_system_map'] = "";
 			$this->dat['data'][0]['rr_desc'] 			= html_entity_decode($rrdat[$i]->rr_desc);
+			$this->dat['data'][0]['forumposts']			= $forump;
 			$this->dat['data'][0]['owner_name'] 		= $rrdat[$i]->owner_name;
-			$this->dat['data'][0]['interchanges']		= str_replace(";","<br />",$rrdat[$i]->interchanges);
+			$this->dat['data'][0]['interchanges']		= "<div class=\"wb_btn\" style=\"width: auto;\">".str_replace(";","</div><div class=\"wb_btn\" style=\"width: auto;\">",$rrdat[$i]->interchanges)."</div>";
 			$this->dat['data'][0]['affiliates'] 		= $rrdat[$i]->affiliates;
 			$rrdat[$i]->website = str_replace("&#47;","/",$rrdat[$i]->website);
 			$rrdat[$i]->social = str_replace("&#47;","/",$rrdat[$i]->social);
@@ -119,7 +133,7 @@ class Rr extends CI_Controller {
 			}
 
 		//}
-
+		
 		// Load views
 		$this->load->view('header', $this->arr);
 		$this->load->view('menu', $this->arr);

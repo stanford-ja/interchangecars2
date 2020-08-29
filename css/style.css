@@ -1,5 +1,5 @@
 /* Style sheet */
-body {
+body, .pun {
 	background-color: cornsilk;
 	background-image: url(../images/bg.jpg);
 	font-family: Arial;
@@ -23,14 +23,16 @@ a:hover {
 	background-color: yellow;
 }
 
-h2 {
+h1,h2, #brdheader.block div.box div#brdtitle.inbox h1 {
 	color: maroon;
 	text-align: center;
 	font-weight: bold;
 	border-bottom: 2px solid maroon;
-	text-shadow: -2px -2px 0 rgba(255,0,180,0.5);
-
+	text-shadow: -1px -1px 0 rgba(255,0,180,0.5);
 }
+h1 { font-size: 18pt; }
+h2 #brdheader.block div.box div#brdtitle.inbox h1 { font-size: 16pt; }
+h3 { color: maroon; font-weight: bold; font-size: 14pt;; }
 
 hr {color: #ccc;}
 
@@ -52,6 +54,31 @@ hr {color: #ccc;}
     -moz-border-radius: 5px;
 }
 
+/* FluxBB Menu Items */
+#brdmenu { 
+	background-color: #FFDAB9;
+	border: 1px solid #888;
+	padding: 5px;
+	font-size: 10pt;
+	margin: 2px;
+}
+
+#brdmenu.inbox ul li a { 
+	background-color: ivory;
+	color: blue;
+   text-align: center;
+	padding: 5px;
+	border: 1px solid #BC8F8F;
+	font-size: 11pt;
+	width: 110px;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    margin:1px;
+    margin-right: 3px;
+}
+
+/* MRICF Menu / TD Items */
 .td_menu {
 	background-color: ivory;
 	/*
@@ -111,9 +138,9 @@ hr {color: #ccc;}
 	font-size: 9pt;
 }
 
-.td1 {
-	background-color: #ffffff; 
-	border: 1px solid #ccc;
+.td1, .rowodd {
+	background-color: #dedede; 
+	border: 1px solid #bbb;
 	padding: 5px;
 	font-size: 10pt;
 	margin: 2px;
@@ -123,9 +150,9 @@ hr {color: #ccc;}
     -moz-border-radius: 5px;
 }
 
-.td2 {
-	background-color: #dddddd;
-	border: 1px solid #ccc;
+.td2, .roweven {
+	background-color: #ededed;
+	border: 1px solid #bbb;
 	padding: 5px;
 	font-size: 10pt;
 	margin: 2px;
@@ -384,6 +411,14 @@ div.forumposts {
 	/*max-width: 380px; height: 60px; overflow: hidden;*/
 }
 
+.forumpost2 {
+	/* STANDARD DISPLAY FOR FORUM POSTS, NOT USING MASONRY */
+	background-color: ivory; border: 1px solid #888; 
+	border-radius: 4px; 
+	font-size: 11pt;
+	padding: 8px; margin: 2px;
+}
+
 .forumpost img { display: none; }
 .forumpost img.avatar { float: left; display: inline-block; width: 25px; padding: 3px; padding-top: 0px; }
 
@@ -449,5 +484,6 @@ blockquote {
 	padding: 5px;
 	border-radius: 5px;
 }
+div.quotebox blockquote { background-color: transparent; } /* For blockquote background reset in Forum */
 
 .wb_lnk_mess img { max-width: 75%; }

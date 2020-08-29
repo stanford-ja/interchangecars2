@@ -29,11 +29,19 @@ class Login extends CI_Controller {
 			$this->arr['allRRKys'][] = $arRR[$i]->id; // Used to order by Report Mark.
 		}
 		//echo "<pre>"; print_r($this->arr['allRR']); echo "</pre>";
-		//echo "<pre>"; print_r($this->arr['allRRKys']); echo "</pre>";
+		//echo "<pre>"; print_r($this->arr['allRRKys']); echo "</pre>"; //exit();
 		
+		$this->cookiedie = intval(86400*3);
 	}
 
 	public function index(){
+		// Do bulk update of all railroad report marks in Forum then go there to log in.
+		for($i=0;$i<count($this->arr['allRRKys']);$i++){
+			$this->doForumUpdate($this->arr['allRRKys'][$i]);
+		}
+		header("Location:".WEB_ROOT."/forum/login.php");
+
+		/* REPLACED BY LOGIN VIA FORUM ABOVE! 2020-08-26
 		$rr_opts = array();
 		$rr_opts['Active'] = "-- A C T I V E --";
 		for($i=0;$i<count($this->arr['allRRKys']);$i++){
@@ -53,19 +61,44 @@ class Login extends CI_Controller {
 		$this->load->view('header',$this->arr);
 		$this->load->view('login', $this->arr);
 		$this->load->view('footer');
+		*/
+	}
+
+	public function chkFromForumLogin($reqUsername="",$reqPassword="",$expire=0){
+		$sql = "SELECT `id` FROM `ichange_rr` WHERE MD5(`report_mark`) = '".$reqUsername."' AND `pw` = '".$reqPassword."'";
+		$qry = (array)$this->Generic_model->qry($sql);
+		if(isset($qry[0]->id) && $qry[0]->id > 0){
+			if($expire > 0){
+				$this->cookiedie = $expire;
+			}
+			$this->input->set_cookie('rr_sess',$qry[0]->id,$this->cookiedie);
+			$this->input->set_cookie('_tz',$this->arr['allRR'][$qry[0]->id]->tzone,$this->cookiedie);
+			if(@$this->arr['allRR'][$qry[0]->id]->admin_flag == 1){$this->input->set_cookie('_mricfadmin',1,$$this->cookiedie);}
+			$this->last_act_update($qry[0]->id);
+			$this->session->set_flashdata('loginSuccess', '1');
+			header("Location:".WEB_ROOT.INDEX_PAGE."/home");
+		}else{
+			header("Location:".WEB_ROOT."/forum/?MRICFLF=1");
+		}
 	}
 	
 	public function chk(){
 		//print_r($_POST);
 		if(md5($_POST['p_word']) == $this->arr['allRR'][$_POST['rr_selected']]->pw){
-			$this->input->set_cookie('rr_sess',$_POST['rr_selected'],86500);
-			$this->input->set_cookie('_tz',$this->arr['allRR'][$_POST['rr_selected']]->tzone,86500);
-			if(@$this->arr['allRR'][$_POST['rr_selected']]->admin_flag == 1){$this->input->set_cookie('_mricfadmin',1,86500);}
+			$this->input->set_cookie('rr_sess',$_POST['rr_selected'],$this->cookiedie);
+			$this->input->set_cookie('_tz',$this->arr['allRR'][$_POST['rr_selected']]->tzone,$this->cookiedie);
+			if(@$this->arr['allRR'][$_POST['rr_selected']]->admin_flag == 1){$this->input->set_cookie('_mricfadmin',1,$this->cookiedie);}
 			$this->last_act_update($_POST['rr_selected']);
 			$this->session->set_flashdata('loginSuccess', '1');
+			
+			// Update Forum user record for this user.
 			$this->doForumUpdate($_POST['rr_selected']);
-			header('Location:'.WEB_ROOT.'/index.php/home');
-		}else{header('Location:'.WEB_ROOT.'/index.php/login');}
+			
+			// Now do login to forum so it is available to this user too
+			//header('Location:'.WEB_ROOT.'/forum/login.php?fromMRICF=1');  
+			
+			header('Location:'.WEB_ROOT.INDEX_PAGE.'/home');
+		}else{header('Location:'.WEB_ROOT.INDEX_PAGE.'/login');}
 	}
 	
 	public function logout(){
@@ -81,8 +114,8 @@ class Login extends CI_Controller {
 		
 		// START check that railroad being switched to has the same Owner Name as the one being switched from.
 		if(strtoupper($this->arr['allRR'][$id]->owner_name) == strtoupper($this->arr['allRR'][$this->input->cookie('rr_sess')]->owner_name) || isset($_COOKIE['_mricfadmin'])){
-			$this->input->set_cookie('rr_sess',$id,86500); 
-			$this->input->set_cookie('_tz',$this->arr['allRR'][$id]->tzone,86500);
+			$this->input->set_cookie('rr_sess',$id,$this->cookiedie); 
+			$this->input->set_cookie('_tz',$this->arr['allRR'][$id]->tzone,$this->cookiedie);
 			$this->last_act_update($id);
 			$this->doForumUpdate($id);
 			header("Location:../../home");
@@ -111,8 +144,9 @@ class Login extends CI_Controller {
 	
 	// Updates or adds record for report_mark to fluxbb users table so when a user logs into MRICF the FluxBB password is the same as MRICF.
 	function doForumUpdate($id=0){
+		$id2 = 0;
 		if(isset($this->arr['allRR'][$id]->report_mark)){
-			$sql = "SELECT COUNT(`id`) AS `cntr` FROM `".$this->fluxbb_users."` WHERE `username` = '".$this->arr['allRR'][$id]->report_mark."'";
+			$sql = "SELECT COUNT(`id`) AS `cntr`, `id` FROM `".$this->fluxbb_users."` WHERE `username` = '".$this->arr['allRR'][$id]->report_mark."'";
 			$res = (array)$this->Generic_model->qry($sql);
 			if($res[0]->cntr > 0){
 				$sql = "UPDATE `".$this->fluxbb_users."` SET 
@@ -120,6 +154,8 @@ class Login extends CI_Controller {
 					`title` = '".$this->arr['allRR'][$id]->rr_name."',
 					`realname` = '".$this->arr['allRR'][$id]->owner_name."' 
 					WHERE `username` = '".$this->arr['allRR'][$id]->report_mark."'";
+				$this->Generic_model->change($sql);
+				$id2 = $res[0]->id;
 			}else{
 				$sql = "INSERT INTO `".$this->fluxbb_users."` SET 
 					`username` = '".$this->arr['allRR'][$id]->report_mark."', 
@@ -132,9 +168,10 @@ class Login extends CI_Controller {
 					`registered` = '".date('U')."',
 					`group_id` = 4,
 					`registration_ip` = '".$_SERVER['REMOTE_ADDR']."'";
+				$id2 = $this->Generic_model->change($sql);
 			}
-			$this->Generic_model->change($sql);
 		}
+		//return $id2;
 	}
 }
 ?>
