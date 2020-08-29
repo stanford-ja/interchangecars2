@@ -46,7 +46,6 @@ if($_SERVER['SERVER_NAME'] == "localhost" || strpos("a".$_SERVER['SERVER_NAME'],
 if(strpos($_SERVER['PHP_SELF'],"interchangecars2_test") > 0){
 	$mricf_dir = "/interchangecars2_test";
 }
-echo $_SERVER['PHP_SELF']; exit();
 define('DOC_ROOT', $_SERVER['DOCUMENT_ROOT'].$doc_path.$mricf_dir);
 define('WEB_ROOT', 'http://'.$_SERVER['SERVER_NAME'].$doc_path.$mricf_dir);
 define('INDEX_PAGE', $idp);
