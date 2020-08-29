@@ -38,12 +38,17 @@ define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 
 $doc_path = "/apps";
 $idp = "";
+$mricf_dir = "/interchangecars2";
 if($_SERVER['SERVER_NAME'] == "localhost" || strpos("a".$_SERVER['SERVER_NAME'],"10.0.0.") > 0){
 	$doc_path = "/Applications";
 	$idp = "/index.php";
 }
-define('DOC_ROOT', $_SERVER['DOCUMENT_ROOT'].$doc_path."/interchangecars2");
-define('WEB_ROOT', 'http://'.$_SERVER['SERVER_NAME'].$doc_path."/interchangecars2");
+if(strpos($_SERVER['PHP_SELF'],"interchangecars2_test") > 0){
+	$mricf_dir = "/interchangecars2_test";
+}
+echo $_SERVER['PHP_SELF']; exit();
+define('DOC_ROOT', $_SERVER['DOCUMENT_ROOT'].$doc_path.$mricf_dir);
+define('WEB_ROOT', 'http://'.$_SERVER['SERVER_NAME'].$doc_path.$mricf_dir);
 define('INDEX_PAGE', $idp);
 
 /* USED IF YOU USE A THEME */
