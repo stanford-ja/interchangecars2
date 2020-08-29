@@ -73,7 +73,7 @@ class Login extends CI_Controller {
 			}
 			$this->input->set_cookie('rr_sess',$qry[0]->id,$this->cookiedie);
 			$this->input->set_cookie('_tz',$this->arr['allRR'][$qry[0]->id]->tzone,$this->cookiedie);
-			if(@$this->arr['allRR'][$qry[0]->id]->admin_flag == 1){$this->input->set_cookie('_mricfadmin',1,$$this->cookiedie);}
+			if(@$this->arr['allRR'][$qry[0]->id]->admin_flag == 1){$this->input->set_cookie('_mricfadmin',1,$this->cookiedie);}
 			$this->last_act_update($qry[0]->id);
 			$this->session->set_flashdata('loginSuccess', '1');
 			header("Location:".WEB_ROOT.INDEX_PAGE."/home");
