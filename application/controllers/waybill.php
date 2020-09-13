@@ -418,6 +418,8 @@ class Waybill extends CI_Controller {
 	function tranship($id=0){
 		//$s3 = "SELECT `waybill_num` FROM `ichange_waybill` WHERE `waybill_num` LIKE '".$id."%'";
 		$wb = (array)$this->Waybill_model->get_single($id,'id');
+		$cars_arr = json_decode($wb[0]->cars,true);
+		//echo "<pre>"; print_r($cars_arr); echo "</pre>"; exit();
 		$r3 = (array)$this->Waybill_model->get_allTranshipped($wb[0]->waybill_num);
 		$flds_arr = $this->Waybill_model->get_fld_names();
 		/*
@@ -472,11 +474,16 @@ class Waybill extends CI_Controller {
 		//$r1['notes'] = "";
 		$r1['date'] = date('Y-m-d');
 		$r1['cars'] = "";
+		/* REPLACED BY RETREIVE FROM ichange_progress BELOW - 2020-09-13
 		$r1_prog = @json_decode($r1['progress'], true);
 		$r1_max = count($r1_prog) - 1;
 		$r1_last = $r1_prog[$r1_max];
 		$r1_progress = array();
 		$r1_progress[] = $r1_last;
+		*/
+		$sql = "SELECT * FROM `ichange_progress` WHERE `waybill_num` = '".$wb[0]->waybill_num."' ORDER BY `added` DESC LIMIT 1";
+		$tmp = (array)$this->Generic_model->qry($sql);
+		$r1_last = (array)$tmp[0];
 		// Added 2016-03-02			
 		$prog_sql = "INSERT INTO `ichange_progress` SET 
 			`date` = '".$r1_last['date']."', 
@@ -495,7 +502,7 @@ class Waybill extends CI_Controller {
 		$r1_progress[] = array(
 			'date' => date('Y-m-d'),
 			'time' => date('H:i'), 
-			'text' => "TRANSHIPPED FROM WB ".$wb[0]->waybill_num, 
+			'text' => "TRANSHIPPED ".count($cars_arr)." CARS OF ".$wb[0]->lading." FROM WB ".$wb[0]->waybill_num, 
 			'waybill_num' => $t_wb, 
 			'status' => "TRANSHIPPED", 
 			'map_location' => "", 
@@ -505,7 +512,7 @@ class Waybill extends CI_Controller {
 		$prog_sql = "INSERT INTO `ichange_progress` SET 
 			`date` = '".date('Y-m-d')."', 
 			`time` = '".date('H:i')."', 
-			`text` = 'TRANSHIPPED FROM WB ".$wb[0]->waybill_num."', 
+			`text` = '".count($cars_arr)." CARS OF ".$wb[0]->lading." TRANSHIPPED FROM WB ".$wb[0]->waybill_num."', 
 			`waybill_num` = '".$t_wb."', 
 			`map_location` = '', 
 			`status` = 'TRANSHIPPED', 
@@ -532,10 +539,11 @@ class Waybill extends CI_Controller {
 		// End create new waybill
 
 		// Start Update Orig Waybill
-		$r1_prog[] = array(
+		//$r1_prog[] = array(
+		$r1_prog = array(
 			'date' => date('Y-m-d'), 
 			'time' => date('H:i'), 
-			'text' => "FREIGHT TRANSHIPPED TO WB ".$t_wb.". CAR EMPTY AND READY FOR RETURN JOURNEY.", 
+			'text' => count($cars_arr)." CARS OF ".$wb[0]->lading." TRANSHIPPED TO WB ".$t_wb.". CAR EMPTY AND READY FOR RETURN JOURNEY.", 
 			'waybill_num' => $id, 
 			'status' => "UNLOADED", 
 			'map_location' => "", 
@@ -543,14 +551,25 @@ class Waybill extends CI_Controller {
 		);
 		$json_prog = json_encode($r1_prog);
 		//$s4 = "UPDATE `ichange_waybill` SET `progress` = '".$json_prog."', `status` = 'UNLOADED', `lading` = 'MT' WHERE `waybill_num` = '".$id."'";
-		$s4 = "UPDATE `ichange_waybill` SET `progress` = '".$json_prog."', `status` = 'UNLOADED', `lading` = 'MT' WHERE `id` = '".$id."'";
+		//$s4 = "UPDATE `ichange_waybill` SET `progress` = '".$json_prog."', `status` = 'UNLOADED', `lading` = 'MT' WHERE `id` = '".$id."'";
 		//mysqli_query($s4);
+		$s4 = "INSERT INTO `ichange_progress` SET 
+			`date` = '".$r1_prog['date']."', 
+			`time` = '".$r1_prog['time']."', 
+			`text` = '".$r1_prog['text']."', 
+			`waybill_num` = '".$wb[0]->waybill_num."', 
+			`status` = '".$r1_prog['status']."', 
+			`map_location` = '".$r1_prog['map_location']."', 
+			`tzone` = '".$r1_prog['tzone']."', 
+			`added` = '".date('U')."'";
 		$this->Generic_model->change($s4);
+		$s5 = "UPDATE `ichange_waybill` SET `status` = 'UNLOADED', `lading` = 'MT' WHERE `id` = '".$id."'";
+		$this->Generic_model->change($s5);
 		// End Update Orig Waybill
 
 		// Redirect to SWAP orig / Dest, etc.
 		//header("Location:edit.php?action=EDIT&type=WAYBILL&id=".$id."&swap=1&unsaved=1"); //edit.php?type=WAYBILL&id=".$id."&action=EDIT");
-		header("Location:../../waybill/edit/".$id); //edit.php?type=WAYBILL&id=".$id."&action=EDIT");
+		header("Location:".WEB_ROOT.INDEX_PAGE."/waybill/edit/".$id); //edit.php?type=WAYBILL&id=".$id."&action=EDIT");
 	}
 	
 	function swap($id=0){

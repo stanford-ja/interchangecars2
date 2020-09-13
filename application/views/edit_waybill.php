@@ -49,26 +49,26 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 			<span style="font-size: 10pt;">
 					<?php if($fld11 != "MT" && $fld11 != "MTY"){ ?>
 					<div class="wbLinkElement">
-						<a href="../../waybill/swap/<?php echo $id; ?>">Swap origin / destination, mark Lading as MT</a>
+						<a href="<?php echo WEB_ROOT.INDEX_PAGE; ?>/waybill/swap/<?php echo $id; ?>">Swap origin / destination, mark Lading as MT</a>
 					</div>
 					<?php } ?>
 					<div class="wbLinkElement">
 						<a href="#progfrm">Progress</a>
 					</div>
 					<div class="wbLinkElement">
-						<!-- <a href="<?php echo WEB_ROOT; ?>/messaging/lst/<?php echo $id; ?>">Messages</a> REPLACED BY BELOW 2020-08-13 // -->
+						<!-- <a href="<?php echo WEB_ROOT.INDEX_PAGE; ?>/messaging/lst/<?php echo $id; ?>">Messages</a> REPLACED BY BELOW 2020-08-13 // -->
 						<a href="<?php echo WEB_ROOT; ?>/forum/search.php?action=search&keywords=<?php echo $fld8; ?>&show_as=topics&search=Submit">Messages</a>
 					</div>
 					<?php if($id > 0){ ?>
-						<!-- <a href="javascript:{}" onclick="window.open('<?php echo WEB_ROOT; ?>/graphics/waybill/<?php echo $id; ?>','WB<?php echo $id; ?>','width=500, height=700');">Upload Image</a>&nbsp; // -->
+						<!-- <a href="javascript:{}" onclick="window.open('<?php echo WEB_ROOT.INDEX_PAGE; ?>/graphics/waybill/<?php echo $id; ?>','WB<?php echo $id; ?>','width=500, height=700');">Upload Image</a>&nbsp; // -->
 					<div class="wbLinkElement">
 						<a href="#imagesDiv">Upload Image</a>
 					</div>
 					<?php } ?>
 					<div class="wbLinkElement">
-						<a href="<?php echo WEB_ROOT; ?>/waybill/tranship/<?php echo $id; ?>" style=\"color: yellow;\">Tranship</a>&nbsp;
+						<a href="<?php echo WEB_ROOT.INDEX_PAGE; ?>/waybill/tranship/<?php echo $id; ?>" style=\"color: yellow;\">Tranship</a>&nbsp;
 					</div>
-					<!-- <a href="<?php echo WEB_ROOT; ?>/edit.php?type=WAYBILL&id=20120517115321&action=EDIT" style=\"color: yellow;\">Orig. Waybill</a>&nbsp; // -->
+					<!-- <a href="<?php echo WEB_ROOT.INDEX_PAGE; ?>/edit.php?type=WAYBILL&id=20120517115321&action=EDIT" style=\"color: yellow;\">Orig. Waybill</a>&nbsp; // -->
 				</span>
 
 				</td>
