@@ -96,7 +96,7 @@ class Rr extends CI_Controller {
 			$forump .= "<div class=\"forumpost2\">
 				<strong><a href=\"".WEB_ROOT."/forum/viewtopic.php?id=".$fordat[$f]->topic_id."\">".$fordat[$f]->subject."</a></strong><br />
 				Posted in <strong>".$fordat[$f]->forum_name."</strong> on ".date('Y-m-d H:i',$fordat[$f]->posted)."<br /><br />
-				".$fordat[$f]->message."
+				".$this->BBCode->bbcode_to_html($fordat[$f]->message)."
 				</div>";
 		}
 
