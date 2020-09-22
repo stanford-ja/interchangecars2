@@ -35,9 +35,9 @@ class Storedfreight extends CI_Controller {
 		$this->dat['fields'] 			= array('id', 'indust_name', 'qty_cars', 'commodity', 'availability', 'added');
 		$this->dat['field_names'] 		= array("ID", "Stored at Industry", "Qty of Cars", "Commodity", "Availability", "Added");
 		$this->dat['options']			= array(
-				'Acquire' => "storedfreight/acquire/",
-				'Make Public' => "storedfreight/makepublic/",
-				'Make Private' => "storedfreight/makeprivate/"
+				'Acquire' => WEB_ROOT.INDEX_PAGE."/storedfreight/acquire/",
+				'Make Public' => WEB_ROOT.INDEX_PAGE."/storedfreight/makepublic/",
+				'Make Private' => WEB_ROOT.INDEX_PAGE."/storedfreight/makeprivate/"
 			); // Paths to options method, with trailling slash!
 		
 		//$rr_me = (array)$this->Railroad_model->get_single(@$this->arr['rr_sess']);
@@ -61,7 +61,12 @@ class Storedfreight extends CI_Controller {
 		// Load views
 		$this->load->view('header', $this->arr);
 		$this->load->view('menu', $this->arr);
-		$this->load->view('list', $this->dat);
+		if($this->arr['rr_sess'] > 0){
+			$this->load->view('list', $this->dat);
+		}else{
+			$this->load->view('not_allowed');
+		}
+		//$this->load->view('list', $this->dat);
 		$this->load->view('footer');
 	}
 
@@ -89,8 +94,9 @@ class Storedfreight extends CI_Controller {
 
 		$this->load->view('header', $this->arr);
 		$this->load->view('menu', $this->arr);
-		if($this->arr['rr_sess'] > 0){$this->load->view('edit', $this->dat);}
-		else{
+		if($this->arr['rr_sess'] > 0){
+			$this->load->view('edit', $this->dat);
+		}else{
 			$this->load->view('not_allowed');
 		}
 		$this->load->view('footer');
@@ -130,19 +136,19 @@ class Storedfreight extends CI_Controller {
 	
 		//echo "<pre>"; print_r($dat); print_r($p); print_r($arr); print_r($wb); echo "</pre>";
 		//echo $sql;
-		header("Location:".WEB_ROOT."/waybill/edit/".$wb[0]->id);
+		header("Location:".WEB_ROOT.INDEX_PAGE."/waybill/edit/".$wb[0]->id);
 	}
 
 	function makepublic($id=0){
 		$sql = "UPDATE `ichange_indust_stored` SET `availability` = '0' WHERE `id` = '".$id."'";
 		$this->Generic_model->change($sql);
-		header("Location:".WEB_ROOT."/storedfreight");
+		header("Location:".WEB_ROOT.INDEX_PAGE."/storedfreight");
 	}
 	
 	function makeprivate($id=0){
 		$sql = "UPDATE `ichange_indust_stored` SET `availability` = '".$this->arr['rr_sess']."' WHERE `id` = '".$id."'";
 		$this->Generic_model->change($sql);
-		header("Location:".WEB_ROOT."/storedfreight");
+		header("Location:".WEB_ROOT.INDEX_PAGE."/storedfreight");
 	}
 	
 	public function setFieldSpecs(){
