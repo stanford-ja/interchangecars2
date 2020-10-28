@@ -28,7 +28,7 @@ for($i=0;$i<count($lnk_kys);$i++){
 	}
 }
 echo "</p>";
-//if(isset($before_table)){echo $before_table;}
+if(isset($before_table)){echo $before_table;}
 if(isset($list_order_NOTNEEDED)){ ?>
 	<div style="display: inline-block; padding: 5px; float: right;">
 	<form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
