@@ -26,6 +26,13 @@ class Aar extends CI_Controller {
 	}
 	
 	public function lst(){
+		$this->arr['jquery'] = "\$('.table1').DataTable({ 
+			paging: false, 
+			searching: true, 
+			responsive: true, 
+			info: false, 
+			stateSave: false,
+			order: [[ 1, 'asc' ]] });";
 		$this->arr['pgTitle'] .= " - List";
 		$randpos = array();
 		$arrdat = (array)$this->Aar_model->get_allSorted();
@@ -51,7 +58,8 @@ class Aar extends CI_Controller {
 		// Load views
 		$this->load->view('header', $this->arr);
 		$this->load->view('menu', $this->arr);
-		$this->load->view('list', $this->dat);
+		//$this->load->view('list', $this->dat);
+		$this->load->view('table', $this->dat);
 		$this->load->view('footer');
 	}
 	

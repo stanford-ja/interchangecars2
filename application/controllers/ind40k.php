@@ -28,6 +28,14 @@ class Ind40k extends CI_Controller {
 	}
 	
 	public function lst(){
+		$this->arr['jquery'] = "\$('.table1').DataTable({ 
+			paging: false, 
+			searching: false, 
+			responsive: true, 
+			info: false, 
+			stateSave: false,
+			order: [[ 2, 'asc' ]] 
+			});";
 		$this->arr['pgTitle'] .= " - List";
 		$randpos = array();
 		$whr="LENGTH(`industry`) > 0";
@@ -58,7 +66,7 @@ class Ind40k extends CI_Controller {
 			$this->dat['data'][$i]['city'] 						= $industdat[$i]->city;
 			$this->dat['data'][$i]['state']				= $industdat[$i]->state;
 			$this->dat['data'][$i]['serving_rr'] 			= $industdat[$i]->serving_rr;
-			$this->dat['data'][$i]['ships_recives'] 			= $industdat[$i]->ships_receives;
+			$this->dat['data'][$i]['ships_receives'] 			= $industdat[$i]->ships_receives;
 			$this->dat['data'][$i]['commodity'] 			= $industdat[$i]->commodity;
 			$this->dat['data'][$i]['stcc'] 			= $industdat[$i]->stcc;
 		}
@@ -74,19 +82,22 @@ class Ind40k extends CI_Controller {
 	The OpSig Industry Database is available at <a href=\"http://www.opsig.org/reso/inddb/\" target=\"opsig_ind\">www.opsig.org/reso/inddb/</a>.
 	</div>";
 		$this->flddat['fields'][] = form_open_multipart('../ind40k');
-		$this->flddat['fields'][] = "<span style=\"font-size: 10pt;\">City: </span>".form_input(array('name' => "city", 'size' => 15))."&nbsp;";
-		$this->flddat['fields'][] = "<span style=\"font-size: 10pt;\">State: </span>".form_input(array('name' => "state", 'size' => 5))."&nbsp;";
-		$this->flddat['fields'][] = "<span style=\"font-size: 10pt;\">Commodity: </span>".form_input(array('name' => "commodity", 'size' => 15))."<br />";
-		$this->flddat['fields'][] = "<span style=\"font-size: 10pt;\">Era: </span>".form_input(array('name' => "era", 'size' => 10))."&nbsp;";
-		$this->flddat['fields'][] = "<span style=\"font-size: 10pt;\">STCC: </span>".form_input(array('name' => "stcc", 'size' => 10))."&nbsp;";
-		$this->flddat['fields'][] = form_submit('submit', 'Search');
+		$this->flddat['fields'][] = "<table style=\"width: 100%;\">
+			<tr><td>City:</td><td>".form_input(array('name' => "city", 'size' => 15))."&nbsp;</td>";
+		$this->flddat['fields'][] = "<td>State: </td><td>".form_input(array('name' => "state", 'size' => 15))."&nbsp;</td>";
+		$this->flddat['fields'][] = "<td>Commodity: </td><td>".form_input(array('name' => "commodity", 'size' => 15))."</td></tr>";
+		$this->flddat['fields'][] = "<tr><td>Era: </td><td>".form_input(array('name' => "era", 'size' => 15))."&nbsp;</td>";
+		$this->flddat['fields'][] = "<td>STCC: </td><td>".form_input(array('name' => "stcc", 'size' => 15))."&nbsp;</td>";
+		$this->flddat['fields'][] = "<td>".form_submit('submit', 'Search Ind40K')."</td><td>&nbsp;</td></tr></table>";
+		//$this->flddat['fields'][] = form_submit('submit', 'Search Ind40K');
 		$this->flddat['fields'][] = form_close();
 
 		// Load views
 		$this->load->view('header', $this->arr);
 		$this->load->view('menu', $this->arr);
 		$this->load->view('fields', @$this->flddat);
-		$this->load->view('list', $this->dat);
+		//$this->load->view('list', $this->dat);
+		$this->load->view('table', $this->dat);
 		$this->load->view('footer');
 	}
 	

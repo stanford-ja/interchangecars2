@@ -19,6 +19,10 @@ header("Pragma: no-cache");
 	<head>
 		<title><?php echo $pgTitle; ?></title>
 		<meta charset="utf-8">
+		<meta name="generator" content="Bluefish 2.2.2" >
+		<meta name="author" content="James" >
+		<meta name="keywords" content="model, railroad, railway, freight, car, freight, forwarding, interchange, application, waybill, train sheet, rollingstock, management">
+		<meta name="description" content="The MRICF is a Model Railroad Virtual Freight and Cars Forwarding Application with Waybills, Industries, Train Sheets, Rollingstock management and more">
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 		<?php if(isset($redirect)){ echo "<meta http-equiv=\"refresh\" content=\"0;URL='".$redirect."'\" />"; } ?>
@@ -31,12 +35,12 @@ header("Pragma: no-cache");
 		<link rel="stylesheet" href="<?=CSS_ROOT?>/balloon.css" type="text/css" media="screen">
 		<link rel="stylesheet" href="<?=CSS_ROOT?>/print.css" type="text/css" media="print">
 		<!-- <link rel="stylesheet" href="<?=CSS_ROOT?>/mobile.css" type="text/css" media="handheld"> // -->
-		<meta name="generator" content="Bluefish 2.2.2" >
-		<meta name="author" content="James" >
-		<meta name="keywords" content="model, railroad, railway, freight, car, freight, forwarding, interchange, application, waybill, train sheet, rollingstock, management">
-		<meta name="description" content="The MRICF is a Model Railroad Virtual Freight and Cars Forwarding Application with Waybills, Industries, Train Sheets, Rollingstock management and more">
+		<link rel="stylesheet" href="<?php echo CSS_ROOT; ?>/jquery.dataTables.min.css" />
+		<link rel="stylesheet" href="<?php echo CSS_ROOT; ?>/responsive.dataTables.min.css" />
 		<script type="text/javascript" src="<?php echo JS_ROOT; ?>/jquery-1.8.2.min.js"></script>
 		<script type="text/javascript" src="<?php echo JS_ROOT; ?>/push.min.js"></script>
+		<script src="<?php echo JS_ROOT; ?>/jquery.dataTables.min.js"></script>
+		<script src="<?php echo JS_ROOT; ?>/dataTables.responsive.min.js"></script>
 		<!-- 
 		<script type="text/javascript" src="<?php echo JS_ROOT; ?>/jquery-1.9.1.min.js"></script>
 		<script type="text/javascript" src="<?php echo JS_ROOT; ?>/jquery.autocomplete.min.js"></script>
@@ -119,6 +123,7 @@ header("Pragma: no-cache");
 	<?php if(file_exists(@$script_file)){include($script_file); } ?>
 
 	$(document).ready(function(){
+		<?php if(isset($jquery)){ echo $jquery."\n"; } ?>
 		$("#search_expand").click(function(){
 			$("#search").slideDown("slow");
 			document.getElementById('search').style.display = 'block';

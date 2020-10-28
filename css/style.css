@@ -185,6 +185,16 @@ hr {color: #ccc;}
 	border: none;
 }
 
+/* START DataTable STYLES */
+table tbody tr td {
+	background-color: ivory;
+	border: 1px solid #bbb;
+	padding: 6px;
+	font-size: 10pt;
+}
+.dataTables_filter { display: block; margin: 5px; text-align: left; }
+/* END */
+
 .tiny_txt {
 	font-size: 8pt;
 }

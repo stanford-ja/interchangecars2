@@ -46,6 +46,13 @@ class Trains extends CI_Controller {
 	}
 	
 	public function lst(){
+		$this->arr['jquery'] = "\$('.table1').DataTable({ 
+			paging: false, 
+			searching: true, 
+			responsive: true, 
+			info: false, 
+			stateSave: false,
+			order: [[ 1, 'asc' ]] });";
 		// Sync waypoints, origin, destination, tr_sheet_ord
 		// 1st - create waypoints from origin, destination & tr_sheet_ord where waypoints has not been set.
 		$sql = "SELECT `id`,`origin`,`destination`,`tr_sheet_ord` FROM `ichange_trains` WHERE LENGTH(`waypoints`) < 6 AND `railroad_id` = '".$this->arr['rr_sess']."'";
@@ -186,7 +193,8 @@ class Trains extends CI_Controller {
 		$this->load->view('header', $this->arr);
 		$this->load->view('menu', $this->arr);
 		if($this->arr['rr_sess'] > 0){
-			$this->load->view('list', $this->dat);
+			//$this->load->view('list', $this->dat);
+			$this->load->view('table', $this->dat);
 		}else{
 			$this->load->view('not_allowed');
 		}

@@ -28,6 +28,13 @@ class Storedfreight extends CI_Controller {
 	}
 	
 	public function lst(){
+		$this->arr['jquery'] = "\$('.table1').DataTable({ 
+			paging: false, 
+			searching: true, 
+			responsive: true, 
+			info: false, 
+			stateSave: false,
+			order: [[ 1, 'asc' ]] });";
 		$this->arr['pgTitle'] .= " - List";
 		$this->Generic_model->change("DELETE FROM `ichange_indust_stored` WHERE `qty_cars` = 0");
 		$stored = (array)$this->Storedfreight_model->get_all_nonzero($this->arr['rr_sess']);
@@ -62,7 +69,8 @@ class Storedfreight extends CI_Controller {
 		$this->load->view('header', $this->arr);
 		$this->load->view('menu', $this->arr);
 		if($this->arr['rr_sess'] > 0){
-			$this->load->view('list', $this->dat);
+			//$this->load->view('list', $this->dat);
+			$this->load->view('table', $this->dat);
 		}else{
 			$this->load->view('not_allowed');
 		}
