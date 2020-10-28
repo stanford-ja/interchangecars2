@@ -248,6 +248,14 @@ class Trains extends CI_Controller {
 	function sheet($day="sun",$auto=0){
 		// Train Sheet for day = $tarr['day'], (sun,mon,tues,wed,thu,fri,sat)
 		// Railroad $tarr['rr']; Show Auto Trains $tarr['auto']
+		$this->arr['jquery'] = "\$('.table1').DataTable({ 
+			paging: false, 
+			searching: false, 
+			responsive: true, 
+			info: false, 
+			stateSave: false,
+			order: [[ 4, 'asc' ]] 
+			});";
 		if(isset($_POST['day'])){$tarr = $_POST;}
 		else{$tarr = array('day' => $day, 'auto' => $auto);}
 		$this->arr['pgTitle'] .= " - Train Sheet for ".ucwords($tarr['day']);
@@ -355,7 +363,8 @@ class Trains extends CI_Controller {
 		$this->load->view('header', $this->arr);
 		$this->load->view('menu', $this->arr);
 		if($this->arr['rr_sess'] > 0){
-			$this->load->view('list', $this->dat);
+			//$this->load->view('list', $this->dat);
+			$this->load->view('table', $this->dat);
 		}else{
 			$this->load->view('not_allowed');
 		}

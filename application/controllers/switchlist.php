@@ -52,6 +52,14 @@ class Switchlist extends CI_Controller {
 	}
 	
 	public function lst($id=0){
+		$this->arr['jquery'] = "\$('.table1').DataTable({ 
+			paging: false, 
+			searching: false, 
+			responsive: true, 
+			info: false, 
+			stateSave: false,
+			order: [[ 4, 'asc' ]] 
+			});";
 		//$this->arr['pgTitle'] .= " - Switchlist";
 		$randpos = array();
 		$trdat = (array)$this->Train_model->get_single($id); // Single train indicated by `id`
@@ -316,7 +324,8 @@ class Switchlist extends CI_Controller {
 		if($this->arr['rr_sess'] > 0){
 			$this->load->view('view', $this->trdat);
 			$this->load->view('fields', @$this->flddat);
-			$this->load->view('list', $this->dat);
+			//$this->load->view('list', $this->dat);
+			$this->load->view('table', $this->dat);
 		}else{
 			$this->load->view('not_allowed');
 		}
