@@ -51,7 +51,7 @@ if(isset($list_order_NOTNEEDED)){ ?>
 		$wid = intval(100/(count($field_names)+1))."%";
 		if(isset($widths[$i])){ $wid = $widths[$i]; }
 	?>
-		<td class="td_title"><?php echo $field_names[$i] ; ?></td>
+		<td class="td_title"><?php echo $field_names[$i] ; ?><br /></td>
 	<?php } ?>
 		<td class="td_title">Options</td>
 	</tr>
