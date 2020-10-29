@@ -55,11 +55,30 @@ class Switchlist extends CI_Controller {
 		$this->arr['jquery'] = "\$('.table1').DataTable({ 
 			paging: false, 
 			searching: false, 
-			responsive: true, 
+			responsive: {
+				details: {
+					display: $.fn.dataTable.Responsive.display.childRowImmediate,
+					type: ''
+				}
+			}, 
 			info: false, 
 			stateSave: false,
-			order: [[ 4, 'asc' ]] 
-			});";
+			order: [[ 2, 'asc' ]] 
+			});\n";
+		$this->arr['jquery'] .= "\$('.table2').DataTable({ 
+			paging: false, 
+			searching: false, 
+			responsive: true, 
+			info: false, 
+			stateSave: false
+			});\n";
+		$this->arr['jquery'] .= "\$('.table3').DataTable({ 
+			paging: false, 
+			searching: false, 
+			responsive: true, 
+			info: false, 
+			stateSave: false
+			});\n";
 		//$this->arr['pgTitle'] .= " - Switchlist";
 		$randpos = array();
 		$trdat = (array)$this->Train_model->get_single($id); // Single train indicated by `id`
@@ -136,8 +155,8 @@ class Switchlist extends CI_Controller {
 		$this->dat['fields'] 			= array('waybill_num', 'move_to', 'cars','info','lading','routing','rr_id_handling');
 		$this->dat['field_names'] 		= array("Waybill No.", "Action", "Cars on waybill","Details","Lading","Route","On Railroad");
 		*/
-		$this->dat['fields'] 			= array('waybill_num', 'cars','info','lading','routing','rr_id_handling');
-		$this->dat['field_names'] 		= array("Waybill No. / Order", "Cars on waybill","Details","Lading","Route","On Railroad");
+		$this->dat['fields'] 			= array('waybill_num', 'cars','sw_ord','info','lading','routing','rr_id_handling');
+		$this->dat['field_names'] 		= array("Waybill No.", "Cars on waybill","Order","Details","Lading","Route","On Railroad");
 		//$this->dat['field_styles']		= array(0 => "width: 180px;");
 		$this->dat['options']			= array();
 		if($this->arr['rr_sess'] > 0){$this->dat['options']	= array('Edit' => "onclick:if(isNaN('[id]')){ alert('You cannot edit this as it is not a waybill.'); }else{ window.location = '../../waybill/edit/[id]'; }",
@@ -175,6 +194,7 @@ class Switchlist extends CI_Controller {
 				$cars = "";
 				$cars_cntr = 0;
 				$cars_arr = @json_decode($arrdat[$i]->cars,TRUE);
+				if(!is_array($cars_arr)){ $cars_arr = array(); }
 				for($c=0;$c<count($cars_arr);$c++){
 					if(in_array($cars_arr[$c]['RR'],$this->my_rr_ids) && strlen($cars_arr[$c]['NUM']) > 0){
 						$cars_cntr++;
@@ -278,8 +298,10 @@ class Switchlist extends CI_Controller {
 				}
 				if(strlen($prog_locs_txt) > 0){ $this->dat['data'][$i]['info'] .= "<div style=\"display: block; font-size: 9pt;border-bottom: 1px solid #999; padding: 5px; margin: 2px;\">Journey so far: ".$prog_locs_txt."</div>"; }
 				if(strlen($arrdat[$i]->notes) > 0){			$this->dat['data'][$i]['info'] .= "<div style=\"display: block; font-size: 9pt;border-bottom: 1px solid #999; padding: 5px; margin: 2px;\"><em>".$arrdat[$i]->notes."</em></div>";}
+				$sw_ord = 999; if(isset($arrdat[$i]->sw_order) && $arrdat[$i]->sw_order > -1){ $sw_ord = $arrdat[$i]->sw_order; }
 				$this->dat['data'][$i]['routing']				= $arrdat[$i]->routing;
 				$this->dat['data'][$i]['lading']				= $arrdat[$i]->lading;
+				$this->dat['data'][$i]['sw_ord']				= $sw_ord;
 				$this->dat['data'][$i]['rr_id_handling']		= ""; if(isset($this->arr['allRR'][$arrdat[$i]->rr_id_handling])){ $this->dat['data'][$i]['rr_id_handling'] = $this->arr['allRR'][$arrdat[$i]->rr_id_handling]->report_mark; }
 				
 				$this->dat['widths'] = array(2=>"45%", 3=>"8%", 4=>"4%" , 5=>"4%" , 6=>"54%", 7=>"5%");
@@ -296,15 +318,40 @@ class Switchlist extends CI_Controller {
 			$this->flddat['fields'][] = form_hidden('id',$id);
 			$this->flddat['fields'][] = form_hidden('train_id',$trdat[0]->train_id);
 			$this->flddat['fields'][] = form_hidden('wb_affected_ids',$wb_affected_ids);
-			$this->flddat['fields'][] = "<span style=\"font-size: 10pt; float: left:\">Train Location: <input type=\"text\" name=\"tr_location\" value=\"".$trdat[0]->location."\" onchange=\"document.tr_ind.tr_location.value = this.value;\" />&nbsp;".form_submit('submit', 'Change Location')."&nbsp;</span>";
-			$this->flddat['fields'][] = "<span style=\"font-size: 10pt;\">Move to: <select name=\"move_to\">".$move_to_opts."</select>&nbsp;".
-				"Date/Time: <select name=\"move_to_dt\" style=\"font-size:9pt;\">".$this->dt_opts($latest_ux)."</select>".
-				"&nbsp;<select name=\"move_to_hr\" style=\"font-size:9pt;\">".$this->hr_opts()."</select>:".
-				"<select name=\"move_to_mi\" style=\"font-size:9pt;\">".$this->mi_opts()."</select></span>";
-			$this->flddat['fields'][] = "&nbsp;".form_submit('submit', 'Deliver Cars');
+			$this->flddat['fields'][] = "<table class=\"table2\" style=\"width: 95%;\">
+					<thead>
+					<tr>
+						<td>Move to</td>
+						<td>Date/Time</td>
+						<td>Action</td>
+					</tr>
+					</thead>
+					<tbody>
+					<tr>
+						<td><select name=\"move_to\" style=\"font-size: 9pt; width: 95%;\">".$move_to_opts."</select></td>
+						<td>
+							<div style=\"display: inline-block;\"><select name=\"move_to_dt\" style=\"font-size:9pt;\">".$this->dt_opts($latest_ux)."</select></div>
+							&nbsp;<div style=\"display: inline-block;\"><select name=\"move_to_hr\" style=\"font-size:9pt;\">".$this->hr_opts()."</select> : <select name=\"move_to_mi\" style=\"font-size:9pt;\">".$this->mi_opts()."</select></div>
+						</td>
+						<td>".form_submit('submit', 'Deliver Cars')."</td>
+					</tr>
+					</tbody>
+				</table>";
+			$this->flddat['fields'][] = "<br /><table class=\"table3\" style=\"width: 95%;\">
+					<thead>
+						<td>Train Location</td>
+						<td>Action</td>
+					</thead>
+					<tbody>
+					<tr>
+						<td><input type=\"text\" name=\"tr_location\" style=\"width: 95%\" value=\"".$trdat[0]->location."\" onchange=\"document.tr_ind.tr_location.value = this.value;\" /></td>
+						<td>".form_submit('submit', 'Change Location')."</td>
+					</tr>
+					</tbody>
+				</table>";
 			$this->flddat['fields'][] = form_close().
 				"<span style=\"font-size: 10pt;\"><strong>To change only the Train Location:</strong> Enter the location and click the Change Location button.<br />
-				<strong>To change the train location AND deliver cars:</strong> Select Deliver To options and click the Delivery Cars or Deliver Cars Individually.</span>";
+				<strong>To change the train location AND deliver cars:</strong> Select Deliver To options and click the Deliver Cars or Deliver Cars Individually buttons.</span>";
 
 
 			// Form for table contents
