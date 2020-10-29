@@ -29,6 +29,7 @@ Once the Submit button has been clicked the records selected will disappear from
 <?php } ?>
 	</tbody>
 </table>
+<br />
 <?php } } ?>
 
 <h2>Car Pool</h2>
@@ -53,6 +54,7 @@ Once the Submit button has been clicked the records selected will disappear from
 <?php } ?>
 	</tbody>
 </table>
+<br />
 <?php } } ?>
 
 <h2>Motive Power</h2>
@@ -79,6 +81,7 @@ Once the Submit button has been clicked the records selected will disappear from
 <?php } ?>
 	</tbody>
 </table>
+<br />
 <?php } } ?>
 
 <h2>Trains</h2>
@@ -107,6 +110,7 @@ Once the Submit button has been clicked the records selected will disappear from
 <?php } ?>
 	</tbody>
 </table>
+<br />
 <?php } } ?>
 <input type="submit" name="submit" value="Move" />
 </form>
