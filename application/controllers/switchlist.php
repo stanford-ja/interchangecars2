@@ -321,9 +321,9 @@ class Switchlist extends CI_Controller {
 			$this->flddat['fields'][] = "<table class=\"table2\" style=\"width: 95%;\">
 					<thead>
 					<tr>
-						<td>Move to</td>
-						<td>Date/Time</td>
-						<td>Action</td>
+						<td class=\"td_title2\">Move to</td>
+						<td class=\"td_title2\">Date/Time</td>
+						<td class=\"td_title2\">Action</td>
 					</tr>
 					</thead>
 					<tbody>
@@ -339,8 +339,8 @@ class Switchlist extends CI_Controller {
 				</table>";
 			$this->flddat['fields'][] = "<br /><table class=\"table3\" style=\"width: 95%;\">
 					<thead>
-						<td>Train Location</td>
-						<td>Action</td>
+						<td class=\"td_title2\">Train Location</td>
+						<td class=\"td_title2\">Action</td>
 					</thead>
 					<tbody>
 					<tr>
