@@ -28,6 +28,38 @@ class Affiliates extends CI_Controller {
 	
 	public function mv(){
 		// Move affiliate industries, trains, etc from an affiliated railroad to railroad currently logged in as.
+		$this->arr['jquery'] = "\$('.table1').DataTable({ 
+			paging: false, 
+			searching: true, 
+			responsive: true, 
+			info: false, 
+			stateSave: false,
+			order: [[ 0, 'asc' ]] 
+			});\n";
+		$this->arr['jquery'] .= "\$('.table2').DataTable({ 
+			paging: false, 
+			searching: true, 
+			responsive: true, 
+			info: false, 
+			stateSave: false,
+			order: [[ 0, 'asc' ]] 
+			});\n";
+		$this->arr['jquery'] .= "\$('.table3').DataTable({ 
+			paging: false, 
+			searching: true, 
+			responsive: true, 
+			info: false, 
+			stateSave: false,
+			order: [[ 0, 'asc' ]] 
+			});\n";
+		$this->arr['jquery'] .= "\$('.table4').DataTable({ 
+			paging: false, 
+			searching: true, 
+			responsive: true, 
+			info: false, 
+			stateSave: false,
+			order: [[ 0, 'asc' ]] 
+			});\n";
 		$this->arr['pgTitle'] .= " - List";
 		if($this->arr['rr_sess'] > 0){
 			$this->rr = (array)$this->Generic_model->qry("SELECT `owner_name`,`id` FROM `ichange_rr` WHERE `id` LIKE '".$this->arr['rr_sess']."'");
