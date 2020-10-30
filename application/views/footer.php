@@ -6,6 +6,7 @@
 	echo "<span style=\"font-size: 10pt; color: red; float: right;\">GIT REPO available! To clone: <strong>git clone https://github.com/stanford-ja/interchangecars2.git</strong></span>";
 } ?>
 <span style="color: #777">&copy; <?php echo date('Y'); ?> J. Stanford.</span>
+<div id="searchtable1popup"></div>
 </body>
 	<?php if(strpos($_SERVER['REQUEST_URI'],"waybill/edit") < 1){ ?>
 	<script type="text/javascript">

@@ -208,6 +208,16 @@ $f21 = str_replace("{\"AAR_REQD\":\"UNDEFINED\",\"NUM\":\"UNDEFINED\",\"AAR\":\"
 			<?php } ?>
 		});
 	}
+
+	function parseFld21Car(){
+		// Parse what is in the fld21_car field if populated by 'search' table results.
+		var expSt = explodeStr('\,',document.getElementById('fld21_car').value); 
+		option0 = new Option(expSt[1],expSt[1]); 
+		document.form1.fld21_car.value = expSt[0]; 
+		document.form1.fld21_aar.options[0] = option0; 
+		document.form1.fld21_aar.options[0].selected = true;
+		addCar();
+	}
 	
 	function carsAutoFind(a,b){
 		a = a.toUpperCase();
@@ -395,14 +405,15 @@ $f21 = str_replace("{\"AAR_REQD\":\"UNDEFINED\",\"NUM\":\"UNDEFINED\",\"AAR\":\"
 		//var y = document.getElementById('pfld2_y');
 		//var m = document.getElementById('pfld2_m');
 		//var d = document.getElementById('pfld2_d');
-
+		
 		if(document.getElementById(i)){
 			var fdt = document.getElementById(i);
-			var y = document.getElementById(i+'_y');
-			var m = document.getElementById(i+'_m');
-			var d = document.getElementById(i+'_d');
+			if(document.getElementById(i+'_y')){ var y = document.getElementById(i+'_y'); }
+			if(document.getElementById(i+'_m')){ var m = document.getElementById(i+'_m'); }
+			if(document.getElementById(i+'_d')){ var d = document.getElementById(i+'_d'); }
 		
-			fdt.value = y.value + "-" + m.value + "-" + d.value;
+			if(y && m && d){ fdt.value = y.value + "-" + m.value + "-" + d.value; }
+			
 		}
 	}
 	

@@ -109,6 +109,7 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 			<td style="padding: 3px;" colspan="2">
 		// -->
 			<div class="wbElement">
+				<a name="carsdetails"></a>
 				<div class="wbElementHeading">&nbsp;&nbsp;Cars Details</div>
 				<span style="display: none;">
 					<textarea name="fld21" id="fld21" cols="50" rows="3"><?php echo $fld21; ?></textarea>
@@ -166,11 +167,11 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 						</div>
 						<br />
 						
-						<div style="display: inline-block; width: 450px; margin: 2px;">
+						<div style="display: inline-block; width: 480px; margin: 2px;">
 							<span id="fld9drop">
-								Car Select&nbsp;&nbsp;
+								Car Select&nbsp;<a href="#carsdetails" id="carsSearch" class="searchLink">Search & Add</a>&nbsp;
 								<span data-balloon="Select a car from the list, then click the Add Car button to add it to the car list for this waybill." data-balloon-pos="right" data-balloon-length="large"> 
-									<select id="fld9sel" name="fld9sel" style="width: 320px; background-color: white;" onChange="var expSt = explodeStr('\,',document.getElementById('fld9sel').value); option0 = new Option(expSt[1],expSt[1]); document.form1.fld21_car.value = expSt[0]; document.form1.fld21_aar.options[0] = option0; document.form1.fld21_aar.options[0].selected = true;">
+									<select id="fld9sel" name="fld9sel" style="width: 300px; background-color: white;" onChange="var expSt = explodeStr('\,',document.getElementById('fld9sel').value); option0 = new Option(expSt[1],expSt[1]); document.form1.fld21_car.value = expSt[0]; document.form1.fld21_aar.options[0] = option0; document.form1.fld21_aar.options[0].selected = true;">
 									<option value="">--Select Car Number or enter in Field above--</option>
 								<?php $last_aar = ""; for($c=0;$c<count($cars_options);$c++){
 									$this_aar = substr($cars_options[$c]['aar_type'],0,1);
@@ -361,9 +362,9 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 				<div id="fld11_span" style="display: none; border: 1px solid black; background-color: yellow; font-size: 9pt; padding: 5px;"></div>
 				</div>
 
-				<div style="display: inline-block; padding: 3px;">
-				Origin<br />
 				<a name="ind1"></a>
+				<div style="display: inline-block; padding: 3px;">
+				Origin <a href="#ind1" id="industOrigSearch" class="searchLink">Search</a><br />
 				<span data-balloon="The originating industry for this waybill. Enter the commodity to ship, the industry name, city or state for a list of industries." data-balloon-pos="right" data-balloon-length="large">
 					<input type"text" name="fld4" id="fld4" value="<?php echo $fld4; ?>" onKeyUp="industAutoComp(this.value,'ichange_indust','fld4','fld4',1)" onfocus="showEle('orig_ind_info');" onblur="hideEle('orig_ind_info');" style="width: 310px;" />
 				</span>
@@ -374,9 +375,9 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 				<span style="font-size: 9pt; display: none;" id="orig_ind_info"><!-- Enter the commodity to ship, the industry name, city or state for a list of industries.<br /> // --></span>
 				</div>
 
-				<div style="display: inline-block; padding: 3px;">
-				Destination<br />
 				<a name="ind2"></a>
+				<div style="display: inline-block; padding: 3px;">
+				Destination <a href="#ind2" id="industDestSearch" class="searchLink">Search</a><br />
 				<span data-balloon="The destination industry for this waybill. Enter the commodity to ship, the industry name, city or state for a list of industries." data-balloon-pos="right" data-balloon-length="large">
 					<input type"text" name="fld5" id="fld5" value="<?php echo $fld5; ?>" onKeyUp="industAutoComp(this.value,'ichange_indust','fld5','fld5',2);" onfocus="showEle('dest_ind_info');" onblur="hideEle('dest_ind_info');" style="width: 310px;" />
 				</span>

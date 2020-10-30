@@ -130,6 +130,39 @@ class Waybill extends CI_Controller {
 	
 	public function edit($id=0){
 		// Used for editing existing (edit/[id]) and adding new (edit/0) records
+		$this->load->library('javascript', array('js_library_driver' => 'jquery', 'autoload' => TRUE));
+		$this->arr['jquery'] = "";
+		//$this->arr['jquery'] .= "\$('.searchtable1').DataTable({ paging: true, searching: true, responsive: true, info: true, stateSave: false, ordering: false });\n";
+		$this->arr['jquery'] .= "\$('#industOrigSearch').click(function(){ 
+			var p1 = '".WEB_ROOT.INDEX_PAGE."/search/indust/fld4';
+			\$.get(p1,function(data1){ 
+				\$('#searchtable1popup').html(data1);
+				//document.getElementById('searchtable1popup').innerHTML = data1; 
+				\$('#searchtable1popup').modal();
+				\$('#searchtable1').DataTable({ responsive: true, order: [[ 1, 'asc' ]] });\n
+			});
+			return false;
+		}); \n";
+		$this->arr['jquery'] .= "\$('#industDestSearch').click(function(){ 
+			var p2 = '".WEB_ROOT.INDEX_PAGE."/search/indust/fld5';
+			\$.get(p2,function(data2){ 
+				\$('#searchtable1popup').html(data2);
+				//document.getElementById('searchtable1popup').innerHTML = data2; 
+				\$('#searchtable1popup').modal();
+				\$('#searchtable1').DataTable({ responsive: true, order: [[ 1, 'asc' ]] });\n
+			});
+			return false;
+		}); \n";
+		$this->arr['jquery'] .= "\$('#carsSearch').click(function(){ 
+			var p2 = '".WEB_ROOT.INDEX_PAGE."/search/car/fld21_car/' + document.getElementById('fld21_rr').value + '/parseFld21Car';
+			\$.get(p2,function(data2){ 
+				\$('#searchtable1popup').html(data2);
+				//document.getElementById('searchtable1popup').innerHTML = data2; 
+				\$('#searchtable1popup').modal();
+				\$('#searchtable1').DataTable({ responsive: true, order: [[ 1, 'asc' ]] });\n
+			});
+			return false;
+		}); \n";
 		if($this->arr['rr_sess'] == 0){header("Location:".WEB_ROOT."/waybill/view/".$id); exit();}
 		$this->load->helper('form');
 		$this->dat['attribs'] = array('name' => "form"); // Attribs for form tag

@@ -37,10 +37,13 @@ header("Pragma: no-cache");
 		<!-- <link rel="stylesheet" href="<?=CSS_ROOT?>/mobile.css" type="text/css" media="handheld"> // -->
 		<link rel="stylesheet" href="<?php echo CSS_ROOT; ?>/jquery.dataTables.min.css" />
 		<link rel="stylesheet" href="<?php echo CSS_ROOT; ?>/responsive.dataTables.min.css" />
+		<link rel="stylesheet" href="<?php echo CSS_ROOT; ?>/jquery.modal.min.css" />
 		<script type="text/javascript" src="<?php echo JS_ROOT; ?>/jquery-1.8.2.min.js"></script>
 		<script type="text/javascript" src="<?php echo JS_ROOT; ?>/push.min.js"></script>
 		<script src="<?php echo JS_ROOT; ?>/jquery.dataTables.min.js"></script>
 		<script src="<?php echo JS_ROOT; ?>/dataTables.responsive.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+
 		<!-- 
 		<script type="text/javascript" src="<?php echo JS_ROOT; ?>/jquery-1.9.1.min.js"></script>
 		<script type="text/javascript" src="<?php echo JS_ROOT; ?>/jquery.autocomplete.min.js"></script>
@@ -124,6 +127,7 @@ header("Pragma: no-cache");
 
 	$(document).ready(function(){
 		<?php if(isset($jquery)){ echo $jquery."\n"; } ?>
+		
 		$("#search_expand").click(function(){
 			$("#search").slideDown("slow");
 			document.getElementById('search').style.display = 'block';

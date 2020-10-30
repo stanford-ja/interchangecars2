@@ -486,6 +486,8 @@ div.forumposts {
 	/* color: #858585; */
 }
 
+a.searchLink { font-size: 9pt; text-decoration: none; display: inline-block; color: navy; background-color: ivory; border: 1px solid #777; border-radius: 4px; padding: 4px; margin: 2px; }
+
 .nextTrains {
 	display: block; 
 	margin: 3px; 
