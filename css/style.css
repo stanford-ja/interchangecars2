@@ -511,3 +511,19 @@ blockquote {
 div.quotebox blockquote { background-color: transparent; } /* For blockquote background reset in Forum */
 
 .wb_lnk_mess img { max-width: 75%; }
+
+.tranship_cars_rr { 
+	display: inline-block; 
+	padding: 3px;
+	border: 1px solid #ccc;
+	background-color: yellow;
+	border-radius: 3px;
+}
+
+.wbedit_ind_desc_div {
+	padding: 3px;
+	border: 1px solid #ccc;
+	background-color: ivory;
+	border-radius: 3px;
+	width: 310px;
+}

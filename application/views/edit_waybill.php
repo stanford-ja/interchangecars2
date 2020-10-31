@@ -357,7 +357,7 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 				</div>
 				</div>
 				<?php if($fld11 == "MT" || $fld11 == "MTY"){ ?>
-				<br />was&nbsp;<a href="javascript:{}" onclick="document.getElementById('fld11').value = '<?php echo trim($fld11_prev); ?>'"><?php echo $fld11_prev; ?></a>
+				was&nbsp;<a href="javascript:{}" onclick="document.getElementById('fld11').value = '<?php echo trim($fld11_prev); ?>'"><?php echo $fld11_prev; ?></a>
 				<?php } ?>
 				<div id="fld11_span" style="display: none; border: 1px solid black; background-color: yellow; font-size: 9pt; padding: 5px;"></div>
 				</div>
@@ -369,9 +369,7 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 					<input type"text" name="fld4" id="fld4" value="<?php echo $fld4; ?>" onKeyUp="industAutoComp(this.value,'ichange_indust','fld4','fld4',1)" onfocus="showEle('orig_ind_info');" onblur="hideEle('orig_ind_info');" style="width: 310px;" />
 				</span>
 				<div id="fld4_span" style="display: none; border: 1px solid black; background-color: yellow; font-size: 9pt; padding: 5px; max-height: 100px; overflow: auto;"></div>
-				<div id="fld4_indDescDiv" style="display: none;">
-					<textarea name="fld4_indDesc" id="fld4_indDesc" onchange="this.parent.style.display = 'block'" style="width: 310px;"><?php echo $fld4_indDesc; ?></textarea>
-				</div>
+				<div id="fld4_indDescDiv" class="wbedit_ind_desc_div" style="display: <?php if(isset($fld4_indDesc) && strlen($fld4_indDesc) > 0){ echo 'block'; }else{ echo 'none'; } ?>;"><?php echo $fld4_indDesc; ?></div>
 				<span style="font-size: 9pt; display: none;" id="orig_ind_info"><!-- Enter the commodity to ship, the industry name, city or state for a list of industries.<br /> // --></span>
 				</div>
 
@@ -382,9 +380,7 @@ if(isset($traindata[0]->sat) && $traindata[0]->sat == 1){$op_days[] = "Sat";}
 					<input type"text" name="fld5" id="fld5" value="<?php echo $fld5; ?>" onKeyUp="industAutoComp(this.value,'ichange_indust','fld5','fld5',2);" onfocus="showEle('dest_ind_info');" onblur="hideEle('dest_ind_info');" style="width: 310px;" />
 				</span>
 				<div id="fld5_span"  style="display: none; border: 1px solid black; background-color: yellow; font-size: 9pt; padding: 5px; max-height: 100px; overflow: auto;"></div>
-				<div id="fld5_indDescDiv" style="display: none;">
-					<textarea name="fld5_indDesc" id="fld5_indDesc" onchange="this.parent.style.display = 'block'" style="width: 310px;"><?php echo $fld5_indDesc; ?></textarea>
-				</div>
+				<div id="fld5_indDescDiv" class="wbedit_ind_desc_div" style="display: <?php if(isset($fld5_indDesc) && strlen($fld5_indDesc) > 0){ echo 'block'; }else{ echo 'none'; } ?>;"><?php echo $fld5_indDesc; ?></div>
 				<span style="font-size: 9pt; display: none;" id="dest_ind_info"><!-- Enter the commodity to ship, the industry name, city or state for a list of industries.<br /> // --></span>
 				</div>
 

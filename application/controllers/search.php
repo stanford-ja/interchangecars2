@@ -33,7 +33,9 @@ class Search extends CI_Controller {
 	public function indust($domId=""){
 		// $domID = document.getElementById() element name, eg, document.getElementById('indust_origin').
 		// `key` = field is the value to return when Select link is clicked (is ignored when creating table columns).
-		$sql = "SELECT CONCAT('[',`ichange_indust`.`id`,'] ',`indust_name`) AS `key`, `report_mark` AS `RR`, `indust_name` AS `Name`, `desc` AS `Description`, `town` AS `Town`, `freight_in` AS `Receives`, `freight_out` AS `Sends` 
+		$sql = "SELECT CONCAT('[',`ichange_indust`.`id`,'] ',`indust_name`) AS `key`, `report_mark` AS `RR`, 
+			`indust_name` AS `Name`, `op_info` AS `Op Info`, `desc` AS `Description`, `town` AS `Town`, 
+			`freight_in` AS `Receives`, `freight_out` AS `Sends` 
 			FROM `ichange_indust` 
 			LEFT JOIN `ichange_rr` ON `ichange_indust`.`rr` = `ichange_rr`.`id` 
 			WHERE LENGTH(`ichange_rr`.`report_mark`) > 0";

@@ -252,16 +252,33 @@ class Waybill extends CI_Controller {
   		   	$this->dat['sugg_car_types'] = "Commodities Data Suggested Car Types: <ul>".$this->dat['sugg_car_types']."</ul>";
   	   	}
   	  	}
-   	if(strlen(@$this->dat['data'][0]->car_aar) > 0){
-   		$aar_arr = (array)$this->Generic_model->qry("SELECT `desc` FROM `ichange_aar` WHERE `aar_code` = '".@$this->dat['data'][0]->car_aar."'");
-   		$aar_tmp = "<li>".$this->dat['data'][0]->car_aar." - ".@$aar_arr[0]->desc."</li>";
-   		$this->dat['sugg_car_types'] .= "Car Type from Purchase Order: <ul>".$aar_tmp."</ul>";
-   	}
-  	   
+
+		if(strlen(@$this->dat['data'][0]->car_aar) > 0){
+			$aar_arr = (array)$this->Generic_model->qry("SELECT `desc` FROM `ichange_aar` WHERE `aar_code` = '".@$this->dat['data'][0]->car_aar."'");
+			$aar_tmp = "<li>".$this->dat['data'][0]->car_aar." - ".@$aar_arr[0]->desc."</li>";
+			$this->dat['sugg_car_types'] .= "Car Type from Purchase Order: <ul>".$aar_tmp."</ul>";
+		}
+
   	   $oth_dat = @json_decode($this->dat['data'][0]->other_data,TRUE);
+  	   /* REPLACED BY VARIABLE DECLARIONS BELOW - 2020-11-01
   	   $this->dat['fld4_indDesc'] = @$oth_dat['orig_ind_op'];
   	   $this->dat['fld5_indDesc'] = @$oth_dat['dest_ind_op'];
+  	   */
   	   $this->dat['fld11_prev'] = @$oth_dat['commodity'];
+		$this->dat['fld4_indDesc'] = "";
+		if(strpos("Z".$this->dat['fld4'],"[") == 1){ 
+			$fld4_tmp = explode("]",$this->dat['fld4']); 
+			$fld4_tmp = str_replace("[","",$fld4_tmp[0]);
+			$fld4_tmp = (array)$this->Generic_model->qry("SELECT `op_info` FROM `ichange_indust` WHERE `id` = '".$fld4_tmp."'");
+			if(isset($fld4_tmp[0])){ $this->dat['fld4_indDesc'] = $fld4_tmp[0]->op_info; }
+		}
+		$this->dat['fld5_indDesc'] = "";
+		if(strpos("Z".$this->dat['fld5'],"[") == 1){ 
+			$fld5_tmp = explode("]",$this->dat['fld5']); 
+			$fld5_tmp = str_replace("[","",$fld5_tmp[0]);
+			$fld5_tmp = (array)$this->Generic_model->qry("SELECT `op_info` FROM `ichange_indust` WHERE `id` = '".$fld5_tmp."'");
+			if(isset($fld5_tmp[0])){ $this->dat['fld5_indDesc'] = $fld5_tmp[0]->op_info; }
+		}
   	   
   	   $this->dat['tz_opts'] = $this->dates_times->getTZOptions();
   	   //$prog_data2 = (array)$prog_data[count($prog_data)-1];
@@ -452,6 +469,16 @@ class Waybill extends CI_Controller {
 		//$s3 = "SELECT `waybill_num` FROM `ichange_waybill` WHERE `waybill_num` LIKE '".$id."%'";
 		$wb = (array)$this->Waybill_model->get_single($id,'id');
 		$cars_arr = json_decode($wb[0]->cars,true);
+		$tranship_cars = "";
+		//echo "<pre>"; print_r($cars_arr); /*print_r($this->arr['allRR']);*/ echo "</pre>"; //exit();
+		for($d=0;$d<count($cars_arr);$d++){ 
+			//$this->arr['allRR'][$cars_arr[$d]]['report_mark'];
+			if($d>0){ $tranship_cars .= ", "; }
+			$cn = $cars_arr[$d]['NUM']." [".$cars_arr[$d]['AAR']."] (".$this->arr['allRR'][$cars_arr[$d]['RR']]->report_mark.")"; 
+			if($cars_arr[$d]['RR'] == $this->arr['rr_sess']){ $cn = "<div class=\"tranship_cars_rr\">".$cn."</div>"; }
+			$tranship_cars .= $cn;
+		}
+		//echo $tranship_cars; exit();
 		//echo "<pre>"; print_r($cars_arr); echo "</pre>"; exit();
 		$r3 = (array)$this->Waybill_model->get_allTranshipped($wb[0]->waybill_num);
 		$flds_arr = $this->Waybill_model->get_fld_names();
@@ -535,7 +562,7 @@ class Waybill extends CI_Controller {
 		$r1_progress[] = array(
 			'date' => date('Y-m-d'),
 			'time' => date('H:i'), 
-			'text' => "TRANSHIPPED ".count($cars_arr)." CARS OF ".$wb[0]->lading." FROM WB ".$wb[0]->waybill_num, 
+			'text' => "TRANSHIPPED ".$wb[0]->lading." IN CARS ".$tranship_cars." FROM WB ".$wb[0]->waybill_num, 
 			'waybill_num' => $t_wb, 
 			'status' => "TRANSHIPPED", 
 			'map_location' => "", 
@@ -545,7 +572,7 @@ class Waybill extends CI_Controller {
 		$prog_sql = "INSERT INTO `ichange_progress` SET 
 			`date` = '".date('Y-m-d')."', 
 			`time` = '".date('H:i')."', 
-			`text` = '".count($cars_arr)." CARS OF ".$wb[0]->lading." TRANSHIPPED FROM WB ".$wb[0]->waybill_num."', 
+			`text` = 'TRANSHIPPED ".$wb[0]->lading." IN CARS ".$tranship_cars." FROM WB ".$wb[0]->waybill_num."', 
 			`waybill_num` = '".$t_wb."', 
 			`map_location` = '', 
 			`status` = 'TRANSHIPPED', 
@@ -573,10 +600,11 @@ class Waybill extends CI_Controller {
 
 		// Start Update Orig Waybill
 		//$r1_prog[] = array(
+		
 		$r1_prog = array(
 			'date' => date('Y-m-d'), 
 			'time' => date('H:i'), 
-			'text' => count($cars_arr)." CARS OF ".$wb[0]->lading." TRANSHIPPED TO WB ".$t_wb.". CAR EMPTY AND READY FOR RETURN JOURNEY.", 
+			'text' => "TRANSHIPPED ".$wb[0]->lading." IN CARS ".$tranship_cars." TO WB ".$t_wb.". CAR/S EMPTY AND READY FOR RETURN JOURNEY.", 
 			'waybill_num' => $id, 
 			'status' => "UNLOADED", 
 			'map_location' => "", 

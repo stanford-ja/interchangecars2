@@ -282,8 +282,8 @@ class Save_waybill extends CI_Controller {
 		if($this->arr['fld11'] != "MT" && $this->arr['fld11'] != "EMPTY" && $this->arr['fld11'] != "MTY" && strlen($this->arr['fld11']) > 0){
 			$other_data['commodity'] = $this->arr['fld11']; 
 		}
-		if(strlen($this->arr['fld4_indDesc']) > 0){$other_data['orig_ind_op'] = strtoupper($this->arr['fld4_indDesc']);}
-		if(strlen($this->arr['fld5_indDesc']) > 0){$other_data['dest_ind_op'] = strtoupper($this->arr['fld5_indDesc']);}
+		if(isset($this->arr['fld4_indDesc']) && strlen($this->arr['fld4_indDesc']) > 0){$other_data['orig_ind_op'] = strtoupper($this->arr['fld4_indDesc']);}
+		if(isset($this->arr['fld5_indDesc']) && strlen($this->arr['fld5_indDesc']) > 0){$other_data['dest_ind_op'] = strtoupper($this->arr['fld5_indDesc']);}
 		// End compile other data
 
 
