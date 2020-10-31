@@ -5,10 +5,11 @@ class Search extends CI_Controller {
 	// to make this usable for another view / controller combo!
 		/* REQUIRES SOMETHING LIKE THIS IN VIEW'S CONTROLLER METHOD TO SET searchtable1 FOR DISPLAY FOR EACH LINK ...
 		$this->arr['jquery'] .= "\$('#{LINK-ID}').click(function(){ 
-			var p1 = '".WEB_ROOT.INDEX_PAGE."/search/{METHOD}/{PARAMS}';
-			\$.get(p1,function(data1){ 
-				\$('#searchtable1popup').html(data1);
-				\$('#searchtable1popup').modal();
+			\$('#searchtable1popup').modal();
+			\$('#searchtable1popup').html('Loading...');
+			var p = '".WEB_ROOT.INDEX_PAGE."/search/{METHOD}/{PARAMS}';
+			\$.get(p,function(data){ 
+				\$('#searchtable1popup').html(data);
 				\$('#searchtable1').DataTable({ responsive: true, order: [[ 1, 'asc' ]] });\n
 			});
 			return false;
@@ -92,7 +93,7 @@ class Search extends CI_Controller {
 			}
 			$this->htm['tbody'] .= "</tr>";
 		}
-		echo "<div>
+		echo "<div><p>To exit this Search view, press the ESC key on your keyboard, the round 'X' button on the top right hand corner of this Search view, or click outside the white Search area.</p>
 		<table id=\"searchtable1\" class=\"hover order-column\" style=\"font-size: 9pt; width: 90%;\">
 			<thead>
 				<tr>
