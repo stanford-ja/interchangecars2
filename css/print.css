@@ -17,6 +17,7 @@ table {
 }
 td {
 	border: 1px solid gray;
+	font-size: 9pt;
 }
 
 h2 {
@@ -193,3 +194,8 @@ div.wb_lnk_mess {display: none;}
 .progress {
 	font-size: 10pt;
 }
+
+.dontprint { display: none; }
+.printwide { width: 450px; }
+
+.wb_btn { display: inline-block; padding: 2px; }

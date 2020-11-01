@@ -48,12 +48,13 @@ if(isset($list_order_NOTNEEDED)){ ?>
 	<?php
 	if(!isset($field_names)){$field_names = $fields;}
 	for($i=0;$i<count($field_names);$i++){
-		$wid = intval(100/(count($field_names)+1))."%";
+		$clss = "";if(isset($field_classes[$i])){$clss = " ".$field_classes[$i];}
+		$wid = "auto"; //intval(100/(count($field_names)+1))."%";
 		if(isset($widths[$i])){ $wid = $widths[$i]; }
 	?>
-		<td class="td_title"><?php echo $field_names[$i] ; ?><br /></td>
+		<td class="td_title<?php echo $clss; ?>" style="width:<?php echo $wid; ?>"><?php echo $field_names[$i] ; ?><br /></td>
 	<?php } ?>
-		<td class="td_title">Options</td>
+		<td class="td_title dontprint">Options</td>
 	</tr>
 	</thead>
 	<tbody>
@@ -63,16 +64,17 @@ for($i=0;$i<count(@$data);$i++){
 	echo "<tr>";
 	$l_disp = 0; // If > 0 then show links, otherwise dont.
 	for($j=0;$j<count($fields);$j++){
-		$wid = intval(100/(count($field_names)+1))."%";
+		$wid = "auto"; //intval(100/(count($field_names)+1))."%";
 		if(isset($widths[$j])){ $wid = $widths[$j]; }
 		$styl = "";if(isset($field_styles[$j])){$styl = $field_styles[$j];}
+		$clss = "";if(isset($field_classes[$j])){$clss = $field_classes[$j];}
 		if(isset($data[$i][$fields[$j]])){
 			$l_disp++;
 			$data[$i][$fields[$j]] = str_replace(date('Y-m-d '),"<span style=\"background-color: yellow;\">".date('Y-m-d ')."</span>",$data[$i][$fields[$j]]);
-			echo "<td>".str_replace(",",", ",$data[$i][$fields[$j]])."</td>";
+			echo "<td class=\"".$clss."\" style=\"".$styl.";width:".$wid."\">".str_replace(",",", ",$data[$i][$fields[$j]])."</td>";
 		}
 	}
-	echo "<td>";
+	echo "<td class=\"dontprint\">";
 	if($l_disp > 0){
 		$opt_kys = array_keys($options);
 		for($o=0;$o<count($opt_kys);$o++){ 

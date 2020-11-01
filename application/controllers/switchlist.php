@@ -153,7 +153,7 @@ class Switchlist extends CI_Controller {
 			</div>";
 
 		$this->trdat['field_names'] = array("Train ID / Motive Power", "Train Description", "Origin / Destination", "Waypoints", "Operation Days", "Direction", "Operation Notes");
-		$this->trdat['data'][0]['train_id'] = "<span style=\"float: right;\">
+		$this->trdat['data'][0]['train_id'] = "<span style=\"float: right;\" class=\"dontprint\">
 			<a href=\"javascript:{}\" onclick=\"document.getElementById('loco_sel_div').style.display = 'block'; document.getElementById('add2SWLst').style.display = 'none'; document.getElementById('addC2SWLst').style.display = 'none';\">Change / Add Motive Power</a>&nbsp; 
 			<a href=\"javascript:{}\" onclick=\"add2SW('".$id."');\">Add Waybill to Switchlist</a> 
 			<a href=\"javascript:{}\" onclick=\"addC2SW('".$id."');\">Add Cars to Switchlist</a><br />
@@ -165,7 +165,7 @@ class Switchlist extends CI_Controller {
 		//$this->trdat['data'][0]['loco_num'] = $trdat[0]->loco_num;
 		$this->trdat['data'][0]['train_desc'] = $trdat[0]->train_desc;
 		//if(strlen($trdat[0]->location) < 1){$trdat[0]->location = $trdat[0]->destination;}
-		$this->trdat['data'][0]['origin'] = "<span style=\"float: right; font-size: 13pt; font-weight: bold;\">Location: ".$trdat[0]->location."</span><div class=\"wb_btn\" style=\"width: auto;\">".$trdat[0]->origin."</div> -> <div class=\"wb_btn\" style=\"width: auto;\">".$trdat[0]->destination."</div>";
+		$this->trdat['data'][0]['origin'] = "<span class=\"dontprint\" style=\"float: right; font-size: 13pt; font-weight: bold;\">Location: ".$trdat[0]->location."</span><div class=\"wb_btn\" style=\"width: auto;\">".$trdat[0]->origin."</div> -> <div class=\"wb_btn\" style=\"width: auto;\">".$trdat[0]->destination."</div>";
 		$this->trdat['data'][0]['waypoints'] = $waypoints;
 		//$this->trdat['data'][0]['destination'] = $trdat[0]->destination;
 		$this->trdat['data'][0]['op_days'] = $op_days;
@@ -181,6 +181,7 @@ class Switchlist extends CI_Controller {
 		$this->dat['fields'] 			= array('waybill_num', 'cars','sw_ord','info','lading','routing','rr_id_handling');
 		$this->dat['field_names'] 		= array("Waybill No.", "Cars on waybill","Order","Details","Lading","Route","On Railroad");
 		//$this->dat['field_styles']		= array(0 => "width: 180px;");
+		$this->dat['field_classes']			= array(2 => "dontprint", 3 => "printwide");
 		$this->dat['options']			= array();
 		if($this->arr['rr_sess'] > 0){$this->dat['options']	= array('Edit' => "onclick:if(isNaN('[id]')){ alert('You cannot edit this as it is not a waybill.'); }else{ window.location = '../../waybill/edit/[id]'; }",
 				'Remove' => "../../switchlist/remove_wb/"
@@ -319,7 +320,7 @@ class Switchlist extends CI_Controller {
 						$prog_locs_txt .= "[".$prog_locs[$pl]->map_location."] -> "; 
 					}
 				}
-				if(strlen($prog_locs_txt) > 0){ $this->dat['data'][$i]['info'] .= "<div style=\"display: block; font-size: 9pt;border-bottom: 1px solid #999; padding: 5px; margin: 2px;\">Journey so far: ".$prog_locs_txt."</div>"; }
+				if(strlen($prog_locs_txt) > 0){ $this->dat['data'][$i]['info'] .= "<div class=\"dontprint\" style=\"font-size: 9pt;border-bottom: 1px solid #999; padding: 5px; margin: 2px;\">Journey so far: ".$prog_locs_txt."</div>"; }
 				if(strlen($arrdat[$i]->notes) > 0){			$this->dat['data'][$i]['info'] .= "<div style=\"display: block; font-size: 9pt;border-bottom: 1px solid #999; padding: 5px; margin: 2px;\"><em>".$arrdat[$i]->notes."</em></div>";}
 				$sw_ord = 999; if(isset($arrdat[$i]->sw_order) && $arrdat[$i]->sw_order > -1){ $sw_ord = $arrdat[$i]->sw_order; }
 				$this->dat['data'][$i]['routing']				= $arrdat[$i]->routing;
@@ -327,7 +328,7 @@ class Switchlist extends CI_Controller {
 				$this->dat['data'][$i]['sw_ord']				= $sw_ord;
 				$this->dat['data'][$i]['rr_id_handling']		= ""; if(isset($this->arr['allRR'][$arrdat[$i]->rr_id_handling])){ $this->dat['data'][$i]['rr_id_handling'] = $this->arr['allRR'][$arrdat[$i]->rr_id_handling]->report_mark; }
 				
-				$this->dat['widths'] = array(2=>"45%", 3=>"8%", 4=>"4%" , 5=>"4%" , 6=>"54%", 7=>"5%");
+				$this->dat['widths'] = array(2=>"8%", 3=>"45%", 4=>"4%" , 5=>"4%" , 6=>"10%", 7=>"8%");
 			}
 		}
 
@@ -341,6 +342,7 @@ class Switchlist extends CI_Controller {
 			$this->flddat['fields'][] = form_hidden('id',$id);
 			$this->flddat['fields'][] = form_hidden('train_id',$trdat[0]->train_id);
 			$this->flddat['fields'][] = form_hidden('wb_affected_ids',$wb_affected_ids);
+			$this->flddat['fields'][] = "<div class=\"dontprint\">";
 			$this->flddat['fields'][] = "<table class=\"table2\" style=\"width: 95%;\">
 					<thead>
 					<tr>
@@ -375,6 +377,7 @@ class Switchlist extends CI_Controller {
 			$this->flddat['fields'][] = form_close().
 				"<span style=\"font-size: 10pt;\"><strong>To change only the Train Location:</strong> Enter the location and click the Change Location button.<br />
 				<strong>To change the train location AND deliver cars:</strong> Select Deliver To options and click the Deliver Cars or Deliver Cars Individually buttons.</span>";
+			$this->flddat['fields'][] = "</div>"; // Closing div.dontprint element.
 
 
 			// Form for table contents
