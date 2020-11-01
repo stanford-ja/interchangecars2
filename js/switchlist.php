@@ -27,6 +27,11 @@ $f21 = str_replace("{\"AAR_REQD\":\"UNDEFINED\",\"NUM\":\"UNDEFINED\",\"AAR\":\"
 			});
 		});
 	}
+	
+	function add2SWxSearch(v){
+		//alert('add2SWxSearch: '+v);
+		window.location = '<?php echo WEB_ROOT.INDEX_PAGE; ?>/switchlist/add2SW/'+v+'/<?php echo @$id; ?>'
+	}
 
 	function addC2SW(id){
 		// Adding a car/s to a switchlist.
@@ -40,5 +45,16 @@ $f21 = str_replace("{\"AAR_REQD\":\"UNDEFINED\",\"NUM\":\"UNDEFINED\",\"AAR\":\"
 				document.getElementById('addC2SWLst2').innerHTML = data;
 			});
 		});
+	}
+
+	function addC2SWxSearch(v){
+		//alert('add2CSWxSearch: '+v);
+		var inst = prompt('Enter instructions for this car.');
+		$.post("<?php echo WEB_ROOT.INDEX_PAGE; ?>/switchlist/addC2SWxSearch",
+			{ sw_id: "<?php echo @$id; ?>", car2add2SW: v, instructions: inst }, 
+			function(data, status){ 
+				window.location = '<?php echo WEB_ROOT.INDEX_PAGE; ?>/switchlist/lst/<?php echo @$id; ?>';
+			}
+		);
 	}
 

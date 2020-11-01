@@ -52,6 +52,7 @@ class Switchlist extends CI_Controller {
 	}
 	
 	public function lst($id=0){
+		$this->arr['id'] = $id;
 		$this->arr['jquery'] = "\$('.table1').DataTable({ 
 			paging: false, 
 			searching: false, 
@@ -79,6 +80,26 @@ class Switchlist extends CI_Controller {
 			info: false, 
 			stateSave: false
 			});\n";
+		$this->arr['jquery'] .= "\$('#addWBSearch').click(function(){ 
+			\$('#searchtable1popup').modal();
+			\$('#searchtable1popup').html('Loading...');
+			var p1 = '".WEB_ROOT.INDEX_PAGE."/search/waybillSummarySW/0/".$this->arr['rr_sess']."/".$id."/add2SWxSearch/1';
+			\$.get(p1,function(data1){ 
+				\$('#searchtable1popup').html(data1);
+				\$('#searchtable1').DataTable({ responsive: true, order: [[ 1, 'asc' ]] });\n
+			});
+			return false;
+		}); \n";
+		$this->arr['jquery'] .= "\$('#addCarSearch').click(function(){ 
+			\$('#searchtable1popup').modal();
+			\$('#searchtable1popup').html('Loading...');
+			var p1 = '".WEB_ROOT.INDEX_PAGE."/search/carSummarySW/0/".$this->arr['rr_sess']."/".$id."/addC2SWxSearch/1';
+			\$.get(p1,function(data1){ 
+				\$('#searchtable1popup').html(data1);
+				\$('#searchtable1').DataTable({ responsive: true, order: [[ 1, 'asc' ]] });\n
+			});
+			return false;
+		}); \n";
 		//$this->arr['pgTitle'] .= " - Switchlist";
 		$randpos = array();
 		$trdat = (array)$this->Train_model->get_single($id); // Single train indicated by `id`
@@ -118,7 +139,7 @@ class Switchlist extends CI_Controller {
 		}
 		$lo_select = "<div style=\"background-color: antiquewhite; border: 1px solid brown; padding: 5px; margin: 5px; display: none\" id=\"loco_sel_div\">".
 			"<strong>Change Loco for Switchlist</strong><br /><br />".
-			form_open_multipart(WEB_ROOT.'/switchlist/chgloco').
+			form_open_multipart(WEB_ROOT.INDEX_PAGE.'/switchlist/chgloco').
 			form_hidden('id',$id).
 			form_dropdown("loco_select",$lo_opts,$trdat[0]->loco_num,'style="display: inline;"')."&nbsp;".
 			form_submit("submit","Change").form_close()."<a href=\"javascript:{}\" onclick=\"document.getElementById('loco_sel_div').style.display = 'none';\">[ Close ]</a></div>";
@@ -135,7 +156,9 @@ class Switchlist extends CI_Controller {
 		$this->trdat['data'][0]['train_id'] = "<span style=\"float: right;\">
 			<a href=\"javascript:{}\" onclick=\"document.getElementById('loco_sel_div').style.display = 'block'; document.getElementById('add2SWLst').style.display = 'none'; document.getElementById('addC2SWLst').style.display = 'none';\">Change / Add Motive Power</a>&nbsp; 
 			<a href=\"javascript:{}\" onclick=\"add2SW('".$id."');\">Add Waybill to Switchlist</a> 
-			<a href=\"javascript:{}\" onclick=\"addC2SW('".$id."');\">Add Cars to Switchlist</a>
+			<a href=\"javascript:{}\" onclick=\"addC2SW('".$id."');\">Add Cars to Switchlist</a><br />
+			<a href=\"javascript:{}\" id=\"addWBSearch\" class=\"searchLink\">Waybill Search & Add to SW</a>
+			<a href=\"javascript:{}\" id=\"addCarSearch\" class=\"searchLink\">Car Search & Add to SW</a>
 			</span>".
 			$trdat[0]->train_id." / ".$trdat[0]->loco_num."&nbsp;".
 			$lo_select.$wb_select;
@@ -259,7 +282,7 @@ class Switchlist extends CI_Controller {
 						$sw_ord_opts .= "<option value=\"".$swo."\"".$sel.">".$lab.$swo."</option>\n";
 					}
 					//$this->dat['data'][$i]['waybill_num'] .= "<select name=\"sw_order[]\">".$sw_ord_opts."</select>";
-					$this->dat['data'][$i]['waybill_num'] .= "<br /><select name=\"sw_ord_".$i."\" onchange=\"window.location = '".WEB_ROOT."/switchlist/sword/".$id."/".$arrdat[$i]->id."/' + this.value;\">".$sw_ord_opts."</select>";
+					$this->dat['data'][$i]['waybill_num'] .= "<br /><select name=\"sw_ord_".$i."\" onchange=\"window.location = '".WEB_ROOT.INDEX_PAGE."/switchlist/sword/".$id."/".$arrdat[$i]->id."/' + this.value;\">".$sw_ord_opts."</select>";
 				}
 
 				// Detect whether imag for industries exist, andif so create link to allow user to view the image.
@@ -268,7 +291,7 @@ class Switchlist extends CI_Controller {
 					$ind_name = explode("]",$arrdat[$i]->indust_origin_name);
 					$ind_name[0] = str_replace("[","",$ind_name[0]);
 					if(file_exists(DOC_ROOT."/indust_images/".$ind_name[0].".jpg")){ 
-						$origin_name = "<span data-balloon=\"Click to view Industry image\" data-balloon-pos=\"right\" data-balloon-length=\"large\"><a href=\"javascript:{}\" onclick=\"window.open('".WEB_ROOT."/indust_images/".$ind_name[0].".jpg"."','','width=300,height=300');\">".$origin_name."</a></span>"; 
+						$origin_name = "<span data-balloon=\"Click to view Industry image\" data-balloon-pos=\"right\" data-balloon-length=\"large\"><a href=\"javascript:{}\" onclick=\"window.open('".WEB_ROOT.INDEX_PAGE."/indust_images/".$ind_name[0].".jpg"."','','width=300,height=300');\">".$origin_name."</a></span>"; 
 					}
 				}
 				$dest_name = $arrdat[$i]->indust_dest_name;
@@ -276,7 +299,7 @@ class Switchlist extends CI_Controller {
 					$ind_name = explode("]",$arrdat[$i]->indust_dest_name);
 					$ind_name[0] = str_replace("[","",$ind_name[0]);
 					if(file_exists(DOC_ROOT."/indust_images/".$ind_name[0].".jpg")){ 
-						$dest_name = "<span data-balloon=\"Click to view Industry image\" data-balloon-pos=\"right\" data-balloon-length=\"large\"><a href=\"javascript:{}\" onclick=\"window.open('".WEB_ROOT."/indust_images/".$ind_name[0].".jpg"."','','width=300,height=300');\">".$dest_name."</a></span>"; 
+						$dest_name = "<span data-balloon=\"Click to view Industry image\" data-balloon-pos=\"right\" data-balloon-length=\"large\"><a href=\"javascript:{}\" onclick=\"window.open('".WEB_ROOT.INDEX_PAGE."/indust_images/".$ind_name[0].".jpg"."','','width=300,height=300');\">".$dest_name."</a></span>"; 
 					}
 				}
 				
@@ -566,7 +589,7 @@ class Switchlist extends CI_Controller {
 		$s = "UPDATE `ichange_trains` SET `loco_num` = '".$_POST['loco_select']."' WHERE `id` = '".$_POST['id']."'";
 		//echo $s; exit();
 		$this->Generic_model->change($s);
-		header("Location:".WEB_ROOT."/switchlist/lst/".$_POST['id']);
+		header("Location:".WEB_ROOT.INDEX_PAGE."/switchlist/lst/".$_POST['id']);
 	}
 	
 	public function sword($trid=0,$wbid=0,$ord=0){
@@ -577,7 +600,7 @@ class Switchlist extends CI_Controller {
 		$this->load->model('Generic_model','',TRUE);
 		$s = "UPDATE `ichange_waybill` SET `sw_order` = '".$ord."' WHERE `id` = '".$wbid."'";
 		$this->Generic_model->change($s);
-		header("Location:".WEB_ROOT."/switchlist/lst/".$trid);
+		header("Location:".WEB_ROOT.INDEX_PAGE."/switchlist/lst/".$trid);
 	}
 	
 	public function add2SW($wb_id,$sw_id){
@@ -595,7 +618,7 @@ class Switchlist extends CI_Controller {
 		$t = "UPDATE `ichange_waybill` SET `train_id` = '".$train_id."' WHERE `id` = '".$wb_id."'";
 		$this->Generic_model->change($t);
 		
-		header("Location:".WEB_ROOT."/switchlist/lst/".$sw_id);
+		header("Location:".WEB_ROOT.INDEX_PAGE."/switchlist/lst/".$sw_id);
 	}
 
 	public function addC2SW(){
@@ -617,7 +640,16 @@ class Switchlist extends CI_Controller {
 			$this->Generic_model->change($t);
 		}
 		
-		header("Location:".WEB_ROOT."/switchlist/lst/".$sw_id);
+		header("Location:".WEB_ROOT.INDEX_PAGE."/switchlist/lst/".$sw_id);
+	}
+	
+	public function addC2SWxSearch(){
+		$sw_id = $_POST['sw_id'];
+		$car2add2SW = $_POST['car2add2SW'];
+		$instructions = $_POST['instructions'];
+		$t = "INSERT INTO `ichange_tr_cars` SET `trains_id` = '".$sw_id."', `cars_id` = '".$car2add2SW."', `instructions` = '".strtoupper($instructions)."'";
+		$this->Generic_model->change($t);
+		//header("Location:".WEB_ROOT.INDEX_PAGE."/switchlist/lst/".$sw_id);
 	}
 
 	public function setFieldSpecs(){

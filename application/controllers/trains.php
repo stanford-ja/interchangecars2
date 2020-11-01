@@ -111,7 +111,7 @@ class Trains extends CI_Controller {
 			"<option value=\"1\">Incl. Auto Trains</option>".
 			"<option value=\"2\">Train with Sheet Order</option>".
 			"</select> ".
-			"<a href=\"javascript:{}\" style=\"display: inline-block; padding: 5px; border: 1px solid brown; background-color: peru; text-decoration: none;\" onclick=\"if(document.getElementById('bf_day').value.length > 0){ window.location = '".WEB_ROOT."/trains/sheet/' + document.getElementById('bf_day').value + '/' + document.getElementById('bf_trains').value; }else{ alert('Select a Day'); }\">DISPLAY</a>";
+			"<a href=\"javascript:{}\" style=\"display: inline-block; padding: 5px; border: 1px solid brown; background-color: peru; text-decoration: none;\" onclick=\"if(document.getElementById('bf_day').value.length > 0){ window.location = '".WEB_ROOT.INDEX_PAGE."/trains/sheet/' + document.getElementById('bf_day').value + '/' + document.getElementById('bf_trains').value; }else{ alert('Select a Day'); }\">DISPLAY</a>";
 			/*
 				'[Sun, no Auto]' => "trains/sheet/sun/0'", 
 				'[Sun, incl. Auto]' => "trains/sheet/sun/1", 
@@ -340,9 +340,9 @@ class Trains extends CI_Controller {
 				if(strpos($traindat[$i]->wb_cars,"UNDEFINED") > 0){ $wb_cntr = $wb_cntr-1; }
 				$hl = "<div style=\"color: black; font-weight: bold; font-size: 110%;\">";
 				$wb_alloc =  intval($traindat[$i]->wb_alloc+$traindat[$i]->tr_alloc)." (".intval(count(json_decode($traindat[$i]->wb_cars,TRUE))+$traindat[$i]->tr_alloc).")";
-				//$swlnk = "<br /><a href=\"".WEB_ROOT."/switchlist/lst/".$traindat[$i]->id."\" target=\"swlist".$traindat[$i]->id."\">Switchlist</a>";
+				//$swlnk = "<br /><a href=\"".WEB_ROOT.INDEX_PAGE."/switchlist/lst/".$traindat[$i]->id."\" target=\"swlist".$traindat[$i]->id."\">Switchlist</a>";
 			}
-			$swlnk = "<br /><a href=\"".WEB_ROOT."/switchlist/lst/".$traindat[$i]->id."\" target=\"swlist".$traindat[$i]->id."\">Switchlist</a>";
+			$swlnk = "<br /><a href=\"".WEB_ROOT.INDEX_PAGE."/switchlist/lst/".$traindat[$i]->id."\" target=\"swlist".$traindat[$i]->id."\">Switchlist</a>";
 			//if(($is_auto == 0 && $tarr['auto'] == 0) || $tarr['auto'] == 1){
 				$this->dat['data'][$i]['id'] 						= $traindat[$i]->id;
 				$this->dat['data'][$i]['train_id']			 		= $hl.$traindat[$i]->train_id." (".$traindat[$i]->loco_num.") ".$c_omp.$swlnk."</div>";
