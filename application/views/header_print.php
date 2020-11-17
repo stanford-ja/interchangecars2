@@ -20,5 +20,6 @@ header("Pragma: no-cache");
 		<div class="dontprint" style="background-color: yellow; padding: 10px; border-radius: 8px;">
 		<input type="button" onclick="window.print()" value="Print" />
 		<p>Note: the way the page is rendered below may not be the same as how the page will print.</p>
-		<p>Please use the Print Preview feature to check how the print output will look.</p>
+		<p>If your browser has a Print Preview feature you can use that to check how the print output will look.</p>
+		<?php if(isset($html)){ echo $html; } ?>
 		</div>
