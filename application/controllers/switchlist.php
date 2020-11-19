@@ -429,6 +429,8 @@ class Switchlist extends CI_Controller {
 			
 			$this->arr['id'] = $id;
 			$this->arr['title'] = "Switchlist Print";
+			
+			// HEADER BOX
 			$trdat = (array)$this->Train_model->get_single($id); // Single train indicated by `id`
 			//$trsdat = (array)$this->Train_model->get_all4RR_Sorted($this->arr['rr_sess'],'train_id',1);
 			//$rrdat = (array)$this->Railroad_model->get_allActive();
@@ -466,6 +468,7 @@ class Switchlist extends CI_Controller {
 			$this->trdat['data'][0]['op_notes'] = $trdat[0]->op_notes;
 			$this->arr['pgTitle'] .= " - ".$trdat[0]->train_id;
 
+			// WAYBILL ROWS TABLE
 			//$this->dat = array();
 			$this->dat['fields'] 			= array(); //'waybill_num', /*'move_to',*/ 'cars','info','lading',/*'routing',*/'rr_id_handling');
 			$this->dat['field_names'] 		= array(); //"Waybill No.", /*"Action",*/ "Cars","Details","Lading / Route",/*"Route",*/"On Railroad");
@@ -960,17 +963,6 @@ class Switchlist extends CI_Controller {
 		);
 		$fld_opts = "";
 		$flds_kys = array_keys($flds);
-		for($f=0;$f<count($flds_kys);$f++){ 
-			//$fld_opts .= "<option value=\"".$flds_kys[$f]."\">".$flds[$flds_kys[$f]]."</option>"; 
-			$sel = ""; if($f == 0){ $sel = " selected=\"selected\""; }
-			$fld_opts .= "<input type=\"radio\" name=\"columns[".$flds_kys[$f]."]\" value=\"[COL]\"".$sel." /> ".$flds[$flds_kys[$f]]."<br />";
-		}
-		/*
-		$this->dat['html'] .= "Column 1: <select name=\"column1\">".$fld_opts."</select><br />";
-		$this->dat['html'] .= "Column 2: <select name=\"column2\">".$fld_opts."</select><br />";
-		$this->dat['html'] .= "Column 3: <select name=\"column3\">".$fld_opts."</select><br />";
-		$this->dat['html'] .= "Column 4: <select name=\"column4\">".$fld_opts."</select><br />";
-		*/
 		
 		$this->dat['html'] .= "<table style=\"background-color: transparent;\">
 				<thead>
@@ -982,15 +974,23 @@ class Switchlist extends CI_Controller {
 						<td style=\"color: white; background-color: black; padding: 5px;\">Column 5</td>
 					</tr>
 				</thead>
-				<tbody>
-					<tr>
-						<td style=\"border: 1px solid #ccc;\">".str_replace("[COL]","column1",$fld_opts)."</td>
-						<td style=\"border: 1px solid #ccc;\">".str_replace("[COL]","column2",$fld_opts)."</td>
-						<td style=\"border: 1px solid #ccc;\">".str_replace("[COL]","column3",$fld_opts)."</td>
-						<td style=\"border: 1px solid #ccc;\">".str_replace("[COL]","column4",$fld_opts)."</td>
-						<td style=\"border: 1px solid #ccc;\">".str_replace("[COL]","column5",$fld_opts)."</td>
-					</tr>
-				</tbody>
+				<tbody>";
+
+				$this->dat['html'] .= "<tr>";
+				for($u=1;$u<6;$u++){ // COUNT THE COLUMNS
+					$fld_opts = "";
+					for($f=0;$f<count($flds_kys);$f++){ // CPOUNT THE FIELDS
+						//$fld_opts .= "<option value=\"".$flds_kys[$f]."\">".$flds[$flds_kys[$f]]."</option>"; 
+						$sel = ""; 
+						if(isset($_POST['columns'][$flds_kys[$f]]) && $_POST['columns'][$flds_kys[$f]] == "column".$u){ 
+							$sel = " checked"; 
+						}
+						$fld_opts .= "<input type=\"radio\" name=\"columns[".$flds_kys[$f]."]\" value=\"column".$u."\"".$sel." /> ".$flds[$flds_kys[$f]]."<br />";
+					}
+					$this->dat['html'] .= "<td style=\"border: 1px solid #ccc;\">".$fld_opts."</td>";
+				}
+
+				$this->dat['html'] .= "</tr></tbody>
 			</table>";
 		$this->dat['html'] .= "<input type=\"submit\" name=\"submit\" value=\"Submit\" /></form>";
 		$this->arr['html'] = $this->dat['html'];
