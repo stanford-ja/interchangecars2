@@ -426,7 +426,12 @@ class Switchlist extends CI_Controller {
 				$columns[$_POST['columns'][$col_kys[$c]]][] = $col_kys[$c];
 			}
 			//echo "<pre>"; print_r($columns); echo "</pre>";
-			
+			$sql = "UPDATE `ichange_rr` SET `switch_print_display` = '".json_encode($columns)."' WHERE `id` = '".$this->arr['rr_sess']."'";
+			$this->Generic_model->change($sql);
+		}else{
+			$columns = json_decode($this->arr['allRR'][$this->arr['rr_sess']]->switch_print_display,true);
+		}
+
 			$this->arr['id'] = $id;
 			$this->arr['title'] = "Switchlist Print";
 			
@@ -653,8 +658,9 @@ class Switchlist extends CI_Controller {
 			
 			}
 		
-		}
+		//}
 			// Load views
+			$this->columns = $columns;
 			$this->setFieldSpecsPrint($id);
 			$this->load->view('header_print', $this->arr);
 			if($this->arr['rr_sess'] > 0){
@@ -938,16 +944,7 @@ class Switchlist extends CI_Controller {
 
 	public function setFieldSpecsPrint($id=0){
 		// Sets specific field definiti$id=0ons for printing of the swicthlist.
-		$this->dat['html'] = "<p>Use the table and radio buttons below to choose what will appear in what column then click the Submit to generate the switchlist for printing.</p>";
-		$this->dat['html'] .= "<p>Note: you <strong>do not</strong> have to use all 5 columns or all indicated fields. 
-			If you don't want to use a column/s then don't select anything in that / those columns and it will not be rendered when Submit is clicked.</p>";
-		
-		// Add form and field definitions specific to this controller under this line... 
-		//$this->dat['hidden'] = array('tbl' => 'aar', 'id' => @$this->dat['data'][0]->id);
-		$this->dat['form_url'] = WEB_ROOT.INDEX_PAGE."/switchlist/printit/".$id;
-		$this->dat['html'] .= "<form method=\"post\" action=\"".$this->dat['form_url']."\">";
-
-
+		$this->dat['html'] = "";
 		$flds = array(
 			/*0 => "None",*/
 			'waybill_num' => "Waybill Number",
@@ -961,8 +958,31 @@ class Switchlist extends CI_Controller {
 			'cars' => "Cars",
 			'last_prog' => "Last Progress Report",
 		);
-		$fld_opts = "";
 		$flds_kys = array_keys($flds);
+
+		if(count($this->columns) > 0){
+			$this->dat['html'] .= "<p><strong>Currently using these settings:</strong>";
+			$col_kys = array_keys($this->columns);
+			for($e=0;$e<count($col_kys);$e++){
+				$this->dat['html'] .= "<div style=\"display: inline-block; margin: 1px; padding: 5px; background-color: maroon; color: white;\">".ucwords($col_kys[$e]).": ";
+				for($k=0;$k<count($this->columns[$col_kys[$e]]);$k++){ 
+					if($k > 0){ $this->dat['html'] .= ", "; }
+					//$this->dat['html'] .= $flds[$flds_kys[$col_kys[$e]]];
+					$this->dat['html'] .= $flds[$this->columns[$col_kys[$e]][$k]];
+				}
+				$this->dat['html'] .= "</div>";
+			}
+		}
+		$this->dat['html'] .= "<p>Use the table and radio buttons below to choose what will appear in what column then click the Submit to generate the switchlist for printing.</p>";
+		$this->dat['html'] .= "<p>Note: you <strong>do not</strong> have to use all 5 columns or all indicated fields. 
+			If you don't want to use a column/s then don't select anything in that / those columns and it will not be rendered when Submit is clicked.</p>";
+				
+		// Add form and field definitions specific to this controller under this line... 
+		//$this->dat['hidden'] = array('tbl' => 'aar', 'id' => @$this->dat['data'][0]->id);
+		$this->dat['form_url'] = WEB_ROOT.INDEX_PAGE."/switchlist/printit/".$id;
+		$this->dat['html'] .= "<form method=\"post\" action=\"".$this->dat['form_url']."\">";
+
+		$fld_opts = "";
 		
 		$this->dat['html'] .= "<table style=\"background-color: transparent;\">
 				<thead>
@@ -985,7 +1005,7 @@ class Switchlist extends CI_Controller {
 						if(isset($_POST['columns'][$flds_kys[$f]]) && $_POST['columns'][$flds_kys[$f]] == "column".$u){ 
 							$sel = " checked"; 
 						}
-						$fld_opts .= "<input type=\"radio\" name=\"columns[".$flds_kys[$f]."]\" value=\"column".$u."\"".$sel." /> ".$flds[$flds_kys[$f]]."<br />";
+						$fld_opts .= "<input type=\"radio\" name=\"columns[".$flds_kys[$f]."]\" value=\"column".$u."\"".$sel." /> ".$flds[$flds_kys[$f]]." (".$flds_kys[$f].")<br />";
 					}
 					$this->dat['html'] .= "<td style=\"border: 1px solid #ccc;\">".$fld_opts."</td>";
 				}
