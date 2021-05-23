@@ -266,19 +266,26 @@ class Waybill extends CI_Controller {
   	   $this->dat['fld5_indDesc'] = @$oth_dat['dest_ind_op'];
   	   */
   	   $this->dat['fld11_prev'] = @$oth_dat['commodity'];
+  	   $town_css = "display: block; background-color: lightgreen; font-weight: bold; padding: 3px;";
 		$this->dat['fld4_indDesc'] = "";
 		if(strpos("Z".$this->dat['fld4'],"[") == 1){ 
 			$fld4_tmp = explode("]",$this->dat['fld4']); 
 			$fld4_tmp = str_replace("[","",$fld4_tmp[0]);
-			$fld4_tmp = (array)$this->Generic_model->qry("SELECT `op_info` FROM `ichange_indust` WHERE `id` = '".$fld4_tmp."'");
-			if(isset($fld4_tmp[0])){ $this->dat['fld4_indDesc'] = $fld4_tmp[0]->op_info; }
+			$fld4_tmp = (array)$this->Generic_model->qry("SELECT `op_info`, `town` FROM `ichange_indust` WHERE `id` = '".$fld4_tmp."'");
+			if(isset($fld4_tmp[0])){ 
+				if(strlen($fld4_tmp[0]->town) > 0){ $this->dat['fld4_indDesc'] .= "<div style=\"".$town_css."\">".$fld4_tmp[0]->town."</div>"; }
+				$this->dat['fld4_indDesc'] .= $fld4_tmp[0]->op_info; 
+			}
 		}
 		$this->dat['fld5_indDesc'] = "";
 		if(strpos("Z".$this->dat['fld5'],"[") == 1){ 
 			$fld5_tmp = explode("]",$this->dat['fld5']); 
 			$fld5_tmp = str_replace("[","",$fld5_tmp[0]);
-			$fld5_tmp = (array)$this->Generic_model->qry("SELECT `op_info` FROM `ichange_indust` WHERE `id` = '".$fld5_tmp."'");
-			if(isset($fld5_tmp[0])){ $this->dat['fld5_indDesc'] = $fld5_tmp[0]->op_info; }
+			$fld5_tmp = (array)$this->Generic_model->qry("SELECT `op_info`, `town` FROM `ichange_indust` WHERE `id` = '".$fld5_tmp."'");
+			if(isset($fld5_tmp[0])){ 
+				if(strlen($fld5_tmp[0]->town) > 0){ $this->dat['fld5_indDesc'] .= "<div style=\"".$town_css."\">".$fld5_tmp[0]->town."</div>"; }
+				$this->dat['fld5_indDesc'] .= $fld5_tmp[0]->op_info; 
+			}
 		}
   	   
   	   $this->dat['tz_opts'] = $this->dates_times->getTZOptions();
